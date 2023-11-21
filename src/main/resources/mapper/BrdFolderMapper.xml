@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieCore.brd.mapperInterface.BrdFolderMapper">
+
+
+    <insert id="createFolder" parameterType="com.example.movieCore.brd.vo.BrdVo" >
+
+        insert into BRD_FOLDER (
+            FOL_ID,
+            MEM_ID,
+            FOL_NAME,
+            PARENT_FOLDER,
+            FOL_LOC,
+            DEPTH,
+            STATE,
+            ODR,
+            CREATE_DT
+        )
+        values (
+                   #{folderBean.folId},
+                   #{folderBean.memId},
+                   #{folderBean.folName},
+                   #{folderBean.parentFolder},
+                   #{folderBean.folLoc},
+                   #{folderBean.depth},
+                   #{folderBean.state},
+                   #{folderBean.odr},
+                   DATE_FORMAT(#{folderBean.createDt}, '%Y-%m-%d %h:%m:%s')
+               )
+
+    </insert>
+
+
+
+
+</mapper>

@@ -1,0 +1,94 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieCore.brd.mapperInterface.BrdArticleMapper">
+
+
+    <!-- 게시글 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdArticleBean" id="articleBean">
+        <id column="ATCL_ID" property="atclId" jdbcType="VARCHAR"/>
+        <result column="BRD_ID" property="brdId" jdbcType="VARCHAR"/>
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="SUBJECT" property="subject" jdbcType="VARCHAR"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="VIEW_CNT" property="viewCnt" jdbcType="INTEGER"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+        <result column="UPDATE_DT" property="updateDt" jdbcType="DATE"/>
+        <result column="EXPIRE_DT" property="expireDt" jdbcType="DATE"/>
+        <result column="EXPIRE_YN" property="expireYn" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
+        <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
+
+        <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!-- 게시글 작성 -->
+    <insert id="atclRegistry" parameterType="com.example.movieCore.brd.vo.BrdVo" >
+        insert into
+            BRD_ARTICLE
+            (
+                ATCL_ID,
+                BRD_ID,
+                MEM_ID,
+                SUBJECT,
+                CONTENT,
+                VIEW_CNT,
+                CREATE_DT,
+                UPDATE_DT,
+                EXPIRE_DT,
+                EXPIRE_YN,
+                STATE,
+                ATCL_REPL_CNT
+             )
+        VALUES
+            (
+                #{articleBean.atclId},
+                #{articleBean.brdId},
+                #{articleBean.memId},
+                #{articleBean.subject},
+                #{articleBean.content},
+                #{articleBean.viewCnt},
+                DATE_FORMAT(#{articleBean.createDt}, '%Y-%m-%d %h:%m:%s'),
+                DATE_FORMAT(#{articleBean.updateDt}, '%Y-%m-%d %h:%m:%s'),
+                DATE_FORMAT(#{articleBean.expireDt}, '%Y-%m-%d %h:%m:%s'),
+                #{articleBean.expireYn},
+                #{articleBean.state},
+                #{articleBean.atclReplCnt}
+            )
+
+    </insert>
+
+
+    <!-- 게시판 id로 게시글 리스트 조회 -->
+    <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
+
+        SELECT
+            BA.ATCL_ID,
+            BA.BRD_ID,
+            BA.MEM_ID,
+            BA.SUBJECT,
+            BA.CONTENT,
+            BA.VIEW_CNT,
+            BA.CREATE_DT,
+            BA.UPDATE_DT,
+            BA.EXPIRE_DT,
+            BA.EXPIRE_YN,
+            BA.STATE,
+            BA.ATCL_REPL_CNT,
+            MMI.MEM_NAME
+        FROM
+            BRD_ARTICLE BA,
+            MEM_MEMBER_INFO MMI
+        where
+            BA.MEM_ID = MMI.MEM_ID
+        AND
+            BA.STATE = 'B'
+        AND
+            BA.BRD_ID = #{boardBean.brdId}
+
+    </select>
+
+
+</mapper>

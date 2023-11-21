@@ -1,0 +1,145 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieCore.brd.mapperInterface.BrdBoardMapper">
+
+    <!-- 폴더 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBean">
+        <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
+        <result column="PARENT_FOLDER" property="parentFolder" jdbcType="VARCHAR" />
+        <result column="FOL_LOC" property="folLoc" jdbcType="VARCHAR" />
+        <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+        <result column="ODR" property="odr" jdbcType="INTEGER"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <!-- 게시판 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdBoardBean" id="boardBean">
+        <id column="BRD_ID" property="brdId" jdbcType="VARCHAR" />
+        <result column="FOL_ID" property="folId" jdbcType="VARCHAR"/>
+        <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
+        <result column="BRD_COMMENT" property="brdComment" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+        <result column="ODR" property="odr" jdbcType="INTEGER" />
+        <result column="CREATE_DT" property="createDt" jdbcType="DATE" />
+        <result column="NOTICE_YN" property="noticeYn" jdbcType="VARCHAR" />
+        <result column="IMG_UPLOAD_YN" property="imgUploadYn" jdbcType="VARCHAR" />
+        <result column="FILE_LIMIT" property="fileLimit" jdbcType="VARCHAR" />
+        <result column="FILE_CNT_LIMIT" property="fileCntLimit" jdbcType="VARCHAR" />
+        <result column="REPL_YN" property="replYn" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+
+
+    <!-- 게시판 생성 -->
+    <insert id="createBoard" parameterType="com.example.movieCore.brd.vo.BrdVo" >
+        insert into BRD_BOARD(
+            BRD_ID,
+            FOL_ID,
+            BRD_NAME,
+            BRD_COMMENT,
+            MEM_ID,
+            STATE,
+            ODR,
+            CREATE_DT,
+            NOTICE_YN,
+            IMG_UPLOAD_YN,
+            FILE_LIMIT,
+            FILE_CNT_LIMIT,
+            REPL_YN
+        )
+        values(
+            #{boardBean.brdId},
+            #{boardBean.folId},
+            #{boardBean.brdName},
+            #{boardBean.brdComment},
+            #{boardBean.memId},
+            #{boardBean.state},
+            #{boardBean.odr},
+            DATE_FORMAT(#{boardBean.createDt}, '%Y-%m-%d %h:%m:%s'),
+            #{boardBean.noticeYn},
+            #{boardBean.imgUploadYn},
+            #{boardBean.fileLimit},
+            #{boardBean.fileCntLimit},
+            #{boardBean.replYn}
+        )
+
+    </insert>
+
+
+
+    <!-- 모든 폴더 리스트 조회 -->
+    <select id="selectAllFolderList" resultMap="folderBean">
+        SELECT
+            FOL_ID,
+            MEM_ID,
+            FOL_NAME,
+            PARENT_FOLDER,
+            FOL_LOC,
+            DEPTH,
+            STATE,
+            ODR,
+            CREATE_DT
+        FROM
+            BRD_FOLDER
+    </select>
+
+
+
+    <!-- 모든 게시판 리스트 조회 -->
+    <select id="selectAllBoardList" resultMap="boardBean">
+        SELECT
+            BRD_ID,
+            FOL_ID,
+            BRD_NAME,
+            BRD_COMMENT,
+            MEM_ID,
+            STATE,
+            ODR,
+            CREATE_DT,
+            NOTICE_YN,
+            IMG_UPLOAD_YN,
+            FILE_LIMIT,
+            FILE_CNT_LIMIT,
+            REPL_YN
+        FROM
+            BRD_BOARD
+        WHERE
+            STATE = 'B'
+    </select>
+
+
+    <!-- folId로 게시판 리스트 조회 -->
+    <select id="selectBoardListByFolId" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean" >
+        SELECT
+            BRD_ID,
+            FOL_ID,
+            BRD_NAME,
+            BRD_COMMENT,
+            MEM_ID,
+            STATE,
+            ODR,
+            CREATE_DT,
+            NOTICE_YN,
+            IMG_UPLOAD_YN,
+            FILE_LIMIT,
+            FILE_CNT_LIMIT,
+            REPL_YN
+        FROM
+            BRD_BOARD
+        WHERE
+            STATE = 'B'
+        AND
+            FOL_ID = #{boardBean.folId}
+    </select>
+
+
+
+</mapper>
