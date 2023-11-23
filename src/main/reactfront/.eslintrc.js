@@ -20,6 +20,9 @@ module.exports = {
   ],
   plugins: ['react', 'react-hooks'],
   rules: {
+    "prettier/prettier": "off",
+    // 기타 Prettier와 충돌하는 규칙들을 비활성화 또는 조정
+    // 예: trailing comma, single quotes, 등
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   },

@@ -1,0 +1,51 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieCore.login.mapperInterface.LoginMapper">
+
+    <!-- 리절트맵 예시 -->
+    <!--<resultMap type="project" id="projectResultMap">
+        <id column="PNO" property="no" />
+        <result column="PNAME" property="title" />
+        <result column="CONTENT" property="content" />
+        <result column="STA_DATE" property="startDate" javaType="java.sql.Date" />
+        <result column="END_DATE" property="endDate" javaType="java.sql.Date" />
+        <result column="STATE" property="state" />
+        <result column="CRE_DATE" property="createdDate" javaType="java.sql.Date" />
+        <result column="TAGS" property="tags" />
+    </resultMap>-->
+
+    <insert id="signUp" parameterType="com.example.movieCore.login.vo.LoginMemberVo" >
+        insert into MEM_MEMBER_INFO (
+                                     MEM_ID,
+                                     LOGIN_ID,
+                                     LOGIN_PASSWORD,
+                                     MEM_NAME,
+                                     GENDER,
+                                     /*AUTH,*/
+                                     /*KAKAO_ID,*/
+                                     /*NAVER_ID,*/
+                                     MEM_CREATE_DATE,
+                                     ADDRESS,
+                                     EMAIL,
+                                     ADDRESS_INFO
+                                     )
+        values (
+                #{memberBean.memId},
+                #{memberBean.loginId},
+                #{memberBean.loginPassword},
+                #{memberBean.memName},
+                #{memberBean.gender},
+                DATE_FORMAT(#{memberBean.memCreateDate}, '%Y-%m-%d %h:%m:%s'),
+                #{memberBean.address},
+                #{memberBean.email},
+                #{memberBean.addressInfo}
+                )
+    </insert>
+
+
+
+
+
+</mapper>
