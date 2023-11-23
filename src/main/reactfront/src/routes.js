@@ -1,5 +1,10 @@
 import React from 'react'
 
+/** 커스텀 루트 주소 - 준호*/
+const ArticleReg = React.lazy(() => import('./views/brd/article/ArticleReg'))
+
+
+/** 템플릿 루트 주소 */
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
@@ -51,6 +56,13 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
+  /** 커스텀 루트 배열 - 준호 */
+
+  { path: '/brd/articleReg', name: 'articleReg', element: ArticleReg },
+
+
+
+  /** 템플릿 루트 배열 */
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
