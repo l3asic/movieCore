@@ -26,6 +26,22 @@ const _nav = [
       text: 'NEW',
     },
   },
+
+  /** 커스텀 게시판 모듈 - 준호 */
+  {
+    component: CNavTitle,
+    name: '게시판',
+  },
+  {
+    component: CNavItem,
+    name: '게시글 작성',
+    to: '/theme/colors',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+
+
+
+  /** 사이드바 템플릿 컴포넌트 */
   {
     component: CNavTitle,
     name: 'Theme',
@@ -42,6 +58,8 @@ const _nav = [
     to: '/theme/typography',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
+
+
   {
     component: CNavTitle,
     name: 'Components',
