@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   CButton,
   CCard,
@@ -26,6 +26,27 @@ const Register = () => {
     addressInfo: '',
     email: '',
   });
+
+  useEffect(() => {
+    // Daum 우편번호 서비스 스크립트 로드
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.onload = () => {
+      // Daum 우편번호 서비스 초기화
+      new window.daum.Postcode({
+        oncomplete: function (data) {
+          const fullAddress = data.address;
+          handleAddressSelection(fullAddress);
+        },
+      });
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      // 컴포넌트 언마운트 시 스크립트 제거
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -85,12 +106,22 @@ const Register = () => {
                       <option value="F">여성</option>
                     </CFormSelect>
                   </CInputGroup>
-                  <CInputGroup className="mb-3">
-                    <CInputGroupText>
-                      <CIcon icon={cilRoom} />
-                    </CInputGroupText>
-                    <CFormInput name="address" placeholder="주소" onChange={changeMemberInfo} />
-                  </CInputGroup>
+                  <CRow className="mb-3">
+                    <CCol md={9}>
+                      <CInputGroup>
+                        <CInputGroupText>
+                          <CIcon icon={cilRoom} />
+                        </CInputGroupText>
+                        <CFormInput name="address" placeholder="주소"  value={memberInfo.address}
+                                    onChange={changeMemberInfo} />
+                      </CInputGroup>
+                    </CCol>
+                    <CCol md={3}>
+                      <CButton color="info" onClick={openDaumPostcode} style={{ width: '100%', height: '100%'}}>
+                        주소검색
+                      </CButton>
+                    </CCol>
+                  </CRow>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilRoom} />
@@ -123,6 +154,22 @@ const Register = () => {
       [name]: value // name 키를 가진 값을 value 로 설정
     });
 
+  }
+
+  function handleAddressSelection(selectedAddress) {
+    setMemberInfo({
+      ...memberInfo,
+      address: selectedAddress,
+    });
+  }
+
+  function openDaumPostcode() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        const fullAddress = data.address; // 선택된 전체 주소
+        handleAddressSelection(fullAddress); // 선택된 주소를 상태값에 반영
+      },
+    }).open();
   }
 
   function signUp(){
