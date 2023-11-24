@@ -56,8 +56,8 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
-  /** 커스텀 루트 배열 - 준호 */
 
+  /** 커스텀 루트 배열 - 준호 */
   { path: '/brd/articleReg', name: 'articleReg', element: ArticleReg },
 
 
