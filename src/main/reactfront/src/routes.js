@@ -11,6 +11,13 @@ const FolderBoardList = React.lazy(() => import('./views/admin/brd/FolderBoardLi
 // - 게시글 관리
 const ArticleListManage = React.lazy(() => import('./views/admin/brd/ArticleListManage'))
 
+
+// 영화
+// - 영화 리스트
+const MovieList = React.lazy(() => import('./views/movie/MovieList'))
+
+
+
 // 게시판
 // - 게시글 작성
 const ArticleReg = React.lazy(() => import('./views/brd/article/ArticleReg'))
@@ -85,10 +92,15 @@ const routes = [
   // - 게시글 관리
   { path: '/admin/ArticleListManage', name: 'ArticleListManage', element: ArticleListManage },
 
+
+  // 영화
+  // - 영화 리스트
+  { path: '/movie/MovieList', name: 'MovieList', element: MovieList },
+
+
   // 게시판
   // - 게시글 작성
   { path: '/brd/ArticleReg', name: 'ArticleReg', element: ArticleReg },
-
   // - 게시글 리스트 화면
   { path: '/brd/ArticleListView', name: 'ArticleListView', element: ArticleListView },
 

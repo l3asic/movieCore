@@ -76,6 +76,54 @@ const _nav = [
   },
 
 
+  /** 커스텀 영화 모듈  */
+  {
+    component: CNavTitle,
+    name: '영화',
+  },
+
+  {
+    component: CNavGroup,
+    name: '영화',
+    to: '/base',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: '임시) 영화 리스트',
+        to: '/movie/MovieList',
+        icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavGroup,
+        name: '더미 폴더1',
+        to: '/admin/boardManage',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        items: [
+          {
+            component: CNavItem,
+            name: ' - 더미 기능1',
+            to: '/admin/CreateFolderBoard',
+          },
+          {
+            component: CNavItem,
+            name: ' - 더미 기능2',
+            to: '/admin/FolderBoardList',
+          },
+          {
+            component: CNavItem,
+            name: ' - 더미 기능3',
+            to: '/admin/ArticleListManage',
+          },
+        ],
+      },
+
+
+
+    ],
+  },
+
+
 
 
 
