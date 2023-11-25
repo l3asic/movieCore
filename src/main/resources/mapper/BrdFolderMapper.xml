@@ -4,6 +4,21 @@
 
 <mapper namespace="com.example.movieCore.brd.mapperInterface.BrdFolderMapper">
 
+    <!-- 폴더 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBean">
+        <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
+        <result column="PARENT_FOLDER" property="parentFolder" jdbcType="VARCHAR" />
+        <result column="FOL_LOC" property="folLoc" jdbcType="VARCHAR" />
+        <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+        <result column="ODR" property="odr" jdbcType="INTEGER"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+
+    </resultMap>
+
+
 
     <insert id="createFolder" parameterType="com.example.movieCore.brd.vo.BrdVo" >
 
@@ -31,6 +46,29 @@
                )
 
     </insert>
+
+
+
+
+    <!-- 모든 폴더 리스트 조회 -->
+    <select id="selectAllFolderList" resultMap="folderBean">
+        SELECT
+            bf.FOL_ID,
+            bf.MEM_ID,
+            bf.FOL_NAME,
+            bf.PARENT_FOLDER,
+            bf.FOL_LOC,
+            bf.DEPTH,
+            bf.STATE,
+            bf.ODR,
+            bf.CREATE_DT
+
+        FROM
+            BRD_FOLDER bf
+        WHERE
+            bf.state = 'B'
+    </select>
+
 
 
 

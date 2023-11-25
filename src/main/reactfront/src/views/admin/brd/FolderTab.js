@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CInputGroup, CInputGroupText, CForm, CFormInput, CCol, CFormSelect, CButton} from "@coreui/react";
 import axios from "axios";
 
 function FolderTab() {
+
+  const [brdVo, setBrdVo] = useState({
+    folderBeanList : []
+  });
 
   const [folderBean, setFolderBean] = useState({
     memId : '',
@@ -12,6 +16,25 @@ function FolderTab() {
     depth : 0,
     odr : 0
   });
+
+
+  /** 모든 폴더 리스트 조회 */
+  useEffect(() => {
+    selectAllFolderList();
+  }, [])
+
+  /** 조회된 폴더 리스트의 첫번째 폴더로 기본 값 세팅 */
+  useEffect(() => {
+    if (brdVo.folderBeanList.length > 0) {
+      const firstFolder = brdVo.folderBeanList[0];
+      setFolderBean((prevFolderBean) => ({
+        ...prevFolderBean,
+        folId: firstFolder.folId,
+      }));
+    }
+  }, [brdVo.folderBeanList]);
+
+
 
   return (
     <>
@@ -24,12 +47,11 @@ function FolderTab() {
             <CInputGroupText id="basic-addon1">상위 폴더 선택</CInputGroupText>
             <CFormSelect
               aria-label="상위 폴더 선택"
-              options={[
-                {label: '상위폴더 선택안함', value: 'N'},
-                {label: 'One', value: '1'},
-                {label: 'Two', value: '2'},
-                {label: 'Three', value: '3',}
-              ]}
+              options={
+              brdVo.folderBeanList.map(folderBean => ({
+                label: folderBean.folName,
+                value: folderBean.folId
+              }))}
               name="parentFolder"
               onChange={changeFolderBean}
             />
@@ -59,7 +81,30 @@ function FolderTab() {
 
 
     </>
-  )
+  ) // return
+
+
+  /** 모든 폴더 리스트 조회 */
+  function selectAllFolderList(){
+    axios({
+      url: '/selectAllFolderList',
+      method: 'post',
+      params:{
+      }
+
+    }).then(function (res){
+      setBrdVo((prevBrdVo) => ({
+        ...prevBrdVo,
+        folderBeanList: res.data.brdVo.folderBeanList
+      }));
+
+    }).catch(function (err){
+      alert("조회실패 (오류)");
+    });
+
+  }
+
+
 
 
   function changeFolderBean(e){

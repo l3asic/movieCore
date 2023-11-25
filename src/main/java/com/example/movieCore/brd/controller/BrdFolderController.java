@@ -80,4 +80,36 @@ public class BrdFolderController {
 
     }
 
+
+
+    /** 모든 폴더 리스트 조회 */
+    @PostMapping(value = "/selectAllFolderList")
+    @ResponseBody
+    public Map<String, Object> selectAllFolderList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+
+        boolean succesResult = false;
+
+        BrdVo brdVo = new BrdVo();
+
+        Map resMap = new HashMap<>();
+
+        try {
+            brdVo.setFolderBeanList(folderService.selectAllFolderList());
+            resMap.put("brdVo",brdVo);
+            succesResult = true;
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        resMap.put("succesResult",succesResult);
+
+        return resMap;
+
+
+    }
+
+
+
+
 }
