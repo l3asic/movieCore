@@ -6,7 +6,7 @@ import {
   cilChartPie,
   cilCursor,
   cilDescription,
-  cilDrop, cilFaceDead,
+  cilDrop, cilFaceDead, cilLightbulb, cilMovie,
   cilNotes,
   cilPencil,
   cilPuzzle,
@@ -86,19 +86,17 @@ const _nav = [
     component: CNavGroup,
     name: '영화',
     to: '/base',
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilMovie} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: '임시) 영화 리스트',
         to: '/movie/MovieList',
-        icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
       },
       {
         component: CNavGroup,
         name: '더미 폴더1',
         to: '/admin/boardManage',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
         items: [
           {
             component: CNavItem,
@@ -212,6 +210,42 @@ const _nav = [
 
 
 
+
+
+  /** 커스텀 QnA 모듈  */
+  {
+    component: CNavTitle,
+    name: 'QnA',
+  },
+
+  {
+    component: CNavGroup,
+    name: 'QnA',
+    icon: <CIcon icon={cilLightbulb} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: '시스템 공지사항',
+        to: '/qna/SystemNotice',
+      },
+      {
+        component: CNavItem,
+        name: '자주 묻는 질문',
+        to: '/qna/FreqQuestion',
+      },
+      {
+        component: CNavItem,
+        name: '채팅 상담',
+        to: '/qna/ChattingCounseling',
+      },
+      {
+        component: CNavItem,
+        name: '패치노트',
+        to: '/qna/PatchNotes',
+      },
+
+    ],
+  },
 
 
 

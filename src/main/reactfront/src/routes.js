@@ -25,6 +25,17 @@ const ArticleReg = React.lazy(() => import('./views/brd/article/ArticleReg'))
 const ArticleListView = React.lazy(() => import('./views/brd/article/ArticleListView'))
 
 
+// QnA
+// - 시스템 공지사항
+const SystemNotice = React.lazy(() => import('./views/qna/systemNotice/SystemNotice'))
+// - 자주 묻는 질문
+const FreqQuestion = React.lazy(() => import('./views/qna/freqQuestion/FreqQuestion'))
+// - 채팅 상담
+const ChattingCounseling = React.lazy(() => import('./views/qna/chattingCounseling/ChattingCounseling'))
+// - 패치 노트
+const PatchNotes = React.lazy(() => import('./views/qna/patchNotes/PatchNotes'))
+
+
 
 
 /** 템플릿 루트 주소 */
@@ -105,8 +116,15 @@ const routes = [
   { path: '/brd/ArticleListView', name: 'ArticleListView', element: ArticleListView },
 
 
-
-
+  // QnA
+  // - 시스템 공지사항
+  { path: '/qna/SystemNotice', name: 'SystemNotice', element: SystemNotice },
+  // - 자주 묻는 질문
+  { path: '/qna/FreqQuestion', name: 'FreqQuestion', element: FreqQuestion },
+  // - 채팅 상담
+  { path: '/qna/ChattingCounseling', name: 'ChattingCounseling', element: ChattingCounseling },
+  // - 패치 노트
+  { path: '/qna/PatchNotes', name: 'PatchNotes', element: PatchNotes },
 
 
 
