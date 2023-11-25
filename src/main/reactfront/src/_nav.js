@@ -58,6 +58,13 @@ const _nav = [
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
 
+  {
+    component: CNavItem,
+    name: '임시) 게시글 리스트 보기',
+    to: '/brd/ArticleListView',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+
 
 
 
