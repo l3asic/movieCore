@@ -19,7 +19,7 @@ function FolderTab() {
       <CForm className="row g-3">
 
         {/** 상위폴더 선택 추후 트리구조로 개편 필요 */}
-        <CCol md={4}>
+        <CCol md={5}>
           <CInputGroup className="mb-3">
             <CInputGroupText id="basic-addon1">상위 폴더 선택</CInputGroupText>
             <CFormSelect
@@ -37,7 +37,7 @@ function FolderTab() {
         </CCol>
 
 
-        <CCol md={4}>
+        <CCol md={5}>
           <CInputGroup className="mb-3">
             <CInputGroupText id="basic-addon1">폴더 명</CInputGroupText>
             <CFormInput placeholder="폴더 명 입력" aria-label="Username" aria-describedby="basic-addon1"
@@ -47,8 +47,6 @@ function FolderTab() {
           </CInputGroup>
         </CCol>
 
-        <CCol md={2}>
-        </CCol>
         <CCol md={2}>
           <CButton
             color="primary"
