@@ -6,7 +6,7 @@ import {
   cilChartPie,
   cilCursor,
   cilDescription,
-  cilDrop,
+  cilDrop, cilFaceDead,
   cilNotes,
   cilPencil,
   cilPuzzle,
@@ -32,18 +32,54 @@ const _nav = [
     component: CNavTitle,
     name: '관리자',
   },
+
   {
-    component: CNavItem,
-    name: '회원 관리',
-    to: '/admin/memberManage',
-    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+    component: CNavGroup,
+    name: '관리자',
+    to: '/base',
+    icon: <CIcon icon={cilFaceDead} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: '회원 관리',
+        to: '/admin/memberManage',
+        icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+      },
+
+      {
+        component: CNavGroup,
+        name: '게시판 관리',
+        to: '/admin/boardManage',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        items: [
+          {
+            component: CNavItem,
+            name: ' - 폴더/게시판 생성',
+            to: '/admin/CreateFolderBoard',
+          },
+          {
+            component: CNavItem,
+            name: ' - 폴더/게시판 관리',
+            to: '/admin/FolderBoardList',
+          },
+        ],
+      },
+
+
+
+    ],
   },
-  {
-    component: CNavItem,
-    name: '게시판 관리',
-    to: '/admin/boardManage',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-  },
+
+
+
+
+
+
+
+
+
+
+
 
 
   /** 커스텀 게시판 모듈  */

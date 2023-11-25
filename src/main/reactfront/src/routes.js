@@ -4,8 +4,10 @@ import React from 'react'
 // 관리자
 // - 회원 관리
 const MemberManage = React.lazy(() => import('./views/admin/mem/MemberManage'))
-// - 게시판 관리
-const BoardManage = React.lazy(() => import('./views/admin/brd/BoardManage'))
+// - 폴더/게시판 생성
+const CreateFolderBoard = React.lazy(() => import('./views/admin/brd/CreateFolderBoard'))
+// - 폴더/게시판 관리
+const FolderBoardList = React.lazy(() => import('./views/admin/brd/FolderBoardList'))
 
 // 게시판
 // - 게시글 작성
@@ -74,8 +76,10 @@ const routes = [
   // 관리자
   // - 회원 관리
   { path: '/admin/MemberManage', name: 'MemberManage', element: MemberManage },
-  // - 게시판 관리
-  { path: '/admin/BoardManage', name: 'BoardManage', element: BoardManage },
+  // - 폴더/게시판 생성
+  { path: '/admin/CreateFolderBoard', name: 'CreateFolderBoard', element: CreateFolderBoard },
+  // - 폴더/게시판 관리
+  { path: '/admin/FolderBoardList', name: 'FolderBoardList', element: FolderBoardList },
 
   // 게시판
   // - 게시글 작성
