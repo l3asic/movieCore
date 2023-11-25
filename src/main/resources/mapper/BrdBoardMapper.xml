@@ -143,30 +143,6 @@
     </select>
 
 
-    <!-- folId로 게시판 리스트 조회 -->
-    <select id="selectBoardListByFolId" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean" >
-        SELECT
-            BRD_ID,
-            FOL_ID,
-            BRD_NAME,
-            BRD_COMMENT,
-            MEM_ID,
-            STATE,
-            ODR,
-            CREATE_DT,
-            NOTICE_YN,
-            IMG_UPLOAD_YN,
-            FILE_LIMIT,
-            FILE_CNT_LIMIT,
-            REPL_YN
-        FROM
-            BRD_BOARD
-        WHERE
-            STATE = 'B'
-        AND
-            FOL_ID = #{boardBean.folId}
-    </select>
-
 
 
 </mapper>

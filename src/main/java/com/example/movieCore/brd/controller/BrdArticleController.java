@@ -94,7 +94,6 @@ public class BrdArticleController {
     public Map<String, Object> selectArticleList(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
 
 
-
         /** 게시글 리스트 조회디비서 셀렉트  */
         BrdVo brdVo = new BrdVo();
         brdVo.setBoardBean(boardBean);

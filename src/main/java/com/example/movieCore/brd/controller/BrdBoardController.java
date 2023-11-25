@@ -129,36 +129,6 @@ public class BrdBoardController {
 
 
 
-    /** folId로 게시판 리스트 조회 */
-    @PostMapping(value = "/selectBoardListByFolId")
-    @ResponseBody
-    public Map<String, Object> selectBoardListByFolId(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
-
-        BrdVo brdVo = new BrdVo();
-        brdVo.setBoardBean(boardBean);
-
-
-
-        Map resMap = new HashMap<>();
-
-        try {
-            brdVo.setBoardBeanList(boardService.selectBoardListByFolId(brdVo));
-            resMap.put("succesResult",true);
-        }catch (Exception e){
-            resMap.put("succesResult",false);
-        }
-
-        resMap.put("brdVo",brdVo);
-
-
-        return resMap;
-
-
-    }
-
-
-
-
 
 
 

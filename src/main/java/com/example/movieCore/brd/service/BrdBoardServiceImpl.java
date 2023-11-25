@@ -32,7 +32,4 @@ public class BrdBoardServiceImpl {
         return brdBoardMapper.selectAllBoardList();
     }
 
-    public ArrayList<BrdBoardBean> selectBoardListByFolId(BrdVo brdVo) {
-        return brdBoardMapper.selectBoardListByFolId(brdVo);
-    }
 }

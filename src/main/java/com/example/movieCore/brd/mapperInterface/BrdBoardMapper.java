@@ -16,5 +16,4 @@ public interface BrdBoardMapper {
 
     ArrayList<BrdBoardBean> selectAllBoardList();
 
-    ArrayList<BrdBoardBean> selectBoardListByFolId(BrdVo brdVo);
 }
