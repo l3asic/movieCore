@@ -30,7 +30,7 @@ const ArticleReg = () => {
 
   /** 전체 폴더와 게시판 조회 */
   useEffect(() => {
-    selectAllFolderList();
+    selectAllFolderBoardList();
   }, [])
 
 
@@ -222,8 +222,8 @@ const ArticleReg = () => {
 
 
 
-  /** 모든 폴더리스트 조회 */
-  function selectAllFolderList(){
+  /** 모든 폴더/게시판 리스트 조회 */
+  function selectAllFolderBoardList(){
     axios({
       url: '/selectAllFolderBoardList',
       method: 'post',
