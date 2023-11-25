@@ -3,13 +3,15 @@ import React from 'react'
 /** 커스텀 루트 주소 */
 // 관리자
 // - 회원 관리
-const memberManage = React.lazy(() => import('./views/admin/mem/memberManage'))
+const MemberManage = React.lazy(() => import('./views/admin/mem/MemberManage'))
 // - 게시판 관리
-const boardManage = React.lazy(() => import('./views/admin/brd/boardManage'))
+const BoardManage = React.lazy(() => import('./views/admin/brd/BoardManage'))
 
 // 게시판
 // - 게시글 작성
 const ArticleReg = React.lazy(() => import('./views/brd/article/ArticleReg'))
+// - 게시글 리스트
+const ArticleListView = React.lazy(() => import('./views/brd/article/ArticleListView'))
 
 
 
@@ -71,13 +73,18 @@ const routes = [
 
   // 관리자
   // - 회원 관리
-  { path: '/admin/memberManage', name: 'memberManage', element: memberManage },
+  { path: '/admin/MemberManage', name: 'MemberManage', element: MemberManage },
   // - 게시판 관리
-  { path: '/admin/boardManage', name: 'boardManage', element: boardManage },
+  { path: '/admin/BoardManage', name: 'BoardManage', element: BoardManage },
 
   // 게시판
   // - 게시글 작성
-  { path: '/brd/articleReg', name: 'articleReg', element: ArticleReg },
+  { path: '/brd/ArticleReg', name: 'ArticleReg', element: ArticleReg },
+
+  // - 게시글 리스트 화면
+  { path: '/brd/ArticleListView', name: 'ArticleListView', element: ArticleListView },
+
+
 
 
 

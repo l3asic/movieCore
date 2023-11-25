@@ -60,6 +60,69 @@ const _nav = [
 
 
 
+
+
+  /** 폴더/게시판리스트 렌더링 테스트 - 준호 */
+  /** 폴더/게시판리스트 렌더링 테스트 - 준호 */
+  /** 폴더/게시판리스트 렌더링 테스트 - 준호 */
+
+  {
+    component: CNavGroup,
+    name: '폴더 더미 1',
+    to: '/base',
+    icon: <CIcon icon={cilFolder} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Accordion',
+        to: '/base/accordion',
+      },
+      {
+        component: CNavItem,
+        name: 'Breadcrumb',
+        to: '/base/breadcrumbs',
+      },
+      {
+        component: CNavItem,
+        name: 'Cards',
+        to: '/base/cards',
+      },
+    ],
+  },
+
+  {
+    component: CNavGroup,
+    name: '폴더 더미 2',
+    to: '/base',
+    icon: <CIcon icon={cilFolder} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Accordion',
+        to: '/base/accordion',
+      },
+      {
+        component: CNavItem,
+        name: 'Breadcrumb',
+        to: '/base/breadcrumbs',
+      },
+      {
+        component: CNavItem,
+        name: 'Cards',
+        to: '/base/cards',
+      },
+    ],
+  },
+
+
+
+
+
+
+
+
+
+
   /** 사이드바 템플릿 컴포넌트 */
   {
     component: CNavTitle,
