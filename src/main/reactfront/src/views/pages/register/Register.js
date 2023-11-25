@@ -188,7 +188,6 @@ const Register = () => {
       }
 
     }).then(function (res){
-      debugger;
       if(res.data.succesResult){
         alert(res.data.memberVo.memberBean.loginId + " 가입성공");
       }else{
@@ -196,7 +195,6 @@ const Register = () => {
       }
 
     }).catch(function (err){
-      debugger;
       alert("가입 실패 (오류)");
     });
 
