@@ -27,7 +27,26 @@ const _nav = [
     },
   },
 
-  /** 커스텀 게시판 모듈 - 준호 */
+  /** 커스텀 관리자 모듈  */
+  {
+    component: CNavTitle,
+    name: '관리자',
+  },
+  {
+    component: CNavItem,
+    name: '회원 관리',
+    to: '/admin/memberManage',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: '게시판 관리',
+    to: '/admin/boardManage',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
+
+
+  /** 커스텀 게시판 모듈  */
   {
     component: CNavTitle,
     name: '게시판',

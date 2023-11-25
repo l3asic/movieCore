@@ -1,7 +1,17 @@
 import React from 'react'
 
-/** 커스텀 루트 주소 - 준호*/
+/** 커스텀 루트 주소 */
+// 관리자
+// - 회원 관리
+const memberManage = React.lazy(() => import('./views/admin/mem/memberManage'))
+// - 게시판 관리
+const boardManage = React.lazy(() => import('./views/admin/brd/boardManage'))
+
+// 게시판
+// - 게시글 작성
 const ArticleReg = React.lazy(() => import('./views/brd/article/ArticleReg'))
+
+
 
 
 /** 템플릿 루트 주소 */
@@ -57,8 +67,21 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
 
-  /** 커스텀 루트 배열 - 준호 */
+  /** 커스텀 루트 배열  */
+
+  // 관리자
+  // - 회원 관리
+  { path: '/admin/memberManage', name: 'memberManage', element: memberManage },
+  // - 게시판 관리
+  { path: '/admin/boardManage', name: 'boardManage', element: boardManage },
+
+  // 게시판
+  // - 게시글 작성
   { path: '/brd/articleReg', name: 'articleReg', element: ArticleReg },
+
+
+
+
 
 
 
