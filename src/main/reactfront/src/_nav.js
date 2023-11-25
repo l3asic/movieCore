@@ -70,7 +70,7 @@ const _nav = [
     component: CNavGroup,
     name: '폴더 더미 1',
     to: '/base',
-    icon: <CIcon icon={cilFolder} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -94,7 +94,7 @@ const _nav = [
     component: CNavGroup,
     name: '폴더 더미 2',
     to: '/base',
-    icon: <CIcon icon={cilFolder} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
