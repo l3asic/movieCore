@@ -62,6 +62,11 @@ const _nav = [
             name: ' - 폴더/게시판 관리',
             to: '/admin/FolderBoardList',
           },
+          {
+            component: CNavItem,
+            name: ' - 게시글 관리',
+            to: '/admin/ArticleListManage',
+          },
         ],
       },
 

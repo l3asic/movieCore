@@ -8,6 +8,8 @@ const MemberManage = React.lazy(() => import('./views/admin/mem/MemberManage'))
 const CreateFolderBoard = React.lazy(() => import('./views/admin/brd/CreateFolderBoard'))
 // - 폴더/게시판 관리
 const FolderBoardList = React.lazy(() => import('./views/admin/brd/FolderBoardList'))
+// - 게시글 관리
+const ArticleListManage = React.lazy(() => import('./views/admin/brd/ArticleListManage'))
 
 // 게시판
 // - 게시글 작성
@@ -80,6 +82,8 @@ const routes = [
   { path: '/admin/CreateFolderBoard', name: 'CreateFolderBoard', element: CreateFolderBoard },
   // - 폴더/게시판 관리
   { path: '/admin/FolderBoardList', name: 'FolderBoardList', element: FolderBoardList },
+  // - 게시글 관리
+  { path: '/admin/ArticleListManage', name: 'ArticleListManage', element: ArticleListManage },
 
   // 게시판
   // - 게시글 작성
