@@ -61,7 +61,6 @@ const ArticleReg = () => {
 
   // 선택된 폴더에 따라 게시판 옵션을 업데이트하는 효과
   useEffect(() => {
-    debugger;
     if (selectedFolder) {
       // 여기서는 간단히 폴더에 대한 데이터를 가져온다고 가정
       const folderData = brdVo.folderBeanList.find((folder) => folder.folId === selectedFolder);
