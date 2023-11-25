@@ -36,7 +36,7 @@ const _nav = [
     component: CNavItem,
     name: '게시글 작성',
     to: '/brd/articleReg',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
 
 
