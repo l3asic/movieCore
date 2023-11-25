@@ -12,7 +12,7 @@ public interface BrdBoardMapper {
 
     public boolean createBoard(BrdVo brdVo);
 
-    ArrayList<BrdFolderBean> selectAllFolderList();
+    ArrayList<BrdFolderBean> selectAllFolderBoardList();
 
     ArrayList<BrdBoardBean> selectAllBoardList();
 

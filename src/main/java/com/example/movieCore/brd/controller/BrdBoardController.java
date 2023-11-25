@@ -73,17 +73,17 @@ public class BrdBoardController {
 
 
 
-    /** 모든 폴더 리스트 조회 */
-    @PostMapping(value = "/selectAllFolderList")
+    /** 모든 폴더/게시판 리스트 조회 */
+    @PostMapping(value = "/selectAllFolderBoardList")
     @ResponseBody
-    public Map<String, Object> selectAllFolderList(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public Map<String, Object> selectAllFolderBoardList(HttpServletRequest request, HttpServletResponse response) throws Exception{
 
         BrdVo brdVo = new BrdVo();
 
         Map resMap = new HashMap<>();
 
         try {
-            brdVo.setFolderBeanList(boardService.selectAllFolderList());
+            brdVo.setFolderBeanList(boardService.selectAllFolderBoardList());
             resMap.put("succesResult",true);
         }catch (Exception e){
             resMap.put("succesResult",false);
@@ -158,39 +158,6 @@ public class BrdBoardController {
 
 
 
-
-    /** 모든 폴더 리스트 조회 + folId로 게시판 리스트 조회 */
-    @PostMapping(value = "/selectFolderBoardList")
-    @ResponseBody
-    public Map<String, Object> selectFolderBoardList(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
-
-        BrdVo brdVo = new BrdVo();
-        brdVo.setBoardBean(boardBean);
-
-
-
-        Map resMap = new HashMap<>();
-
-        try {
-
-            // 모든 폴더 리스트 조회
-            brdVo.setFolderBeanList(boardService.selectAllFolderList());
-
-            // 폴더 id로 게시판 리스트 조회
-            brdVo.setBoardBeanList(boardService.selectBoardListByFolId(brdVo));
-
-            resMap.put("succesResult",true);
-        }catch (Exception e){
-            resMap.put("succesResult",false);
-        }
-
-        resMap.put("brdVo",brdVo);
-
-
-        return resMap;
-
-
-    }
 
 
 

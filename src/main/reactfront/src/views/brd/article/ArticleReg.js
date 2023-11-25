@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CFormInput, CForm, CFormLabel, CFormTextarea,
   CFormSelect,
@@ -15,13 +15,7 @@ const ArticleReg = () => {
     folderBeanList : [],
     boardBean : {},
     boardBeanList : [],
-    articleBean : {
-      atclId : '',
-      brdId : '',
-      memId : '',
-      subject : '',
-      content : ''
-    }
+    articleBean : {}
   });
 
 
@@ -34,8 +28,56 @@ const ArticleReg = () => {
   });
 
 
+  /** 전체 폴더와 게시판 조회 */
+  useEffect(() => {
+    selectAllFolderList();
+  }, [])
 
 
+
+
+  // 폴더와 게시판 상태
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [boardOptions, setBoardOptions] = useState([]);
+
+
+  // 폴더 선택 이벤트 핸들러
+  const handleFolderChange = (event) => {
+    const folderValue = event.target.value;
+    // 폴더가 변경될 때마다 게시판 상태를 초기화하고 폴더 상태 업데이트
+    setSelectedBoard(null);
+    setSelectedFolder(folderValue);
+  };
+
+  // 게시판 선택 이벤트 핸들러
+  const handleBoardChange = (event) => {
+    const boardValue = event.target.value;
+    // 게시판 상태 업데이트
+    setSelectedBoard(boardValue);
+    changeAtclBean(event);
+  };
+
+
+  // 선택된 폴더에 따라 게시판 옵션을 업데이트하는 효과
+  useEffect(() => {
+    debugger;
+    if (selectedFolder) {
+      // 여기서는 간단히 폴더에 대한 데이터를 가져온다고 가정
+      const folderData = brdVo.folderBeanList.find((folder) => folder.folId === selectedFolder);
+      if (folderData) {
+        // 선택된 폴더에 해당하는 게시판 옵션 생성
+        const newBoardOptions = folderData.boardBeanList.map((boardBean) => ({
+          label: boardBean.brdName,
+          value: boardBean.brdId,
+        }));
+        setBoardOptions(newBoardOptions);
+      }
+    } else {
+      // 선택된 폴더가 없을 경우 게시판 옵션 초기화
+      setBoardOptions([]);
+    }
+  }, [selectedFolder]);
 
 
 
@@ -49,24 +91,21 @@ const ArticleReg = () => {
         <CCol md={3}>
           <CFormSelect
             label="폴더 선택"
-            options={[
-              {label: '임시 테스트 폴더 001', value: 'BF2311713518'},
-              {label: '임시 테스트 폴더 002', value: 'BF4258826302'},
-              {label: '임시 테스트 폴더 003', value: 'BF4258826303'}
-            ]}
+            options={brdVo.folderBeanList.map(folderBean => ({
+              label: folderBean.folName,
+              value: folderBean.folId
+            }))}
             name="folId"
+            onChange={handleFolderChange}
           />
         </CCol>
 
         <CCol md={3}>
           <CFormSelect
             label="게시판 선택"
-            options={[
-              {label: '임시 그냥게시판', value: 'BB2115411073'},
-              {label: '테스트 게시판 001', value: 'BB4265418620'}
-            ]}
+            options={boardOptions}
             name="brdId"
-            onChange={changeAtclBean}
+            onChange={handleBoardChange}
           />
         </CCol>
 
@@ -184,6 +223,48 @@ const ArticleReg = () => {
 
 
 
+  /** 모든 폴더리스트 조회 */
+  function selectAllFolderList(){
+    axios({
+      url: '/selectAllFolderBoardList',
+      method: 'post',
+      params:{
+      }
+
+    }).then(function (res){
+      const fetchedFolderBeanList = res.data.brdVo.folderBeanList;
+
+      /* 폴더/게시판 기본값 세팅 */
+      // 상태에 folderBeanList 설정
+      setBrdVo((prevBrdVo) => ({
+        ...prevBrdVo,
+        folderBeanList: fetchedFolderBeanList,
+      }));
+
+      // 검색된 데이터에 폴더가 있는지 확인
+      if (fetchedFolderBeanList.length > 0) {
+        const defaultFolder = fetchedFolderBeanList[0];
+        setSelectedFolder(defaultFolder.folId);
+
+        // 기본 폴더를 기반으로 게시판 옵션 설정
+        const newBoardOptions = defaultFolder.boardBeanList.map((board) => ({
+          label: board.brdName,
+          value: board.brdId,
+        }));
+        setBoardOptions(newBoardOptions);
+
+        // 기본 폴더를 기반으로 선택된 게시판 설정
+        setSelectedBoard(newBoardOptions.length > 0 ? newBoardOptions[0].value : null);
+      }
+
+    }).catch(function (err){
+      alert("등록 실패 (오류)");
+    });
+
+  }
+
+
+
   /** 게시글 정보 입력시 객체에 세팅 */
   function changeAtclBean(e){
     const { value, name } = e.target;
@@ -197,6 +278,8 @@ const ArticleReg = () => {
   /** 게시글 최종 작성(등록) */
   function atclRegistry(){
 
+    brdVo.articleBean = articleBean;
+
     /** 테스트용 기본값 추가 세팅 */
     brdVo.articleBean.memId = "001";
     // brdVo.articleBean.atclBean.expireDt =  new Date(); // 날짜 타입 컨트롤러 값 전송시 추가 확인 필요
@@ -205,10 +288,10 @@ const ArticleReg = () => {
       url: '/atclRegistry', // 통신할 웹문서
       method: 'post', // 통신할 방식
       params:{
-        brdId: articleBean.brdId,
-        memId: articleBean.memId,
-        subject: articleBean.subject,
-        content: articleBean.content
+        brdId: brdVo.articleBean.brdId,
+        memId: brdVo.articleBean.memId,
+        subject: brdVo.articleBean.subject,
+        content: brdVo.articleBean.content
         /*expireDt:  brdVo.articleBean.expireDt*/
       }
 

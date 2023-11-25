@@ -22,9 +22,9 @@ public class BrdBoardServiceImpl {
     }
 
 
-    public ArrayList<BrdFolderBean> selectAllFolderList() {
+    public ArrayList<BrdFolderBean> selectAllFolderBoardList() {
 
-        return brdBoardMapper.selectAllFolderList();
+        return brdBoardMapper.selectAllFolderBoardList();
 
     }
 

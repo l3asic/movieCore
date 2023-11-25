@@ -3,6 +3,7 @@ package com.example.movieCore.brd.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Getter
@@ -33,5 +34,9 @@ public class BrdBoardBean {
     private String fileCntLimit;
 
     private String replYn;
+
+    private ArrayList<BrdArticleBean> articleBeanList;
+
+
 
 }

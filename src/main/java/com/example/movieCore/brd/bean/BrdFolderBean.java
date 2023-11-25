@@ -3,6 +3,7 @@ package com.example.movieCore.brd.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Getter
@@ -25,4 +26,6 @@ public class BrdFolderBean {
     private int odr;
 
     private Date createDt;
+
+    private ArrayList<BrdBoardBean> boardBeanList;
 }
