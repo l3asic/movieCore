@@ -9,7 +9,6 @@
         <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
         <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
-        <result column="PARENT_FOLDER" property="parentFolder" jdbcType="VARCHAR" />
         <result column="FOL_LOC" property="folLoc" jdbcType="VARCHAR" />
         <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
         <result column="STATE" property="state" jdbcType="VARCHAR" />
@@ -26,7 +25,6 @@
             FOL_ID,
             MEM_ID,
             FOL_NAME,
-            PARENT_FOLDER,
             FOL_LOC,
             DEPTH,
             STATE,
@@ -37,7 +35,6 @@
                    #{folderBean.folId},
                    #{folderBean.memId},
                    #{folderBean.folName},
-                   #{folderBean.parentFolder},
                    #{folderBean.folLoc},
                    #{folderBean.depth},
                    #{folderBean.state},
@@ -56,7 +53,6 @@
             bf.FOL_ID,
             bf.MEM_ID,
             bf.FOL_NAME,
-            bf.PARENT_FOLDER,
             bf.FOL_LOC,
             bf.DEPTH,
             bf.STATE,

@@ -49,9 +49,6 @@ public class BrdFolderController {
         // 회원 id
         folderBean.setMemId("001");
 
-        // 부모 폴더 id
-        folderBean.setParentFolder(folId);
-
         // 폴더 경로
         folderBean.setFolLoc(folId);
 

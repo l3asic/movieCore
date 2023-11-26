@@ -15,8 +15,6 @@ public class BrdFolderBean {
 
     private String folName;
 
-    private String parentFolder;
-
     private String folLoc;
 
     private int depth;
