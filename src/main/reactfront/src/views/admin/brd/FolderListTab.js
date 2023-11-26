@@ -22,8 +22,6 @@ function FolderListTab(){
             <CTableHeaderCell scope="col">고유번호</CTableHeaderCell>
             <CTableHeaderCell scope="col">폴더 명</CTableHeaderCell>
             <CTableHeaderCell scope="col">생성자 명</CTableHeaderCell>
-            <CTableHeaderCell scope="col">상위폴더</CTableHeaderCell>
-            <CTableHeaderCell scope="col">하위 폴더 갯수</CTableHeaderCell>
             <CTableHeaderCell scope="col">하위 게시판 갯수</CTableHeaderCell>
             <CTableHeaderCell scope="col">폴더 경로</CTableHeaderCell>
             <CTableHeaderCell scope="col">폴더 뎁스</CTableHeaderCell>
@@ -44,8 +42,6 @@ function FolderListTab(){
             <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
-            <CTableDataCell>임시 값</CTableDataCell>
-            <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 버튼</CTableDataCell>
 
           </CTableRow>
@@ -59,16 +55,12 @@ function FolderListTab(){
             <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
-            <CTableDataCell>임시 값</CTableDataCell>
-            <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 버튼</CTableDataCell>
           </CTableRow>
           <CTableRow>
             <CTableHeaderCell scope="row">3</CTableHeaderCell>
             <CTableDataCell colSpan={2}>Larry the Bird</CTableDataCell>
             <CTableDataCell>@twitter</CTableDataCell>
-            <CTableDataCell>임시 값</CTableDataCell>
-            <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
             <CTableDataCell>임시 값</CTableDataCell>
