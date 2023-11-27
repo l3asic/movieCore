@@ -4,6 +4,8 @@ import React from 'react'
 // 관리자
 // - 회원 관리
 const MemberManage = React.lazy(() => import('./views/admin/mem/MemberManage'))
+// - 영화 목록 관리
+const MovieManage = React.lazy(() => import('./views/admin/movie/MovieManage'))
 // - 폴더/게시판 생성
 const CreateFolderBoard = React.lazy(() => import('./views/admin/brd/CreateFolderBoard'))
 // - 폴더/게시판 관리
@@ -96,6 +98,12 @@ const routes = [
   // 관리자
   // - 회원 관리
   { path: '/admin/MemberManage', name: 'MemberManage', element: MemberManage },
+
+
+  // - 영화 목록 관리
+  { path: '/admin/MovieManage', name: 'MovieManage', element: MovieManage },
+
+
   // - 폴더/게시판 생성
   { path: '/admin/CreateFolderBoard', name: 'CreateFolderBoard', element: CreateFolderBoard },
   // - 폴더/게시판 관리

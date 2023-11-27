@@ -46,6 +46,22 @@ const _nav = [
         icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
       },
 
+
+      {
+        component: CNavGroup,
+        name: '영화 관리',
+        to: '/admin/boardManage',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        items: [
+          {
+            component: CNavItem,
+            name: ' - 영화 목록 관리',
+            to: '/admin/MovieManage',
+          },
+        ],
+      },
+
+
       {
         component: CNavGroup,
         name: '게시판 관리',
