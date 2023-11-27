@@ -41,6 +41,9 @@ dependencies {
 	/* 내장 톰캣*/
 	implementation  'org.springframework.boot:spring-boot-starter-tomcat'
 
+	// 스프링 부트 웹플럭스 의존성 추가 (API 호출용)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 
 }
 
