@@ -1,0 +1,53 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieCore.movie.mapperInterface.MovManageMapper">
+
+
+    <!-- 영화 정보 인서트 -->
+    <insert id="insertMovieBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_MOVIE
+            (
+             movie_cd,
+             movie_nm,
+             movie_nm_en,
+             prdt_year,
+             open_dt,
+             type_nm,
+             prdt_stat_nm,
+             nation_alt,
+             genre_alt,
+             rep_nation_nm,
+             rep_genre_nm,
+             people_nm,
+             company_cd,
+             company_nm
+
+        )
+        VALUES
+            (
+                #{movieBean.movieCd},
+                #{movieBean.movieNm},
+                #{movieBean.movieNmEn},
+                #{movieBean.prdtYear},
+                DATE_FORMAT(#{movieBean.openDt}, '%Y-%m-%d %h:%m:%s'),
+                #{movieBean.typeNm},
+                #{movieBean.prdtStatNm},
+                #{movieBean.nationAlt},
+                #{movieBean.genreAlt},
+                #{movieBean.repNationNm},
+                #{movieBean.repGenreNm},
+                #{movieBean.peopleNm},
+                #{movieBean.companyCd},
+                #{movieBean.companyNm}
+
+            )
+
+    </insert>
+
+
+
+
+
+</mapper>

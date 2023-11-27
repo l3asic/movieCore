@@ -1,6 +1,6 @@
-package com.example.movieCore.movie.Vo;
+package com.example.movieCore.movie.vo;
 
-import com.example.movieCore.movie.Bean.MovieBean;
+import com.example.movieCore.movie.bean.MovieBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-public class MovieVo {
+public class MovVo {
 
     /** 영화 정보 */
     private MovieBean movieBean;

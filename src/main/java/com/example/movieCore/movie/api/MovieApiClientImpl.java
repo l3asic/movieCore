@@ -1,18 +1,21 @@
-package com.example.movieCore.movie.API;
+package com.example.movieCore.movie.api;
 
-import com.example.movieCore.movie.Bean.MovieBean;
-import com.example.movieCore.movie.Vo.MovieVo;
+import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.vo.MovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 import java.util.*;
 
 
-public class MovieApiClient {
+@Component
+public class MovieApiClientImpl{
 
-    public MovieVo callMovieApi(){
+    /** 영화 목록 호출 */
+    public MovVo callMovieApi(String curPage){  //String curPage 페이지 숫자
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
@@ -26,7 +29,7 @@ public class MovieApiClient {
         /** API 호출에 필요한 파라미터 설정*/
 
         // 페이지 숫자 (1페이지당 10개씩)
-        String curPage = "1";
+//        String curPage = "200";
 //        String param2 = "값2";
 
 
@@ -40,19 +43,12 @@ public class MovieApiClient {
                 .bodyToMono(String.class)
                 .block();
 
-        // 응답 확인
-        System.out.println(responseBody);
-
-
         // JSON 데이터를 객체로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> jsonMap = new HashMap<>();
         try {
-            // 여기서는 예시로 String을 Map으로 변환하였습니다.
-            // 실제로는 받아온 JSON 데이터에 맞게 적절한 클래스를 정의하고 사용하세요.
             jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
             });
-            System.out.println(jsonMap);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,10 +60,10 @@ public class MovieApiClient {
         ArrayList<MovieBean> movieBeanList = (ArrayList<MovieBean>) movieListResult.get("movieList");
 
         // vo에 세팅
-        MovieVo movieVo = new MovieVo();
-        movieVo.setMovieBeanList(movieBeanList);
+        MovVo movVo = new MovVo();
+        movVo.setMovieBeanList(movieBeanList);
 
-        return movieVo;
+        return movVo;
 
 
     }
