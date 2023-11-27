@@ -15,3 +15,27 @@ $enable-rtl: true;
 
 // If you want to add custom CSS you can put it here.
 @import "custom";
+
+.boardTableList {
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 10%; /* 1 out of 20 (1:8:4:4:2 ratio) */
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 50%; /* 8 out of 20 (1:8:4:4:2 ratio) */
+  }
+
+  th:nth-child(3),
+  td:nth-child(3),
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 10%; /* 4 out of 20 (1:8:4:4:2 ratio) */
+  }
+
+  th:nth-child(5),
+  td:nth-child(5) {
+    width: 8%; /* 2 out of 20 (1:8:4:4:2 ratio) */
+  }
+}

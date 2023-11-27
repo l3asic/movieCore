@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LoginMapper {
 
-    public boolean signUp(LoginMemberVo vo);
+    boolean signUp(LoginMemberVo vo);
 
 
 }

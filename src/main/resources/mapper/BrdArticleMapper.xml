@@ -62,7 +62,7 @@
 
 
     <!-- 게시판 id로 게시글 리스트 조회 -->
-    <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
+    <!--<select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
 
         SELECT
             BA.ATCL_ID,
@@ -84,6 +84,30 @@
         where
             BA.MEM_ID = MMI.MEM_ID
         AND
+            BA.STATE = 'B'
+        AND
+            BA.BRD_ID = #{boardBean.brdId}
+
+    </select>-->
+
+    <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
+
+        SELECT
+            BA.ATCL_ID,
+            BA.BRD_ID,
+            BA.MEM_ID,
+            BA.SUBJECT,
+            BA.CONTENT,
+            BA.VIEW_CNT,
+            DATE_FORMAT(BA.CREATE_DT, '%Y-%m-%d'),
+            BA.UPDATE_DT,
+            BA.EXPIRE_DT,
+            BA.EXPIRE_YN,
+            BA.STATE,
+            BA.ATCL_REPL_CNT
+        FROM
+            BRD_ARTICLE BA
+        WHERE
             BA.STATE = 'B'
         AND
             BA.BRD_ID = #{boardBean.brdId}

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Mapper
 public interface BrdArticleMapper {
 
-    public boolean atclRegistry(BrdVo brdVo);
+    boolean atclRegistry(BrdVo brdVo);
 
 
     ArrayList<BrdArticleBean> selectArticleList(BrdVo brdVo);
