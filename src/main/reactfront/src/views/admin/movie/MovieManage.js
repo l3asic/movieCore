@@ -1,62 +1,94 @@
-
-
-import React, { useEffect, useState } from 'react'
-import {CButton} from "@coreui/react";
+import React, {useEffect, useState} from 'react'
+import {
+  CButton,
+  CContainer,
+  CRow,
+  CCol
+} from "@coreui/react";
 import axios from "axios";
 
-function MovieManage(){
+function MovieManage() {
 
 
   return (
     <>
       <h3 className="mb-4">영화 관리 페이지 입니다</h3>
-      <h4> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
-      < CButton color = "danger" size="lg" onClick={callMovieApiSyncDB}> 영화 목록 API 호출 및 DB 동기화 </ CButton >
-      < CButton color = "dark" size="lg" onClick={callMovieCompanyApiSyncDB}> 영화 회사 API 호출 및 DB 동기화 </ CButton >
+      <h4 className="mb-4"> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
+      <CContainer>
+        <CRow>
+          <CCol>
+            < CButton color="danger" size="lg" onClick={callMovieApiSyncDB}> 영화 목록 API 호출 및 DB 이관 </ CButton>
+          </CCol>
+          <CCol>
+            < CButton color="dark" size="lg" onClick={callMovieCompanyApiSyncDB}> 영화 회사 API 호출 및 DB 이관 </ CButton>
+          </CCol>
+          <CCol>
+            < CButton color="secondary" size="lg" onClick={callMoviePersonApiSyncDB}> 영화 인 API 호출 및 DB 이관 </ CButton>
+          </CCol>
+        </CRow>
+      </CContainer>
     </>
   )
 }
 
 
-
-function callMovieApiSyncDB(){
+function callMovieApiSyncDB() {
   axios({
     url: '/callMovieApiSyncDB', // 통신할 웹문서
     method: 'post', // 통신할 방식
-    params:{
+    params: {}
+
+  }).then(function (res) {
+    if (res.data.succesResult) {
+      alert("이관 성공?");
+    } else {
+      alert("이관 실패?");
     }
 
-  }).then(function (res){
-    if(res.data.succesResult){
-      alert("동기화 성공 성공?");
-    }else{
-      alert("동기화 성공 실패?");
-    }
-
-  }).catch(function (err){
+  }).catch(function (err) {
     alert("실패 (오류)");
   });
 
 }
-
 
 
 /** 영화 회사 api 호출 */
-function callMovieCompanyApiSyncDB(){
+function callMovieCompanyApiSyncDB() {
   axios({
-    url: '/callMovieCompanyApiSyncDB', // 통신할 웹문서
-    method: 'post', // 통신할 방식
-    params:{
+    url: '/callMovieCompanyApiSyncDB',
+    method: 'post',
+    params: {}
+
+  }).then(function (res) {
+    if (res.data.succesResult) {
+      alert("이관 성공?");
+    } else {
+      alert("이관 실패?");
     }
-
-  }).then(function (res){
-
-  }).catch(function (err){
+  }).catch(function (err) {
     alert("실패 (오류)");
   });
 
 }
 
+/** 영화 인 api 호출 */
+function callMoviePersonApiSyncDB() {
+  axios({
+    url: '/callMoviePersonApiSyncDB',
+    method: 'post',
+    params: {}
+
+  }).then(function (res) {
+    if (res.data.succesResult) {
+      alert("이관 성공?");
+    } else {
+      alert("이관 실패?");
+    }
+  }).catch(function (err) {
+    alert("실패 (오류)");
+  });
+
+}
 
 
 

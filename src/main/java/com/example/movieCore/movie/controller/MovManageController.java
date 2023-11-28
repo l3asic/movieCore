@@ -274,6 +274,7 @@ public class MovManageController {
 
 
 
+    /** 영화 회사 api 호출 및 이관 */
     @PostMapping(value = "/callMovieCompanyApiSyncDB")
     @ResponseBody
     public Map<String, Object> callMovieCompanyApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -289,6 +290,7 @@ public class MovManageController {
         movVo = movieApiClient.callMovieCompanyApi(1);
 
 
+        boolean successResult = true;
 
         int maxPage = movVo.getTotCnt()/10 + 1 ;
         for (int curPage = 1; curPage < maxPage+1; curPage++) {
@@ -302,6 +304,7 @@ public class MovManageController {
                     movManageService.insertMovieCompanyBean(movVo);
 
                 }catch (Exception e){
+                    successResult = false;
                     e.printStackTrace();
                 }
 
@@ -310,15 +313,26 @@ public class MovManageController {
         }
 
 
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("successResult", successResult);
+        return resMap;
+
+    }
 
 
 
+    /** 영화 인 api 호출 및 이관 */
+    @PostMapping(value = "/callMoviePersonApiSyncDB")
+    @ResponseBody
+    public Map<String, Object> callMoviePersonApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("호출 성공?");
+        
 
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("successResult", "true");
         return resMap;
-
     }
+
 
 
 
