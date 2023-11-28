@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.vo;
 
 import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieInfoBean;
 import lombok.Getter;
 import lombok.Setter;
