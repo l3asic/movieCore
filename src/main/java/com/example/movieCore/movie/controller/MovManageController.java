@@ -1,7 +1,7 @@
 package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.movie.api.DataConverter;
-import com.example.movieCore.movie.api.MovieApiClientImpl;
+import com.example.movieCore.movie.api.MovieApiClient;
 import com.example.movieCore.movie.service.MovManageServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
 import io.netty.util.internal.StringUtil;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class MovManageController {
 
     private final MovManageServiceImpl movManageService;
-    private final MovieApiClientImpl movieApiClientImpl;
+    private final MovieApiClient movieApiClient;
 
     @PostMapping(value = "/callMovieApiSyncDB")
     @ResponseBody
@@ -33,7 +33,7 @@ public class MovManageController {
         // 테스트) 영화 200개만 세팅 (1페이지 당 10개)
         for (int i = 0; i < 21; i++) {
             // 영화 목록 api 호출 (10개)
-            MovVo movVo = movieApiClientImpl.callMovieApi(i + "");
+            MovVo movVo = movieApiClient.callMovieApi(i + "");
 
             // LinkedHashMap 데이터 BeanList 구조로 변환
             movVo.setMovieBeanList(DataConverter.convertToMovieBeanList((List) movVo.getMovieBeanList()));
@@ -146,7 +146,7 @@ public class MovManageController {
 
 
                 /** 영화 상세 정보 api 호출 */
-                movVo.setMovieInfoBean(movieApiClientImpl.callMovieInfoApi(movVo.getMovieBean().getMovieCd()));
+                movVo.setMovieInfoBean(movieApiClient.callMovieInfoApi(movVo.getMovieBean().getMovieCd()));
 
 
                 // 개봉일 없을시 예외 처리
@@ -330,10 +330,10 @@ public class MovManageController {
 
                 try {
                     // 영화 목록(정보1개) 디비 인서트
-                     movManageService.insertMovieBean(movVo);
+                     //movManageService.insertMovieBean(movVo);
 
                     // 영화 상세정보 디비 인서트
-                     movManageService.insertMovieInfoBean(movVo);
+                     //movManageService.insertMovieInfoBean(movVo);
 
                 } catch (Exception e) {
                     successResult = false;
@@ -346,4 +346,24 @@ public class MovManageController {
         resMap.put("successResult", successResult);
         return resMap;
     }
+
+
+
+
+
+    /** 영화 회사 api 호출 컨트롤러 */
+    @PostMapping(value = "/callMovieCompanyApiSyncDB")
+    @ResponseBody
+    public void callMovieCompanyApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MovVo movVo = new MovVo();
+
+        movVo = movieApiClient.callMovieCompanyApi();
+
+        System.out.println("완료?");
+
+    }
+
+
+
 }
