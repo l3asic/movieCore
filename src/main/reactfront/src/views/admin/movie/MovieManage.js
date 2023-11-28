@@ -27,9 +27,9 @@ function callMovieApiSyncDB(){
 
   }).then(function (res){
     if(res.data.succesResult){
-      debugger
+      alert("동기화 성공 성공?");
     }else{
-      alert("동기화 성공");
+      alert("동기화 성공 실패?");
     }
 
   }).catch(function (err){
