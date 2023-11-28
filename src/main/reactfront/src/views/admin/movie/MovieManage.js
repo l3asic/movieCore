@@ -29,11 +29,11 @@ function callMovieApiSyncDB(){
     if(res.data.succesResult){
       debugger
     }else{
-      alert("동기화?");
+      alert("동기화 성공");
     }
 
   }).catch(function (err){
-    alert("가입 실패 (오류)");
+    alert("실패 (오류)");
   });
 
 }

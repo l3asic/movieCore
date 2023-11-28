@@ -7,5 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MovManageMapper {
 
-    boolean insertMovieBean(MovVo movVo);
+    void insertMovieBean(MovVo movVo);
+
+    void insertMovieInfoBean(MovVo movVo);
 }

@@ -13,7 +13,11 @@ public class MovManageServiceImpl {
     private MovManageMapper movManageMapper;
 
 
-    public boolean insertMovieBean(MovVo movVo) {
-        return movManageMapper.insertMovieBean(movVo);
+    public void insertMovieBean(MovVo movVo) {
+        movManageMapper.insertMovieBean(movVo);
+    }
+
+    public void insertMovieInfoBean(MovVo movVo) {
+        movManageMapper.insertMovieInfoBean(movVo);
     }
 }
