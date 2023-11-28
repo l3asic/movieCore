@@ -8,12 +8,12 @@ import {CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTable
 function ArticleListManage(){
   return(
     <>
-      <h1>
+      <h3>
         게시글 관리 페이지 입니다
-      </h1>
+      </h3>
 
 
-      <CTable  color="dark" striped>
+      <CTable  color="dark" striped className="mt-5">
 
         <CTableHead>
           <CTableRow>
