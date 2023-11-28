@@ -12,6 +12,7 @@ function MovieManage(){
       <h3 className="mb-4">영화 관리 페이지 입니다</h3>
       <h4> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
       < CButton color = "danger" size="lg" onClick={callMovieApiSyncDB}> 영화 목록 API 호출 및 DB 동기화 </ CButton >
+      < CButton color = "dark" size="lg" onClick={callMovieCompanyApiSyncDB}> 영화 회사 API 호출 및 DB 동기화 </ CButton >
     </>
   )
 }
@@ -31,6 +32,24 @@ function callMovieApiSyncDB(){
     }else{
       alert("동기화 성공 실패?");
     }
+
+  }).catch(function (err){
+    alert("실패 (오류)");
+  });
+
+}
+
+
+
+/** 영화 회사 api 호출 */
+function callMovieCompanyApiSyncDB(){
+  axios({
+    url: '/callMovieCompanyApiSyncDB', // 통신할 웹문서
+    method: 'post', // 통신할 방식
+    params:{
+    }
+
+  }).then(function (res){
 
   }).catch(function (err){
     alert("실패 (오류)");

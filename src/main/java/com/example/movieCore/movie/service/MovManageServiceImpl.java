@@ -20,4 +20,8 @@ public class MovManageServiceImpl {
     public void insertMovieInfoBean(MovVo movVo) {
         movManageMapper.insertMovieInfoBean(movVo);
     }
+
+    public void insertMovieCompanyBean(MovVo movVo) {
+        movManageMapper.insertMovieCompanyBean(movVo);
+    }
 }

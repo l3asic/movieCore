@@ -346,4 +346,69 @@ public class MovManageController {
         resMap.put("successResult", successResult);
         return resMap;
     }
+
+
+
+
+    @PostMapping(value = "/callMovieCompanyApiSyncDB")
+    @ResponseBody
+    public Map<String, Object> callMovieCompanyApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MovVo movVo;
+
+        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+
+        // 현재 페이지
+
+
+        // 최초 토탈 갯수 조회용
+        movVo = movieApiClient.callMovieCompanyApi(1);
+
+
+
+        int maxPage = movVo.getTotCnt()/10 + 1 ;
+        for (int curPage = 1; curPage < maxPage+1; curPage++) {
+            movVo = movieApiClient.callMovieCompanyApi(curPage);
+            for (int i = 0; i < movVo.getMovieCompanyBeanList().size(); i++) {
+                try {
+                    /** bean에 세팅 */
+                    movVo.setMovieCompanyBean(movVo.getMovieCompanyBeanList().get(i));
+
+                    // 디비 인서트
+                    movManageService.insertMovieCompanyBean(movVo);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
+
+
+
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("successResult", "true");
+        return resMap;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

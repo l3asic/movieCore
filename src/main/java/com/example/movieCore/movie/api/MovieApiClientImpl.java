@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.api;
 
 import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieInfoBean;
 import com.example.movieCore.movie.vo.MovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -109,6 +110,61 @@ public class MovieApiClientImpl{
         movieInfoBean = dataConverter.extractMovieInfoBean(jsonMap);
 
         return movieInfoBean;
+
+
+    }
+
+
+
+    /** 영화 상세정보 호출 */
+    public MovVo callMovieCompanyApi(int curPage){
+
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/company/searchCompanyList.json";
+
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s&curPage=%s", apiUrl, key, curPage+"" );
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        MovVo movVo = new MovVo();
+
+        if (jsonMap.containsKey("companyListResult")) {
+            LinkedHashMap<String, Object> companyListResult = (LinkedHashMap<String, Object>) jsonMap.get("companyListResult");
+            if (companyListResult.containsKey("totCnt")) {
+                movVo.setTotCnt((Integer) companyListResult.get("totCnt"));
+            }
+        }
+
+        DataConverter dataConverter = new DataConverter();
+        ArrayList<MovieCompanyBean> movieCompanyBeanList = dataConverter.convertToMovieCompanyBeanList(jsonMap);
+        movVo.setMovieCompanyBeanList(movieCompanyBeanList);
+
+
+
+        return movVo;
 
 
     }

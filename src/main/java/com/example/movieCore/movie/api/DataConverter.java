@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.api;
 
 import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieInfoBean;
 
 import java.util.ArrayList;
@@ -107,6 +108,44 @@ public class DataConverter {
             }
         }
         return null;
+    }
+
+
+
+
+    /** 영화 회사 데이터 변환 */
+    public ArrayList<MovieCompanyBean> convertToMovieCompanyBeanList(Object jsonMap) {
+        ArrayList<MovieCompanyBean> movieCompanyBeanList = new ArrayList<>();
+
+        if (jsonMap instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> topLevelMap = (LinkedHashMap<String, Object>) jsonMap;
+
+            if (topLevelMap.containsKey("companyListResult")) {
+                LinkedHashMap<String, Object> companyListResult = (LinkedHashMap<String, Object>) topLevelMap.get("companyListResult");
+
+                if (companyListResult.containsKey("companyList")) {
+                    ArrayList<LinkedHashMap<String, Object>> companyList = (ArrayList<LinkedHashMap<String, Object>>) companyListResult.get("companyList");
+
+                    for (LinkedHashMap<String, Object> companyMap : companyList) {
+                        movieCompanyBeanList.add(convertToMovieCompanyBean(companyMap));
+                    }
+                }
+            }
+        }
+
+        return movieCompanyBeanList;
+    }
+
+    private MovieCompanyBean convertToMovieCompanyBean(LinkedHashMap<String, Object> linkedHashMap) {
+        MovieCompanyBean movieCompanyBean = new MovieCompanyBean();
+        movieCompanyBean.setCompanyCd((String) linkedHashMap.get("companyCd"));
+        movieCompanyBean.setCompanyNm((String) linkedHashMap.get("companyNm"));
+        movieCompanyBean.setCompanyNmEn((String) linkedHashMap.get("companyNmEn"));
+        movieCompanyBean.setCompanyPartNames((String) linkedHashMap.get("companyPartNames"));
+        movieCompanyBean.setCeoNm((String) linkedHashMap.get("ceoNm"));
+        movieCompanyBean.setFilmoNames((String) linkedHashMap.get("filmoNames"));
+
+        return movieCompanyBean;
     }
 
 

@@ -126,6 +126,29 @@
     </insert>
 
 
+    <!-- 영화 회사 인서트 -->
+    <insert id="insertMovieCompanyBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_COMPANY
+        (
+         COMPANY_CD,
+         COMPANY_NM,
+         COMPANY_NM_EN,
+         COMPANY_PART_NAMES,
+         CEO_NM,
+         FILMO_NAMES
+            )
+        VALUES (
+                   #{movieCompanyBean.companyCd},
+                   #{movieCompanyBean.companyNm},
+                   #{movieCompanyBean.companyNmEn},
+                   #{movieCompanyBean.companyPartNames},
+                   #{movieCompanyBean.ceoNm},
+                   #{movieCompanyBean.filmoNames}
+                )
+
+    </insert>
+
+
 
 
 

@@ -11,6 +11,9 @@ import java.util.ArrayList;
 @Setter
 public class MovVo {
 
+    /** 이관 토탈 갯수 */
+    private int totCnt;
+
     /** 영화 정보 */
     private MovieBean movieBean;
 
@@ -19,5 +22,12 @@ public class MovVo {
 
     /** 영화 상세 정보 */
     private MovieInfoBean movieInfoBean;
+
+    /** 영화 회사 정보 */
+    private MovieCompanyBean movieCompanyBean;
+
+    /** 영화 회사 리스트 */
+    private ArrayList<MovieCompanyBean> movieCompanyBeanList;
+
 
 }
