@@ -20,9 +20,7 @@
              genre_alt,
              rep_nation_nm,
              rep_genre_nm,
-             people_nm,
-             company_cd,
-             company_nm
+             people_nm
 
         )
         VALUES
@@ -38,9 +36,7 @@
                 #{movieBean.genreAlt},
                 #{movieBean.repNationNm},
                 #{movieBean.repGenreNm},
-                #{movieBean.peopleNm},
-                #{movieBean.companyCd},
-                #{movieBean.companyNm}
+                #{movieBean.peopleNm}
 
             )
 
@@ -71,9 +67,6 @@
             SHOW_TYPE_NM,
             AUDIT_NO,
             WATCH_GRADE_NM,
-            COMPANY_CD,
-            COMPANY_NM,
-            COMPANY_NM_EN,
             STAFFS_NM,
             STAFFS_NM_EN,
             STAFFS_ROLE_NM,
@@ -107,9 +100,6 @@
                 #{movieInfoBean.showTypeNm},
                 #{movieInfoBean.auditNo},
                 #{movieInfoBean.watchGradeNm},
-                #{movieInfoBean.companyCd},
-                #{movieInfoBean.companyNm},
-                #{movieInfoBean.companyNmEn},
                 #{movieInfoBean.staffsNm},
                 #{movieInfoBean.staffsNmEn},
                 #{movieInfoBean.staffsRoleNm},

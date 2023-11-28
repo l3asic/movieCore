@@ -85,59 +85,6 @@ public class MovManageController {
 
 
                 // 제작사 코드/명 데이터 가공
-                if (movVo.getMovieBean().getCompanys() != null && !movVo.getMovieBean().getCompanys().isEmpty()) {
-                    Object companysObject = movVo.getMovieBean().getCompanys();
-
-                    // 확인된 형변환 가능한 경우 처리
-                    if (companysObject instanceof List<?>) {
-                        List<?> companysList = (List<?>) companysObject;
-
-                        // 리스트가 비어 있지 않은 경우
-                        if (!companysList.isEmpty()) {
-
-                            // 여러 제작사가 있는 경우, 모든 제작사 코드와 제작사 명을 구분자 ","로 연결하여 할당
-                            StringBuilder companyCdBuilder = new StringBuilder();
-                            StringBuilder companyNmBuilder = new StringBuilder();
-
-                            for (Object singleCompanysObject : companysList) {
-                                if (singleCompanysObject instanceof LinkedHashMap<?, ?>) {
-                                    LinkedHashMap<?, ?> companys = (LinkedHashMap<?, ?>) singleCompanysObject;
-
-                                    // 제작사 코드 할당
-                                    if (companys.containsKey("companyCd")) {
-                                        Object valueObject = companys.get("companyCd");
-                                        String value = (valueObject != null) ? valueObject.toString() : null;
-                                        if (value != null) {
-                                            if (companyCdBuilder.length() > 0) {
-                                                companyCdBuilder.append(","); // 구분자 추가
-                                            }
-                                            companyCdBuilder.append(value);
-                                        }
-                                    }
-
-                                    // 제작사 명 할당
-                                    if (companys.containsKey("companyNm")) {
-                                        Object valueObject = companys.get("companyNm");
-                                        String value = (valueObject != null) ? valueObject.toString() : null;
-                                        if (value != null) {
-                                            if (companyNmBuilder.length() > 0) {
-                                                companyNmBuilder.append(","); // 구분자 추가
-                                            }
-                                            companyNmBuilder.append(value);
-                                        }
-                                    }
-                                }
-                            }
-
-                            // 최종 결과를 MovieBean에 할당
-                            movVo.getMovieBean().setCompanyCd(companyCdBuilder.toString());
-                            movVo.getMovieBean().setCompanyNm(companyNmBuilder.toString());
-                        }
-                    } else {
-                        // 형변환이 불가능한 경우 예외 처리
-                        System.out.println("제작사 코드/명 형변환 오류");
-                    }
-                }
 
                 // 개봉일 없을시 예외 처리
                 if (movVo.getMovieBean().getOpenDt() == null || movVo.getMovieBean().getOpenDt().isEmpty()) {
@@ -253,29 +200,6 @@ public class MovManageController {
 
                 }
 
-                if(movVo.getMovieInfoBean().getCompanys().size() > 0){
-                    String companyCd = "";
-                    String companyNm = "";
-                    String companyNmEn = "";
-
-                    for (int k = 0; k < movVo.getMovieInfoBean().getCompanys().size(); k++) {
-                        LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getCompanys().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(companyCd) && !companyCd.equals(""))companyCd += ",";
-                            if(!StringUtil.isNullOrEmpty(companyNm) && !companyNm.equals(""))companyNm += ",";
-                            if(!StringUtil.isNullOrEmpty(companyNmEn) && !companyNmEn.equals(""))companyNmEn += ",";
-                        }
-
-                        companyCd += (String) dataMap.get("companyCd");
-                        companyNm += (String) dataMap.get("companyNm");
-                        companyNmEn += (String) dataMap.get("companyNmEn");
-
-                    }
-                    movVo.getMovieInfoBean().setCompanyCd(companyCd);
-                    movVo.getMovieInfoBean().setCompanyNm(companyNm);
-                    movVo.getMovieInfoBean().setCompanyNmEn(companyNmEn);
-
-                }
 
                 if(movVo.getMovieInfoBean().getStaffs().size() > 0){
                     String staffNm  = "";
