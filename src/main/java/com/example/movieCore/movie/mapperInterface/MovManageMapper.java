@@ -12,4 +12,6 @@ public interface MovManageMapper {
     void insertMovieInfoBean(MovVo movVo);
 
     void insertMovieCompanyBean(MovVo movVo);
+
+    void insertMoviePeopleBean(MovVo movVo);
 }

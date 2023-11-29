@@ -140,6 +140,25 @@
 
 
 
+    <!-- 영화 인 인서트 -->
+    <insert id="insertMoviePeopleBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_PEOPLE
+        (
+        PEOPLE_CD,
+        PEOPLE_NM,
+        PEOPLE_NM_EN,
+        REP_ROLE_NM,
+        FILMO_NAMES
+        )
+        VALUES (
+                   #{moviePeopleBean.peopleCd},
+                   #{moviePeopleBean.peopleNm},
+                   #{moviePeopleBean.peopleNmEn},
+                   #{moviePeopleBean.repRoleNm},
+                   #{moviePeopleBean.filmoNames}
+                )
+    </insert>
+
 
 
 

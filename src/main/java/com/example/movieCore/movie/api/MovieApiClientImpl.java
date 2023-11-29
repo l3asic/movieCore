@@ -3,6 +3,7 @@ package com.example.movieCore.movie.api;
 import com.example.movieCore.movie.bean.MovieBean;
 import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieInfoBean;
+import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.vo.MovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,8 +73,8 @@ public class MovieApiClientImpl{
 
 
 
-    /** 영화 상세정보 호출 */
-    public MovieInfoBean callMovieInfoApi(String movieCd){  // 영화 코드
+    /** 영화 상세정보 호출 */   // 영화 코드
+    public MovieInfoBean callMovieInfoApi(String movieCd){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
@@ -116,7 +117,7 @@ public class MovieApiClientImpl{
 
 
 
-    /** 영화 상세정보 호출 */
+    /** 영화 회사 호출 */
     public MovVo callMovieCompanyApi(int curPage){
 
         // API 엔드포인트 URL
@@ -161,6 +162,62 @@ public class MovieApiClientImpl{
         DataConverter dataConverter = new DataConverter();
         ArrayList<MovieCompanyBean> movieCompanyBeanList = dataConverter.convertToMovieCompanyBeanList(jsonMap);
         movVo.setMovieCompanyBeanList(movieCompanyBeanList);
+
+
+
+        return movVo;
+
+
+    }
+
+
+
+    /** 영화 인 호출 */
+    public MovVo callMoviePeopleApi(int curPage){
+
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleList.json";
+
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s&curPage=%s&itemPerPage=%s", apiUrl, key, curPage+"","100" );
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+        MovVo movVo = new MovVo();
+
+        if (jsonMap.containsKey("peopleListResult")) {
+            LinkedHashMap<String, Object> peopleListResult = (LinkedHashMap<String, Object>) jsonMap.get("peopleListResult");
+            if (peopleListResult.containsKey("totCnt")) {
+                movVo.setTotCnt((Integer) peopleListResult.get("totCnt"));
+            }
+        }
+
+        DataConverter dataConverter = new DataConverter();
+        ArrayList<MoviePeopleBean> moviePeopleBeanList = dataConverter.convertToMoviePeopleBeanList(jsonMap);
+        movVo.setMoviePeopleBeanList(moviePeopleBeanList);
 
 
 

@@ -23,7 +23,7 @@ function MovieManage() {
             < CButton color="dark" size="lg" onClick={callMovieCompanyApiSyncDB}> 영화 회사 API 호출 및 DB 이관 </ CButton>
           </CCol>
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callMoviePersonApiSyncDB}> 영화 인 API 호출 및 DB 이관 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMoviePeopleApiSyncDB}> 영화 인 API 호출 및 DB 이관 </ CButton>
           </CCol>
         </CRow>
       </CContainer>
@@ -32,6 +32,7 @@ function MovieManage() {
 }
 
 
+/** 영화 목록,영화 상세정보 api 호출 */
 function callMovieApiSyncDB() {
   axios({
     url: '/callMovieApiSyncDB', // 통신할 웹문서
@@ -72,9 +73,9 @@ function callMovieCompanyApiSyncDB() {
 }
 
 /** 영화 인 api 호출 */
-function callMoviePersonApiSyncDB() {
+function callMoviePeopleApiSyncDB() {
   axios({
-    url: '/callMoviePersonApiSyncDB',
+    url: '/callMoviePeopleApiSyncDB',
     method: 'post',
     params: {}
 

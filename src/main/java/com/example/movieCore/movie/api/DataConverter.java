@@ -3,6 +3,7 @@ package com.example.movieCore.movie.api;
 import com.example.movieCore.movie.bean.MovieBean;
 import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieInfoBean;
+import com.example.movieCore.movie.bean.MoviePeopleBean;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -146,6 +147,43 @@ public class DataConverter {
         movieCompanyBean.setFilmoNames((String) linkedHashMap.get("filmoNames"));
 
         return movieCompanyBean;
+    }
+
+
+
+
+    /** 영화 인 데이터 형 변환 */
+    public ArrayList<MoviePeopleBean> convertToMoviePeopleBeanList(Object jsonMap) {
+        ArrayList<MoviePeopleBean> moviePeopleBeanList = new ArrayList<>();
+
+        if (jsonMap instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> topLevelMap = (LinkedHashMap<String, Object>) jsonMap;
+
+            if (topLevelMap.containsKey("peopleListResult")) {
+                LinkedHashMap<String, Object> peopleListResult = (LinkedHashMap<String, Object>) topLevelMap.get("peopleListResult");
+
+                if (peopleListResult.containsKey("peopleList")) {
+                    ArrayList<LinkedHashMap<String, Object>> peopleList = (ArrayList<LinkedHashMap<String, Object>>) peopleListResult.get("peopleList");
+
+                    for (LinkedHashMap<String, Object> peopleMap : peopleList) {
+                        moviePeopleBeanList.add(convertToMoviePeopleBean(peopleMap));
+                    }
+                }
+            }
+        }
+
+        return moviePeopleBeanList;
+    }
+
+    private MoviePeopleBean convertToMoviePeopleBean(LinkedHashMap<String, Object> people) {
+        MoviePeopleBean moviePeopleBean = new MoviePeopleBean();
+        moviePeopleBean.setPeopleCd((String) people.get("peopleCd"));
+        moviePeopleBean.setPeopleNm((String) people.get("peopleNm"));
+        moviePeopleBean.setPeopleNmEn((String) people.get("peopleNmEn"));
+        moviePeopleBean.setRepRoleNm((String) people.get("repRoleNm"));
+        moviePeopleBean.setFilmoNames((String) people.get("filmoNames"));
+
+        return moviePeopleBean;
     }
 
 
