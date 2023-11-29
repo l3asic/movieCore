@@ -18,6 +18,7 @@ import java.util.*;
 public class MovieApiClientImpl{
     /** 발급받은 API 키 */
     private String key = "7ed99cc4e7bce9910e15252a08c4ec17";
+    private String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
 
 
     /** 영화 목록 호출 */
@@ -183,7 +184,7 @@ public class MovieApiClientImpl{
         WebClient webClient = WebClient.create();
 
         // API 호출 URL 및 파라미터 조합
-        String fullUrl = String.format("%s?key=%s&curPage=%s&itemPerPage=%s", apiUrl, key, curPage+"","100" );
+        String fullUrl = String.format("%s?key=%s&curPage=%s&itemPerPage=%s", apiUrl, key2, curPage+"","100" );
 
         // API 호출 및 응답 받기
         String responseBody = webClient.get()
