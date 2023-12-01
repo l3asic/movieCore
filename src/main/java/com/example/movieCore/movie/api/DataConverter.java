@@ -1,9 +1,6 @@
 package com.example.movieCore.movie.api;
 
-import com.example.movieCore.movie.bean.MovieBean;
-import com.example.movieCore.movie.bean.MovieCompanyBean;
-import com.example.movieCore.movie.bean.MovieInfoBean;
-import com.example.movieCore.movie.bean.MoviePeopleBean;
+import com.example.movieCore.movie.bean.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -185,6 +182,44 @@ public class DataConverter {
 
         return moviePeopleBean;
     }
+
+
+    public ArrayList<MoviePeopleInfoBean> convertToMoviePeopleInfoBeanList(Object jsonMap) {
+        ArrayList<MoviePeopleInfoBean> moviePeopleInfoBeanList = new ArrayList<>();
+
+        if (jsonMap instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> topLevelMap = (LinkedHashMap<String, Object>) jsonMap;
+
+            if (topLevelMap.containsKey("peopleInfoResult")) {
+                LinkedHashMap<String, Object> peopleInfoResult = (LinkedHashMap<String, Object>) topLevelMap.get("peopleInfoResult");
+
+                if (peopleInfoResult.containsKey("peopleInfo")) {
+                    LinkedHashMap<String, Object> peopleInfo = (LinkedHashMap<String, Object>) peopleInfoResult.get("peopleInfo");
+
+                    MoviePeopleInfoBean moviePeopleInfoBean = convertToMoviePeopleInfoBean(peopleInfo);
+                    moviePeopleInfoBeanList.add(moviePeopleInfoBean);
+                }
+            }
+        }
+
+        return moviePeopleInfoBeanList;
+    }
+
+    private MoviePeopleInfoBean convertToMoviePeopleInfoBean(LinkedHashMap<String, Object> linkedHashMap) {
+        MoviePeopleInfoBean moviePeopleInfoBean = new MoviePeopleInfoBean();
+        moviePeopleInfoBean.setPeopleCd((String) linkedHashMap.get("peopleCd"));
+        moviePeopleInfoBean.setPeopleNm((String) linkedHashMap.get("peopleNm"));
+        moviePeopleInfoBean.setPeopleNmEn((String) linkedHashMap.get("peopleNmEn"));
+        moviePeopleInfoBean.setSex((String) linkedHashMap.get("sex"));
+        moviePeopleInfoBean.setRepRoleNm((String) linkedHashMap.get("repRoleNm"));
+
+        List<String> filmoList = (List<String>) linkedHashMap.get("filmos");
+        String filmos = String.join(", ", filmoList);
+        moviePeopleInfoBean.setFilmos(filmos);
+
+        return moviePeopleInfoBean;
+    }
+
 
 
 

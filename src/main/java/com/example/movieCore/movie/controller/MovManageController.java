@@ -24,21 +24,26 @@ public class MovManageController {
     private final MovManageServiceImpl movManageService;
     private final MovieApiClientImpl movieApiClientImpl;
 
+    /** 영화 목록, 영화 상세정보 api 호출 및 이관 */
     @PostMapping(value = "/callMovieApiSyncDB")
     @ResponseBody
     public Map<String, Object> callMovieApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         boolean successResult = true;
-
         // 테스트) 영화 200개만 세팅 (1페이지 당 10개)
-        for (int i = 0; i < 21; i++) {
+
+        MovVo movVo = movieApiClientImpl.callMovieApi(1);
+
+        int maxPage = movVo.getTotCnt()/100 + 1;
+
+        for (int curPage = 1; curPage < maxPage+1; curPage++) {
             // 영화 목록 api 호출 (10개)
-            MovVo movVo = movieApiClientImpl.callMovieApi(i + "");
+            movVo = movieApiClientImpl.callMovieApi(curPage);
 
             // LinkedHashMap 데이터 BeanList 구조로 변환
             movVo.setMovieBeanList(DataConverter.convertToMovieBeanList((List) movVo.getMovieBeanList()));
 
-            // 영화 10개 반복
+            // 영화 100개 인서트
             for (int j = 0; j < movVo.getMovieBeanList().size(); j++) {
                 // 영화 한 개 정보 세팅
                 movVo.setMovieBean(movVo.getMovieBeanList().get(j));
@@ -84,7 +89,13 @@ public class MovManageController {
                 }
 
 
-                // 제작사 코드/명 데이터 가공
+                // 제작사 코드 추출 (매핑 테이블 인서트 용)
+                if(movVo.getMovieBean().getCompanys() != null && movVo.getMovieBean().getCompanys().size() >0){
+                    String companyCd = movVo.getMovieBean().getCompanys().get(0);
+                    movVo.getMovieBean().setCompanyCd(companyCd);
+                }
+
+
 
                 // 개봉일 없을시 예외 처리
                 if (movVo.getMovieBean().getOpenDt() == null || movVo.getMovieBean().getOpenDt().isEmpty()) {
@@ -247,14 +258,13 @@ public class MovManageController {
                 }
 
 
-                System.out.println("확인용");
-
-
-
 
                 try {
                     // 영화 목록(정보1개) 디비 인서트
                      movManageService.insertMovieBean(movVo);
+
+                    // 영화 목록, 회사 매핑 정보 디비 인서트
+                     movManageService.insertMovieCompanyMap(movVo);
 
                     // 영화 상세정보 디비 인서트
                      movManageService.insertMovieInfoBean(movVo);
@@ -282,8 +292,6 @@ public class MovManageController {
         MovVo movVo;
 
         MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
-
-        // 현재 페이지
 
 
         // 최초 토탈 갯수 조회용
@@ -325,8 +333,6 @@ public class MovManageController {
     @PostMapping(value = "/callMoviePeopleApiSyncDB")
     @ResponseBody
     public Map<String, Object> callMoviePeopleApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-
         MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
 
         /** 토탈 갯수 조회 */
@@ -363,6 +369,54 @@ public class MovManageController {
         resMap.put("successResult", "true");
         return resMap;
     }
+
+
+
+
+    /** 영화 인 상세정보 api 호출 및 이관 */
+    @PostMapping(value = "/callMoviePeopleInfoApiSyncDB")
+    @ResponseBody
+    public Map<String, Object> callMoviePeopleInfoApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MovVo movVo = new MovVo();
+        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+        int successCnt = 0;
+        int failCnt = 0;
+
+        // 디비서 영화인 리스트 조회
+        movVo.setMoviePeopleBeanList(movManageService.selectMoviePeopleList(movVo));
+
+
+        for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
+            String peopleCd = movVo.getMoviePeopleBeanList().get(i).getPeopleCd();
+            // 영화인 상세정보 조회 api 호출
+            movVo = movieApiClient.callMoviePeopleInfoApi(peopleCd);
+
+            try {
+                // 영화인 상세정보 디비 인서트
+                movManageService.insertMoviePeopleInfoBean(movVo);
+                successCnt++;
+
+            }catch (Exception e){
+                failCnt++;
+
+            }
+
+
+        }
+
+
+
+
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("successCnt", successCnt);
+        resMap.put("failCnt", failCnt);
+        return resMap;
+    }
+
+
 
 
 

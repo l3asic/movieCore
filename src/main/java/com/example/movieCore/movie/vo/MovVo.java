@@ -1,9 +1,6 @@
 package com.example.movieCore.movie.vo;
 
-import com.example.movieCore.movie.bean.MovieBean;
-import com.example.movieCore.movie.bean.MovieCompanyBean;
-import com.example.movieCore.movie.bean.MovieInfoBean;
-import com.example.movieCore.movie.bean.MoviePeopleBean;
+import com.example.movieCore.movie.bean.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +34,13 @@ public class MovVo {
 
     /** 영화 인 리스트 */
     private ArrayList<MoviePeopleBean> moviePeopleBeanList;
+
+    /** 영화인 상세정보 */
+    private MoviePeopleInfoBean moviePeopleInfoBean;
+
+
+
+
 
 
 

@@ -22,7 +22,7 @@ public class MovieApiClientImpl{
 
 
     /** 영화 목록 호출 */
-    public MovVo callMovieApi(String curPage){  //String curPage 페이지 숫자
+    public MovVo callMovieApi(int curPage){  //String curPage 페이지 숫자
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
@@ -31,14 +31,9 @@ public class MovieApiClientImpl{
         // WebClient 인스턴스 생성
         WebClient webClient = WebClient.create();
 
-        /** API 호출에 필요한 파라미터 설정*/
-
-        // 페이지 숫자 (1페이지당 10개씩)
-//        String curPage = "1";
-
 
         // API 호출 URL 및 파라미터 조합
-        String fullUrl = String.format("%s?key=%s&curPage=%s", apiUrl, key, curPage);
+        String fullUrl = String.format("%s?key=%s&curPage=%s&itemPerPage=%s", apiUrl, key, curPage+"","100");   // 1페이지당 100개씩
 
         // API 호출 및 응답 받기
         String responseBody = webClient.get()
@@ -57,6 +52,16 @@ public class MovieApiClientImpl{
             e.printStackTrace();
         }
 
+        MovVo movVo = new MovVo();
+
+        // 토탈 갯수
+        if (jsonMap.containsKey("peopleListResult")) {
+            LinkedHashMap<String, Object> peopleListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
+            if (peopleListResult.containsKey("totCnt")) {
+                movVo.setTotCnt((Integer) peopleListResult.get("totCnt"));
+            }
+        }
+
         // movieListResult 에서 movieList 추출
         LinkedHashMap<String, Object> movieListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
 
@@ -64,7 +69,6 @@ public class MovieApiClientImpl{
         ArrayList<MovieBean> movieBeanList = (ArrayList<MovieBean>) movieListResult.get("movieList");
 
         // vo에 세팅
-        MovVo movVo = new MovVo();
         movVo.setMovieBeanList(movieBeanList);
 
         return movVo;
@@ -219,6 +223,51 @@ public class MovieApiClientImpl{
         DataConverter dataConverter = new DataConverter();
         ArrayList<MoviePeopleBean> moviePeopleBeanList = dataConverter.convertToMoviePeopleBeanList(jsonMap);
         movVo.setMoviePeopleBeanList(moviePeopleBeanList);
+
+
+
+        return movVo;
+
+
+    }
+
+
+    /** 영화 인 상세정보 호출 */
+    public MovVo callMoviePeopleInfoApi(String peopleCd){
+
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleInfo.json";
+
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s&peopleCd=%s", apiUrl, key2, peopleCd);
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        MovVo movVo = new MovVo();
+
+
+        DataConverter dataConverter = new DataConverter();
+
+        movVo.setMoviePeopleInfoBean(dataConverter.convertToMoviePeopleInfoBeanList(jsonMap).get(0));
 
 
 

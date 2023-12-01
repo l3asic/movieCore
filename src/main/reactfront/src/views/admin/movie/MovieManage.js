@@ -13,17 +13,23 @@ function MovieManage() {
   return (
     <>
       <h3 className="mb-4">영화 관리 페이지 입니다</h3>
-      <h4 className="mb-4"> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
+      <h4 > 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
       <CContainer>
-        <CRow>
+        <CRow className="mt-4">
           <CCol>
             < CButton color="danger" size="lg" onClick={callMovieApiSyncDB}> 영화 목록 API 호출 및 DB 이관 </ CButton>
           </CCol>
           <CCol>
             < CButton color="dark" size="lg" onClick={callMovieCompanyApiSyncDB}> 영화 회사 API 호출 및 DB 이관 </ CButton>
           </CCol>
+        </CRow>
+        <CRow className="mt-4">
           <CCol>
             < CButton color="secondary" size="lg" onClick={callMoviePeopleApiSyncDB}> 영화 인 API 호출 및 DB 이관 </ CButton>
+          </CCol>
+          <CCol>
+            < CButton color="secondary" size="lg" onClick={callMoviePeopleInfoApiSyncDB}> 영화 인 상세정보 API 호출 및 DB
+              이관 </ CButton>
           </CCol>
         </CRow>
       </CContainer>
@@ -91,9 +97,19 @@ function callMoviePeopleApiSyncDB() {
 
 }
 
+/** 영화 인 상세정보 api 호출 */
+function callMoviePeopleInfoApiSyncDB() {
+  axios({
+    url: '/callMoviePeopleInfoApiSyncDB',
+    method: 'post',
+    params: {}
 
+  }).then(function (res) {
+  }).catch(function (err) {
+    alert("실패 (오류)");
+  });
 
-
+}
 
 
 export default MovieManage

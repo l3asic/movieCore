@@ -1,9 +1,12 @@
 package com.example.movieCore.movie.service;
 
+import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.mapperInterface.MovManageMapper;
 import com.example.movieCore.movie.vo.MovVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 
 @Service
@@ -27,5 +30,17 @@ public class MovManageServiceImpl {
 
     public void insertMoviePeopleBean(MovVo movVo) {
         movManageMapper.insertMoviePeopleBean(movVo);
+    }
+
+    public void insertMovieCompanyMap(MovVo movVo) {
+        movManageMapper.insertMovieCompanyMap(movVo);
+    }
+
+    public ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo) {
+        return movManageMapper.selectMoviePeopleList(movVo);
+    }
+
+    public void insertMoviePeopleInfoBean(MovVo movVo) {
+        movManageMapper.insertMoviePeopleInfoBean(movVo);
     }
 }
