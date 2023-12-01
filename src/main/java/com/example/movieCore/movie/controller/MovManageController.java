@@ -48,45 +48,6 @@ public class MovManageController {
                 // 영화 한 개 정보 세팅
                 movVo.setMovieBean(movVo.getMovieBeanList().get(j));
 
-                // 감독 명 데이터 가공
-                if (movVo.getMovieBean().getDirectors() != null && !movVo.getMovieBean().getDirectors().isEmpty()) {
-                    Object directorsObject = movVo.getMovieBean().getDirectors();
-
-                    // 확인된 형변환 가능한 경우 처리
-                    if (directorsObject instanceof List<?>) {
-                        List<?> directorsList = (List<?>) directorsObject;
-
-                        // 리스트가 비어 있지 않은 경우
-                        if (!directorsList.isEmpty()) {
-                            // 여러 감독이 있는 경우, 모든 감독명을 구분자 ","로 연결하여 할당
-                            StringBuilder peopleNmBuilder = new StringBuilder();
-
-                            for (Object singleDirectorObject : directorsList) {
-                                if (singleDirectorObject instanceof LinkedHashMap<?, ?>) {
-                                    LinkedHashMap<?, ?> director = (LinkedHashMap<?, ?>) singleDirectorObject;
-                                    Object peopleNmObject = director.get("peopleNm");
-
-                                    // 감독명이 있는 경우
-                                    if (peopleNmObject != null) {
-                                        String peopleNm = peopleNmObject.toString();
-                                        if (peopleNmBuilder.length() > 0) {
-                                            peopleNmBuilder.append(","); // 구분자 추가
-                                        }
-                                        peopleNmBuilder.append(peopleNm);
-                                    } else {
-                                        System.out.println("peopleNm 키가 존재하지 않습니다.");
-                                    }
-                                }
-                            }
-
-                            // 최종 결과를 MovieBean에 할당
-                            movVo.getMovieBean().setPeopleNm(peopleNmBuilder.toString());
-                        }
-                    } else {
-                        // 형변환이 불가능한 경우 예외 처리
-                        System.out.println("감독 명 형변환 오류");
-                    }
-                }
 
 
                 // 제작사 코드 추출 (매핑 테이블 인서트 용)
@@ -130,46 +91,6 @@ public class MovManageController {
                     movVo.getMovieInfoBean().setNationNm(nationNm);
                 }
 
-                if(movVo.getMovieInfoBean().getDirectors().size() > 0){
-                    String directorNm = "";
-                    String directorNmEn = "";
-
-                    for (int k = 0; k < movVo.getMovieInfoBean().getDirectors().size(); k++) {
-                        LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getDirectors().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(directorNm) && !directorNm.equals(""))directorNm += ",";
-                            if(!StringUtil.isNullOrEmpty(directorNmEn) && !directorNmEn.equals(""))directorNmEn += ",";
-                        }
-
-                        directorNm += (String) dataMap.get("peopleNm");
-                        directorNmEn += (String) dataMap.get("peopleNmEn");
-
-                    }
-                    movVo.getMovieInfoBean().setDirectorNm(directorNm);
-                    movVo.getMovieInfoBean().setDirectorNmEn(directorNmEn);
-
-
-                }
-
-                if(movVo.getMovieInfoBean().getActors().size() > 0){
-                    String actorsNm  = "";
-                    String actorsNmEn = "";
-
-                    for (int k = 0; k < movVo.getMovieInfoBean().getDirectors().size(); k++) {
-                        LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getDirectors().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(actorsNm) && !actorsNm.equals(""))actorsNm += ",";
-                            if(!StringUtil.isNullOrEmpty(actorsNmEn) && !actorsNmEn.equals(""))actorsNmEn += ",";
-                        }
-
-                        actorsNm += (String) dataMap.get("peopleNm");
-                        actorsNmEn += (String) dataMap.get("peopleNmEn");
-
-                    }
-                    movVo.getMovieInfoBean().setActorsNm(actorsNm);
-                    movVo.getMovieInfoBean().setActorsNmEn(actorsNmEn);
-
-                }
 
                 if(movVo.getMovieInfoBean().getShowTypes().size() > 0){
                     String showTypeGroupNm = "";
@@ -212,34 +133,6 @@ public class MovManageController {
                 }
 
 
-                if(movVo.getMovieInfoBean().getStaffs().size() > 0){
-                    String staffNm  = "";
-                    String staffNmEn = "";
-                    String staffRoleNm = "";
-
-                    for (int k = 0; (k < movVo.getMovieInfoBean().getStaffs().size()); k++) {
-                        LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getStaffs().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(staffNm) && !staffNm.equals(""))staffNm += ",";
-                            if(!StringUtil.isNullOrEmpty(staffNmEn) && !staffNmEn.equals(""))staffNmEn += ",";
-                            if(!StringUtil.isNullOrEmpty(staffRoleNm) && !staffRoleNm.equals(""))staffRoleNm += ",";
-                        }
-
-                        staffNm += (String) dataMap.get("peopleNm");
-                        staffNmEn += (String) dataMap.get("peopleNmEn");
-                        staffRoleNm += (String) dataMap.get("staffRoleNm");
-
-                        // 스탭많으면 50명까지만 컽
-                        if(k>50){
-                            break;
-                        }
-
-                    }
-                    movVo.getMovieInfoBean().setStaffsNm(staffNm);
-                    movVo.getMovieInfoBean().setStaffsNmEn(staffNmEn);
-                    movVo.getMovieInfoBean().setStaffsRoleNm(staffRoleNm);
-
-                }
 
                 if(movVo.getMovieInfoBean().getGenres().size() > 0){
                     String genreNm  = "";

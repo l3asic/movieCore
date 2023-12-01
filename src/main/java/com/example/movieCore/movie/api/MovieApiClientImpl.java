@@ -21,9 +21,8 @@ public class MovieApiClientImpl{
     private String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
 
 
-    /** 영화 목록 호출 */
-    public MovVo callMovieApi(int curPage){  //String curPage 페이지 숫자
-
+    /** 영화 목록 호출 */ //String curPage 페이지 숫자
+    public MovVo callMovieApi(int curPage){
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
 
