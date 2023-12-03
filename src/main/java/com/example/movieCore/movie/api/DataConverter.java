@@ -264,7 +264,7 @@ public class DataConverter {
 
     private MovieNationBean convertToMovieNationBean(LinkedHashMap<String, Object> linkedHashMap) {
         MovieNationBean movieNationBean = new MovieNationBean();
-        movieNationBean.setFullCd((String) linkedHashMap.get("fullCd"));
+        movieNationBean.setNationCd((String) linkedHashMap.get("fullCd"));
         movieNationBean.setKorNm((String) linkedHashMap.get("korNm"));
         movieNationBean.setEngNm((String) linkedHashMap.get("engNm"));
 

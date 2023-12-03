@@ -2,6 +2,7 @@ package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.movie.api.DataConverter;
 import com.example.movieCore.movie.api.MovieApiClientImpl;
+import com.example.movieCore.movie.bean.MovieNationBean;
 import com.example.movieCore.movie.service.MovManageServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
 import io.netty.util.internal.StringUtil;
@@ -30,14 +31,13 @@ public class MovManageController {
     public Map<String, Object> callMovieApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         boolean successResult = true;
-        // 테스트) 영화 200개만 세팅 (1페이지 당 10개)
 
         MovVo movVo = movieApiClientImpl.callMovieApi(1);
 
         int maxPage = movVo.getTotCnt()/100 + 1;
 
         for (int curPage = 1; curPage < maxPage+1; curPage++) {
-            // 영화 목록 api 호출 (10개)
+            // 영화 목록 api 호출 (1페이지당 100개)
             movVo = movieApiClientImpl.callMovieApi(curPage);
 
             // LinkedHashMap 데이터 BeanList 구조로 변환
@@ -76,20 +76,37 @@ public class MovManageController {
 
                 /** 리스트 데이터 가공 */
 
+                // 제작 국가 (리스트) 매핑 이관
                 if(movVo.getMovieInfoBean().getNations().size() > 0){
-                    String nationNm = "";
+                    MovieNationBean movieNationBean = new MovieNationBean();
 
                     for (int k = 0; k < movVo.getMovieInfoBean().getNations().size(); k++) {
                         LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getNations().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(nationNm) && !nationNm.equals(""))nationNm += ",";
+
+                        // 제작 국가명 추출
+                        movieNationBean.setKorNm((String)dataMap.get("nationNm"));
+                        
+                        // 제작 국가 코드 조회
+                        movieNationBean.setNationCd(movManageService.selectMovieNation(movVo));
+
+                        if(!StringUtil.isNullOrEmpty(movieNationBean.getNationCd())){
+                            movieNationBean.setMovieCd(movVo.getMovieBean().getMovieCd());
+                            movVo.setMovieNationBean(movieNationBean);
+
+                            // 영화 <=> 제작국가 매핑 인서트
+                            movManageService.insertMovieNationMap(movVo);
                         }
 
-                        nationNm += (String) dataMap.get("nationNm");
+
 
                     }
-                    movVo.getMovieInfoBean().setNationNm(nationNm);
                 }
+
+
+
+
+
+
 
 
                 if(movVo.getMovieInfoBean().getShowTypes().size() > 0){
@@ -312,9 +329,6 @@ public class MovManageController {
 
 
 
-
-
-
     /** 영화 제작 국가 api 호출 및 이관 */
     @PostMapping(value = "/callMovieNationsApiSyncDB")
     @ResponseBody
@@ -325,13 +339,14 @@ public class MovManageController {
 
         movVo = movieApiClient.callMovieNationApi();
 
+        // 영화 제작 국가 인서트 반복문
         for (int i = 0; i < movVo.getMovieNationBeanList().size(); i++) {
             movVo.setMovieNationBean(movVo.getMovieNationBeanList().get(i));
 
             movManageService.insertMovieNationBean(movVo);
 
         }
-        // 영화 제작 국가 인서트
+        
 
 
 

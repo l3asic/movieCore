@@ -27,7 +27,6 @@
              prdt_stat_nm,
              nation_alt,
              genre_alt,
-             rep_nation_nm,
              rep_genre_nm,
              people_nm
 
@@ -43,7 +42,6 @@
                 #{movieBean.prdtStatNm},
                 #{movieBean.nationAlt},
                 #{movieBean.genreAlt},
-                #{movieBean.repNationNm},
                 #{movieBean.repGenreNm},
                 #{movieBean.peopleNm}
 
@@ -64,7 +62,6 @@
             OPEN_DT,
             PRDT_STAT_NM,
             TYPE_NM,
-            NATION_NM,
             genre_nm,
             DIRECTOR_NM,
             DIRECTOR_NM_EN,
@@ -97,7 +94,6 @@
                 DATE_FORMAT(#{movieInfoBean.openDt}, '%Y-%m-%d %h:%m:%s'),
                 #{movieInfoBean.prdtStatNm},
                 #{movieInfoBean.typeNm},
-                #{movieInfoBean.nationNm},
                 #{movieInfoBean.genreNm},
                 #{movieInfoBean.directorNm},
                 #{movieInfoBean.directorNmEn},
@@ -235,9 +231,40 @@
          eng_nm
          )
         values (
-                #{movieNationBean.fullCd},
+                #{movieNationBean.nationCd},
                 #{movieNationBean.korNm},
                 #{movieNationBean.engNm}
+                )
+    </insert>
+
+
+
+    <!-- 영화 제작국가 이름으로 셀렉트 -->
+    <select id="selectMovieNation" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="String">
+        select
+        (
+            NATION_CD
+        )
+        from
+            MOV_NATION
+        where KOR_NM = #{movieNationBean.korNm}
+    </select>
+
+
+
+
+
+
+    <!-- 영화 제작국가 매핑 인서트 -->
+    <insert id="insertMovieNationMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_NATION_MAP
+        (
+         NATION_CD,
+         MOVIE_CD
+         )
+        values (
+                #{movieNationBean.nationCd},
+                #{movieNationBean.movieCd}
                 )
     </insert>
 

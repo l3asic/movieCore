@@ -7,9 +7,10 @@ import lombok.Setter;
 @Setter
 public class MovieNationBean {
 
-    private String fullCd;
+    private String nationCd;
     private String korNm;
     private String engNm;
+    private String movieCd;
 
 
 
