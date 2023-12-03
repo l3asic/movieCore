@@ -38,5 +38,13 @@ public class BrdBoardBean {
     private ArrayList<BrdArticleBean> articleBeanList;
 
 
+    /** 검색 조건 */
+    private String schSelect;
+
+    /** 검색 내용 */
+    private String schText;
+
+
+
 
 }

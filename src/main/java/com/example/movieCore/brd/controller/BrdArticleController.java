@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -103,6 +104,34 @@ public class BrdArticleController {
         Map resMap = new HashMap<>();
         try {
             brdVo.setArticleBeanList(articleService.selectArticleList(brdVo));
+            resMap.put("brdVo",brdVo);
+            succesResult = true;
+        }catch (Exception e){
+
+        }
+
+        resMap.put("succesResult",succesResult);
+
+        return resMap;
+
+
+    }
+
+    @GetMapping(value = "/searchArticle")
+    @ResponseBody
+    public Map<String, Object> searchArticle(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
+
+
+        /** 게시글 리스트 조회디비서 셀렉트  */
+        BrdVo brdVo = new BrdVo();
+        brdVo.setBoardBean(boardBean);
+
+        boolean succesResult = false;
+
+        Map resMap = new HashMap<>();
+        try {
+                brdVo.setArticleBeanList(articleService.searchArticle(brdVo));
+
             resMap.put("brdVo",brdVo);
             succesResult = true;
         }catch (Exception e){

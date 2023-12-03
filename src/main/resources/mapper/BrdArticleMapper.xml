@@ -99,7 +99,7 @@
             BA.SUBJECT,
             BA.CONTENT,
             BA.VIEW_CNT,
-            DATE_FORMAT(BA.CREATE_DT, '%Y-%m-%d'),
+            BA.CREATE_DT,
             BA.UPDATE_DT,
             BA.EXPIRE_DT,
             BA.EXPIRE_YN,
@@ -111,6 +111,48 @@
             BA.STATE = 'B'
         AND
             BA.BRD_ID = #{boardBean.brdId}
+
+    </select>
+
+    <select id="searchArticle" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
+
+        SELECT
+            BA.ATCL_ID,
+            BA.BRD_ID,
+            BA.MEM_ID,
+            BA.SUBJECT,
+            BA.CONTENT,
+            BA.VIEW_CNT,
+            BA.CREATE_DT,
+            BA.UPDATE_DT,
+            BA.EXPIRE_DT,
+            BA.EXPIRE_YN,
+            BA.STATE,
+            BA.ATCL_REPL_CNT
+        FROM
+            BRD_ARTICLE BA
+        WHERE
+            BA.STATE = 'B'
+        AND
+            BA.BRD_ID = #{boardBean.brdId}
+        <choose>
+            <when test="boardBean.schSelect == 'subject'">
+                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'content'">
+                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'memName'">
+                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                )
+            </otherwise>
+        </choose>
 
     </select>
 
