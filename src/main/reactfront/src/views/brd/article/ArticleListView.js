@@ -108,6 +108,7 @@ const ArticleListView = () => {
       }));
       setSchSelect('');
       setSchText('');
+      // ㅇ
 
 
     }).catch(function (err){
