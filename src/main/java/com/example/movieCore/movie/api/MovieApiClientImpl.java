@@ -231,7 +231,7 @@ public class MovieApiClientImpl{
     /**
      * 영화 인 상세정보 호출
      */
-    public MoviePeopleInfoBean callMoviePeopleInfoApi(String peopleCd){
+    public MoviePeopleInfoBean callMoviePeopleInfoApi(String peopleCd,String customKey){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleInfo.json";
@@ -241,7 +241,7 @@ public class MovieApiClientImpl{
         WebClient webClient = WebClient.create();
 
         // API 호출 URL 및 파라미터 조합
-        String fullUrl = String.format("%s?key=%s&peopleCd=%s", apiUrl, key2, peopleCd);
+        String fullUrl = String.format("%s?key=%s&peopleCd=%s", apiUrl, customKey, peopleCd);
 
         // API 호출 및 응답 받기
         String responseBody = webClient.get()

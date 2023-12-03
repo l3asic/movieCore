@@ -329,10 +329,35 @@ public class MovManageController {
         movVo.setMoviePeopleBeanList(movManageService.selectMoviePeopleList(movVo));
 
 
-        for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
+
+        /** 발급받은 API 키  분담용  */
+        String key1 = "7ed99cc4e7bce9910e15252a08c4ec17";
+        String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
+        String key3 = "2de1d6d0dab3e485b0d97f0ff5b0bd25";
+        String key4 = "7957ef755545f3af1d212a0ece169def";
+
+
+        int devideCnt = 0;
+        String customKey ="";
+
+        // 준호 0 ~ 49999
+        // 승경 50000 ~ 99999
+        // 준호 100000 ~ 끝
+
+//        for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
+        for (int i = 0; i < 3000; i++) {
             String peopleCd = movVo.getMoviePeopleBeanList().get(i).getPeopleCd();
+
+            /** 분담용 커스텀 */
+            if(devideCnt<=3000){
+                customKey = key1;
+            }else{
+                customKey = key2;
+            }
+
+
             // 영화인 상세정보 조회 api 호출
-            movVo.setMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd));
+            movVo.setMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd,customKey));
 
             try {
                 // 영화인 상세정보 디비 인서트
@@ -344,6 +369,7 @@ public class MovManageController {
 
             }
 
+            devideCnt++;
 
         }
 
