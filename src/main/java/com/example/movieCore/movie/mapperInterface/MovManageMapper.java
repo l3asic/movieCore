@@ -29,4 +29,6 @@ public interface MovManageMapper {
     void insertMovieNationMap(MovVo movVo);
 
     String selectMovieNation(MovVo movVo);
+
+    int checkTheCompany(MovVo movVo);
 }

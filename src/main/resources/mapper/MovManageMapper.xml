@@ -270,6 +270,15 @@
 
 
 
+    <!-- 영화 회사 코드 실재 확인 -->
+    <select id="checkTheCompany" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
+        select count(COMPANY_CD)
+        from MOV_COMPANY
+        where company_cd =  #{movieBean.companyCd}
+    </select>
+
+
+
 
 
 

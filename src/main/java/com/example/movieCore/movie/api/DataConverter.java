@@ -34,7 +34,8 @@ public class DataConverter {
         movieBean.setRepGenreNm((String) linkedHashMap.get("repGenreNm"));
 
         List<String> directors = (List<String>) linkedHashMap.get("directors");
-        List<String> companys = (List<String>) linkedHashMap.get("companys");
+
+        List<LinkedHashMap<String, Object>> companys = (List<LinkedHashMap<String, Object>>) linkedHashMap.get("companys");
 
         movieBean.setDirectors(directors != null ? new ArrayList<>(directors) : new ArrayList<>());
         movieBean.setCompanys(companys != null ? new ArrayList<>(companys) : new ArrayList<>());

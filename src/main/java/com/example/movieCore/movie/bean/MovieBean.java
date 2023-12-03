@@ -3,6 +3,7 @@ package com.example.movieCore.movie.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Getter
@@ -49,7 +50,7 @@ public class MovieBean {
     private String peopleNm;
     
     /** 제작사들  */
-    private List<String> companys;
+    private List<LinkedHashMap<String, Object>> companys;
 
     /** 제작사 코드 */
     private String companyCd;

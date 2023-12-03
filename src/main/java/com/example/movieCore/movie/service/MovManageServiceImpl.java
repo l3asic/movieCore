@@ -55,4 +55,8 @@ public class MovManageServiceImpl {
     public String selectMovieNation(MovVo movVo) {
         return movManageMapper.selectMovieNation(movVo);
     }
+
+    public int checkTheCompany(MovVo movVo) {
+        return movManageMapper.checkTheCompany(movVo);
+    }
 }

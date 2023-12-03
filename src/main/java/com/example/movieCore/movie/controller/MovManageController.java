@@ -13,10 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -50,10 +47,32 @@ public class MovManageController {
 
 
 
-                // 제작사 코드 추출 (매핑 테이블 인서트 용)
+                // 제작사 코드들 추출 및 매핑 테이블 인서트
                 if(movVo.getMovieBean().getCompanys() != null && movVo.getMovieBean().getCompanys().size() >0){
-                    String companyCd = movVo.getMovieBean().getCompanys().get(0);
-                    movVo.getMovieBean().setCompanyCd(companyCd);
+
+                    for (int i = 0; i < movVo.getMovieBean().getCompanys().size(); i++) {
+
+                        // 영화에서 회사 코드 추출
+                        LinkedHashMap<String, Object> companyMap = movVo.getMovieBean().getCompanys().get(i);
+                        String companyCd = (String) companyMap.get("companyCd");
+                        movVo.getMovieBean().setCompanyCd(companyCd);
+
+                        // 회사 코드 실재 확인
+                        int companyCnt = 0;
+                        companyCnt = movManageService.checkTheCompany(movVo);
+
+                        if(companyCnt>0){
+                            movManageService.insertMovieCompanyMap(movVo);
+                        }else {
+                            System.out.println("영화에 맞는 회사가 디비에 없음?");
+                        }
+
+
+
+                    }
+
+
+
                 }
 
 
@@ -173,8 +192,6 @@ public class MovManageController {
                     // 영화 목록(정보1개) 디비 인서트
                      movManageService.insertMovieBean(movVo);
 
-                    // 영화 목록, 회사 매핑 정보 디비 인서트
-                     movManageService.insertMovieCompanyMap(movVo);
 
                     // 영화 상세정보 디비 인서트
                      movManageService.insertMovieInfoBean(movVo);
