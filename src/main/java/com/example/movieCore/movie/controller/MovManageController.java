@@ -87,11 +87,6 @@ public class MovManageController {
                 movVo.setMovieInfoBean(movieApiClientImpl.callMovieInfoApi(movVo.getMovieBean().getMovieCd()));
 
 
-                // 개봉일 없을시 예외 처리
-                if (movVo.getMovieInfoBean().getOpenDt() == null || movVo.getMovieInfoBean().getOpenDt().isEmpty()) {
-                    movVo.getMovieInfoBean().setOpenDt(null);
-                }
-
 
                 /** 리스트 데이터 가공 */
 
@@ -120,10 +115,6 @@ public class MovManageController {
 
                     }
                 }
-
-
-
-
 
 
 
