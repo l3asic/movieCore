@@ -46,6 +46,9 @@ public class MovVo {
     private ArrayList<MovieNationBean> movieNationBeanList;
 
 
+    /** 영화 제작 국가  */
+    private MovieGenreBean movieGenreBean;
+
 
 
 

@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.service;
 
+import com.example.movieCore.movie.bean.MovieGenreBean;
 import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.mapperInterface.MovManageMapper;
 import com.example.movieCore.movie.vo.MovVo;
@@ -58,5 +59,17 @@ public class MovManageServiceImpl {
 
     public int checkTheCompany(MovVo movVo) {
         return movManageMapper.checkTheCompany(movVo);
+    }
+
+    public MovieGenreBean selectMovieGenre(String genreNm) {
+        return movManageMapper.selectMovieGenre(genreNm);
+    }
+
+    public void insertMovieGenre(MovVo movVo) {
+        movManageMapper.insertMovieGenre(movVo);
+    }
+
+    public void insertMovieGenreMap(MovVo movVo) {
+        movManageMapper.insertMovieGenreMap(movVo);
     }
 }

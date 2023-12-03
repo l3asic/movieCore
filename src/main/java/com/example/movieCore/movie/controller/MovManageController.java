@@ -2,9 +2,11 @@ package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.movie.api.DataConverter;
 import com.example.movieCore.movie.api.MovieApiClientImpl;
+import com.example.movieCore.movie.bean.MovieGenreBean;
 import com.example.movieCore.movie.bean.MovieNationBean;
 import com.example.movieCore.movie.service.MovManageServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.utils.MakeUUID;
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +23,8 @@ public class MovManageController {
 
     private final MovManageServiceImpl movManageService;
     private final MovieApiClientImpl movieApiClientImpl;
+
+    private final MakeUUID makeUUID = new MakeUUID();
 
     /** 영화 목록, 영화 상세정보 api 호출 및 이관 */
     @PostMapping(value = "/callMovieApiSyncDB")
@@ -162,18 +166,38 @@ public class MovManageController {
 
 
                 if(movVo.getMovieInfoBean().getGenres().size() > 0){
-                    String genreNm  = "";
 
                     for (int k = 0; k < movVo.getMovieInfoBean().getGenres().size(); k++) {
                         LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getGenres().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(genreNm) && !genreNm.equals(""))genreNm += ",";
+                        String genreNm = (String) dataMap.get("genreNm");
+
+
+                        // 장르 검색
+                        MovieGenreBean movieGenreBean = movManageService.selectMovieGenre(genreNm);
+
+                        // 장르 없는 경우 장르 인서트
+                        if(movieGenreBean == null){
+                            movieGenreBean = new MovieGenreBean();
+                            // 장르 코드 새로 생성
+                            String genreCd = makeUUID.makeShortUUID("GR");
+                            movieGenreBean.setGenreCd(genreCd);
+
+                            movieGenreBean.setGenreNm(genreNm);
+                            movieGenreBean.setMovieCd(movVo.getMovieBean().getMovieCd());
+                            movVo.setMovieGenreBean(movieGenreBean);
+
+                            movManageService.insertMovieGenre(movVo);
+
                         }
 
-                        genreNm += (String) dataMap.get("genreNm");
+                        // 영화 <=> 장르 매핑 인서트
+                        movieGenreBean.setMovieCd(movVo.getMovieBean().getMovieCd());
+                        movVo.setMovieGenreBean(movieGenreBean);
 
-                    }
-                    movVo.getMovieInfoBean().setGenreNm(genreNm);
+                        movManageService.insertMovieGenreMap(movVo);
+
+
+                    } // 장르 for
 
                 }
 

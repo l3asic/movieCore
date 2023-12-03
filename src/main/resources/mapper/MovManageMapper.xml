@@ -13,6 +13,12 @@
         <result column="filmo_names" property="filmoNames" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!-- 영화 장르 빈 -->
+    <resultMap type="com.example.movieCore.movie.bean.MovieGenreBean" id="MovieGenreBean">
+        <result column="genre_cd" property="genreCd" jdbcType="VARCHAR"/>
+        <result column="genre_nm" property="genreNm" jdbcType="VARCHAR"/>
+    </resultMap>
+
 
     <!-- 영화 정보 인서트 -->
     <insert id="insertMovieBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
@@ -276,6 +282,45 @@
         from MOV_COMPANY
         where company_cd =  #{movieBean.companyCd}
     </select>
+
+    <!-- 영화 장르 조회 -->
+    <select id="selectMovieGenre" parameterType="String" resultMap="MovieGenreBean">
+        select
+            genre_cd,
+            genre_nm
+        from
+            MOV_GENRE
+        where
+            GENRE_NM =  #{genreNm}
+    </select>
+
+
+    <!-- 영화 장르 인서트 -->
+    <insert id="insertMovieGenre" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_GENRE
+            (
+                genre_cd,
+                genre_nm
+            )
+            VALUES (
+                   #{movieGenreBean.genreCd},
+                   #{movieGenreBean.genreNm}
+                   )
+    </insert>
+
+    <!-- 영화 장르 매핑 인서트 -->
+    <insert id="insertMovieGenreMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_GENRE_MAP
+            (
+                genre_cd,
+                movie_cd
+            )
+            VALUES (
+                   #{movieGenreBean.genreCd},
+                   #{movieGenreBean.movieCd}
+                   )
+    </insert>
+
 
 
 

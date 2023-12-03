@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.mapperInterface;
 
+import com.example.movieCore.movie.bean.MovieGenreBean;
 import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,4 +32,10 @@ public interface MovManageMapper {
     String selectMovieNation(MovVo movVo);
 
     int checkTheCompany(MovVo movVo);
+
+    MovieGenreBean selectMovieGenre(String genreNm);
+
+    void insertMovieGenre(MovVo movVo);
+
+    void insertMovieGenreMap(MovVo movVo);
 }
