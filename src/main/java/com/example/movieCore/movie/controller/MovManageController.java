@@ -315,6 +315,33 @@ public class MovManageController {
 
 
 
+    /** 영화 제작 국가 api 호출 및 이관 */
+    @PostMapping(value = "/callMovieNationsApiSyncDB")
+    @ResponseBody
+    public Map<String, Object> callMovieNationsApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MovVo movVo;
+        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+
+        movVo = movieApiClient.callMovieNationApi();
+
+        for (int i = 0; i < movVo.getMovieNationBeanList().size(); i++) {
+            movVo.setMovieNationBean(movVo.getMovieNationBeanList().get(i));
+
+            movManageService.insertMovieNationBean(movVo);
+
+        }
+        // 영화 제작 국가 인서트
+
+
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("successCnt", "successCnt");
+        return resMap;
+
+    }
+
 
 
 

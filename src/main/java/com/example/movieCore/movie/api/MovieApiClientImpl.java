@@ -274,6 +274,55 @@ public class MovieApiClientImpl{
 
     }
 
+    /**
+     *  공통코드 - 영화 국가 api 호출
+     */
+    public MovVo callMovieNationApi(){
+
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/code/searchCodeList.json";
+
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s&comCode=2204", apiUrl, key2);
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        DataConverter dataConverter = new DataConverter();
+
+        MovVo movVo = new MovVo();
+
+        movVo.setMovieNationBeanList(dataConverter.convertToMovieNationBeanList(jsonMap));
+
+
+
+        return movVo;
+
+
+
+
+
+
+    }
+
 
 
 

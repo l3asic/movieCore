@@ -23,4 +23,6 @@ public interface MovManageMapper {
     ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo);
 
     void insertMoviePeopleInfoBean(MovVo movVo);
+
+    void insertMovieNationBean(MovVo movVo);
 }

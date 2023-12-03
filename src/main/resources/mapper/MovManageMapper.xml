@@ -226,5 +226,24 @@
 
 
 
+    <!-- 영화 제작국가 인서트 -->
+    <insert id="insertMovieNationBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        insert into MOV_NATION
+        (
+         NATION_CD,
+         kor_nm,
+         eng_nm
+         )
+        values (
+                #{movieNationBean.fullCd},
+                #{movieNationBean.korNm},
+                #{movieNationBean.engNm}
+                )
+    </insert>
+
+
+
+
+
 
 </mapper>

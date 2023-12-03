@@ -43,4 +43,8 @@ public class MovManageServiceImpl {
     public void insertMoviePeopleInfoBean(MovVo movVo) {
         movManageMapper.insertMoviePeopleInfoBean(movVo);
     }
+
+    public void insertMovieNationBean(MovVo movVo) {
+        movManageMapper.insertMovieNationBean(movVo);
+    }
 }

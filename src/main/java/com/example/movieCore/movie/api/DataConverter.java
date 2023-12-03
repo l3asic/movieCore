@@ -244,6 +244,33 @@ public class DataConverter {
     }
 
 
+    public ArrayList<MovieNationBean> convertToMovieNationBeanList(Object jsonMap) {
+        ArrayList<MovieNationBean> movieNationBeanList = new ArrayList<>();
+
+        if (jsonMap instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> topLevelMap = (LinkedHashMap<String, Object>) jsonMap;
+
+            if (topLevelMap.containsKey("codes")) {
+                ArrayList<LinkedHashMap<String, Object>> codesList = (ArrayList<LinkedHashMap<String, Object>>) topLevelMap.get("codes");
+
+                for (LinkedHashMap<String, Object> codeMap : codesList) {
+                    movieNationBeanList.add(convertToMovieNationBean(codeMap));
+                }
+            }
+        }
+
+        return movieNationBeanList;
+    }
+
+    private MovieNationBean convertToMovieNationBean(LinkedHashMap<String, Object> linkedHashMap) {
+        MovieNationBean movieNationBean = new MovieNationBean();
+        movieNationBean.setFullCd((String) linkedHashMap.get("fullCd"));
+        movieNationBean.setKorNm((String) linkedHashMap.get("korNm"));
+        movieNationBean.setEngNm((String) linkedHashMap.get("engNm"));
+
+        return movieNationBean;
+    }
+
 
 
 
