@@ -213,9 +213,32 @@ public class DataConverter {
         moviePeopleInfoBean.setSex((String) linkedHashMap.get("sex"));
         moviePeopleInfoBean.setRepRoleNm((String) linkedHashMap.get("repRoleNm"));
 
-        List<String> filmoList = (List<String>) linkedHashMap.get("filmos");
-        String filmos = String.join(", ", filmoList);
-        moviePeopleInfoBean.setFilmos(filmos);
+
+        List<LinkedHashMap<String, Object>> filmoList = (List<LinkedHashMap<String, Object>>) linkedHashMap.get("filmos");
+
+        if (filmoList != null && !filmoList.isEmpty()) {
+            List<String> movieNmList = new ArrayList<>();
+
+            int filmoCnt = 0;
+
+            for (LinkedHashMap<String, Object> filmoMap : filmoList) {
+                // 필모 너무 길면 스톱
+                if(filmoCnt > 30){
+                    break;
+                }
+                String movieNm = (String) filmoMap.get("movieNm");
+
+                if (movieNm != null && !movieNm.isEmpty()) {
+                    movieNmList.add(movieNm);
+                }
+                filmoCnt++;
+            }
+
+            String filmos = String.join(", ", movieNmList);
+            moviePeopleInfoBean.setFilmos(filmos);
+        } else {
+            moviePeopleInfoBean.setFilmos(""); // 빈 문자열로 설정 또는 null로 설정하셔도 됩니다.
+        }
 
         return moviePeopleInfoBean;
     }

@@ -1,9 +1,6 @@
 package com.example.movieCore.movie.api;
 
-import com.example.movieCore.movie.bean.MovieBean;
-import com.example.movieCore.movie.bean.MovieCompanyBean;
-import com.example.movieCore.movie.bean.MovieInfoBean;
-import com.example.movieCore.movie.bean.MoviePeopleBean;
+import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.vo.MovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -231,8 +228,10 @@ public class MovieApiClientImpl{
     }
 
 
-    /** 영화 인 상세정보 호출 */
-    public MovVo callMoviePeopleInfoApi(String peopleCd){
+    /**
+     * 영화 인 상세정보 호출
+     */
+    public MoviePeopleInfoBean callMoviePeopleInfoApi(String peopleCd){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleInfo.json";
@@ -270,7 +269,7 @@ public class MovieApiClientImpl{
 
 
 
-        return movVo;
+        return movVo.getMoviePeopleInfoBean();
 
 
     }

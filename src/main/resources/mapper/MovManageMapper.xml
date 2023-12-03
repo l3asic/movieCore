@@ -208,7 +208,7 @@
                 REP_ROLE_NM,
                 FILMO_NAMES,
                 MOVIE_CD,
-                HOMEPAGES,
+                HOMEPAGES
             )
         values
             (
@@ -217,7 +217,7 @@
                 #{moviePeopleInfoBean.peopleNmEn},
                 #{moviePeopleInfoBean.sex},
                 #{moviePeopleInfoBean.repRoleNm},
-                #{moviePeopleInfoBean.filmoNames},
+                #{moviePeopleInfoBean.filmos},
                 #{moviePeopleInfoBean.movieCd},
                 #{moviePeopleInfoBean.homepages}
 

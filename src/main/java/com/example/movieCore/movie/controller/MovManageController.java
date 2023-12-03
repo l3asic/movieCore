@@ -283,7 +283,7 @@ public class MovManageController {
         for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
             String peopleCd = movVo.getMoviePeopleBeanList().get(i).getPeopleCd();
             // 영화인 상세정보 조회 api 호출
-            movVo = movieApiClient.callMoviePeopleInfoApi(peopleCd);
+            movVo.setMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd));
 
             try {
                 // 영화인 상세정보 디비 인서트
