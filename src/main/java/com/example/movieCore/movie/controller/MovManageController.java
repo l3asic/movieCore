@@ -2,8 +2,11 @@ package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.movie.api.DataConverter;
 import com.example.movieCore.movie.api.MovieApiClientImpl;
+import com.example.movieCore.movie.bean.MovieGenreBean;
+import com.example.movieCore.movie.bean.MovieNationBean;
 import com.example.movieCore.movie.service.MovManageServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.utils.MakeUUID;
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,10 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,20 +24,21 @@ public class MovManageController {
     private final MovManageServiceImpl movManageService;
     private final MovieApiClientImpl movieApiClientImpl;
 
+    private final MakeUUID makeUUID = new MakeUUID();
+
     /** 영화 목록, 영화 상세정보 api 호출 및 이관 */
     @PostMapping(value = "/callMovieApiSyncDB")
     @ResponseBody
     public Map<String, Object> callMovieApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         boolean successResult = true;
-        // 테스트) 영화 200개만 세팅 (1페이지 당 10개)
 
         MovVo movVo = movieApiClientImpl.callMovieApi(1);
 
         int maxPage = movVo.getTotCnt()/100 + 1;
 
         for (int curPage = 1; curPage < maxPage+1; curPage++) {
-            // 영화 목록 api 호출 (10개)
+            // 영화 목록 api 호출 (1페이지당 100개)
             movVo = movieApiClientImpl.callMovieApi(curPage);
 
             // LinkedHashMap 데이터 BeanList 구조로 변환
@@ -50,10 +51,32 @@ public class MovManageController {
 
 
 
-                // 제작사 코드 추출 (매핑 테이블 인서트 용)
+                // 제작사 코드들 추출 및 매핑 테이블 인서트
                 if(movVo.getMovieBean().getCompanys() != null && movVo.getMovieBean().getCompanys().size() >0){
-                    String companyCd = movVo.getMovieBean().getCompanys().get(0);
-                    movVo.getMovieBean().setCompanyCd(companyCd);
+
+                    for (int i = 0; i < movVo.getMovieBean().getCompanys().size(); i++) {
+
+                        // 영화에서 회사 코드 추출
+                        LinkedHashMap<String, Object> companyMap = movVo.getMovieBean().getCompanys().get(i);
+                        String companyCd = (String) companyMap.get("companyCd");
+                        movVo.getMovieBean().setCompanyCd(companyCd);
+
+                        // 회사 코드 실재 확인
+                        int companyCnt = 0;
+                        companyCnt = movManageService.checkTheCompany(movVo);
+
+                        if(companyCnt>0){
+                            movManageService.insertMovieCompanyMap(movVo);
+                        }else {
+                            System.out.println("영화에 맞는 회사가 디비에 없음?");
+                        }
+
+
+
+                    }
+
+
+
                 }
 
 
@@ -68,28 +91,36 @@ public class MovManageController {
                 movVo.setMovieInfoBean(movieApiClientImpl.callMovieInfoApi(movVo.getMovieBean().getMovieCd()));
 
 
-                // 개봉일 없을시 예외 처리
-                if (movVo.getMovieInfoBean().getOpenDt() == null || movVo.getMovieInfoBean().getOpenDt().isEmpty()) {
-                    movVo.getMovieInfoBean().setOpenDt(null);
-                }
-
 
                 /** 리스트 데이터 가공 */
 
+                // 제작 국가 (리스트) 매핑 이관
                 if(movVo.getMovieInfoBean().getNations().size() > 0){
-                    String nationNm = "";
+                    MovieNationBean movieNationBean = new MovieNationBean();
 
                     for (int k = 0; k < movVo.getMovieInfoBean().getNations().size(); k++) {
                         LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getNations().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(nationNm) && !nationNm.equals(""))nationNm += ",";
+
+                        // 제작 국가명 추출
+                        movieNationBean.setKorNm((String)dataMap.get("nationNm"));
+                        
+                        // 제작 국가 코드 조회
+                        movieNationBean.setNationCd(movManageService.selectMovieNation(movVo));
+
+                        if(!StringUtil.isNullOrEmpty(movieNationBean.getNationCd())){
+                            movieNationBean.setMovieCd(movVo.getMovieBean().getMovieCd());
+                            movVo.setMovieNationBean(movieNationBean);
+
+                            // 영화 <=> 제작국가 매핑 인서트
+                            movManageService.insertMovieNationMap(movVo);
                         }
 
-                        nationNm += (String) dataMap.get("nationNm");
+
 
                     }
-                    movVo.getMovieInfoBean().setNationNm(nationNm);
                 }
+
+
 
 
                 if(movVo.getMovieInfoBean().getShowTypes().size() > 0){
@@ -135,18 +166,38 @@ public class MovManageController {
 
 
                 if(movVo.getMovieInfoBean().getGenres().size() > 0){
-                    String genreNm  = "";
 
                     for (int k = 0; k < movVo.getMovieInfoBean().getGenres().size(); k++) {
                         LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMovieInfoBean().getGenres().get(k);
-                        if(k>0){
-                            if(!StringUtil.isNullOrEmpty(genreNm) && !genreNm.equals(""))genreNm += ",";
+                        String genreNm = (String) dataMap.get("genreNm");
+
+
+                        // 장르 검색
+                        MovieGenreBean movieGenreBean = movManageService.selectMovieGenre(genreNm);
+
+                        // 장르 없는 경우 장르 인서트
+                        if(movieGenreBean == null){
+                            movieGenreBean = new MovieGenreBean();
+                            // 장르 코드 새로 생성
+                            String genreCd = makeUUID.makeShortUUID("GR");
+                            movieGenreBean.setGenreCd(genreCd);
+
+                            movieGenreBean.setGenreNm(genreNm);
+                            movieGenreBean.setMovieCd(movVo.getMovieBean().getMovieCd());
+                            movVo.setMovieGenreBean(movieGenreBean);
+
+                            movManageService.insertMovieGenre(movVo);
+
                         }
 
-                        genreNm += (String) dataMap.get("genreNm");
+                        // 영화 <=> 장르 매핑 인서트
+                        movieGenreBean.setMovieCd(movVo.getMovieBean().getMovieCd());
+                        movVo.setMovieGenreBean(movieGenreBean);
 
-                    }
-                    movVo.getMovieInfoBean().setGenreNm(genreNm);
+                        movManageService.insertMovieGenreMap(movVo);
+
+
+                    } // 장르 for
 
                 }
 
@@ -156,8 +207,6 @@ public class MovManageController {
                     // 영화 목록(정보1개) 디비 인서트
                      movManageService.insertMovieBean(movVo);
 
-                    // 영화 목록, 회사 매핑 정보 디비 인서트
-                     movManageService.insertMovieCompanyMap(movVo);
 
                     // 영화 상세정보 디비 인서트
                      movManageService.insertMovieInfoBean(movVo);
@@ -283,7 +332,7 @@ public class MovManageController {
         for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
             String peopleCd = movVo.getMoviePeopleBeanList().get(i).getPeopleCd();
             // 영화인 상세정보 조회 api 호출
-            movVo = movieApiClient.callMoviePeopleInfoApi(peopleCd);
+            movVo.setMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd));
 
             try {
                 // 영화인 상세정보 디비 인서트
@@ -312,8 +361,33 @@ public class MovManageController {
 
 
 
+    /** 영화 제작 국가 api 호출 및 이관 */
+    @PostMapping(value = "/callMovieNationsApiSyncDB")
+    @ResponseBody
+    public Map<String, Object> callMovieNationsApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MovVo movVo;
+        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+
+        movVo = movieApiClient.callMovieNationApi();
+
+        // 영화 제작 국가 인서트 반복문
+        for (int i = 0; i < movVo.getMovieNationBeanList().size(); i++) {
+            movVo.setMovieNationBean(movVo.getMovieNationBeanList().get(i));
+
+            movManageService.insertMovieNationBean(movVo);
+
+        }
+        
 
 
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("successCnt", "successCnt");
+        return resMap;
+
+    }
 
 
 

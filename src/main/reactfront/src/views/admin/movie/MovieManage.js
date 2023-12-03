@@ -32,6 +32,11 @@ function MovieManage() {
               이관 </ CButton>
           </CCol>
         </CRow>
+        <CRow className="mt-4">
+          <CCol>
+            < CButton color="secondary" size="lg" onClick={callMovieNationsApiSyncDB}> 영화 제작 국가 API 호출 및 DB 이관 </ CButton>
+          </CCol>
+        </CRow>
       </CContainer>
     </>
   )
@@ -110,6 +115,22 @@ function callMoviePeopleInfoApiSyncDB() {
   });
 
 }
+
+/** 영화 제작 국가 api 호출 */
+function callMovieNationsApiSyncDB() {
+  axios({
+    url: '/callMovieNationsApiSyncDB',
+    method: 'post',
+    params: {}
+
+  }).then(function (res) {
+  }).catch(function (err) {
+    alert("실패 (오류)");
+  });
+
+}
+
+
 
 
 export default MovieManage
