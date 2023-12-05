@@ -1,11 +1,11 @@
-package com.example.movieCore.movie.bean;
+package com.example.movieCore.migMovie.bean;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class MovieCompanyBean {
+public class MigMovieCompanyBean {
     private String companyCd;
     private String companyNm;
     private String companyNmEn;

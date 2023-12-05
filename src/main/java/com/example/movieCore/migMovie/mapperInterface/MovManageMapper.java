@@ -1,8 +1,8 @@
-package com.example.movieCore.movie.mapperInterface;
+package com.example.movieCore.migMovie.mapperInterface;
 
-import com.example.movieCore.movie.bean.MovieGenreBean;
-import com.example.movieCore.movie.bean.MoviePeopleBean;
-import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
+import com.example.movieCore.migMovie.bean.MigMoviePeopleBean;
+import com.example.movieCore.migMovie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public interface MovManageMapper {
 
     void insertMovieCompanyMap(MovVo movVo);
 
-    ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo);
+    ArrayList<MigMoviePeopleBean> selectMoviePeopleList(MovVo movVo);
 
     void insertMoviePeopleInfoBean(MovVo movVo);
 
@@ -33,7 +33,7 @@ public interface MovManageMapper {
 
     int checkTheCompany(MovVo movVo);
 
-    MovieGenreBean selectMovieGenre(String genreNm);
+    MigMovieGenreBean selectMovieGenre(String genreNm);
 
     void insertMovieGenre(MovVo movVo);
 

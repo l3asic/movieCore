@@ -1,7 +1,7 @@
-package com.example.movieCore.movie.api;
+package com.example.movieCore.migMovie.api;
 
-import com.example.movieCore.movie.bean.*;
-import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.migMovie.bean.*;
+import com.example.movieCore.migMovie.vo.MovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
@@ -62,10 +62,10 @@ public class MovieApiClientImpl{
         LinkedHashMap<String, Object> movieListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
 
         // movieList 를 BeanList로 받기
-        ArrayList<MovieBean> movieBeanList = (ArrayList<MovieBean>) movieListResult.get("movieList");
+        ArrayList<MigMovieBean> migMovieBeanList = (ArrayList<MigMovieBean>) movieListResult.get("movieList");
 
         // vo에 세팅
-        movVo.setMovieBeanList(movieBeanList);
+        movVo.setMigMovieBeanList(migMovieBeanList);
 
         return movVo;
 
@@ -75,7 +75,7 @@ public class MovieApiClientImpl{
 
 
     /** 영화 상세정보 호출 */   // 영화 코드
-    public MovieInfoBean callMovieInfoApi(String movieCd){
+    public MigMovieInfoBean callMovieInfoApi(String movieCd){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
@@ -107,11 +107,11 @@ public class MovieApiClientImpl{
 
 
         DataConverter dataConverter = new DataConverter();
-        MovieInfoBean movieInfoBean;
+        MigMovieInfoBean migMovieInfoBean;
 
-        movieInfoBean = dataConverter.extractMovieInfoBean(jsonMap);
+        migMovieInfoBean = dataConverter.extractMovieInfoBean(jsonMap);
 
-        return movieInfoBean;
+        return migMovieInfoBean;
 
 
     }
@@ -161,8 +161,8 @@ public class MovieApiClientImpl{
         }
 
         DataConverter dataConverter = new DataConverter();
-        ArrayList<MovieCompanyBean> movieCompanyBeanList = dataConverter.convertToMovieCompanyBeanList(jsonMap);
-        movVo.setMovieCompanyBeanList(movieCompanyBeanList);
+        ArrayList<MigMovieCompanyBean> migMovieCompanyBeanList = dataConverter.convertToMovieCompanyBeanList(jsonMap);
+        movVo.setMigMovieCompanyBeanList(migMovieCompanyBeanList);
 
 
 
@@ -217,8 +217,8 @@ public class MovieApiClientImpl{
         }
 
         DataConverter dataConverter = new DataConverter();
-        ArrayList<MoviePeopleBean> moviePeopleBeanList = dataConverter.convertToMoviePeopleBeanList(jsonMap);
-        movVo.setMoviePeopleBeanList(moviePeopleBeanList);
+        ArrayList<MigMoviePeopleBean> migMoviePeopleBeanList = dataConverter.convertToMoviePeopleBeanList(jsonMap);
+        movVo.setMigMoviePeopleBeanList(migMoviePeopleBeanList);
 
 
 
@@ -231,7 +231,7 @@ public class MovieApiClientImpl{
     /**
      * 영화 인 상세정보 호출
      */
-    public MoviePeopleInfoBean callMoviePeopleInfoApi(String peopleCd,String customKey){
+    public MigMoviePeopleInfoBean callMoviePeopleInfoApi(String peopleCd, String customKey){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleInfo.json";
@@ -265,11 +265,11 @@ public class MovieApiClientImpl{
 
         DataConverter dataConverter = new DataConverter();
 
-        movVo.setMoviePeopleInfoBean(dataConverter.convertToMoviePeopleInfoBeanList(jsonMap).get(0));
+        movVo.setMigMoviePeopleInfoBean(dataConverter.convertToMoviePeopleInfoBeanList(jsonMap).get(0));
 
 
 
-        return movVo.getMoviePeopleInfoBean();
+        return movVo.getMigMoviePeopleInfoBean();
 
 
     }
@@ -310,7 +310,7 @@ public class MovieApiClientImpl{
 
         MovVo movVo = new MovVo();
 
-        movVo.setMovieNationBeanList(dataConverter.convertToMovieNationBeanList(jsonMap));
+        movVo.setMigMovieNationBeanList(dataConverter.convertToMovieNationBeanList(jsonMap));
 
 
 

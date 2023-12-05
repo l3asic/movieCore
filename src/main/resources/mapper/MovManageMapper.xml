@@ -5,7 +5,7 @@
 <mapper namespace="com.example.movieCore.movie.mapperInterface.MovManageMapper">
 
     <!-- 영화인 빈 -->
-    <resultMap type="com.example.movieCore.movie.bean.MoviePeopleBean" id="moviePeopleBean">
+    <resultMap type="com.example.movieCore.migMovie.bean.MigMoviePeopleBean" id="migMoviePeopleBean">
         <result column="people_cd" property="peopleCd" jdbcType="VARCHAR"/>
         <result column="people_nm" property="peopleNm" jdbcType="VARCHAR"/>
         <result column="people_nm_en" property="peopleNmEn" jdbcType="VARCHAR"/>
@@ -14,14 +14,14 @@
     </resultMap>
 
     <!-- 영화 장르 빈 -->
-    <resultMap type="com.example.movieCore.movie.bean.MovieGenreBean" id="MovieGenreBean">
+    <resultMap type="com.example.movieCore.migMovie.bean.MigMovieGenreBean" id="MovieGenreBean">
         <result column="genre_cd" property="genreCd" jdbcType="VARCHAR"/>
         <result column="genre_nm" property="genreNm" jdbcType="VARCHAR"/>
     </resultMap>
 
 
     <!-- 영화 정보 인서트 -->
-    <insert id="insertMovieBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_MOVIE
             (
              movie_cd,
@@ -39,24 +39,24 @@
         )
         VALUES
             (
-                #{movieBean.movieCd},
-                #{movieBean.movieNm},
-                #{movieBean.movieNmEn},
-                #{movieBean.prdtYear},
-                DATE_FORMAT(#{movieBean.openDt}, '%Y-%m-%d %h:%m:%s'),
-                #{movieBean.typeNm},
-                #{movieBean.prdtStatNm},
-                #{movieBean.nationAlt},
-                #{movieBean.genreAlt},
-                #{movieBean.repGenreNm},
-                #{movieBean.peopleNm}
+                #{migMovieBean.movieCd},
+                #{migMovieBean.movieNm},
+                #{migMovieBean.movieNmEn},
+                #{migMovieBean.prdtYear},
+                DATE_FORMAT(#{migMovieBean.openDt}, '%Y-%m-%d %h:%m:%s'),
+                #{migMovieBean.typeNm},
+                #{migMovieBean.prdtStatNm},
+                #{migMovieBean.nationAlt},
+                #{migMovieBean.genreAlt},
+                #{migMovieBean.repGenreNm},
+                #{migMovieBean.peopleNm}
 
             )
 
     </insert>
 
     <!-- 영화 상세정보 인서트 -->
-    <insert id="insertMovieInfoBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieInfoBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_MOVIE_INFO
         (
             MOVIE_CD,
@@ -91,35 +91,35 @@
         )
         VALUES
             (
-                #{movieInfoBean.movieCd},
-                #{movieInfoBean.movieNm},
-                #{movieInfoBean.movieNmEn},
-                #{movieInfoBean.movieNmOg},
-                #{movieInfoBean.prdtYear},
-                #{movieInfoBean.showTm},
-                DATE_FORMAT(#{movieInfoBean.openDt}, '%Y-%m-%d %h:%m:%s'),
-                #{movieInfoBean.prdtStatNm},
-                #{movieInfoBean.typeNm},
-                #{movieInfoBean.genreNm},
-                #{movieInfoBean.directorNm},
-                #{movieInfoBean.directorNmEn},
-                #{movieInfoBean.actorsNm},
-                #{movieInfoBean.actorsNmEn},
-                #{movieInfoBean.cast},
-                #{movieInfoBean.castEn},
-                #{movieInfoBean.showTypeGroupNm},
-                #{movieInfoBean.showTypeNm},
-                #{movieInfoBean.auditNo},
-                #{movieInfoBean.watchGradeNm},
-                #{movieInfoBean.staffsNm},
-                #{movieInfoBean.staffsNmEn},
-                #{movieInfoBean.staffsRoleNm},
-                #{movieInfoBean.pointYn},
-                #{movieInfoBean.pointAvg},
-                #{movieInfoBean.pointTotalCnt},
-                #{movieInfoBean.totalViewCnt},
-                #{movieInfoBean.state},
-                #{movieInfoBean.previewUrl}
+                #{migMovieInfoBean.movieCd},
+                #{migMovieInfoBean.movieNm},
+                #{migMovieInfoBean.movieNmEn},
+                #{migMovieInfoBean.movieNmOg},
+                #{migMovieInfoBean.prdtYear},
+                #{migMovieInfoBean.showTm},
+                DATE_FORMAT(#{migMovieInfoBean.openDt}, '%Y-%m-%d %h:%m:%s'),
+                #{migMovieInfoBean.prdtStatNm},
+                #{migMovieInfoBean.typeNm},
+                #{migMovieInfoBean.genreNm},
+                #{migMovieInfoBean.directorNm},
+                #{migMovieInfoBean.directorNmEn},
+                #{migMovieInfoBean.actorsNm},
+                #{migMovieInfoBean.actorsNmEn},
+                #{migMovieInfoBean.cast},
+                #{migMovieInfoBean.castEn},
+                #{migMovieInfoBean.showTypeGroupNm},
+                #{migMovieInfoBean.showTypeNm},
+                #{migMovieInfoBean.auditNo},
+                #{migMovieInfoBean.watchGradeNm},
+                #{migMovieInfoBean.staffsNm},
+                #{migMovieInfoBean.staffsNmEn},
+                #{migMovieInfoBean.staffsRoleNm},
+                #{migMovieInfoBean.pointYn},
+                #{migMovieInfoBean.pointAvg},
+                #{migMovieInfoBean.pointTotalCnt},
+                #{migMovieInfoBean.totalViewCnt},
+                #{migMovieInfoBean.state},
+                #{migMovieInfoBean.previewUrl}
             )
 
 
@@ -128,7 +128,7 @@
 
 
     <!-- 영화 회사 인서트 -->
-    <insert id="insertMovieCompanyBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieCompanyBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_COMPANY
         (
          COMPANY_CD,
@@ -139,27 +139,27 @@
          FILMO_NAMES
             )
         VALUES (
-                   #{movieCompanyBean.companyCd},
-                   #{movieCompanyBean.companyNm},
-                   #{movieCompanyBean.companyNmEn},
-                   #{movieCompanyBean.companyPartNames},
-                   #{movieCompanyBean.ceoNm},
-                   #{movieCompanyBean.filmoNames}
+                   #{migMovieCompanyBean.companyCd},
+                   #{migMovieCompanyBean.companyNm},
+                   #{migMovieCompanyBean.companyNmEn},
+                   #{migMovieCompanyBean.companyPartNames},
+                   #{migMovieCompanyBean.ceoNm},
+                   #{migMovieCompanyBean.filmoNames}
                 )
 
     </insert>
 
 
     <!-- 영화 회사 매핑 인서트 -->
-    <insert id="insertMovieCompanyMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieCompanyMap" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_COMPANY_MAP
         (
          MOVIE_CD,
          COMPANY_CD
          )
         VALUES (
-                   #{movieBean.movieCd},
-                   #{movieBean.companyCd}
+                   #{migMovieBean.movieCd},
+                   #{migMovieBean.companyCd}
                 )
 
     </insert>
@@ -167,7 +167,7 @@
 
 
     <!-- 영화 인 인서트 -->
-    <insert id="insertMoviePeopleBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMoviePeopleBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_PEOPLE
         (
         PEOPLE_CD,
@@ -177,17 +177,17 @@
         FILMO_NAMES
         )
         VALUES (
-                   #{moviePeopleBean.peopleCd},
-                   #{moviePeopleBean.peopleNm},
-                   #{moviePeopleBean.peopleNmEn},
-                   #{moviePeopleBean.repRoleNm},
-                   #{moviePeopleBean.filmoNames}
+                   #{migMoviePeopleBean.peopleCd},
+                   #{migMoviePeopleBean.peopleNm},
+                   #{migMoviePeopleBean.peopleNmEn},
+                   #{migMoviePeopleBean.repRoleNm},
+                   #{migMoviePeopleBean.filmoNames}
                 )
     </insert>
 
 
     <!-- 영화 인 전체 조회 -->
-    <select id="selectMoviePeopleList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="moviePeopleBean">
+    <select id="selectMoviePeopleList" parameterType="com.example.movieCore.migMovie.vo.MovVo" resultMap="migMoviePeopleBean">
         select
             people_cd,
             people_nm,
@@ -200,7 +200,7 @@
 
 
     <!-- 영화 인 상세정보 인서트 -->
-    <insert id="insertMoviePeopleInfoBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMoviePeopleInfoBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_PEOPLE_INFO
             (
                 PEOPLE_CD,
@@ -214,14 +214,14 @@
             )
         values
             (
-                #{moviePeopleInfoBean.peopleCd},
-                #{moviePeopleInfoBean.peopleNm},
-                #{moviePeopleInfoBean.peopleNmEn},
-                #{moviePeopleInfoBean.sex},
-                #{moviePeopleInfoBean.repRoleNm},
-                #{moviePeopleInfoBean.filmos},
-                #{moviePeopleInfoBean.movieCd},
-                #{moviePeopleInfoBean.homepages}
+                #{migMoviePeopleInfoBean.peopleCd},
+                #{migMoviePeopleInfoBean.peopleNm},
+                #{migMoviePeopleInfoBean.peopleNmEn},
+                #{migMoviePeopleInfoBean.sex},
+                #{migMoviePeopleInfoBean.repRoleNm},
+                #{migMoviePeopleInfoBean.filmos},
+                #{migMoviePeopleInfoBean.movieCd},
+                #{migMoviePeopleInfoBean.homepages}
 
             )
     </insert>
@@ -229,7 +229,7 @@
 
 
     <!-- 영화 제작국가 인서트 -->
-    <insert id="insertMovieNationBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieNationBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_NATION
         (
          NATION_CD,
@@ -237,23 +237,23 @@
          eng_nm
          )
         values (
-                #{movieNationBean.nationCd},
-                #{movieNationBean.korNm},
-                #{movieNationBean.engNm}
+                #{migMovieNationBean.nationCd},
+                #{migMovieNationBean.korNm},
+                #{migMovieNationBean.engNm}
                 )
     </insert>
 
 
 
     <!-- 영화 제작국가 이름으로 셀렉트 -->
-    <select id="selectMovieNation" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="String">
+    <select id="selectMovieNation" parameterType="com.example.movieCore.migMovie.vo.MovVo" resultType="String">
         select
         (
             NATION_CD
         )
         from
             MOV_NATION
-        where KOR_NM = #{movieNationBean.korNm}
+        where KOR_NM = #{migMovieNationBean.korNm}
     </select>
 
 
@@ -262,25 +262,25 @@
 
 
     <!-- 영화 제작국가 매핑 인서트 -->
-    <insert id="insertMovieNationMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieNationMap" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_NATION_MAP
         (
          NATION_CD,
          MOVIE_CD
          )
         values (
-                #{movieNationBean.nationCd},
-                #{movieNationBean.movieCd}
+                #{migMovieNationBean.nationCd},
+                #{migMovieNationBean.movieCd}
                 )
     </insert>
 
 
 
     <!-- 영화 회사 코드 실재 확인 -->
-    <select id="checkTheCompany" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
+    <select id="checkTheCompany" parameterType="com.example.movieCore.migMovie.vo.MovVo" resultType="integer">
         select count(COMPANY_CD)
         from MOV_COMPANY
-        where company_cd =  #{movieBean.companyCd}
+        where company_cd =  #{migMovieBean.companyCd}
     </select>
 
     <!-- 영화 장르 조회 -->
@@ -296,28 +296,28 @@
 
 
     <!-- 영화 장르 인서트 -->
-    <insert id="insertMovieGenre" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieGenre" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_GENRE
             (
                 genre_cd,
                 genre_nm
             )
             VALUES (
-                   #{movieGenreBean.genreCd},
-                   #{movieGenreBean.genreNm}
+                   #{migMovieGenreBean.genreCd},
+                   #{migMovieGenreBean.genreNm}
                    )
     </insert>
 
     <!-- 영화 장르 매핑 인서트 -->
-    <insert id="insertMovieGenreMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="insertMovieGenreMap" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
         insert into MOV_GENRE_MAP
             (
                 genre_cd,
                 movie_cd
             )
             VALUES (
-                   #{movieGenreBean.genreCd},
-                   #{movieGenreBean.movieCd}
+                   #{migMovieGenreBean.genreCd},
+                   #{migMovieGenreBean.movieCd}
                    )
     </insert>
 

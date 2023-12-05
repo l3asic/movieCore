@@ -7,12 +7,12 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 
-function MovieManage() {
+function MovieMigManage() {
 
 
   return (
     <>
-      <h3 className="mb-4">영화 관리 페이지 입니다</h3>
+      <h3 className="mb-4">영화 이관 관리 페이지 입니다</h3>
       <h4 > 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
       <CContainer>
         <CRow className="mt-4">
@@ -133,4 +133,4 @@ function callMovieNationsApiSyncDB() {
 
 
 
-export default MovieManage
+export default MovieMigManage

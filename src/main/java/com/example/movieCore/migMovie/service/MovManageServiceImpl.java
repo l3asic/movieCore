@@ -1,9 +1,9 @@
-package com.example.movieCore.movie.service;
+package com.example.movieCore.migMovie.service;
 
-import com.example.movieCore.movie.bean.MovieGenreBean;
-import com.example.movieCore.movie.bean.MoviePeopleBean;
-import com.example.movieCore.movie.mapperInterface.MovManageMapper;
-import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
+import com.example.movieCore.migMovie.bean.MigMoviePeopleBean;
+import com.example.movieCore.migMovie.mapperInterface.MovManageMapper;
+import com.example.movieCore.migMovie.vo.MovVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class MovManageServiceImpl {
         movManageMapper.insertMovieCompanyMap(movVo);
     }
 
-    public ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo) {
+    public ArrayList<MigMoviePeopleBean> selectMoviePeopleList(MovVo movVo) {
         return movManageMapper.selectMoviePeopleList(movVo);
     }
 
@@ -61,7 +61,7 @@ public class MovManageServiceImpl {
         return movManageMapper.checkTheCompany(movVo);
     }
 
-    public MovieGenreBean selectMovieGenre(String genreNm) {
+    public MigMovieGenreBean selectMovieGenre(String genreNm) {
         return movManageMapper.selectMovieGenre(genreNm);
     }
 

@@ -50,13 +50,13 @@ const _nav = [
       {
         component: CNavGroup,
         name: '영화 관리',
-        to: '/admin/boardManage',
+        to: '/admin/MovieMigManage',
         icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
         items: [
           {
             component: CNavItem,
-            name: ' - 영화 목록 관리',
-            to: '/admin/MovieManage',
+            name: ' - 영화 이관 관리',
+            to: '/admin/MovieMigManage',
           },
         ],
       },

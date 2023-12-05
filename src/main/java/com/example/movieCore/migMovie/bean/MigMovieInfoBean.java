@@ -1,4 +1,4 @@
-package com.example.movieCore.movie.bean;
+package com.example.movieCore.migMovie.bean;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class MovieInfoBean {
+public class MigMovieInfoBean {
 
     private String movieCd;
     private String movieNm;
