@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-public class MovVo {
+public class MigMovVo {
 
     /** 이관 토탈 갯수 */
     private int totCnt;

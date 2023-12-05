@@ -21,7 +21,7 @@
 
 
     <!-- 영화 정보 인서트 -->
-    <insert id="insertMovieBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_MOVIE
             (
              movie_cd,
@@ -56,7 +56,7 @@
     </insert>
 
     <!-- 영화 상세정보 인서트 -->
-    <insert id="insertMovieInfoBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieInfoBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_MOVIE_INFO
         (
             MOVIE_CD,
@@ -128,7 +128,7 @@
 
 
     <!-- 영화 회사 인서트 -->
-    <insert id="insertMovieCompanyBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieCompanyBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_COMPANY
         (
          COMPANY_CD,
@@ -151,7 +151,7 @@
 
 
     <!-- 영화 회사 매핑 인서트 -->
-    <insert id="insertMovieCompanyMap" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieCompanyMap" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_COMPANY_MAP
         (
          MOVIE_CD,
@@ -167,7 +167,7 @@
 
 
     <!-- 영화 인 인서트 -->
-    <insert id="insertMoviePeopleBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMoviePeopleBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_PEOPLE
         (
         PEOPLE_CD,
@@ -187,7 +187,7 @@
 
 
     <!-- 영화 인 전체 조회 -->
-    <select id="selectMoviePeopleList" parameterType="com.example.movieCore.migMovie.vo.MovVo" resultMap="migMoviePeopleBean">
+    <select id="selectMoviePeopleList" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" resultMap="migMoviePeopleBean">
         select
             people_cd,
             people_nm,
@@ -200,7 +200,7 @@
 
 
     <!-- 영화 인 상세정보 인서트 -->
-    <insert id="insertMoviePeopleInfoBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMoviePeopleInfoBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_PEOPLE_INFO
             (
                 PEOPLE_CD,
@@ -229,7 +229,7 @@
 
 
     <!-- 영화 제작국가 인서트 -->
-    <insert id="insertMovieNationBean" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieNationBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_NATION
         (
          NATION_CD,
@@ -246,7 +246,7 @@
 
 
     <!-- 영화 제작국가 이름으로 셀렉트 -->
-    <select id="selectMovieNation" parameterType="com.example.movieCore.migMovie.vo.MovVo" resultType="String">
+    <select id="selectMovieNation" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" resultType="String">
         select
         (
             NATION_CD
@@ -262,7 +262,7 @@
 
 
     <!-- 영화 제작국가 매핑 인서트 -->
-    <insert id="insertMovieNationMap" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieNationMap" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_NATION_MAP
         (
          NATION_CD,
@@ -277,7 +277,7 @@
 
 
     <!-- 영화 회사 코드 실재 확인 -->
-    <select id="checkTheCompany" parameterType="com.example.movieCore.migMovie.vo.MovVo" resultType="integer">
+    <select id="checkTheCompany" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" resultType="integer">
         select count(COMPANY_CD)
         from MOV_COMPANY
         where company_cd =  #{migMovieBean.companyCd}
@@ -296,7 +296,7 @@
 
 
     <!-- 영화 장르 인서트 -->
-    <insert id="insertMovieGenre" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieGenre" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_GENRE
             (
                 genre_cd,
@@ -309,7 +309,7 @@
     </insert>
 
     <!-- 영화 장르 매핑 인서트 -->
-    <insert id="insertMovieGenreMap" parameterType="com.example.movieCore.migMovie.vo.MovVo" >
+    <insert id="insertMovieGenreMap" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_GENRE_MAP
             (
                 genre_cd,

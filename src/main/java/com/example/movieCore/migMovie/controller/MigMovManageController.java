@@ -1,11 +1,11 @@
 package com.example.movieCore.migMovie.controller;
 
 import com.example.movieCore.migMovie.api.DataConverter;
-import com.example.movieCore.migMovie.api.MovieApiClientImpl;
+import com.example.movieCore.migMovie.api.MigMovieApiClientImpl;
 import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
 import com.example.movieCore.migMovie.bean.MigMovieNationBean;
-import com.example.movieCore.migMovie.service.MovManageServiceImpl;
-import com.example.movieCore.migMovie.vo.MovVo;
+import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
+import com.example.movieCore.migMovie.vo.MigMovVo;
 import com.example.movieCore.utils.MakeUUID;
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,10 +19,10 @@ import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
-public class MovManageController {
+public class MigMovManageController {
 
-    private final MovManageServiceImpl movManageService;
-    private final MovieApiClientImpl movieApiClientImpl;
+    private final MigMovManageServiceImpl movManageService;
+    private final MigMovieApiClientImpl migMovieApiClientImpl;
 
     private final MakeUUID makeUUID = new MakeUUID();
 
@@ -35,13 +35,13 @@ public class MovManageController {
 
         boolean successResult = true;
 
-        MovVo movVo = movieApiClientImpl.callMovieApi(1);
+        MigMovVo movVo = migMovieApiClientImpl.callMovieApi(1);
 
         int maxPage = movVo.getTotCnt()/100 + 1;
 
         for (int curPage = 1; curPage < maxPage+1; curPage++) {
             // 영화 목록 api 호출 (1페이지당 100개)
-            movVo = movieApiClientImpl.callMovieApi(curPage);
+            movVo = migMovieApiClientImpl.callMovieApi(curPage);
 
             // LinkedHashMap 데이터 BeanList 구조로 변환
             movVo.setMigMovieBeanList(dataConverter.convertToMovieBeanList((List) movVo.getMigMovieBeanList()));
@@ -90,7 +90,7 @@ public class MovManageController {
 
 
                 /** 영화 상세 정보 api 호출 */
-                movVo.setMigMovieInfoBean(movieApiClientImpl.callMovieInfoApi(movVo.getMigMovieBean().getMovieCd()));
+                movVo.setMigMovieInfoBean(migMovieApiClientImpl.callMovieInfoApi(movVo.getMigMovieBean().getMovieCd()));
 
 
 
@@ -235,9 +235,9 @@ public class MovManageController {
     @ResponseBody
     public Map<String, Object> callMovieCompanyApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        MovVo movVo;
+        MigMovVo movVo;
 
-        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+        MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
 
 
         // 최초 토탈 갯수 조회용
@@ -279,10 +279,10 @@ public class MovManageController {
     @PostMapping(value = "/callMoviePeopleApiSyncDB")
     @ResponseBody
     public Map<String, Object> callMoviePeopleApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+        MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
 
         /** 토탈 갯수 조회 */
-        MovVo movVo = movieApiClient.callMoviePeopleApi(1);
+        MigMovVo movVo = movieApiClient.callMoviePeopleApi(1);
 
 
         boolean successResult = true;
@@ -324,8 +324,8 @@ public class MovManageController {
     @ResponseBody
     public Map<String, Object> callMoviePeopleInfoApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        MovVo movVo = new MovVo();
-        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+        MigMovVo movVo = new MigMovVo();
+        MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
         int successCnt = 0;
         int failCnt = 0;
 
@@ -385,8 +385,8 @@ public class MovManageController {
     @ResponseBody
     public Map<String, Object> callMovieNationsApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        MovVo movVo;
-        MovieApiClientImpl movieApiClient = new MovieApiClientImpl();
+        MigMovVo movVo;
+        MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
 
         movVo = movieApiClient.callMovieNationApi();
 

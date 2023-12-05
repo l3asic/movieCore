@@ -1,7 +1,7 @@
 package com.example.movieCore.migMovie.api;
 
 import com.example.movieCore.migMovie.bean.*;
-import com.example.movieCore.migMovie.vo.MovVo;
+import com.example.movieCore.migMovie.vo.MigMovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Component
-public class MovieApiClientImpl{
+public class MigMovieApiClientImpl {
     /** 발급받은 API 키 */
     private String key = "7ed99cc4e7bce9910e15252a08c4ec17";
     private String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
@@ -21,7 +21,7 @@ public class MovieApiClientImpl{
 
 
     /** 영화 목록 호출 */ //String curPage 페이지 숫자
-    public MovVo callMovieApi(int curPage){
+    public MigMovVo callMovieApi(int curPage){
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
 
@@ -50,7 +50,7 @@ public class MovieApiClientImpl{
             e.printStackTrace();
         }
 
-        MovVo movVo = new MovVo();
+        MigMovVo movVo = new MigMovVo();
 
         // 토탈 갯수
         if (jsonMap.containsKey("peopleListResult")) {
@@ -120,7 +120,7 @@ public class MovieApiClientImpl{
 
 
     /** 영화 회사 호출 */
-    public MovVo callMovieCompanyApi(int curPage){
+    public MigMovVo callMovieCompanyApi(int curPage){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/company/searchCompanyList.json";
@@ -152,7 +152,7 @@ public class MovieApiClientImpl{
 
 
 
-        MovVo movVo = new MovVo();
+        MigMovVo movVo = new MigMovVo();
 
         if (jsonMap.containsKey("companyListResult")) {
             LinkedHashMap<String, Object> companyListResult = (LinkedHashMap<String, Object>) jsonMap.get("companyListResult");
@@ -174,7 +174,7 @@ public class MovieApiClientImpl{
 
 
     /** 영화 인 호출 */
-    public MovVo callMoviePeopleApi(int curPage){
+    public MigMovVo callMoviePeopleApi(int curPage){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleList.json";
@@ -207,7 +207,7 @@ public class MovieApiClientImpl{
 
 
 
-        MovVo movVo = new MovVo();
+        MigMovVo movVo = new MigMovVo();
 
         if (jsonMap.containsKey("peopleListResult")) {
             LinkedHashMap<String, Object> peopleListResult = (LinkedHashMap<String, Object>) jsonMap.get("peopleListResult");
@@ -259,7 +259,7 @@ public class MovieApiClientImpl{
             e.printStackTrace();
         }
 
-        MovVo movVo = new MovVo();
+        MigMovVo movVo = new MigMovVo();
 
 
         movVo.setMigMoviePeopleInfoBean(dataConverter.convertToMoviePeopleInfoBeanList(jsonMap).get(0));
@@ -274,7 +274,7 @@ public class MovieApiClientImpl{
     /**
      *  공통코드 - 영화 국가 api 호출
      */
-    public MovVo callMovieNationApi(){
+    public MigMovVo callMovieNationApi(){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/code/searchCodeList.json";
@@ -303,7 +303,7 @@ public class MovieApiClientImpl{
             e.printStackTrace();
         }
 
-        MovVo movVo = new MovVo();
+        MigMovVo movVo = new MigMovVo();
 
         movVo.setMigMovieNationBeanList(dataConverter.convertToMovieNationBeanList(jsonMap));
 
