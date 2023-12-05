@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.movieCore.movie.mapperInterface.MovManageMapper">
+<mapper namespace="com.example.movieCore.migMovie.mapperInterface.MigMovManageMapper">
 
     <!-- 영화인 빈 -->
     <resultMap type="com.example.movieCore.migMovie.bean.MigMoviePeopleBean" id="migMoviePeopleBean">
