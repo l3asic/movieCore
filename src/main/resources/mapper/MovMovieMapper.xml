@@ -1,0 +1,46 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.movieCore.movie.mapperInterface.MovMovieMapper">
+
+
+    <!-- 영화 빈 -->
+    <resultMap type="com.example.movieCore.movie.bean.MovieBean" id="MovieBean">
+        <result column="movie_cd" property="movieCd" jdbcType="VARCHAR"/>
+        <result column="movie_nm" property="movieNm" jdbcType="VARCHAR"/>
+        <result column="movie_nm_en" property="movieNmEn" jdbcType="VARCHAR"/>
+        <result column="prdt_year" property="prdtYear" jdbcType="VARCHAR"/>
+        <result column="open_dt" property="openDt" jdbcType="DATE"/>
+        <result column="type_nm" property="typeNm" jdbcType="VARCHAR"/>
+        <result column="prdt_stat_nm" property="prdtStatNm" jdbcType="VARCHAR"/>
+        <result column="genre_alt" property="genreAlt" jdbcType="VARCHAR"/>
+        <result column="rep_genre_nm" property="repGenreNm" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <select id="selectAllMovieList" resultMap="MovieBean">
+        SELECT
+            MM.movie_cd,
+            MM.movie_nm,
+            MM.movie_nm_en,
+            MM.prdt_year,
+            MM.open_dt,
+            MM.type_nm,
+            MM.prdt_stat_nm,
+            MM.genre_alt,
+            MM.rep_genre_nm
+        FROM
+            MOV_MOVIE MM
+
+    </select>
+
+
+
+
+
+
+
+
+
+</mapper>

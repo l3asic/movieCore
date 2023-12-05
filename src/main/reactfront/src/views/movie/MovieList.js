@@ -1,164 +1,99 @@
-import React, { useEffect, useState } from 'react'
-import axios from "axios";
-
+import React, {useEffect, useState} from 'react';
 import {
-  CRow,
-  CCol,
-  CButton,
+  CCardGroup,
   CCard,
   CCardBody,
   CCardImage,
   CCardText,
   CCardTitle
 } from '@coreui/react';
+import ReactImg from '../../assets/images/react.jpg';
+import axios from 'axios';
 
-import ReactImg from "../../assets/images/react.jpg"
-
-function MovieList(){
+const MovieList = () => {
+  const cardStyle = {
+    marginRight: '20px'
+  };
 
   const [movVo, setMovVo] = useState({
-    movieBeanList:[]
+    movieBeanList: []
   });
-
 
   /** 전체 영화 리스트 조회 */
   useEffect(() => {
     selectAllMovieList();
-  }, [])
+  }, []);
 
-
-
-  return(
+  return (
     <>
-      <h3>영화 리스트 페이지 입니다</h3>
+      <h4 className="mb-3">영화 리스트 페이지 입니다</h4>
+      <h4 className="mb-3">검색 및 상태 표시줄</h4>
 
-      {/** 첫번째 줄 (3개 아이템)  */}
+      {movVo.movieBeanList.length > 0 && (
+        <div className="mb-4">
+          {movVo.movieBeanList.reduce((rows, movie, index) => {
+            if (index % 3 === 0) {
+              rows.push([]);
+            }
 
-      <CRow className="mt-5">
-        <CCol sm="4">
-          <CCard style={{ width: '18rem' }}>
-            <CCardImage orientation="top" src={ReactImg} />
-            <CCardBody>
-              <CCardTitle>Card title</CCardTitle>
-              <CCardText>텍스트</CCardText>
-              <CButton href="#">Go somewhere</CButton>
-            </CCardBody>
-          </CCard>
-        </CCol>
+            // 개봉년도 가공
+            movie.openDt = changeToFullYear(movie.openDt);
 
-        <CCol sm="4">
-          <CCard style={{ width: '18rem' }}>
-            <CCardImage orientation="top" src={ReactImg} />
-            <CCardBody>
-              <CCardTitle>Card title</CCardTitle>
-              <CCardText>텍스트</CCardText>
-              <CButton href="#">Go somewhere</CButton>
-            </CCardBody>
-          </CCard>
-        </CCol>
-
-        <CCol sm="4">
-          <CCard style={{ width: '18rem' }}>
-            <CCardImage orientation="top" src={ReactImg} />
-            <CCardBody>
-              <CCardTitle>Card title</CCardTitle>
-              <CCardText>텍스트</CCardText>
-              <CButton href="#">Go somewhere</CButton>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
-
-
-      {/** 두번쨰 줄 */}
-      <CRow className="mt-5">
-        <CCol sm="4">
-          <CCard style={{ width: '18rem' }}>
-            <CCardImage orientation="top" src={ReactImg} />
-            <CCardBody>
-              <CCardTitle>Card title</CCardTitle>
-              <CCardText>텍스트</CCardText>
-              <CButton href="#">Go somewhere</CButton>
-            </CCardBody>
-          </CCard>
-        </CCol>
-
-        <CCol sm="4">
-          <CCard style={{ width: '18rem' }}>
-            <CCardImage orientation="top" src={ReactImg} />
-            <CCardBody>
-              <CCardTitle>Card title</CCardTitle>
-              <CCardText>텍스트</CCardText>
-              <CButton href="#">Go somewhere</CButton>
-            </CCardBody>
-          </CCard>
-        </CCol>
-
-        <CCol sm="4">
-          <CCard style={{ width: '18rem' }}>
-            <CCardImage orientation="top" src={ReactImg} />
-            <CCardBody>
-              <CCardTitle>Card title</CCardTitle>
-              <CCardText>텍스트</CCardText>
-              <CButton href="#">Go somewhere</CButton>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+            rows[rows.length - 1].push(
+              <CCard key={index} movieCd={movie.movieCd} style={cardStyle}>
+                <CCardImage orientation="top" src={ReactImg} style={{ height: '400px' }} />
+                <CCardBody>
+                  <CCardTitle>{movie.movieNm} ({movie.openDt})</CCardTitle>
+                  <CCardText className="d-inline-flex">
+                    <p><small>{movie.repGenreNm} </small></p>
+                    <p><small> 제작국가 </small></p>
+                  </CCardText>
+                  <CCardText>
+                    <small className="text-medium-emphasis">별점</small>
+                  </CCardText>
+                </CCardBody>
+              </CCard>
+            );
+            return rows;
+          }, []).map((row, rowIndex) => (
+            <CCardGroup key={rowIndex} className="mb-4">
+              {row}
+            </CCardGroup>
+          ))}
+        </div>
+      )}
 
 
     </>
+  );
 
-  ) // return
-
-
-
-
-  /** 모든 영화 리스트 조회 */
-  function selectAllMovieList(){
+  /** 전체 영화 리스트 조회 */
+  function selectAllMovieList() {
     axios({
       url: '/selectAllMovieList',
       method: 'post',
-      params:{
-      }
-
-    }).then(function (res){
-      // const fetchedFolderBeanList = res.data.brdVo.folderBeanList;
-      //
-      // /* 폴더/게시판 기본값 세팅 */
-      // // 상태에 folderBeanList 설정
-      // setBrdVo((prevBrdVo) => ({
-      //   ...prevBrdVo,
-      //   folderBeanList: fetchedFolderBeanList,
-      // }));
-      //
-      // // 검색된 데이터에 폴더가 있는지 확인
-      // if (fetchedFolderBeanList.length > 0) {
-      //   const defaultFolder = fetchedFolderBeanList[0];
-      //   setSelectedFolder(defaultFolder.folId);
-      //
-      //   // 기본 폴더를 기반으로 게시판 옵션 설정
-      //   const newBoardOptions = defaultFolder.boardBeanList.map((board) => ({
-      //     label: board.brdName,
-      //     value: board.brdId,
-      //   }));
-      //   setBoardOptions(newBoardOptions);
-      //
-      //   // 기본 폴더를 기반으로 선택된 게시판 설정
-      //   setSelectedBoard(newBoardOptions.length > 0 ? newBoardOptions[0].value : null);
-      // }
-
-    }).catch(function (err){
-      alert("등록 실패 (오류)");
-    });
-
+      params: {}
+    })
+      .then(function (res) {
+        const movieBeanList = res.data.movVo.movieBeanList;
+        debugger;
+        setMovVo({movieBeanList}); // setMovVo로 상태를 업데이트
+      })
+      .catch(function (err) {
+        alert('등록 실패 (오류)');
+      });
   }
 
 
-
-
+  /** openDt 를 년도로 변환 */
+  function changeToFullYear(openDt){
+    const dateObject = new Date(openDt);
+    const year = dateObject.getFullYear();
+    return year;
+  }
 
 
 }
 
-export default MovieList
+
+export default MovieList;
