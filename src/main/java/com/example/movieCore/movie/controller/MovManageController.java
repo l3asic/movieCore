@@ -113,6 +113,8 @@ public class MovManageController {
 
                             // 영화 <=> 제작국가 매핑 인서트
                             movManageService.insertMovieNationMap(movVo);
+                        }else {
+                            System.out.println("검색된 제작국가 없음 ");
                         }
 
 
@@ -337,39 +339,28 @@ public class MovManageController {
         String key4 = "7957ef755545f3af1d212a0ece169def";
 
 
-        int devideCnt = 0;
         String customKey ="";
 
-        // 준호 0 ~ 49999
-        // 승경 50000 ~ 99999
-        // 준호 100000 ~ 끝
-
 //        for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 50000; i++) {
             String peopleCd = movVo.getMoviePeopleBeanList().get(i).getPeopleCd();
 
-            /** 분담용 커스텀 */
-            if(devideCnt<=3000){
-                customKey = key1;
-            }else{
-                customKey = key2;
-            }
+            customKey = key1;
 
-
-            // 영화인 상세정보 조회 api 호출
-            movVo.setMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd,customKey));
 
             try {
+                // 영화인 상세정보 조회 api 호출
+                movVo.setMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd,customKey));
                 // 영화인 상세정보 디비 인서트
                 movManageService.insertMoviePeopleInfoBean(movVo);
                 successCnt++;
 
             }catch (Exception e){
+                e.printStackTrace();
                 failCnt++;
 
             }
 
-            devideCnt++;
 
         }
 
