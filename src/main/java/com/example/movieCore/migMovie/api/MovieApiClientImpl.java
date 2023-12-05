@@ -17,6 +17,8 @@ public class MovieApiClientImpl{
     private String key = "7ed99cc4e7bce9910e15252a08c4ec17";
     private String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
 
+    private final DataConverter dataConverter = new DataConverter();
+
 
     /** 영화 목록 호출 */ //String curPage 페이지 숫자
     public MovVo callMovieApi(int curPage){
@@ -106,7 +108,6 @@ public class MovieApiClientImpl{
 
 
 
-        DataConverter dataConverter = new DataConverter();
         MigMovieInfoBean migMovieInfoBean;
 
         migMovieInfoBean = dataConverter.extractMovieInfoBean(jsonMap);
@@ -160,7 +161,6 @@ public class MovieApiClientImpl{
             }
         }
 
-        DataConverter dataConverter = new DataConverter();
         ArrayList<MigMovieCompanyBean> migMovieCompanyBeanList = dataConverter.convertToMovieCompanyBeanList(jsonMap);
         movVo.setMigMovieCompanyBeanList(migMovieCompanyBeanList);
 
@@ -216,7 +216,6 @@ public class MovieApiClientImpl{
             }
         }
 
-        DataConverter dataConverter = new DataConverter();
         ArrayList<MigMoviePeopleBean> migMoviePeopleBeanList = dataConverter.convertToMoviePeopleBeanList(jsonMap);
         movVo.setMigMoviePeopleBeanList(migMoviePeopleBeanList);
 
@@ -263,8 +262,6 @@ public class MovieApiClientImpl{
         MovVo movVo = new MovVo();
 
 
-        DataConverter dataConverter = new DataConverter();
-
         movVo.setMigMoviePeopleInfoBean(dataConverter.convertToMoviePeopleInfoBeanList(jsonMap).get(0));
 
 
@@ -305,8 +302,6 @@ public class MovieApiClientImpl{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        DataConverter dataConverter = new DataConverter();
 
         MovVo movVo = new MovVo();
 

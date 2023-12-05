@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataConverter {
-    public static ArrayList<MigMovieBean> convertToMovieBeanList(List<LinkedHashMap<String, Object>> linkedHashMapList) {
+    public ArrayList<MigMovieBean> convertToMovieBeanList(List<LinkedHashMap<String, Object>> linkedHashMapList) {
         ArrayList<MigMovieBean> migMovieBeanList = new ArrayList<>();
 
         for (LinkedHashMap<String, Object> linkedHashMap : linkedHashMapList) {
@@ -19,7 +19,7 @@ public class DataConverter {
         return migMovieBeanList;
     }
 
-    private static MigMovieBean convertToMovieBean(LinkedHashMap<String, Object> linkedHashMap) {
+    private MigMovieBean convertToMovieBean(LinkedHashMap<String, Object> linkedHashMap) {
         MigMovieBean migMovieBean = new MigMovieBean();
         migMovieBean.setMovieCd((String) linkedHashMap.get("movieCd"));
         migMovieBean.setMovieNm((String) linkedHashMap.get("movieNm"));

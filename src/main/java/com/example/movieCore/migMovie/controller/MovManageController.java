@@ -26,6 +26,8 @@ public class MovManageController {
 
     private final MakeUUID makeUUID = new MakeUUID();
 
+    private final DataConverter dataConverter = new DataConverter();
+
     /** 영화 목록, 영화 상세정보 api 호출 및 이관 */
     @PostMapping(value = "/callMovieApiSyncDB")
     @ResponseBody
@@ -42,7 +44,7 @@ public class MovManageController {
             movVo = movieApiClientImpl.callMovieApi(curPage);
 
             // LinkedHashMap 데이터 BeanList 구조로 변환
-            movVo.setMigMovieBeanList(DataConverter.convertToMovieBeanList((List) movVo.getMigMovieBeanList()));
+            movVo.setMigMovieBeanList(dataConverter.convertToMovieBeanList((List) movVo.getMigMovieBeanList()));
 
             // 영화 100개 인서트
             for (int j = 0; j < movVo.getMigMovieBeanList().size(); j++) {
