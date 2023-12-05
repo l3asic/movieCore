@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.vo;
 
 import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.bean.SearchBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,8 @@ public class MovVo {
      private ArrayList<MovieBean> movieBeanList;
 
 
+    /** 검색 조건 */
+    private SearchBean searchBean;
 
 
 

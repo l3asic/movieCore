@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.controller;
 
+import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,16 +23,28 @@ public class MovMovieController {
 
 
     /** 모든 영화 목록 조회 */
-    @PostMapping(value = "/selectAllMovieList")
+    @PostMapping(value = "/selectMovieList")
     @ResponseBody
-    public Map<String, Object> selectAllMovieList(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MovVo movVo = new MovVo();
+    public Map<String, Object> selectMovieList(HttpServletRequest request, HttpServletResponse response, SearchBean searchBean) throws Exception {
 
-        movVo.setMovieBeanList(movieService.selectAllMovieList());
+        MovVo movVo = new MovVo();
+        movVo.setSearchBean(searchBean);
+
+        boolean successResult = false;
+
+        try {
+            movVo.setMovieBeanList(movieService.selectMovieList(movVo));
+            successResult = true;
+
+        }catch (Exception e){
+
+        }
+
+
 
 
         Map<String, Object> resMap = new HashMap<>();
-        resMap.put("successResult", "successResult");
+        resMap.put("successResult", successResult);
         resMap.put("movVo", movVo);
         return resMap;
 

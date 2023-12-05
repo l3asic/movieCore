@@ -19,7 +19,7 @@
 
     </resultMap>
 
-    <select id="selectAllMovieList" resultMap="MovieBean">
+    <select id="selectMovieList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
         SELECT
             MM.movie_cd,
             MM.movie_nm,
@@ -33,6 +33,15 @@
         FROM
             MOV_MOVIE MM
 
+        WHERE
+            1=1
+
+        /* 제목 검색 */
+        <if test="searchBean.searchFilter=='movieNm'">
+            <if test="searchBean.searchText!=''">
+                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </if>
+        </if>
     </select>
 
 
