@@ -15,4 +15,6 @@ public interface BrdArticleMapper {
     ArrayList<BrdArticleBean> selectArticleList(BrdVo brdVo);
 
     ArrayList<BrdArticleBean> searchArticle(BrdVo brdVo);
+
+    ArrayList<BrdArticleBean> selectArticleDetail(BrdVo brdVo);
 }

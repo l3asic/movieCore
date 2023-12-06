@@ -145,11 +145,30 @@ public class BrdArticleController {
 
     }
 
+    /** 게시글 상세내역 디비서 셀렉트  */
+    @PostMapping (value = "/selectArticleDetail")
+    @ResponseBody
+    public Map<String, Object> selectArticleDetail(HttpServletRequest request, HttpServletResponse response, BrdArticleBean articleBean) throws Exception {
 
+        /** 게시글 리스트 조회디비서 셀렉트  */
+        BrdVo brdVo = new BrdVo();
+        brdVo.setArticleBean(articleBean);
 
+        boolean succesResult = false;
 
+        Map resMap = new HashMap<>();
+        try {
+            brdVo.setArticleBeanList(articleService.selectArticleDetail(brdVo));
 
+            resMap.put("brdVo", brdVo);
+            succesResult = true;
+        } catch (Exception e) {
 
+        }
 
+        resMap.put("succesResult", succesResult);
 
-}
+        return resMap;
+        }
+
+    }

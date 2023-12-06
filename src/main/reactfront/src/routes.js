@@ -25,7 +25,8 @@ const MovieList = React.lazy(() => import('./views/movie/MovieList'))
 const ArticleReg = React.lazy(() => import('./views/brd/article/ArticleReg'))
 // - 게시글 리스트
 const ArticleListView = React.lazy(() => import('./views/brd/article/ArticleListView'))
-
+// - 게시글 상세정보
+const ArticleDetail = React.lazy(() => import('./views/brd/article/ArticleDetail'))
 
 // QnA
 // - 시스템 공지사항
@@ -122,6 +123,9 @@ const routes = [
   { path: '/brd/ArticleReg', name: 'ArticleReg', element: ArticleReg },
   // - 게시글 리스트 화면
   { path: '/brd/ArticleListView', name: 'ArticleListView', element: ArticleListView },
+  // - 게시글 상세화면
+  { path: '/brd/ArticleDetail', name: 'ArticleDetail', element: ArticleDetail },
+
 
 
   // QnA

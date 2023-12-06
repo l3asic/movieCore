@@ -3,8 +3,11 @@ import {
   CTableBody, CTable, CTableHead, CTableHeaderCell, CTableRow, CFormSelect, CFormInput, CInputGroup, CButton
 } from '@coreui/react'
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const ArticleListView = () => {
+
+  const navigate  = useNavigate();
   const [brdVo, setBrdVo] = useState({
     brdBoardBean: {
       brdId : 'BB2115517422'   //임의의 값 하드코딩_ 추후 수정
@@ -72,6 +75,42 @@ const ArticleListView = () => {
     });
   }
 
+  function selectArticleDetail(atclId) {
+    axios({
+      url: '/selectArticleDetail',
+      method: 'post',
+      params: {
+        atclId: atclId
+      }
+    })
+      .then(function (res) { debugger;
+       // let articleBeanList = res.data.brdVo.articleBeanList;
+
+        let articleBeanList = res.data.brdVo.articleBeanList.map(article => {
+          // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
+          const date = new Date(article.createDt);
+
+          // Date 객체를 '0000.00.00' 형식의 문자열로 변환
+          const formattedDate = date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          }).replace(/\.$/, '');
+
+          // article 객체에 새로운 속성으로 변환된 날짜를 할당
+          return {
+            ...article,
+            createDt: formattedDate
+          };
+        });
+        // ArticleDetail 페이지로 이동하면서 데이터 전달
+        navigate('/brd/ArticleDetail', { state: { articleData: articleBeanList } });
+      })
+      .catch(function (err) {
+        alert('조회 실패 (오류)');
+      });
+  }
+
   function searchArticle(){
     axios({
       url: '/searchArticle',
@@ -119,6 +158,7 @@ const ArticleListView = () => {
 
   return (
     <div>
+      <h2>게시판입니다</h2>
       <div>
       <CInputGroup className="mb-3" style={{width: "30%", display: "flex", float:"right"}}>
         <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect}>
@@ -144,8 +184,8 @@ const ArticleListView = () => {
         <CTableBody>
           {brdVo.articleBeanList.map((article, index) => (
             <CTableRow key={index}>
-              <CTableHeaderCell scope="col">{index+1}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">{article.subject}</CTableHeaderCell>
+              <CTableHeaderCell scope="col">{index + 1}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" value={article.atclId} onClick={() => selectArticleDetail(article.atclId)}>{article.subject}</CTableHeaderCell>
               <CTableHeaderCell scope="col">{article.memName}</CTableHeaderCell>
               <CTableHeaderCell scope="col">{article.createDt}</CTableHeaderCell>
               <CTableHeaderCell scope="col">{article.viewCnt}</CTableHeaderCell>

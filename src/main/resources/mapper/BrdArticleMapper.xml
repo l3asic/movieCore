@@ -21,6 +21,11 @@
         <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
 
         <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
+
+        <result column="FOL_ID" property="folId" jdbcType="VARCHAR"/>
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
+
+        <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -153,6 +158,35 @@
                 )
             </otherwise>
         </choose>
+
+    </select>
+    <select id="selectArticleDetail" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean">
+        SELECT
+            BA.ATCL_ID,
+            BA.BRD_ID,
+            BA.MEM_ID,
+            BA.SUBJECT,
+            BA.CONTENT,
+            BA.VIEW_CNT,
+            BA.CREATE_DT,
+            BA.UPDATE_DT,
+            BA.EXPIRE_DT,
+            BA.EXPIRE_YN,
+            BA.STATE,
+            BA.ATCL_REPL_CNT,
+            BB.BRD_NAME,
+            BF.FOL_ID,
+            BF.FOL_NAME
+        FROM
+            BRD_ARTICLE BA
+        LEFT JOIN BRD_BOARD BB
+        ON BA.BRD_ID = BB.BRD_ID
+        LEFT JOIN BRD_FOLDER BF
+        ON BB.FOL_ID = BF.FOL_ID
+        WHERE
+            BA.STATE = 'B'
+          AND
+            BA.ATCL_ID = #{articleBean.atclId}
 
     </select>
 
