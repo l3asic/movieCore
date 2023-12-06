@@ -68,8 +68,11 @@ function MovieListManage() {
   /** 전체 영화 리스트 조회 */
   function selectMovieList(newPage) {
 
+    // 페이지 이동일시
     if(newPage != null){
       movVo.paging.currentPage = newPage;
+    }else{
+      movVo.paging = null;
     }
 
 

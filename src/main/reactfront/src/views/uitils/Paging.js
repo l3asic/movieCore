@@ -1,26 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  CPagination,
-  CPaginationItem
-} from '@coreui/react';
+import { CPagination, CPaginationItem } from '@coreui/react';
 
 const Paging = ({ paging, onPageChange }) => {
   const { currentPage, totalPages, hasPreviousPage, hasNextPage } = paging;
 
   const renderPaginationItems = () => {
     const items = [];
-    for (let i = 1; i <= totalPages; i++) {
-      items.push(
-        <CPaginationItem
-          key={i}
-          active={i === currentPage}
-          onClick={() => onPageChange(i)}
-        >
-          {i}
-        </CPaginationItem>
-      );
+
+    if (totalPages > 0) {
+      for (let i = 1; i <= totalPages; i++) {
+        items.push(
+          <CPaginationItem
+            key={i}
+            active={i === currentPage}
+            onClick={() => onPageChange(i)}
+          >
+            {i}
+          </CPaginationItem>
+        );
+      }
     }
+
     return items;
   };
 
