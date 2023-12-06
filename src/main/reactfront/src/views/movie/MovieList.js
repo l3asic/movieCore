@@ -23,7 +23,7 @@ const MovieList = () => {
   const [movVo, setMovVo] = useState({
     movieBeanList: [],
     searchBean : {
-      searchFilter : "all",
+      searchFilter : "",
       searchText : ""
     }
   });

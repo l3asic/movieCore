@@ -31,9 +31,11 @@ public class MovMovieController {
         movVo.setSearchBean(searchBean);
 
         boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
 
         try {
             movVo.setMovieBeanList(movieService.selectMovieList(movVo));
+            resMap.put("movVo", movVo);
             successResult = true;
 
         }catch (Exception e){
@@ -41,11 +43,7 @@ public class MovMovieController {
         }
 
 
-
-
-        Map<String, Object> resMap = new HashMap<>();
         resMap.put("successResult", successResult);
-        resMap.put("movVo", movVo);
         return resMap;
 
     }

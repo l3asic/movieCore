@@ -340,14 +340,18 @@ public class MigMovManageController {
         String key3 = "2de1d6d0dab3e485b0d97f0ff5b0bd25";
         String key4 = "7957ef755545f3af1d212a0ece169def";
 
+        int divideCnt = 0;
 
-        String customKey ="";
+        String customKey =key1;
 
 //        for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
-        for (int i = 0; i < 50000; i++) {
+        for (int i = 0; i < 60000; i++) {
             String peopleCd = movVo.getMigMoviePeopleBeanList().get(i).getPeopleCd();
 
-            customKey = key1;
+            if(divideCnt>40000){
+                customKey = key2;
+            }
+
 
 
             try {
@@ -362,6 +366,8 @@ public class MigMovManageController {
                 failCnt++;
 
             }
+
+            divideCnt++;
 
 
         }
