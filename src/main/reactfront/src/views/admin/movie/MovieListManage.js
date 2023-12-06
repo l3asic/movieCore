@@ -7,6 +7,18 @@ import axios from "axios";
 
 function MovieListManage() {
 
+  const [movVo, setMovVo] = useState({
+    movieBeanList: [],
+    searchBean : {
+    }
+  });
+
+
+  /** 전체 영화 리스트 조회 */
+  useEffect(() => {
+    selectMovieList();
+  }, []);
+
 
   return (
     <>
@@ -23,37 +35,51 @@ function MovieListManage() {
             <CTableHeaderCell scope="col">영화 제목</CTableHeaderCell>
             <CTableHeaderCell scope="col">개봉년도</CTableHeaderCell>
             <CTableHeaderCell scope="col">대표 장르</CTableHeaderCell>
+            <CTableHeaderCell scope="col">상태</CTableHeaderCell>
             <CTableHeaderCell scope="col">수정/삭제</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
-        <CTableBody>
-          <CTableRow>
-            <CTableHeaderCell scope="row">1</CTableHeaderCell>
-            <CTableDataCell>Mark</CTableDataCell>
-            <CTableDataCell>Otto</CTableDataCell>
-            <CTableDataCell>@mdo</CTableDataCell>
-            <CTableDataCell>임시 버튼</CTableDataCell>
 
-          </CTableRow>
-          <CTableRow>
-            <CTableHeaderCell scope="row">2</CTableHeaderCell>
-            <CTableDataCell>Jacob</CTableDataCell>
-            <CTableDataCell>Thornton</CTableDataCell>
-            <CTableDataCell>@fat</CTableDataCell>
-            <CTableDataCell>임시 버튼</CTableDataCell>
-          </CTableRow>
-          <CTableRow>
-            <CTableHeaderCell scope="row">3</CTableHeaderCell>
-            <CTableDataCell >Larry the Bird</CTableDataCell>
-            <CTableDataCell>임시값</CTableDataCell>
-            <CTableDataCell>임시값</CTableDataCell>
-            <CTableDataCell>임시 버튼</CTableDataCell>
-          </CTableRow>
+
+        <CTableBody>
+          {movVo.movieBeanList.map((movie, index) => (
+            <CTableRow key={index}>
+              <CTableHeaderCell scope="row">{movie.movieCd}</CTableHeaderCell>
+              <CTableDataCell>{movie.movieNm}</CTableDataCell>
+              <CTableDataCell>{movie.prdtYear}</CTableDataCell>
+              <CTableDataCell>{movie.repGenreNm}</CTableDataCell>
+              <CTableDataCell>{movie.state}</CTableDataCell>
+              <CTableDataCell>임시 버튼</CTableDataCell>
+            </CTableRow>
+          ))}
         </CTableBody>
 
       </CTable>
     </>
-  )
+  ) // return
+
+
+  /** 전체 영화 리스트 조회 */
+  function selectMovieList() {
+    axios({
+      url: '/selectMovieList',
+      method: 'post',
+      params: {
+      }
+    })
+      .then(function (res) {
+        debugger;
+        const movieBeanList = res.data.movVo.movieBeanList;
+        setMovVo({
+          movieBeanList
+        }); // setMovVo로 상태를 업데이트
+      })
+      .catch(function (err) {
+        alert('(오류)');
+      });
+  }
+
+
 }
 
 export default MovieListManage

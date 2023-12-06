@@ -18,6 +18,7 @@ public class MovieBean {
     private String prdtStatNm;
     private String genreAlt;
     private String repGenreNm;
+    private String state;
 
 
 

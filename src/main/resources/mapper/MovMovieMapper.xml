@@ -19,36 +19,52 @@
 
     </resultMap>
 
-    <select id="selectMovieList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+    <!-- 영화 리스트 토탈 갯수 조회 -->
+    <select id="selectMovieListTotalCnt" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
         SELECT
-            MM.movie_cd,
-            MM.movie_nm,
-            MM.movie_nm_en,
-            MM.prdt_year,
-            MM.open_dt,
-            MM.type_nm,
-            MM.prdt_stat_nm,
-            MM.genre_alt,
-            MM.rep_genre_nm
+        count(MM.movie_cd) totalCnt
         FROM
-            MOV_MOVIE MM
+        MOV_MOVIE MM
 
         WHERE
-            1=1
-
+        1=1
         /* 제목 검색 */
-        <if test="searchBean.searchFilter=='movieNm'">
-            <if test="searchBean.searchText!=''">
-                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchBean.searchText}, '%')
+        <if test="searchBean !=null">
+            <if test="searchBean.searchFilter=='movieNm'">
+                <if test="searchBean.searchText!=''">
+                    AND MM.MOVIE_NM LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                </if>
             </if>
         </if>
     </select>
 
 
-
-
-
-
+    <!-- 영화 리스트 조회 -->
+    <select id="selectMovieList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+        SELECT
+        MM.movie_cd,
+        MM.movie_nm,
+        MM.movie_nm_en,
+        MM.prdt_year,
+        MM.open_dt,
+        MM.type_nm,
+        MM.prdt_stat_nm,
+        MM.genre_alt,
+        MM.rep_genre_nm,
+        MM.STATE
+        FROM MOV_MOVIE MM
+        WHERE 1=1
+        /* 제목 검색 */
+        <if test="searchBean !=null">
+            <if test="searchBean.searchFilter=='movieNm'">
+                <if test="searchBean.searchText!=''">
+                    AND MM.MOVIE_NM LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                </if>
+            </if>
+        </if>
+        ORDER BY MM.movie_cd
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+    </select>
 
 
 

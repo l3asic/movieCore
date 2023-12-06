@@ -3,6 +3,7 @@ package com.example.movieCore.movie.controller;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.utils.Paging;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,12 @@ public class MovMovieController {
         Map<String, Object> resMap = new HashMap<>();
 
         try {
+            int totalCnt = movieService.selectMovieListTotalCnt(movVo);
+
+            Paging paging = new Paging(totalCnt, 10, null);
+
+            movVo.setPaging(paging);
+
             movVo.setMovieBeanList(movieService.selectMovieList(movVo));
             resMap.put("movVo", movVo);
             successResult = true;
