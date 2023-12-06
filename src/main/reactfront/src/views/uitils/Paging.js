@@ -28,11 +28,18 @@ const Paging = ({ paging, onPageChange }) => {
   return (
     <CPagination aria-label="Page navigation example" align="center">
       <CPaginationItem
+        aria-label="First"
+        disabled={!hasPreviousPage}
+        onClick={() => onPageChange(1)}
+      >
+        <span aria-hidden="true">««</span>
+      </CPaginationItem>
+      <CPaginationItem
         aria-label="Previous"
         disabled={!hasPreviousPage}
         onClick={() => onPageChange(currentPage - 1)}
       >
-        <span aria-hidden="true">&laquo;</span>
+        <span aria-hidden="true">«</span>
       </CPaginationItem>
       {renderPaginationItems()}
       <CPaginationItem
@@ -40,7 +47,14 @@ const Paging = ({ paging, onPageChange }) => {
         disabled={!hasNextPage}
         onClick={() => onPageChange(currentPage + 1)}
       >
-        <span aria-hidden="true">&raquo;</span>
+        <span aria-hidden="true">»</span>
+      </CPaginationItem>
+      <CPaginationItem
+        aria-label="Last"
+        disabled={!hasNextPage}
+        onClick={() => onPageChange(totalPages)}
+      >
+        <span aria-hidden="true">»»</span>
       </CPaginationItem>
     </CPagination>
   );
