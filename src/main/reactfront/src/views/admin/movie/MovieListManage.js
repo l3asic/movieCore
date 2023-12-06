@@ -3,12 +3,15 @@ import {
   CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow
 } from "@coreui/react";
 import axios from "axios";
+import Paging from "../../uitils/Paging";
 
 
 function MovieListManage() {
 
   const [movVo, setMovVo] = useState({
     movieBeanList: [],
+    paging:{
+    },
     searchBean : {
     }
   });
@@ -27,7 +30,7 @@ function MovieListManage() {
       </h3>
 
 
-      <CTable  color="dark" striped className="mt-5">
+      <CTable  color="dark" striped className="mt-5 mb-lg-5">
 
         <CTableHead>
           <CTableRow>
@@ -55,28 +58,42 @@ function MovieListManage() {
         </CTableBody>
 
       </CTable>
+
+      <Paging paging={movVo.paging} onPageChange={handlePageChange} />
+
     </>
   ) // return
 
 
   /** 전체 영화 리스트 조회 */
-  function selectMovieList() {
+  function selectMovieList(newPage) {
+
+    if(newPage != null){
+      movVo.paging.currentPage = newPage;
+    }
+
+
+
     axios({
       url: '/selectMovieList',
       method: 'post',
-      params: {
+      data: {
+        paging: movVo.paging
       }
     })
       .then(function (res) {
-        debugger;
         const movieBeanList = res.data.movVo.movieBeanList;
-        setMovVo({
-          movieBeanList
-        }); // setMovVo로 상태를 업데이트
+        const paging = res.data.movVo.paging;
+        setMovVo((prevMovVo) => ({ ...prevMovVo, movieBeanList, paging }));
       })
       .catch(function (err) {
         alert('(오류)');
       });
+  }
+
+  // 페이지 변경 시 호출되는 함수
+  function handlePageChange(newPage) {
+    selectMovieList(newPage);
   }
 
 

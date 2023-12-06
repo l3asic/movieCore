@@ -4,11 +4,10 @@ import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
 import com.example.movieCore.utils.Paging;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -23,23 +22,28 @@ public class MovMovieController {
 
 
 
-    /** 모든 영화 목록 조회 */
+
+    /** 영화 목록 조회 */
     @PostMapping(value = "/selectMovieList")
     @ResponseBody
-    public Map<String, Object> selectMovieList(HttpServletRequest request, HttpServletResponse response, SearchBean searchBean) throws Exception {
-
-        MovVo movVo = new MovVo();
-        movVo.setSearchBean(searchBean);
+    public Map<String, Object> selectMovieList(@RequestBody MovVo movVo) throws Exception {
 
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
 
+
         try {
-            int totalCnt = movieService.selectMovieListTotalCnt(movVo);
 
-            Paging paging = new Paging(totalCnt, 10, null);
+            //  최초 조회 일시 (페이징 널상태)
+            if(movVo.getPaging() == null){
+                int totalCnt = 0;
+                movVo.setPaging(new Paging());
+                totalCnt = movieService.selectMovieListTotalCnt(movVo);
+                movVo.getPaging().setTotalItems(totalCnt);
+            }
 
-            movVo.setPaging(paging);
+            // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
+            movVo.getPaging().setCurrentPage(movVo.getPaging().getCurrentPage());
 
             movVo.setMovieBeanList(movieService.selectMovieList(movVo));
             resMap.put("movVo", movVo);

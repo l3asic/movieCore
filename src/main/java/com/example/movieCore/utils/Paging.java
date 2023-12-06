@@ -18,11 +18,33 @@ public class Paging {
     private boolean hasPreviousPage;    // 이전 페이지 보유 여부
     private boolean hasNextPage;        // 다음 페이지 보유 여부
 
-    /** 파라미터 : 리스트 토탈 갯수, 1페이지당 리스트 갯수, 현재 페이지 수*/
-    public Paging(int totalItems, Integer itemsPerPage, Integer currentPage) {
+    public Paging() {
+        this.itemsPerPage = DEFAULT_ITEMS_PER_PAGE;  // 기본값으로 세팅
+        this.currentPage = DEFAULT_CURRENT_PAGE;     // 기본값으로 세팅
+    }
+
+    /** 리스트 토탈 갯수 세팅 */
+    public void setTotalItems(int totalItems) {
+        setTotalItemsWithDefaultItemsPerPage(totalItems);
+    }
+
+    /** 1페이지당 리스트 갯수 세팅 */
+    public void setItemsPerPage(int itemsPerPage) {
+        this.itemsPerPage = (itemsPerPage > 0) ? itemsPerPage : DEFAULT_ITEMS_PER_PAGE;
+        calculatePagination();
+    }
+
+    /** 현재 페이지 세팅 및 페이징 계산 */
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+        calculatePagination();
+    }
+
+    // 기본값인 itemsPerPage와 currentPage를 사용하여 totalItems를 설정
+    private void setTotalItemsWithDefaultItemsPerPage(int totalItems) {
         this.totalItems = totalItems;
-        this.itemsPerPage = (itemsPerPage != null && itemsPerPage > 0) ? itemsPerPage : DEFAULT_ITEMS_PER_PAGE;
-        this.currentPage = (currentPage != null && currentPage > 0) ? currentPage : DEFAULT_CURRENT_PAGE;
+        this.itemsPerPage = DEFAULT_ITEMS_PER_PAGE;
+        this.currentPage = DEFAULT_CURRENT_PAGE;
         calculatePagination();
     }
 
