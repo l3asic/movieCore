@@ -7,19 +7,19 @@ const Paging = ({ paging, onPageChange }) => {
 
   const renderPaginationItems = () => {
     const items = [];
+    const startPage = Math.floor((currentPage - 1) / 10) * 10 + 1;
+    const endPage = Math.min(startPage + 9, totalPages);
 
-    if (totalPages > 0) {
-      for (let i = 1; i <= totalPages; i++) {
-        items.push(
-          <CPaginationItem
-            key={i}
-            active={i === currentPage}
-            onClick={() => onPageChange(i)}
-          >
-            {i}
-          </CPaginationItem>
-        );
-      }
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <CPaginationItem
+          key={i}
+          active={i === currentPage}
+          onClick={() => onPageChange(i)}
+        >
+          {i}
+        </CPaginationItem>
+      );
     }
 
     return items;
