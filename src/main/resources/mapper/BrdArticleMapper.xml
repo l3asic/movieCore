@@ -167,6 +167,7 @@
                 )
             </otherwise>
         </choose>
+        LIMIT #{boardBean.paging.startIndex}, #{boardBean.paging.itemsPerPage}
 
     </select>
 
