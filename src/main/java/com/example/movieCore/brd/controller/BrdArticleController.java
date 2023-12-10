@@ -5,6 +5,7 @@ import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.service.BrdArticleServiceImpl;
 import com.example.movieCore.brd.vo.BrdVo;
 import com.example.movieCore.utils.MakeUUID;
+import com.example.movieCore.utils.Paging;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -103,6 +104,19 @@ public class BrdArticleController {
 
         Map resMap = new HashMap<>();
         try {
+
+            //  최초 조회 일시 (페이징 널상태)
+            if(brdVo.getBoardBean().getPaging() == null){
+                int totalCnt = 0;
+                brdVo.getBoardBean().setPaging(new Paging());
+                totalCnt = articleService.selectArticleListTotalCnt(brdVo);
+                brdVo.getBoardBean().getPaging().setTotalItems(totalCnt);
+            }
+
+            // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
+            brdVo.getBoardBean().getPaging().setCurrentPage(brdVo.getBoardBean().getPaging().getCurrentPage());
+
+
             brdVo.setArticleBeanList(articleService.selectArticleList(brdVo));
             resMap.put("brdVo",brdVo);
             succesResult = true;
@@ -159,6 +173,8 @@ public class BrdArticleController {
         Map resMap = new HashMap<>();
         try {
             brdVo.setArticleBeanList(articleService.selectArticleDetail(brdVo));
+            brdVo.setBoardBeanList(articleService.selectBoardList(brdVo));
+
 
             resMap.put("brdVo", brdVo);
             succesResult = true;

@@ -22,10 +22,42 @@
 
         <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
 
-        <result column="FOL_ID" property="folId" jdbcType="VARCHAR"/>
-        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
+        <!-- 해당 폴더에 속한 게시판들을 담을 리스트 -->
+        <collection property="folderBeanList" ofType="com.example.movieCore.brd.bean.BrdFolderBean" resultMap="folderBean"/>
+    </resultMap>
 
+    <!-- 게시판 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdBoardBean" id="boardBean">
+        <id column="BRD_ID" property="brdId" jdbcType="VARCHAR" />
+        <result column="FOL_ID" property="folId" jdbcType="VARCHAR"/>
         <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
+        <result column="BRD_COMMENT" property="brdComment" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+        <result column="ODR" property="odr" jdbcType="INTEGER" />
+        <result column="CREATE_DT" property="createDt" jdbcType="DATE" />
+        <result column="NOTICE_YN" property="noticeYn" jdbcType="VARCHAR" />
+        <result column="IMG_UPLOAD_YN" property="imgUploadYn" jdbcType="VARCHAR" />
+        <result column="FILE_LIMIT" property="fileLimit" jdbcType="VARCHAR" />
+        <result column="FILE_CNT_LIMIT" property="fileCntLimit" jdbcType="VARCHAR" />
+        <result column="REPL_YN" property="replYn" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <!-- 폴더 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBean">
+        <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
+        <result column="FOL_LOC" property="folLoc" jdbcType="VARCHAR" />
+        <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+        <result column="ODR" property="odr" jdbcType="INTEGER"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+
+        <!-- 해당 폴더에 속한 게시판들을 담을 리스트 -->
+        <collection property="boardBeanList" ofType="com.example.movieCore.brd.bean.BrdBoardBean" resultMap="boardBean"/>
+
     </resultMap>
 
 
@@ -117,6 +149,25 @@
         AND
             BA.BRD_ID = #{boardBean.brdId}
 
+        <choose>
+            <when test="boardBean.schSelect == 'subject'">
+                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'content'">
+                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'memName'">
+                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                )
+            </otherwise>
+        </choose>
+
     </select>
 
     <select id="searchArticle" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
@@ -174,9 +225,29 @@
             BA.EXPIRE_YN,
             BA.STATE,
             BA.ATCL_REPL_CNT,
-            BB.BRD_NAME,
+
             BF.FOL_ID,
-            BF.FOL_NAME
+            BF.MEM_ID,
+            BF.FOL_NAME,
+            BF.FOL_LOC,
+            BF.DEPTH,
+            BF.STATE,
+            BF.ODR,
+            BF.CREATE_DT,
+
+            BB.BRD_ID,
+            BB.FOL_ID,
+            BB.BRD_NAME,
+            BB.BRD_COMMENT,
+            BB.MEM_ID,
+            BB.STATE,
+            BB.ODR,
+            BB.CREATE_DT,
+            BB.NOTICE_YN,
+            BB.IMG_UPLOAD_YN,
+            BB.FILE_LIMIT,
+            BB.FILE_CNT_LIMIT,
+            BB.REPL_YN
         FROM
             BRD_ARTICLE BA
         LEFT JOIN BRD_BOARD BB
@@ -188,6 +259,59 @@
           AND
             BA.ATCL_ID = #{articleBean.atclId}
 
+    </select>
+
+    <select id="selectBoardList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean">
+        SELECT
+            BB.BRD_ID,
+            BB.FOL_ID,
+            BB.BRD_NAME,
+            BB.BRD_COMMENT,
+            BB.MEM_ID,
+            BB.STATE,
+            BB.ODR,
+            BB.CREATE_DT,
+            BB.NOTICE_YN,
+            BB.IMG_UPLOAD_YN,
+            BB.FILE_LIMIT,
+            BB.FILE_CNT_LIMIT,
+            BB.REPL_YN
+        FROM
+            BRD_BOARD BB
+        WHERE
+            BB.STATE = 'B'
+          AND
+            BB.FOL_ID = #{boardBean.folId}
+
+    </select>
+    <select id="selectArticleListTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
+        SELECT
+        COUNT(BA.ATCL_ID) totalCnt
+        FROM
+        BRD_ARTICLE BA
+
+        WHERE
+        BA.STATE = 'B'
+        AND
+        BA.BRD_ID = #{boardBean.brdId}
+        <choose>
+            <when test="boardBean.schSelect == 'subject'">
+                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'content'">
+                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'memName'">
+                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                )
+            </otherwise>
+        </choose>
     </select>
 
 

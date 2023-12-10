@@ -1,5 +1,6 @@
 package com.example.movieCore.brd.bean;
 
+import com.example.movieCore.utils.Paging;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,7 +45,7 @@ public class BrdBoardBean {
     /** 검색 내용 */
     private String schText;
 
-
-
+    /** 페이징 */
+    private Paging paging;
 
 }

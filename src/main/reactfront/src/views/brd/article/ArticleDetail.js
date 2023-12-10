@@ -5,12 +5,17 @@ import {
   CCol, CButton
 } from '@coreui/react'
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const ArticleDetail = () => {
 
   const location = useLocation();
   const { articleData } = location.state || {}; // 전달된 데이터
+  const navigate = useNavigate();
+
+  function updateArticle(atclId){ debugger;
+    navigate('/brd/ArticleReg', { state: { articleData: articleData } });
+  }
 
   return (
     <>
@@ -20,7 +25,7 @@ const ArticleDetail = () => {
 
         <CCol md={3}>
           <CFormLabel htmlFor="exampleFormControlInput1">폴더</CFormLabel>
-          <CFormInput type="" id="exampleFormControlInput1" value={articleData[0].folName} name="folId" disabled/>
+          <CFormInput type="" id="exampleFormControlInput1" value={articleData[0].folderBeanList[0].folName} name="folId" disabled/>
 
         </CCol>
 
@@ -28,7 +33,7 @@ const ArticleDetail = () => {
           <CFormInput
             label="게시판"
             name="brdId"
-            value={articleData[0].brdName}
+            value={articleData[0].folderBeanList[0].boardBeanList[0].brdName}
             disabled
           />
         </CCol>
@@ -66,6 +71,7 @@ const ArticleDetail = () => {
             label="작성자"
             name="memName"
             className="mb-1"
+            value={articleData[0].memName}
             disabled
           />
         </CCol>
@@ -87,8 +93,8 @@ const ArticleDetail = () => {
         </CCol>
 
         < div className = " d-grid gap-2 d-md-flex justify-content-md-end pb-3" >
-          < CButton className = " me-md-2 " size="sm" > 수정 </ CButton >
-          < CButton  color = "dark" size="sm" > 목록으로 </ CButton >
+          < CButton className = " me-md-2 " size="sm" value={articleData[0].atclId} onClick={() => updateArticle(articleData[0].atclId)} > 수정 </ CButton >
+          < CButton  color = "dark" size="sm" onClick={() => navigate(-1)}> 목록으로 </ CButton >
         </ div >
       </CForm>
 

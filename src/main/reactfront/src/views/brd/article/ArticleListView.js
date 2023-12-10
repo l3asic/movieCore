@@ -4,15 +4,19 @@ import {
 } from '@coreui/react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Paging from "../../uitils/Paging";
 
 const ArticleListView = () => {
 
   const navigate  = useNavigate();
   const [brdVo, setBrdVo] = useState({
     brdBoardBean: {
-      brdId : 'BB2115517422'   //임의의 값 하드코딩_ 추후 수정
+      brdId : 'BB4265418620',
+      folId : 'BF2311713518'//임의의 값 하드코딩_ 추후 수정
     },
     articleBeanList: [],
+    boardBeanList: [],
+    paging: {},
   });
 
 
@@ -34,17 +38,29 @@ const ArticleListView = () => {
   };
 
   /** 게시글 리스트 조회 */
-  function selectArticleList(){
+  function selectArticleList(newPage){ debugger;
+    if (newPage != null) {
+      if ("searchBtn") { // "searchBtn" 버튼 클릭 여부 확인
+        brdVo.paging = null; // "searchBtn" 클릭 시 brdVo.paging을 null로 설정
+      } else {
+        brdVo.paging.currentPage = newPage;
+      }
+    } else {
+      brdVo.paging = null;
+    }
 
     axios({
       url: '/selectArticleList',
       method: 'post',
       params:{
-        brdId : brdVo.brdBoardBean.brdId
+        brdId : brdVo.brdBoardBean.brdId,
+        schSelect : schSelect,
+        schText : schText,
+        paging: brdVo.paging
       }
 
     }).then(function (res){
-
+      const paging = res.data.brdVo.boardBean.paging;
       let articleBeanList = res.data.brdVo.articleBeanList.map(article => {
         // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
         const date = new Date(article.createDt);
@@ -67,12 +83,21 @@ const ArticleListView = () => {
       // 데이터를 상태로 설정하여 화면에 렌더링될 수 있도록 함
       setBrdVo(prevState => ({
         ...prevState,
-        articleBeanList: articleBeanList
+        articleBeanList: articleBeanList,
+        paging
       }));
+
+      setSchSelect('');
+      setSchText('');
 
     }).catch(function (err){
       alert("조회 실패 (오류)");
     });
+  }
+
+  // 페이지 이동
+  function handlePageChange(newPage) {
+    selectArticleList(newPage);
   }
 
   function selectArticleDetail(atclId) {
@@ -80,7 +105,8 @@ const ArticleListView = () => {
       url: '/selectArticleDetail',
       method: 'post',
       params: {
-        atclId: atclId
+        atclId: atclId,
+        folId : brdVo.brdBoardBean.folId
       }
     })
       .then(function (res) { debugger;
@@ -111,50 +137,50 @@ const ArticleListView = () => {
       });
   }
 
-  function searchArticle(){
-    axios({
-      url: '/searchArticle',
-      method: 'get',
-      params:{
-        brdId : brdVo.brdBoardBean.brdId,
-        schSelect : schSelect,
-        schText : schText
-      }
-
-    }).then(function (res){
-      let searchResult = res.data.brdVo.articleBeanList.map(article => {
-        // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
-        const date = new Date(article.createDt);
-
-        // Date 객체를 '0000.00.00' 형식의 문자열로 변환
-        const formattedDate = date.toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }).replace(/\.$/, '');
-
-        // article 객체에 새로운 속성으로 변환된 날짜를 할당
-        return {
-          ...article,
-          createDt: formattedDate
-        };
-      });
-
-      // 검색된 결과를 상태로 설정하여 화면에 렌더링될 수 있도록 함
-      setBrdVo(prevState => ({
-        ...prevState,
-        articleBeanList: searchResult
-      }));
-      setSchSelect('');
-      setSchText('');
-      // ㅇ
-
-
-    }).catch(function (err){
-      alert("조회 실패 (오류)");
-    });
-
-  }
+  // function searchArticle(){
+  //   axios({
+  //     url: '/searchArticle',
+  //     method: 'get',
+  //     params:{
+  //       brdId : brdVo.brdBoardBean.brdId,
+  //       schSelect : schSelect,
+  //       schText : schText
+  //     }
+  //
+  //   }).then(function (res){
+  //     let searchResult = res.data.brdVo.articleBeanList.map(article => {
+  //       // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
+  //       const date = new Date(article.createDt);
+  //
+  //       // Date 객체를 '0000.00.00' 형식의 문자열로 변환
+  //       const formattedDate = date.toLocaleDateString('ko-KR', {
+  //         year: 'numeric',
+  //         month: '2-digit',
+  //         day: '2-digit'
+  //       }).replace(/\.$/, '');
+  //
+  //       // article 객체에 새로운 속성으로 변환된 날짜를 할당
+  //       return {
+  //         ...article,
+  //         createDt: formattedDate
+  //       };
+  //     });
+  //
+  //     // 검색된 결과를 상태로 설정하여 화면에 렌더링될 수 있도록 함
+  //     setBrdVo(prevState => ({
+  //       ...prevState,
+  //       articleBeanList: searchResult
+  //     }));
+  //     setSchSelect('');
+  //     setSchText('');
+  //     // ㅇ
+  //
+  //
+  //   }).catch(function (err){
+  //     alert("조회 실패 (오류)");
+  //   });
+  //
+  // }
 
   return (
     <div>
@@ -168,7 +194,7 @@ const ArticleListView = () => {
           <option value="memName">작성자</option>
         </CFormSelect>
         <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name={schText}/>
-        <CButton size="sm" className="mb-3" color="secondary" onClick={searchArticle}>검색</CButton>
+        <CButton size="sm" className="mb-3" color="secondary" onClick={selectArticleList} name="searchBtn">검색</CButton>
       </CInputGroup>
       </div>
       <CTable className="boardTableList">
@@ -193,6 +219,8 @@ const ArticleListView = () => {
           ))}
         </CTableBody>
       </CTable>
+      <Paging paging={brdVo.paging} onPageChange={handlePageChange} />
+
     </div>
   )
 }

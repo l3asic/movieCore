@@ -5,10 +5,13 @@ import {
   CCol, CButton
 } from '@coreui/react'
 import axios from "axios";
+import {useLocation} from "react-router-dom";
 
 
 
 const ArticleReg = () => {
+  const location = useLocation();
+  const { articleData } = location.state || {}; // 전달된 데이터
 
   const [brdVo, setBrdVo] = useState({
     folderBean : {},
@@ -37,7 +40,7 @@ const ArticleReg = () => {
 
 
   // 폴더와 게시판 상태
-  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [selectedFolder, setSelectedFolder] = useState(articleData && articleData.length > 0 ? articleData[0].folderBeanList[0].folId : null);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [boardOptions, setBoardOptions] = useState([]);
 
@@ -95,6 +98,7 @@ const ArticleReg = () => {
               value: folderBean.folId
             }))}
             name="folId"
+            value={articleData && articleData.length > 0 ? articleData[0].folId : null}
             onChange={handleFolderChange}
           />
         </CCol>

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Getter
@@ -36,10 +37,8 @@ public class BrdArticleBean implements Serializable {
 
     /** 작성자명 */
     private String memName;
-    /** 폴더코드번호 및 폴더명 */
-    private String folId;
-    private String folName;
-    /** 게시판명 */
-    private String brdName;
+
+    /** 폴더 리스트 */
+    private ArrayList<BrdFolderBean> folderBeanList;
 
 }
