@@ -26,6 +26,8 @@ public class MovVo {
     /** 페이징 */
     private Paging paging;
 
+    private String searchFilter;
+    private String searchText;
 
 
 }

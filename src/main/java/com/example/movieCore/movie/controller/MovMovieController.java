@@ -26,7 +26,7 @@ public class MovMovieController {
     /** 영화 목록 조회 */
     @PostMapping(value = "/selectMovieList")
     @ResponseBody
-    public Map<String, Object> selectMovieList(@RequestBody MovVo movVo) throws Exception {
+    public Map<String, Object> selectMovieList(MovVo movVo) throws Exception {
 
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();

@@ -32,6 +32,18 @@ function MovieListManage() {
     selectMovieList();
   }, []);
 
+  const [schFilter, setSchFilter] = useState('');
+  const [schText, setSchText] = useState('');
+
+
+  const searchFilter = event => {
+    setSchFilter(event.target.value);
+  };
+
+  const searchText = event => {
+    setSchText(event.target.value);
+  };
+
   return (
     <>
       <h3>영화 리스트 관리 페이지입니다</h3>
@@ -49,9 +61,10 @@ function MovieListManage() {
                 { label: '대표 장르', value: 'repGenreNm' },
                 { label: '상태', value: 'state' }
               ]}
+              onChange={searchFilter} value={schFilter}
             />
-            <CFormInput type="search" className="me-2" placeholder="Search" />
-            <CButton type="submit" color="success" variant="outline" className="me-2" style={{ whiteSpace: 'nowrap' }}>
+            <CFormInput type="search" className="me-2" placeholder="Search" onChange={searchText} value={schText} name={schText}/>
+            <CButton color="success" variant="outline" className="me-2" style={{ whiteSpace: 'nowrap' }} onClick={selectMovieList} id="searchBtn">
               검색
             </CButton>
             <CButton color="danger" variant="outline" style={{ whiteSpace: 'nowrap' }}>
@@ -107,7 +120,11 @@ function MovieListManage() {
 
   function selectMovieList(newPage) {
     if (newPage != null) {
-      movVo.paging.currentPage = newPage;
+      if ("searchBtn") { // "searchBtn" 버튼 클릭 여부 확인
+        movVo.paging = null; // "searchBtn" 클릭 시 brdVo.paging을 null로 설정
+      } else {
+        movVo.paging.currentPage = newPage;
+      }
     } else {
       movVo.paging = null;
     }
@@ -115,8 +132,10 @@ function MovieListManage() {
     axios({
       url: '/selectMovieList',
       method: 'post',
-      data: {
-        paging: movVo.paging
+      params: {
+        paging: movVo.paging,
+        searchFilter: schFilter,
+        searchText: schText
       }
     })
       .then(function (res) {

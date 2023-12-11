@@ -29,13 +29,24 @@
         WHERE
         1=1
         /* 제목 검색 */
-        <if test="searchBean !=null">
-            <if test="searchBean.searchFilter=='movieNm'">
-                <if test="searchBean.searchText!=''">
-                    AND MM.MOVIE_NM LIKE CONCAT('%', #{searchBean.searchText}, '%')
-                </if>
-            </if>
-        </if>
+        <choose>
+            <when test="searchFilter == 'movieCd'">
+                AND MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'movieNm'">
+                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'repGenreNm'">
+                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                )
+            </otherwise>
+        </choose>
     </select>
 
 
@@ -55,13 +66,24 @@
         FROM MOV_MOVIE MM
         WHERE 1=1
         /* 제목 검색 */
-        <if test="searchBean !=null">
-            <if test="searchBean.searchFilter=='movieNm'">
-                <if test="searchBean.searchText!=''">
-                    AND MM.MOVIE_NM LIKE CONCAT('%', #{searchBean.searchText}, '%')
-                </if>
-            </if>
-        </if>
+        <choose>
+            <when test="searchFilter == 'movieCd'">
+                AND MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'movieNm'">
+                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'repGenreNm'">
+                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                )
+            </otherwise>
+        </choose>
         ORDER BY MM.movie_cd
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
