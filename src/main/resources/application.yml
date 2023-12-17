@@ -1,7 +1,6 @@
 server:
   port: 8080
   servlet:
-    #context-path: /user/loginView.do
     encoding:
       charset: UTF-8
 spring:
@@ -20,6 +19,16 @@ spring:
     multipart:
       max-file-size: 10MB # default 3MB
       max-request-size: 20MB # default 50MB
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+jwt:
+  header: Authorization
+  #HS512 ,64byte 이상의 secret key를 사용
+  secret: a2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbXRva2FyaW10b2thcmltdG9rYXJpbQ==
+  token-validity-in-seconds: 86400 # ttl (초)
 
 devtools:
   livereload:
