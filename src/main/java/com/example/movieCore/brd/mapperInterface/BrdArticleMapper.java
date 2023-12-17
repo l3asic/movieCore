@@ -1,6 +1,7 @@
 package com.example.movieCore.brd.mapperInterface;
 
 import com.example.movieCore.brd.bean.BrdArticleBean;
+import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.vo.BrdVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,4 +18,8 @@ public interface BrdArticleMapper {
     ArrayList<BrdArticleBean> searchArticle(BrdVo brdVo);
 
     ArrayList<BrdArticleBean> selectArticleDetail(BrdVo brdVo);
+
+    ArrayList<BrdBoardBean> selectBoardList(BrdVo brdVo);
+
+    int selectArticleListTotalCnt(BrdVo brdVo);
 }

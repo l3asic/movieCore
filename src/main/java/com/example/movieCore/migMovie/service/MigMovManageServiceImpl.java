@@ -72,4 +72,8 @@ public class MigMovManageServiceImpl {
     public void insertMovieGenreMap(MigMovVo movVo) {
         migMovManageMapper.insertMovieGenreMap(movVo);
     }
+
+    public int checkPeopleInfo(String peopleCd) {
+        return migMovManageMapper.checkPeopleInfo(peopleCd);
+    }
 }

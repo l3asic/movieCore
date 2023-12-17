@@ -20,4 +20,7 @@ public class MovMovieServiceImpl {
     }
 
 
+    public int selectMovieListTotalCnt(MovVo movVo) {
+        return movMovieMapper.selectMovieListTotalCnt(movVo);
+    }
 }

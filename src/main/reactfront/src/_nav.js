@@ -58,6 +58,11 @@ const _nav = [
             name: ' - 영화 이관 관리',
             to: '/admin/MovieMigManage',
           },
+          {
+            component: CNavItem,
+            name: ' - 영화 리스트 관리',
+            to: '/admin/MovieListManage',
+          },
         ],
       },
 

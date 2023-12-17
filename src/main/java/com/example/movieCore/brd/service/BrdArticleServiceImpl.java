@@ -1,6 +1,7 @@
 package com.example.movieCore.brd.service;
 
 import com.example.movieCore.brd.bean.BrdArticleBean;
+import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.mapperInterface.BrdArticleMapper;
 import com.example.movieCore.brd.vo.BrdVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,13 @@ public class BrdArticleServiceImpl {
 
     public ArrayList<BrdArticleBean> selectArticleDetail(BrdVo brdVo) {
         return brdArticleMapper.selectArticleDetail(brdVo);
+    }
+
+    public ArrayList<BrdBoardBean> selectBoardList(BrdVo brdVo) {
+        return brdArticleMapper.selectBoardList(brdVo);
+    }
+
+    public int selectArticleListTotalCnt(BrdVo brdVo) {
+        return brdArticleMapper.selectArticleListTotalCnt(brdVo);
     }
 }

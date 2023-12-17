@@ -38,4 +38,6 @@ public interface MigMovManageMapper {
     void insertMovieGenre(MigMovVo movVo);
 
     void insertMovieGenreMap(MigMovVo movVo);
+
+    int checkPeopleInfo(String peopleCd);
 }

@@ -11,4 +11,6 @@ import java.util.ArrayList;
 public interface MovMovieMapper {
 
     ArrayList<MovieBean> selectMovieList(MovVo movVo);
+
+    int selectMovieListTotalCnt(MovVo movVo);
 }
