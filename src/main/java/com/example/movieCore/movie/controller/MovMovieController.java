@@ -35,7 +35,7 @@ public class MovMovieController {
         try {
 
             //  최초 조회 일시 (페이징 널상태)
-            if(movVo.getPaging() == null){
+            if(movVo.getPaging() == null || movVo.getPaging().getTotalItems() == 0){
                 int totalCnt = 0;
                 movVo.setPaging(new Paging());
                 totalCnt = movieService.selectMovieListTotalCnt(movVo);

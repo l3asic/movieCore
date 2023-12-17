@@ -339,17 +339,150 @@ public class MigMovManageController {
         String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
         String key3 = "2de1d6d0dab3e485b0d97f0ff5b0bd25";
         String key4 = "7957ef755545f3af1d212a0ece169def";
+        String key5 = "a4277be54018650843ae4f7b5b2a8984";
+        String key6 = "7880a9b4189631c7ea79e950f48d1d83";
+        String key7 = "836ad4f96d7c95ac85c96d2e5e8125f7";
+        String key8 = "9c6dea5d953915b92a695607cb91e48b";
+        String key9 = "973cd4977f769baff219c4d0867bdfba";
+        String key10 = "d546837bf35ea5ff3622dcbccd80bed5";
+        String key11 = "fc5475472496209a244f34c434e6e5ef";
+        String key12 = "382ae0a5ec52ebdc9d00af23359cab17";
+        String key13 = "1dfda86b3835d0739a0af1753b88aaf6";
+        String key14 = "2307d9cdbb7a1020c99298fc305de0c3";
+        String key15 = "87311a5e4325e97ab7adc4368eb9d6bb";
+        String key16 = "a6431d0d15bf7c6beb185e330323b9ec";
+        String key17 = "618325a178c05722bcfda7c9c714e2a9";
+        String key18 = "16c66be398831cd4456586a16f65d1db";
+        String key19 = "fbf4d7a1c30c1e9d83eca52acb2fcc7c";
+        String key20 = "c2bffe81b4aaa64ef0e9195ff4601859";
 
+        String key21 = "dfdb3c434e765d92000e7a1f8a5d090c";
+        String key22 = "fb6a32ba84bc2898394eb39a0456c9ce";
+        String key23 = "34e226c990d48e542c1a909e17768a6a";
+        String key24 = "c511c15fc5d2a2e7ee85a1bb8c4d01b4";
+        String key25 = "cd04240c9ef4fa2f3c2783e87c60e0a6";
+        String key26 = "c2823031249d6b95956fb9c076c62f5f";
+        String key27 = "39dc48dd4b0ad6ba919dd5412455744d";
+        String key28 = "d810720f505c6990eebe8b332a6be8b3";
+        String key29 = "2fa0873be3020de865549f1a8217e0b6";
+        String key30 = "9588d2d495930c6858aa368015aee7db";
+
+        String key31 = "8d6e5c9f4782a4266e7cdceb1a491159";
+        String key32 = "5e43e76335a4f58d65ea815d4caab87a";
+        String key33 = "956e9acd542f26b562e4a68f002be321";
+        String key34 = "98c5c8eb45661a868c7aa14704997526";
+        String key35 = "16c860a56a565302815984c0cd10d53d";
+        String key36 = "b3a5cc51f33c53460f1797ea265083fa";
+        String key37 = "013bf97fd5c9b24666bc2f5045b91f11";
+        String key38 = "f034527d83ea2275fa99390a079467aa";
+        String key39 = "962dfedf753c1aee3295ca88447b4d1a";
+        String key40 = "f7c15d0adbbf6abb295a3912ee9c7632";
+
+        // 이관 갯수
         int divideCnt = 0;
 
-        String customKey =key1;
+        // 오류 peopleCd 리스트
+        List<String> errPeopleCd = new ArrayList<>();
+        // 오류 메시지
+        List<String> errMsg = new ArrayList<>();
 
-//        for (int i = 0; i < movVo.getMoviePeopleBeanList().size(); i++) {
-        for (int i = 0; i < 60000; i++) {
+
+        String customKey = "";
+
+        for (int i = 0; i < movVo.getMigMoviePeopleBeanList().size(); i++) {
+
             String peopleCd = movVo.getMigMoviePeopleBeanList().get(i).getPeopleCd();
 
-            if(divideCnt>40000){
+            // 상세정보 테이블에 존재 확인
+            int checkCnt = 0;
+            checkCnt = movManageService.checkPeopleInfo(peopleCd);
+            if(checkCnt> 0){
+                continue;
+            }
+
+
+            if(divideCnt<2999){
+                customKey = key1;
+            }else if(divideCnt==2999){
                 customKey = key2;
+            }else if(divideCnt==5999){
+                customKey = key3;
+            }else if(divideCnt==8999){
+                customKey = key4;
+            }else if(divideCnt==11999){
+                customKey = key5;
+            }else if(divideCnt==14999){
+                customKey = key6;
+            }else if(divideCnt==17999){
+                customKey = key7;
+            }else if(divideCnt==20999){
+                customKey = key8;
+            }else if(divideCnt==23999){
+                customKey = key9;
+            }else if(divideCnt==26999){
+                customKey = key10;
+            }else if(divideCnt==29999){
+                customKey = key11;
+            }else if(divideCnt==32999){
+                customKey = key12;
+            }else if(divideCnt==35999){
+                customKey = key13;
+            }else if(divideCnt==38999){
+                customKey = key14;
+            }else if(divideCnt==41999){
+                customKey = key15;
+            }else if(divideCnt==44999){
+                customKey = key16;
+            }else if(divideCnt==47999){
+                customKey = key17;
+            }else if(divideCnt==50999){
+                customKey = key18;
+            }else if(divideCnt==53999){
+                customKey = key19;
+            }else if(divideCnt==56999){
+                customKey = key20;
+            }else if(divideCnt==59999){
+                customKey = key21;
+            }else if(divideCnt==52999){
+                customKey = key22;
+            }else if(divideCnt==55999){
+                customKey = key23;
+            }else if(divideCnt==58999){
+                customKey = key24;
+            }else if(divideCnt==61999){
+                customKey = key25;
+            }else if(divideCnt==64999){
+                customKey = key26;
+            }else if(divideCnt==67999){
+                customKey = key27;
+            }else if(divideCnt==70999){
+                customKey = key28;
+            }else if(divideCnt==73999){
+                customKey = key29;
+            }else if(divideCnt==76999){
+                customKey = key30;
+            }else if(divideCnt==79999){
+                customKey = key31;
+            }else if(divideCnt==81999){
+                customKey = key32;
+            }else if(divideCnt==84999){
+                customKey = key33;
+            }else if(divideCnt==87999){
+                customKey = key34;
+            }else if(divideCnt==90999){
+                customKey = key35;
+            }else if(divideCnt==93999){
+                customKey = key36;
+            }else if(divideCnt==96999){
+                customKey = key37;
+            }else if(divideCnt==99999){
+                customKey = key38;
+            }else if(divideCnt==102999){
+                customKey = key39;
+            }else if(divideCnt==105999){
+                customKey = key40;
+            }else {
+                System.out.println("문제?");
             }
 
 
@@ -357,14 +490,20 @@ public class MigMovManageController {
             try {
                 // 영화인 상세정보 조회 api 호출
                 movVo.setMigMoviePeopleInfoBean(movieApiClient.callMoviePeopleInfoApi(peopleCd,customKey));
+
+                // 상세정보 없는 영화 인 예외처리 (peopleCd 그대로 할당, 나머지 공백 )
+                if(movVo.getMigMoviePeopleInfoBean().getPeopleCd() == null){
+                    movVo.getMigMoviePeopleInfoBean().setPeopleCd(peopleCd);
+                }
+
                 // 영화인 상세정보 디비 인서트
                 movManageService.insertMoviePeopleInfoBean(movVo);
                 successCnt++;
 
             }catch (Exception e){
-                e.printStackTrace();
                 failCnt++;
-
+                errPeopleCd.add(peopleCd);
+                errMsg.add(e.getMessage());
             }
 
             divideCnt++;

@@ -322,6 +322,14 @@
     </insert>
 
 
+    <!-- 영화인 상세정보 존재 확인 -->
+    <select id="checkPeopleInfo" parameterType="String" resultType="integer">
+        select count(*) cnt
+        from MOV_PEOPLE_INFO
+        where people_cd = #{peopleCd}
+    </select>
+
+
 
 
 
