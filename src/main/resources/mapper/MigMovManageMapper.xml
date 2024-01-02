@@ -31,10 +31,9 @@
              open_dt,
              type_nm,
              prdt_stat_nm,
-             nation_alt,
              genre_alt,
              rep_genre_nm,
-             people_nm
+             state
 
         )
         VALUES
@@ -46,10 +45,9 @@
                 DATE_FORMAT(#{migMovieBean.openDt}, '%Y-%m-%d %h:%m:%s'),
                 #{migMovieBean.typeNm},
                 #{migMovieBean.prdtStatNm},
-                #{migMovieBean.nationAlt},
                 #{migMovieBean.genreAlt},
                 #{migMovieBean.repGenreNm},
-                #{migMovieBean.peopleNm}
+                'B'
 
             )
 
@@ -69,19 +67,12 @@
             PRDT_STAT_NM,
             TYPE_NM,
             genre_nm,
-            DIRECTOR_NM,
-            DIRECTOR_NM_EN,
-            ACTORS_NM,
-            ACTORS_NM_EN,
             CAST,
             CAST_EN,
             SHOW_TYPE_GROUP_NM,
             SHOW_TYPE_NM,
             AUDIT_NO,
             WATCH_GRADE_NM,
-            STAFFS_NM,
-            STAFFS_NM_EN,
-            STAFFS_ROLE_NM,
             POINT_YN,
             POINT_AVG,
             POINT_TOTAL_CNT,
@@ -101,24 +92,17 @@
                 #{migMovieInfoBean.prdtStatNm},
                 #{migMovieInfoBean.typeNm},
                 #{migMovieInfoBean.genreNm},
-                #{migMovieInfoBean.directorNm},
-                #{migMovieInfoBean.directorNmEn},
-                #{migMovieInfoBean.actorsNm},
-                #{migMovieInfoBean.actorsNmEn},
                 #{migMovieInfoBean.cast},
                 #{migMovieInfoBean.castEn},
                 #{migMovieInfoBean.showTypeGroupNm},
                 #{migMovieInfoBean.showTypeNm},
                 #{migMovieInfoBean.auditNo},
                 #{migMovieInfoBean.watchGradeNm},
-                #{migMovieInfoBean.staffsNm},
-                #{migMovieInfoBean.staffsNmEn},
-                #{migMovieInfoBean.staffsRoleNm},
                 #{migMovieInfoBean.pointYn},
                 #{migMovieInfoBean.pointAvg},
                 #{migMovieInfoBean.pointTotalCnt},
                 #{migMovieInfoBean.totalViewCnt},
-                #{migMovieInfoBean.state},
+                'B',
                 #{migMovieInfoBean.previewUrl}
             )
 
@@ -253,7 +237,8 @@
         )
         from
             MOV_NATION
-        where KOR_NM = #{migMovieNationBean.korNm}
+        where KOR_NM = #{korNm}
+        LIMIT 1
     </select>
 
 

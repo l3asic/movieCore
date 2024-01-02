@@ -53,10 +53,10 @@ public class MigMovieApiClientImpl {
         MigMovVo movVo = new MigMovVo();
 
         // 토탈 갯수
-        if (jsonMap.containsKey("peopleListResult")) {
-            LinkedHashMap<String, Object> peopleListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
-            if (peopleListResult.containsKey("totCnt")) {
-                movVo.setTotCnt((Integer) peopleListResult.get("totCnt"));
+        if (jsonMap.containsKey("movieListResult")) {
+            LinkedHashMap<String, Object> movieListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
+            if (movieListResult.containsKey("totCnt")) {
+                movVo.setTotCnt((Integer) movieListResult.get("totCnt"));
             }
         }
 

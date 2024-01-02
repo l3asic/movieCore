@@ -1,6 +1,7 @@
 package com.example.movieCore.migMovie.mapperInterface;
 
 import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
+import com.example.movieCore.migMovie.bean.MigMovieNationBean;
 import com.example.movieCore.migMovie.bean.MigMoviePeopleBean;
 import com.example.movieCore.migMovie.vo.MigMovVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -29,7 +30,7 @@ public interface MigMovManageMapper {
 
     void insertMovieNationMap(MigMovVo movVo);
 
-    String selectMovieNation(MigMovVo movVo);
+    String selectMovieNation(MigMovieNationBean migMovieNationBean);
 
     int checkTheCompany(MigMovVo movVo);
 

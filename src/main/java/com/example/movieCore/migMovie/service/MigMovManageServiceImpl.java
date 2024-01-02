@@ -1,6 +1,7 @@
 package com.example.movieCore.migMovie.service;
 
 import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
+import com.example.movieCore.migMovie.bean.MigMovieNationBean;
 import com.example.movieCore.migMovie.bean.MigMoviePeopleBean;
 import com.example.movieCore.migMovie.mapperInterface.MigMovManageMapper;
 import com.example.movieCore.migMovie.vo.MigMovVo;
@@ -53,8 +54,8 @@ public class MigMovManageServiceImpl {
         migMovManageMapper.insertMovieNationMap(movVo);
     }
 
-    public String selectMovieNation(MigMovVo movVo) {
-        return migMovManageMapper.selectMovieNation(movVo);
+    public String selectMovieNation(MigMovieNationBean migMovieNationBean) {
+        return migMovManageMapper.selectMovieNation(migMovieNationBean);
     }
 
     public int checkTheCompany(MigMovVo movVo) {

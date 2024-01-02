@@ -3,6 +3,7 @@ package com.example.movieCore.migMovie.controller;
 import com.example.movieCore.migMovie.api.DataConverter;
 import com.example.movieCore.migMovie.api.MigMovieApiClientImpl;
 import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
+import com.example.movieCore.migMovie.bean.MigMovieInfoBean;
 import com.example.movieCore.migMovie.bean.MigMovieNationBean;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
 import com.example.movieCore.migMovie.vo.MigMovVo;
@@ -84,7 +85,7 @@ public class MigMovManageController {
 
 
                 // 개봉일 없을시 예외 처리
-                if (movVo.getMigMovieBean().getOpenDt() == null || movVo.getMigMovieBean().getOpenDt().isEmpty()) {
+                if (movVo.getMigMovieBean().getOpenDt() == null || movVo.getMigMovieBean().getOpenDt().isEmpty() || movVo.getMigMovieBean().getOpenDt().equals(""))  {
                     movVo.getMigMovieBean().setOpenDt(null);
                 }
 
@@ -92,12 +93,26 @@ public class MigMovManageController {
                 /** 영화 상세 정보 api 호출 */
                 movVo.setMigMovieInfoBean(migMovieApiClientImpl.callMovieInfoApi(movVo.getMigMovieBean().getMovieCd()));
 
+                // 영화 상세정보가 없을경우
+                if(movVo.getMigMovieInfoBean() == null || StringUtil.isNullOrEmpty(movVo.getMigMovieInfoBean().getMovieCd())){
+                    movVo.setMigMovieInfoBean(new MigMovieInfoBean());
+                    movVo.getMigMovieInfoBean().setMovieCd(movVo.getMigMovieBean().getMovieCd());
+                }
 
+
+                // 영화 상세정보 개봉일 없을시 예외 처리
+                if (movVo.getMigMovieInfoBean().getOpenDt() == null || movVo.getMigMovieInfoBean().getOpenDt().isEmpty() || movVo.getMigMovieInfoBean().getOpenDt().equals(""))  {
+                    movVo.getMigMovieInfoBean().setOpenDt(null);
+                }
 
                 /** 리스트 데이터 가공 */
 
                 // 제작 국가 (리스트) 매핑 이관
-                if(movVo.getMigMovieInfoBean().getNations().size() > 0){
+//                if(!movVo.getMigMovieInfoBean().getNations().isEmpty()){
+                List<MigMovieNationBean> nationsList = movVo.getMigMovieInfoBean().getNations();
+                if(nationsList == null || nationsList.isEmpty()) {
+                    System.out.println("제작 국가가 비었음?");
+                }else{
                     MigMovieNationBean migMovieNationBean = new MigMovieNationBean();
 
                     for (int k = 0; k < movVo.getMigMovieInfoBean().getNations().size(); k++) {
@@ -107,7 +122,7 @@ public class MigMovManageController {
                         migMovieNationBean.setKorNm((String)dataMap.get("nationNm"));
                         
                         // 제작 국가 코드 조회
-                        migMovieNationBean.setNationCd(movManageService.selectMovieNation(movVo));
+                        migMovieNationBean.setNationCd(movManageService.selectMovieNation(migMovieNationBean));
 
                         if(!StringUtil.isNullOrEmpty(migMovieNationBean.getNationCd())){
                             migMovieNationBean.setMovieCd(movVo.getMigMovieBean().getMovieCd());
@@ -127,7 +142,7 @@ public class MigMovManageController {
 
 
 
-                if(movVo.getMigMovieInfoBean().getShowTypes().size() > 0){
+                if(movVo.getMigMovieInfoBean().getShowTypes() != null && movVo.getMigMovieInfoBean().getShowTypes().size() > 0){
                     String showTypeGroupNm = "";
                     String showTypeNm = "";
 
@@ -147,7 +162,7 @@ public class MigMovManageController {
 
                 }
 
-                if(movVo.getMigMovieInfoBean().getAudits().size() > 0){
+                if(movVo.getMigMovieInfoBean().getAudits() != null && movVo.getMigMovieInfoBean().getAudits().size() > 0){
                     String auditNo = "";
                     String watchGradeNm = "";
 
@@ -169,7 +184,7 @@ public class MigMovManageController {
 
 
 
-                if(movVo.getMigMovieInfoBean().getGenres().size() > 0){
+                if(movVo.getMigMovieInfoBean().getGenres() != null && movVo.getMigMovieInfoBean().getGenres().size() > 0){
 
                     for (int k = 0; k < movVo.getMigMovieInfoBean().getGenres().size(); k++) {
                         LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMigMovieInfoBean().getGenres().get(k);
