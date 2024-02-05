@@ -102,6 +102,7 @@ const Login = () => {
     })
       .then(function (res) {
         debugger;
+        // 세션처럼  jwt에 사용자 데이터 담는 처리 필요함
 
       })
       .catch(function (err) {

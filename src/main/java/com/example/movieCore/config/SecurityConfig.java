@@ -54,8 +54,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/authenticate").permitAll() // 효인) 아무나 다 들어오는 설정   (3줄)
                 .requestMatchers("/").permitAll() // 효인) 메인은 아무나 들어오게 추가하는 코드
+                
+                
+                .requestMatchers("/*").permitAll() // 효인) 모든 페이지 권한 오픈
 
-                .requestMatchers("/selectMovieList").permitAll() // 효인)  영화 리스트 조회 호출 url 임시 허용
+//                .requestMatchers("/selectMovieList").permitAll() // 효인)  영화 리스트 조회 호출 url 임시 허용
 
 
                 .requestMatchers("/allInfo").permitAll()
