@@ -15,6 +15,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import axios from "axios";
 
 const Login = () => {
   return (
@@ -32,7 +33,7 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Username" autoComplete="username" />
+                      <CFormInput placeholder="UserId" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
@@ -46,7 +47,8 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton color="primary" className="px-4">
+                        <CButton color="primary" className="px-4"
+                        onClick={LoginButtonClick}>
                           Login
                         </CButton>
                       </CCol>
@@ -81,6 +83,41 @@ const Login = () => {
       </CContainer>
     </div>
   )
+
+
+  function LoginButtonClick() {
+    debugger;
+
+    var loginId = "hyoke3";
+    var loginPassword = "password";
+
+
+    axios({
+      url: '/authenticate',
+      method: 'post',
+      params: {
+        loginId: loginId,
+        loginPassword: loginPassword
+      }
+    })
+      .then(function (res) {
+        debugger;
+
+      })
+      .catch(function (err) {
+        alert('(오류)');
+      });
+
+
+
+
+
+  }
+
+
 }
+
+
+
 
 export default Login

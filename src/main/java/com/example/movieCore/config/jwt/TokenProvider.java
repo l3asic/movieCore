@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+/** 효인) 토큰 생성 부분 */
 @Component
 public class TokenProvider implements InitializingBean {
 
@@ -30,6 +31,7 @@ public class TokenProvider implements InitializingBean {
     private final long tokenValidityInMilliseconds;
     private Key key;
 
+    /** 효인) 토큰 생성시 필요한 시큐리티 (yml - jwt 에 적혀있음)  */
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInMilliseconds

@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -29,8 +30,10 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final LoginServiceImpl loginService;
 
+    // 효인) 로그인
     @PostMapping("/authenticate")
-    public Map<String, Object> authorize(@RequestBody LoginMemberBean memberBean){
+    @ResponseBody
+    public Map<String, Object> authorize(LoginMemberBean memberBean){
         TokenBean tokenBean = new TokenBean();
         HttpHeaders httpHeaders = new HttpHeaders();
         Map<String, Object> result = new HashMap<>();
