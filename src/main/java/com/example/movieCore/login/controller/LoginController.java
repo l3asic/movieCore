@@ -24,7 +24,8 @@ public class LoginController {
 
     /** 회원 가입시 */
     @PostMapping(value = "/signUp")
-    public Map<String, Object> signUp(@RequestBody LoginMemberBean memberBean) throws Exception{
+    @ResponseBody
+    public Map<String, Object> signUp( LoginMemberBean memberBean) throws Exception{
 
         Map<String, Object> result = new HashMap<>();
         // 가입일 생성
