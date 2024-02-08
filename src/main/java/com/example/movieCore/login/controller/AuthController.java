@@ -7,6 +7,9 @@ import com.example.movieCore.login.bean.TokenBean;
 import com.example.movieCore.login.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -30,34 +33,52 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final LoginServiceImpl loginService;
 
-    // 효인) 로그인
+
     @PostMapping("/authenticate")
     @ResponseBody
-    public Map<String, Object> authorize(LoginMemberBean memberBean){
-        TokenBean tokenBean = new TokenBean();
-        HttpHeaders httpHeaders = new HttpHeaders();
+    public ResponseEntity<Map<String, Object>> authorize(LoginMemberBean memberBean) {
         Map<String, Object> result = new HashMap<>();
 
-        /* 추후 패스워드 확인 로직 추가 */
+        try {
+            // 인증 시도
+            Authentication authentication = authenticationManagerBuilder
+                    .getObject()
+                    .authenticate(new UsernamePasswordAuthenticationToken(memberBean.getLoginId(), memberBean.getLoginPassword()));
 
-        /* 유저정보 token 만들기 전 객체에 할당 */
+            // 인증 성공 시
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.createToken(authentication);
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(memberBean.getLoginId(), memberBean.getLoginPassword());
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            // 응답 생성
+            TokenBean tokenBean = new TokenBean();
+            tokenBean.setToken(jwt);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+            
+            
+            // 사용자 정보 조회
+            LoginMemberBean returnMemberBean = loginService.getMemInfo(memberBean);
+            
 
-        /* securityContextHolder에 저장 */
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        /* authentication사용해 jwt token 생성 */
-        String jwt = tokenProvider.createToken(authentication);
+            result.put("jwt", tokenBean);
+            result.put("httpHeaders", httpHeaders);
+            result.put("userId", memberBean.getLoginId());
+            result.put("memberBean", returnMemberBean);
+            result.put("loginStatus", "success");
+            
+                        return ResponseEntity.ok(result);
+        } catch (BadCredentialsException e) {
+            // 인증 실패 시
+            result.put("error", "Bad credentials");
+            result.put("loginStatus", "fail");
 
-        /* http header 토큰 추가 */
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-        tokenBean.setToken(jwt);
-        result.put("jwt", tokenBean);
-        result.put("httpHeaders", httpHeaders);
-
-        return result;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
     }
+
+
+
+
+
+
 }

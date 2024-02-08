@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -18,6 +18,15 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from "axios";
 
 const Login = () => {
+
+
+  const [memberInfo, setMemberInfo] = useState({
+    loginId: '',
+    loginPassword: '',
+    memName: '',
+  });
+
+
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -33,17 +42,30 @@ const Login = () => {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="UserId" autoComplete="username" />
+
+                      {/* 아이디 입력 */}
+                      <CFormInput
+                        placeholder="UserId"
+                        autoComplete="username"
+                        name="loginId"
+                        onChange={changeMemberInfo}
+                      />
+
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
+
+                      {/* 비밀번호 입력 */}
                       <CFormInput
                         type="password"
                         placeholder="Password"
                         autoComplete="current-password"
+                        name="loginPassword"
+                        onChange={changeMemberInfo}
                       />
+
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
@@ -85,28 +107,62 @@ const Login = () => {
   )
 
 
+  /** id pw 값 할당 */
+  function changeMemberInfo(e){
+    const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
+    setMemberInfo({
+      ...memberInfo, // 기존의 input 객체를 복사한 뒤
+      [name]: value // name 키를 가진 값을 value 로 설정
+    });
+
+  }
+
+
+
+
+  /** 로그인 버튼 클릭시 */
   function LoginButtonClick() {
-    debugger;
-
-    var loginId = "hyoke3";
-    var loginPassword = "password";
-
+    // 추후 유효성 검사 추가 할것
 
     axios({
       url: '/authenticate',
       method: 'post',
       params: {
-        loginId: loginId,
-        loginPassword: loginPassword
+        loginId: memberInfo.loginId,
+        loginPassword: memberInfo.loginPassword
       }
     })
       .then(function (res) {
-        debugger;
-        // 세션처럼  jwt에 사용자 데이터 담는 처리 필요함
+        // 로그인 성공
+        if(res.data.loginStatus == 'success'){
+
+          // 로컬 스토리지에 데이터 담기
+          localStorage.setItem('token', res.data.jwt.token);
+          localStorage.setItem('loginId', res.data.userId);
+          localStorage.setItem('memberBean', JSON.stringify(res.data.memberBean));
+
+          // 스토리지에서 객체 추출 예시)
+          // JSON.parse(localStorage.getItem('memberBean'));
+
+          var welcomeMsg = '환영합니다 ' + res.data.memberBean.memName + ' 님' ;
+          alert(welcomeMsg);
+
+        }else{
+          alert('로그인 오류');
+        }
+
+
+
 
       })
-      .catch(function (err) {
-        alert('(오류)');
+      .catch(function (res) {
+        // 로그인 실패
+        if(res.response.data.loginStatus == 'fail'){
+          alert('id pw 를 확인 해주세요');
+        }else{
+          alert('로그인 오류');
+        }
+
       });
 
 
