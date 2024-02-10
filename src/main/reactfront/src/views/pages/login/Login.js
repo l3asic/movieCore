@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -18,6 +18,8 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from "axios";
 
 const Login = () => {
+
+  const navigate  = useNavigate();
 
 
   const [memberInfo, setMemberInfo] = useState({
@@ -64,6 +66,11 @@ const Login = () => {
                         autoComplete="current-password"
                         name="loginPassword"
                         onChange={changeMemberInfo}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            LoginButtonClick();
+                          }
+                        }}
                       />
 
                     </CInputGroup>
@@ -146,6 +153,9 @@ const Login = () => {
 
           var welcomeMsg = '환영합니다 ' + res.data.memberBean.memName + ' 님' ;
           alert(welcomeMsg);
+
+          // 로그인 후 메인으로 이동
+          navigate('/#/dashboard');
 
         }else{
           alert('로그인 오류');
