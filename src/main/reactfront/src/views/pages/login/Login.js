@@ -155,7 +155,7 @@ const Login = () => {
           alert(welcomeMsg);
 
           // 로그인 후 메인으로 이동
-          navigate('/#/dashboard');
+          navigate('/dashboard');
 
         }else{
           alert('로그인 오류');

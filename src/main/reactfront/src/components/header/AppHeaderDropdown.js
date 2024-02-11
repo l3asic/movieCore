@@ -36,10 +36,10 @@ const AppHeaderDropdown = ({ onLogout }) => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
-        <CDropdownItem href="#/login">
+        {/*<CDropdownItem href="#/login">
           <CIcon icon={cilBell} className="me-2" />
           로그인
-        </CDropdownItem>
+        </CDropdownItem>*/}
 
 
 

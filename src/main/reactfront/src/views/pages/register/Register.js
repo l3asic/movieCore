@@ -15,6 +15,7 @@ import {
 import CIcon from '@coreui/icons-react';
 import {cilAddressBook, cilGroup, cilLockLocked, cilRoom, cilUser} from "@coreui/icons";
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 const Register = () => {
   const [memberInfo, setMemberInfo] = useState({
@@ -26,6 +27,8 @@ const Register = () => {
     addressInfo: '',
     email: '',
   });
+
+  const navigate  = useNavigate();
 
   useEffect(() => {
     // Daum 우편번호 서비스 스크립트 로드
@@ -190,6 +193,11 @@ const Register = () => {
     }).then(function (res){
       if(res.data.succesResult){
         alert(res.data.memberVo.memberBean.loginId + " 가입성공");
+
+        // 로그인 화면으로 이동
+        navigate('/login');
+
+
       }else{
         alert("가입 그냥 실패?");
       }

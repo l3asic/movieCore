@@ -43,7 +43,7 @@ const AppHeader = () => {
     setIsLogin(false);
 
     // 메인화면으로 (새로고침)
-    navigate('/#/dashboard');
+    navigate('/dashboard');
 
   };
 
