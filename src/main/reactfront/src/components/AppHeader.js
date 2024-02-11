@@ -37,6 +37,7 @@ const AppHeader = () => {
 
     localStorage.removeItem('memberBean');
     localStorage.removeItem('loginId');
+    localStorage.removeItem('memRole');
     localStorage.removeItem('token');
 
     // isLogin 상태값 업데이트

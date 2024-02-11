@@ -146,6 +146,7 @@ const Login = () => {
           // 로컬 스토리지에 데이터 담기
           localStorage.setItem('token', res.data.jwt.token);
           localStorage.setItem('loginId', res.data.userId);
+          localStorage.setItem('memRole', res.data.memRole);
           localStorage.setItem('memberBean', JSON.stringify(res.data.memberBean));
 
           // 스토리지에서 객체 추출 예시)

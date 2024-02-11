@@ -63,6 +63,7 @@ public class AuthController {
             result.put("jwt", tokenBean);
             result.put("httpHeaders", httpHeaders);
             result.put("userId", memberBean.getLoginId());
+            result.put("memRole", returnMemberBean.getMemRole());
             result.put("memberBean", returnMemberBean);
             result.put("loginStatus", "success");
             
