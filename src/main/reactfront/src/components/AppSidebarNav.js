@@ -21,6 +21,12 @@ export const AppSidebarNav = ({ items }) => {
   }
 
   const navItem = (item, index) => {
+
+    // 관리자 모듈 예외 처리
+    if(item.name == "관리자" && localStorage.getItem('memRole') != "ADMIN"){
+      return null;
+    }
+
     const { component, name, badge, icon, ...rest } = item
     const Component = component
     return (
@@ -37,6 +43,12 @@ export const AppSidebarNav = ({ items }) => {
     )
   }
   const navGroup = (item, index) => {
+
+    // 관리자 모듈 예외 처리
+    if(item.name == "관리자" && localStorage.getItem('memRole') != "ADMIN"){
+      return null;
+    }
+
     const { component, name, icon, to, ...rest } = item
     const Component = component
     return (
