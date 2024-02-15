@@ -16,7 +16,7 @@ public class MovVo {
     private MovieBean movieBean;
 
     /** 영화 리스트 */
-     private ArrayList<MovieBean> movieBeanList;
+    private ArrayList<MovieBean> movieBeanList;
 
 
     /** 검색 조건 */
