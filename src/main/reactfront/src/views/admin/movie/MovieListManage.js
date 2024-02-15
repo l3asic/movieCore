@@ -14,6 +14,8 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import Paging from "../../uitils/Paging";
+import {cilLoopCircular} from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 
 function MovieListManage() {
 
@@ -69,6 +71,9 @@ function MovieListManage() {
             </CButton>
             <CButton color="danger" variant="outline" style={{ whiteSpace: 'nowrap' }}>
               삭제
+            </CButton>
+            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap' }}>
+              <CIcon icon={cilLoopCircular} />
             </CButton>
           </CForm>
         </CContainer>
