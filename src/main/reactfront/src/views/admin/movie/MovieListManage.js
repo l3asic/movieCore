@@ -41,7 +41,7 @@ function MovieListManage() {
   const [selectAll, setSelectAll] = useState(false);
 
   useEffect(() => {
-    selectMovieList();
+    selectMovieListAdmin();
   }, []);
 
   // 검색조건 및 검색어 관리
@@ -70,7 +70,7 @@ function MovieListManage() {
       sortKey = key;
       sortOdr = 'asc';
     }
-    selectMovieList();
+    selectMovieListAdmin();
   };
 
   return (
@@ -211,7 +211,7 @@ function MovieListManage() {
 
 
   /** 영화 리스트 조회 */
-  function selectMovieList(newPage) {
+  function selectMovieListAdmin(newPage) {
     if (newPage != null) {  // 페이지 이동시
       movVo.paging.currentPage = newPage;
 
@@ -221,7 +221,7 @@ function MovieListManage() {
     }
 
     axios({
-      url: '/selectMovieList',
+      url: '/selectMovieListAdmin',
       method: 'post',
       params: {
         newPage : newPage,
@@ -258,7 +258,7 @@ function MovieListManage() {
 
   /** 페이지 이동 */
   function handlePageChange(newPage) {
-    selectMovieList(newPage);
+    selectMovieListAdmin(newPage);
   }
 
 
@@ -280,7 +280,7 @@ function MovieListManage() {
 
   /** 검색 버튼 클릭 시 */
   function searchMovieList(){
-    selectMovieList();
+    selectMovieListAdmin();
   }
 
 
@@ -296,7 +296,7 @@ function MovieListManage() {
     sortOdr = '';
 
     // 초기화된 조건으로 리스트 조회
-    selectMovieList();
+    selectMovieListAdmin();
 
   }
 
@@ -318,7 +318,7 @@ function MovieListManage() {
         // 삭제 성공 시 처리
         alert(res.data.successMsg);
         // 삭제 후 영화 목록 다시 불러오기
-        selectMovieList();
+        selectMovieListAdmin();
       })
       .catch(function (err) {
         // 삭제 실패 시 메세지

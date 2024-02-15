@@ -24,9 +24,9 @@ public class MovMovieController {
 
 
     /** 관리자 모듈 - 영화 목록 조회 */
-    @PostMapping(value = "/selectMovieList")
+    @PostMapping(value = "/selectMovieListAdmin")
     @ResponseBody
-    public Map<String, Object> selectMovieList(MovVo movVo) throws Exception {
+    public Map<String, Object> selectMovieListAdmin(MovVo movVo) throws Exception {
 
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
@@ -35,7 +35,7 @@ public class MovMovieController {
         try {
 
             movVo.setPaging(new Paging());
-            movVo.getPaging().setTotalItems(movieService.selectMovieListTotalCnt(movVo));
+            movVo.getPaging().setTotalItems(movieService.selectMovieListTotalCntAdmin(movVo));
 
             // 페이지 이동시
             if(movVo.getNewPage() != 0){
@@ -43,7 +43,7 @@ public class MovMovieController {
                 movVo.getPaging().setCurrentPage(movVo.getNewPage());
             }
 
-            movVo.setMovieBeanList(movieService.selectMovieList(movVo));
+            movVo.setMovieBeanList(movieService.selectMovieListAdmin(movVo));
             resMap.put("movVo", movVo);
             successResult = true;
 
@@ -70,7 +70,7 @@ public class MovMovieController {
 
         try {
             // 영화 삭제
-            int sucCnt = movieService.movieListStateDelete(movVo);
+            int sucCnt = movieService.movieListStateDeleteAdmin(movVo);
 
             if(movVo.getMovieBeanList().size() == sucCnt){
                 successResult =true;

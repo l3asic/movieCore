@@ -10,9 +10,9 @@ import java.util.ArrayList;
 @Mapper
 public interface MovMovieMapper {
 
-    ArrayList<MovieBean> selectMovieList(MovVo movVo);
+    ArrayList<MovieBean> selectMovieListAdmin(MovVo movVo);
 
-    int selectMovieListTotalCnt(MovVo movVo);
+    int selectMovieListTotalCntAdmin(MovVo movVo);
 
-    int movieListStateDelete(MovVo movVo);
+    int movieListStateDeleteAdmin(MovVo movVo);
 }

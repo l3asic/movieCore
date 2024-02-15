@@ -20,7 +20,7 @@
     </resultMap>
 
     <!-- 영화 리스트 토탈 갯수 조회 -->
-    <select id="selectMovieListTotalCnt" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
+    <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
         SELECT
         count(MM.movie_cd) totalCnt
         FROM
@@ -51,7 +51,7 @@
 
 
     <!-- 영화 리스트 조회 -->
-    <select id="selectMovieList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+    <select id="selectMovieListAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
         SELECT
         MM.movie_cd,
         MM.movie_nm,
@@ -122,7 +122,7 @@
 
 
     <!-- 영화 상태값 삭제로 변경 -->
-    <update id="movieListStateDelete" parameterType="com.example.movieCore.movie.vo.MovVo">
+    <update id="movieListStateDeleteAdmin" parameterType="com.example.movieCore.movie.vo.MovVo">
         UPDATE MOV_MOVIE
         SET STATE = 'D'
         WHERE MOVIE_CD IN

@@ -15,16 +15,16 @@ public class MovMovieServiceImpl {
     @Autowired
     private MovMovieMapper movMovieMapper;
 
-    public ArrayList<MovieBean> selectMovieList(MovVo movVo) {
-        return movMovieMapper.selectMovieList(movVo);
+    public ArrayList<MovieBean> selectMovieListAdmin(MovVo movVo) {
+        return movMovieMapper.selectMovieListAdmin(movVo);
     }
 
 
-    public int selectMovieListTotalCnt(MovVo movVo) {
-        return movMovieMapper.selectMovieListTotalCnt(movVo);
+    public int selectMovieListTotalCntAdmin(MovVo movVo) {
+        return movMovieMapper.selectMovieListTotalCntAdmin(movVo);
     }
 
-    public int movieListStateDelete(MovVo movVo) {
-        return movMovieMapper.movieListStateDelete(movVo);
+    public int movieListStateDeleteAdmin(MovVo movVo) {
+        return movMovieMapper.movieListStateDeleteAdmin(movVo);
     }
 }
