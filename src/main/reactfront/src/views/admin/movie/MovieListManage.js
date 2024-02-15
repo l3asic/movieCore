@@ -72,9 +72,28 @@ function MovieListManage() {
               ]}
               onChange={searchFilter} value={schFilter}
             />
-            <CFormInput type="search" className="me-2" placeholder="Search" onChange={searchText} value={schText} name={schText}/>
+            <CFormInput
+              type="search"
+              className="me-2"
+              placeholder="Search"
+              onChange={searchText}
+              value={schText}
+              name={schText}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  searchMovieList();
+                }
+              }}
+            />
 
-            <CButton color="success" variant="outline" className="me-2" style={{ whiteSpace: 'nowrap' }} onClick={searchMovieList} id="searchBtn">
+            <CButton
+              color="success"
+              variant="outline"
+              className="me-2"
+              style={{ whiteSpace: 'nowrap' }}
+              onClick={searchMovieList}
+              id="searchBtn"
+            >
               검색
             </CButton>
 
