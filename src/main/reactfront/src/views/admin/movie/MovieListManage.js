@@ -66,7 +66,7 @@ function MovieListManage() {
               onChange={searchFilter} value={schFilter}
             />
             <CFormInput type="search" className="me-2" placeholder="Search" onChange={searchText} value={schText} name={schText}/>
-            <CButton color="success" variant="outline" className="me-2" style={{ whiteSpace: 'nowrap' }} onClick={selectMovieList} id="searchBtn">
+            <CButton color="success" variant="outline" className="me-2" style={{ whiteSpace: 'nowrap' }} onClick={searchMovieList} id="searchBtn">
               검색
             </CButton>
             <CButton color="danger" variant="outline" style={{ whiteSpace: 'nowrap' }}>
@@ -124,21 +124,19 @@ function MovieListManage() {
   );
 
   function selectMovieList(newPage) {
-    if (newPage != null) {
-      if ("searchBtn") { // "searchBtn" 버튼 클릭 여부 확인
-        movVo.paging = null; // "searchBtn" 클릭 시 brdVo.paging을 null로 설정
-      } else {
-        movVo.paging.currentPage = newPage;
-      }
-    } else {
+    if (newPage != null) {  // 페이지 이동시
+      movVo.paging.currentPage = newPage;
+
+    } else {  // 최초 조회, 검색 시
       movVo.paging = null;
+      newPage = 0;
     }
 
     axios({
       url: '/selectMovieList',
       method: 'post',
       params: {
-        paging: movVo.paging,
+        newPage : newPage,
         searchFilter: schFilter,
         searchText: schText
       }
@@ -183,6 +181,15 @@ function MovieListManage() {
     setMovVo((prevMovVo) => ({ ...prevMovVo, movieBeanList: updatedList }));
     setSelectAll(updatedList.every((movie) => movie.selected));
   }
+
+
+
+  /** 검색 버튼 클릭 시 */
+  function searchMovieList(){
+    selectMovieList();
+  }
+
+
 }
 
 export default MovieListManage;

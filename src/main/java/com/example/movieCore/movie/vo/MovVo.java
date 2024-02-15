@@ -25,6 +25,11 @@ public class MovVo {
 
     /** 페이징 */
     private Paging paging;
+    
+    /** 페이지 이동시 새페이지 번호 */
+    private int newPage;
+
+
 
     private String searchFilter;
     private String searchText;
