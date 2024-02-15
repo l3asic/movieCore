@@ -77,7 +77,6 @@
             POINT_AVG,
             POINT_TOTAL_CNT,
             TOTAL_VIEW_CNT,
-            STATE,
             PREVIEW_URL
         )
         VALUES
@@ -102,7 +101,6 @@
                 #{migMovieInfoBean.pointAvg},
                 #{migMovieInfoBean.pointTotalCnt},
                 #{migMovieInfoBean.totalViewCnt},
-                'B',
                 #{migMovieInfoBean.previewUrl}
             )
 
