@@ -84,7 +84,39 @@
                 )
             </otherwise>
         </choose>
-        ORDER BY MM.movie_cd
+
+        /* 정렬 */
+        <if test="sortKey != null and sortOdr != null">
+            ORDER BY
+            <choose>
+                <when test="sortKey == 'movieCd'">
+                    MM.movie_cd
+                </when>
+                <when test="sortKey == 'movieNm'">
+                    MM.movie_nm
+                </when>
+                <when test="sortKey == 'prdtYear'">
+                    MM.prdt_year
+                </when>
+                <when test="sortKey == 'repGenreNm'">
+                    MM.rep_genre_nm
+                </when>
+                <when test="sortKey == 'repGenreNm'">
+                    MM.state
+                </when>
+                <otherwise>
+                    MM.movie_cd
+                </otherwise>
+            </choose>
+            <if test="sortOdr == 'asc'">
+                ASC
+            </if>
+            <if test="sortOdr == 'desc'">
+                DESC
+            </if>
+        </if>
+
+        /* 페이징 */
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
 

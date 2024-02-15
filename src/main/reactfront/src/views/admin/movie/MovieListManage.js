@@ -16,7 +16,8 @@ import axios from "axios";
 import Paging from "../../uitils/Paging";
 import {
   cilLoopCircular,
-  cilTrash
+  cilTrash,
+  cilSwapVertical
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
@@ -46,6 +47,8 @@ function MovieListManage() {
   // 검색조건 및 검색어 관리
   let [schFilter, setSchFilter] = useState('');
   let [schText, setSchText] = useState('');
+  let [sortKey, setSortKey] = useState(); // 정렬 기준 컬럼
+  let [sortOdr, setSortOdr] = useState(); // 정렬
 
 
   const searchFilter = event => {
@@ -54,6 +57,20 @@ function MovieListManage() {
 
   const searchText = event => {
     setSchText(event.target.value);
+  };
+
+
+  // 정렬 함수
+  const sortColumn = (key) => {
+    if (sortKey === key) {
+      // 동일한 컬럼을 클릭한 경우 정렬 순서를 변경
+      sortOdr = (sortOdr === 'asc' ? 'desc' : 'asc');
+    } else {
+      // 다른 컬럼을 클릭한 경우 정렬 기준을 변경하고 기본 순서는 오름차순으로 설정
+      sortKey = key;
+      sortOdr = 'asc';
+    }
+    selectMovieList();
   };
 
   return (
@@ -132,6 +149,7 @@ function MovieListManage() {
       <CTable color="dark" striped className="mt-3 mb-lg-5">
         <CTableHead>
           <CTableRow>
+            {/* 체크박스 */}
             <CTableHeaderCell scope="col" style={{ width: '50px' }}>
               <CFormCheck
                 id="selectAllCheckBox"
@@ -139,11 +157,32 @@ function MovieListManage() {
                 onChange={() => handleSelectAll()}
               />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">영화 고유번호</CTableHeaderCell>
-            <CTableHeaderCell scope="col">영화 제목</CTableHeaderCell>
-            <CTableHeaderCell scope="col">개봉년도</CTableHeaderCell>
-            <CTableHeaderCell scope="col">대표 장르</CTableHeaderCell>
-            <CTableHeaderCell scope="col">상태</CTableHeaderCell>
+
+
+            <CTableHeaderCell scope="col" name="movieCd">
+              영화 고유번호
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('movieCd')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="movieNm">
+              영화 제목
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('movieNm')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="prdtYear">
+              개봉년도
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('prdtYear')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="repGenreNm">
+              대표 장르
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('repGenreNm')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="state">
+              상태
+              {/* 정렬을 위한 화살표 아이콘 */}
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('state')} />
+            </CTableHeaderCell>
+
+
+
           </CTableRow>
         </CTableHead>
 
@@ -187,7 +226,9 @@ function MovieListManage() {
       params: {
         newPage : newPage,
         searchFilter: schFilter,
-        searchText: schText
+        searchText: schText,
+        sortKey: sortKey, // 정렬 기준 컬럼
+        sortOdr: sortOdr // 정렬 순서
       }
     })
       .then(function (res) {
@@ -205,6 +246,9 @@ function MovieListManage() {
         }
 
         setMovVo((prevMovVo) => ({ ...prevMovVo, movieBeanList, paging }));
+        setSortKey(res.data.movVo.sortKey);
+        setSortOdr(res.data.movVo.sortOdr);
+
       })
       .catch(function (err) {
         alert('(오류)');
@@ -246,6 +290,10 @@ function MovieListManage() {
     // 검색조건 및 검색어 초기화 (useState 미사용으로 강제로 즉시 초기화)
     schFilter = '';
     schText = '';
+
+    // 정렬 초기화
+    sortKey = '';
+    sortOdr = '';
 
     // 초기화된 조건으로 리스트 조회
     selectMovieList();

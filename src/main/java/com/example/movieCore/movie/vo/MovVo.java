@@ -30,9 +30,11 @@ public class MovVo {
     private int newPage;
 
 
-
     private String searchFilter;
     private String searchText;
+
+    private String sortKey;
+    private String sortOdr;
 
 
 }
