@@ -59,10 +59,10 @@ public class MovMovieController {
 
 
 
-    /** 영화 상태값 삭제로 변경 */
-    @PostMapping(value = "/deleteMovieList")
+    /** 관리자 모듈 - 영화 상태값 삭제로 변경 */
+    @PostMapping(value = "/deleteMovieListAdmin")
     @ResponseBody
-    public Map<String, Object> deleteMovieList(@RequestBody MovVo movVo) throws Exception {
+    public Map<String, Object> deleteMovieListAdmin(@RequestBody MovVo movVo) throws Exception {
 
         boolean successResult = false;
         String successMsg = "";

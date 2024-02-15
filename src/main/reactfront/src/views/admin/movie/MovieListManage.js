@@ -86,7 +86,7 @@ function MovieListManage() {
             <CButton
               color="black" variant="outline"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-              onClick={deleteTheMovieList}
+              onClick={deleteTheMovieListAdmin}
             >
               <CIcon icon={cilTrash} />
             </CButton>
@@ -302,13 +302,13 @@ function MovieListManage() {
 
 
   /** 영화 삭제 상태로 변경 */
-  function deleteTheMovieList(){
+  function deleteTheMovieListAdmin(){
 
     // 체크된 영화 목록 필터링
     const selectedMovies = movVo.movieBeanList.filter(movie => movie.selected);
 
     axios({
-      url: '/deleteMovieList',
+      url: '/deleteMovieListAdmin',
       method: 'post',
       data: {
         movieBeanList: selectedMovies
