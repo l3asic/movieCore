@@ -75,15 +75,15 @@ const Login = () => {
 
                     </CInputGroup>
                     <CRow>
-                      <CCol xs={6}>
+                      <CCol xs={4}>
                         <CButton color="primary" className="px-4"
                         onClick={LoginButtonClick}>
                           Login
                         </CButton>
                       </CCol>
-                      <CCol xs={6} className="text-right">
+                      <CCol xs={8} className="text-right">
                         <CButton color="link" className="px-0">
-                          Forgot password?
+                          비밀번호를 잊으셨나요?
                         </CButton>
                       </CCol>
                     </CRow>
@@ -93,14 +93,13 @@ const Login = () => {
               <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Sign up</h2>
+                    <h2>임시 제목</h2>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
+                      임시 텍스트
                     </p>
                     <Link to="/register">
                       <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
+                        회원 가입
                       </CButton>
                     </Link>
                   </div>
@@ -125,11 +124,13 @@ const Login = () => {
   }
 
 
-
-
   /** 로그인 버튼 클릭시 */
   function LoginButtonClick() {
-    // 추후 유효성 검사 추가 할것
+
+    // 유효성 검사 수행
+    if (!validateLoginInfo()) {
+      return;
+    }
 
     axios({
       url: '/authenticate',
@@ -169,7 +170,7 @@ const Login = () => {
       .catch(function (res) {
         // 로그인 실패
         if(res.response.data.loginStatus == 'fail'){
-          alert('id pw 를 확인 해주세요');
+          alert('id 혹은 pw 를 확인 해주세요');
         }else{
           alert('로그인 오류');
         }
@@ -180,6 +181,27 @@ const Login = () => {
 
 
 
+  }
+
+
+  /** 로그인 유효성 검사  */
+  function validateLoginInfo() {
+    const { loginId, loginPassword } = memberInfo;
+
+    // 아이디와 비밀번호가 비어 있는지 확인
+    if (!loginId || !loginPassword) {
+      alert('아이디와 비밀번호를 모두 입력해주세요');
+      return false;
+    }
+
+    // 비밀번호에 공백이 포함되어 있는지 검사
+    if (/\s/.test(loginPassword)) {
+      alert('비밀번호에는 공백이 포함될 수 없습니다');
+      return false;
+    }
+
+    // 아이디와 비밀번호가 모두 입력되어 있다면 유효성 검사 통과
+    return true;
   }
 
 

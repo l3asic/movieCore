@@ -59,14 +59,20 @@ const Register = () => {
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm>
-                  <h1>Register</h1>
-                  <p className="text-medium-emphasis">Create your account</p>
+                  <h1>회원 가입</h1>
+                  <p className="text-medium-emphasis">계정을 생성하세요</p>
+                  <p className="text-medium-emphasis">* 항목은 필수 입니다</p>
+                  {/* 아이디 칸*/}
+                  *
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilAddressBook} />
                     </CInputGroupText>
                     <CFormInput name="loginId" placeholder="아이디" onChange={changeMemberInfo} />
                   </CInputGroup>
+
+                  {/* 비밀번호 칸*/}
+                  *
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
@@ -77,6 +83,9 @@ const Register = () => {
                       onChange={changeMemberInfo}
                     />
                   </CInputGroup>
+
+                  {/* 비밀번호 확인 칸*/}
+                  *
                   <CInputGroup className="mb-4">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
@@ -87,6 +96,9 @@ const Register = () => {
                       onChange={changeMemberInfo}
                     />
                   </CInputGroup>
+
+                  {/* 이름 칸 */}
+                  *
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
@@ -149,6 +161,7 @@ const Register = () => {
     </div>
   )
 
+  /** 회원정보 객체 값 할당 */
   function changeMemberInfo(e){
 
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
@@ -159,6 +172,7 @@ const Register = () => {
 
   }
 
+  /** 주소 검색 및 값 할당 */
   function handleAddressSelection(selectedAddress) {
     setMemberInfo({
       ...memberInfo,
@@ -166,6 +180,7 @@ const Register = () => {
     });
   }
 
+  /** 다음 주소 api  */
   function openDaumPostcode() {
     new window.daum.Postcode({
       oncomplete: function (data) {
@@ -175,7 +190,14 @@ const Register = () => {
     }).open();
   }
 
+  /** 회원가입 버튼 클릭 */
   function signUp(){
+
+    // 유효성 검사
+    if (!validateSignUpInfo()) {
+      return;
+    }
+
     // post 버전
     axios({
       url: '/signUp', // 통신할 웹문서
@@ -192,7 +214,7 @@ const Register = () => {
 
     }).then(function (res){
       if(res.data.succesResult){
-        alert(res.data.memberVo.memberBean.loginId + " 가입성공");
+        alert(memberInfo.memName + "님 가입을 축하드립니다.");
 
         // 로그인 화면으로 이동
         navigate('/login');
@@ -207,6 +229,39 @@ const Register = () => {
     });
 
 
+  }
+
+  /** 회원가입 유효성 검사 */
+  function validateSignUpInfo() {
+    const { loginId, loginPassword, loginPasswordConfirm, memName, gender, address, email } = memberInfo;
+
+    // 필수 항목 체크
+    if (!loginId || !loginPassword || !loginPasswordConfirm || !memName || !gender){    // 필수에 주소, 이메일 제외|| !address || !email
+      alert(' * 필수 항목을 입력하세요.');
+      return false;
+    }
+
+    // 비밀번호와 비밀번호 확인 일치 여부 체크
+    if (loginPassword !== loginPasswordConfirm) {
+      alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+      return false;
+    }
+
+    // 비밀번호 길이 체크 (예시: 최소 6자 이상)
+    if (loginPassword.length < 6) {
+      alert('비밀번호는 최소 6자 이상이어야 합니다.');
+      return false;
+    }
+
+    // 이메일 유효성 체크 (예시: 정규식 사용)
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      alert('유효한 이메일 주소를 입력하세요.');
+      return false;
+    }
+
+    // 유효성 검사 통과
+    return true;
   }
 
 }
