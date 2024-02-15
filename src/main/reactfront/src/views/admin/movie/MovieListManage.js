@@ -22,8 +22,14 @@ function MovieListManage() {
   // 영화 객체 관리
   const [movVo, setMovVo] = useState({
     movieBeanList: [],
-    paging: {},
-    searchBean: {},
+    paging: {
+      totalItems: 0, // 전체 갯수 초기값 설정
+      currentPage: 0, // 현재 페이지 초기값 설정
+    },
+    searchBean: {
+      schFilter : "",
+      schText : "",
+    },
   });
 
 
@@ -34,8 +40,9 @@ function MovieListManage() {
     selectMovieList();
   }, []);
 
-  const [schFilter, setSchFilter] = useState('');
-  const [schText, setSchText] = useState('');
+  // 검색조건 및 검색어 관리
+  let [schFilter, setSchFilter] = useState('');
+  let [schText, setSchText] = useState('');
 
 
   const searchFilter = event => {
@@ -66,15 +73,20 @@ function MovieListManage() {
               onChange={searchFilter} value={schFilter}
             />
             <CFormInput type="search" className="me-2" placeholder="Search" onChange={searchText} value={schText} name={schText}/>
+
             <CButton color="success" variant="outline" className="me-2" style={{ whiteSpace: 'nowrap' }} onClick={searchMovieList} id="searchBtn">
               검색
             </CButton>
+
             <CButton color="danger" variant="outline" style={{ whiteSpace: 'nowrap' }}>
               삭제
             </CButton>
-            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap' }}>
+
+            {/* 초기화 */}
+            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap' }} onClick={refreshFilterSearch}>
               <CIcon icon={cilLoopCircular} />
             </CButton>
+
           </CForm>
         </CContainer>
       </CNavbar>
@@ -123,12 +135,14 @@ function MovieListManage() {
     </>
   );
 
+
+  /** 영화 리스트 조회 */
   function selectMovieList(newPage) {
     if (newPage != null) {  // 페이지 이동시
       movVo.paging.currentPage = newPage;
 
     } else {  // 최초 조회, 검색 시
-      movVo.paging = null;
+      movVo.paging = { totalItems: 0, currentPage: 0 }; // 기본 paging 객체를 생성하여 할당
       newPage = 0;
     }
 
@@ -162,12 +176,14 @@ function MovieListManage() {
       });
   }
 
-  // 페이지 이동
+
+  /** 페이지 이동 */
   function handlePageChange(newPage) {
     selectMovieList(newPage);
   }
 
-  // 체크박스 전체 선택
+
+  /** 체크박스 전체 선택*/
   function handleSelectAll() {
     setSelectAll((prev) => !prev);
     const updatedList = [...movVo.movieBeanList];
@@ -183,10 +199,22 @@ function MovieListManage() {
   }
 
 
-
   /** 검색 버튼 클릭 시 */
   function searchMovieList(){
     selectMovieList();
+  }
+
+
+  /** 검색, 필터 초기화  */
+  function refreshFilterSearch(){
+
+    // 검색조건 및 검색어 초기화 (useState 미사용으로 강제로 즉시 초기화)
+    schFilter = '';
+    schText = '';
+
+    // 초기화된 조건으로 리스트 조회
+    selectMovieList();
+
   }
 
 
