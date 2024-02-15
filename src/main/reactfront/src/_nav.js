@@ -111,7 +111,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: '임시) 영화 리스트',
+        name: '영화 리스트',
         to: '/movie/MovieList',
       },
       {
