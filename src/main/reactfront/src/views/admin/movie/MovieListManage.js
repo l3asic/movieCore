@@ -14,7 +14,10 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import Paging from "../../uitils/Paging";
-import {cilLoopCircular} from "@coreui/icons";
+import {
+  cilLoopCircular,
+  cilTrash
+} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
 function MovieListManage() {
@@ -60,7 +63,18 @@ function MovieListManage() {
       {/** 상단 네비 */}
       <CNavbar colorScheme="light" className="bg-light">
         <CContainer fluid>
-          <CNavbarBrand href="#">Total : {movVo.paging.totalItems}</CNavbarBrand>
+          <div className="d-flex align-items-center">
+
+            {/** 삭제 버튼 */}
+            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}>
+              <CIcon icon={cilTrash} />
+            </CButton>
+
+            {/** 토탈 갯수 */}
+            <CNavbarBrand className="ms-3">Total : {movVo.paging.totalItems}</CNavbarBrand>
+          </div>
+
+
           <CForm className="d-flex">
             <CFormSelect
               options={[
@@ -87,26 +101,24 @@ function MovieListManage() {
             />
 
             <CButton
-              color="success"
+              color="black"
               variant="outline"
               className="me-2"
-              style={{ whiteSpace: 'nowrap' }}
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
               onClick={searchMovieList}
               id="searchBtn"
             >
               검색
             </CButton>
 
-            <CButton color="danger" variant="outline" style={{ whiteSpace: 'nowrap' }}>
-              삭제
-            </CButton>
 
             {/* 초기화 */}
-            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap' }} onClick={refreshFilterSearch}>
+            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap', border: '1px solid gray' }} onClick={refreshFilterSearch}>
               <CIcon icon={cilLoopCircular} />
             </CButton>
 
           </CForm>
+
         </CContainer>
       </CNavbar>
 
