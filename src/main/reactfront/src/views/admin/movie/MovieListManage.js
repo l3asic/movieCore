@@ -66,7 +66,11 @@ function MovieListManage() {
           <div className="d-flex align-items-center">
 
             {/** 삭제 버튼 */}
-            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}>
+            <CButton
+              color="black" variant="outline"
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+              onClick={deleteTheMovieList}
+            >
               <CIcon icon={cilTrash} />
             </CButton>
 
@@ -245,6 +249,33 @@ function MovieListManage() {
 
     // 초기화된 조건으로 리스트 조회
     selectMovieList();
+
+  }
+
+
+  /** 영화 삭제 상태로 변경 */
+  function deleteTheMovieList(){
+
+    // 체크된 영화 목록 필터링
+    const selectedMovies = movVo.movieBeanList.filter(movie => movie.selected);
+
+    axios({
+      url: '/deleteMovieList',
+      method: 'post',
+      data: {
+        movieBeanList: selectedMovies
+      }
+    })
+      .then(function (res) {
+        // 삭제 성공 시 처리
+        alert(res.data.successMsg);
+        // 삭제 후 영화 목록 다시 불러오기
+        selectMovieList();
+      })
+      .catch(function (err) {
+        // 삭제 실패 시 메세지
+        alert(err.data.successMsg);
+      });
 
   }
 

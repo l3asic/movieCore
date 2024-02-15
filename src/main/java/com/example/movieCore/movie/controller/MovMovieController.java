@@ -59,48 +59,38 @@ public class MovMovieController {
 
 
 
-
-/*  페이징 처리 오류건 백업본
-
-
-    */
-/** 관리자 모듈 - 영화 목록 조회 *//*
-
-    @PostMapping(value = "/selectMovieList")
+    /** 영화 상태값 삭제로 변경 */
+    @PostMapping(value = "/deleteMovieList")
     @ResponseBody
-    public Map<String, Object> selectMovieList(MovVo movVo) throws Exception {
+    public Map<String, Object> deleteMovieList(@RequestBody MovVo movVo) throws Exception {
 
         boolean successResult = false;
+        String successMsg = "";
         Map<String, Object> resMap = new HashMap<>();
 
-
         try {
+            // 영화 삭제
+            int sucCnt = movieService.movieListStateDelete(movVo);
 
-            //  최초 조회 일시 (페이징 널상태)
-            if(movVo.getPaging() == null || movVo.getPaging().getTotalItems() == 0){
-                int totalCnt = 0;
-                movVo.setPaging(new Paging());
-                totalCnt = movieService.selectMovieListTotalCnt(movVo);
-                movVo.getPaging().setTotalItems(totalCnt);
+            if(movVo.getMovieBeanList().size() == sucCnt){
+                successResult =true;
+                successMsg = sucCnt + "개 영화가 삭제 되었습니다.";
+            }else{
+                successResult =false;
+                int failCnt = movVo.getMovieBeanList().size() - sucCnt;
+                successMsg = failCnt + " 개 영화가 실패 하였습니다.";
             }
-
-            // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
-            movVo.getPaging().setCurrentPage(movVo.getPaging().getCurrentPage());
-
-            movVo.setMovieBeanList(movieService.selectMovieList(movVo));
-            resMap.put("movVo", movVo);
-            successResult = true;
 
         }catch (Exception e){
 
         }
 
-
         resMap.put("successResult", successResult);
-        return resMap;
+        resMap.put("successMsg", successMsg);
 
+        return resMap;
     }
-*/
+
 
 
 

@@ -23,4 +23,8 @@ public class MovMovieServiceImpl {
     public int selectMovieListTotalCnt(MovVo movVo) {
         return movMovieMapper.selectMovieListTotalCnt(movVo);
     }
+
+    public int movieListStateDelete(MovVo movVo) {
+        return movMovieMapper.movieListStateDelete(movVo);
+    }
 }
