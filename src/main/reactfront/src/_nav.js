@@ -60,7 +60,7 @@ const _nav = [
           },
           {
             component: CNavItem,
-            name: ' - 영화 리스트 관리',
+            name: ' - 영화 목록 관리',
             to: '/admin/MovieListManage',
           },
         ],
@@ -111,7 +111,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: '영화 리스트',
+        name: '영화 목록',
         to: '/movie/MovieList',
       },
       {
