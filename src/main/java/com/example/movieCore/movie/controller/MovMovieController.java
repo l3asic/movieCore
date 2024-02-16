@@ -92,6 +92,49 @@ public class MovMovieController {
     }
 
 
+    /** 영화 모듈 - 영화 목록 조회 */
+    @PostMapping(value = "/selectMovieList")
+    @ResponseBody
+    public Map<String, Object> selectMovieList(MovVo movVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+
+        try {
+
+            movVo.setPaging(new Paging());
+
+            movVo.getPaging().setTotalItems(movieService.selectMovieListTotalCntAdmin(movVo));
+
+            // 페이지 이동시
+            if(movVo.getNewPage() != 0){
+                // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
+                movVo.getPaging().setCurrentPage(movVo.getNewPage());
+            }
+
+
+            // 일반 영화 목록은 1페이지당 9개씩 세팅
+            movVo.getPaging().setItemsPerPage(9);
+
+            movVo.setMovieBeanList(movieService.selectMovieListAdmin(movVo));
+            resMap.put("movVo", movVo);
+            successResult = true;
+
+        }catch (Exception e){
+
+        }
+
+
+        resMap.put("successResult", successResult);
+        return resMap;
+
+    }
+
+
+
+
+
 
 
 }

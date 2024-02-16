@@ -14,6 +14,7 @@ import {
 } from '@coreui/react';
 import ReactImg from '../../assets/images/react.jpg';
 import axios from 'axios';
+import Paging from '../uitils/Paging';
 
 const MovieList = () => {
   const cardStyle = {
@@ -22,6 +23,10 @@ const MovieList = () => {
 
   const [movVo, setMovVo] = useState({
     movieBeanList: [],
+    paging: {
+      totalItems: 0, // 전체 갯수 초기값 설정
+      currentPage: 0, // 현재 페이지 초기값 설정
+    },
     searchBean : {
       searchFilter : "",
       searchText : ""
@@ -137,27 +142,56 @@ const MovieList = () => {
         </div>
       )}
 
+      {/** 페이징 처리 */}
+      <Paging
+        paging={movVo.paging}
+        onPageChange={handlePageChange}
+        itemsPerPage={9}
+      />
+
 
     </>
   );
 
   /** 전체 영화 리스트 조회 */
-  function selectMovieList() {
+  function selectMovieList(newPage) {
+
+    if (newPage != null) {  // 페이지 이동시
+      movVo.paging.currentPage = newPage;
+
+    } else {  // 최초 조회, 검색 시
+      movVo.paging = { totalItems: 0, currentPage: 0 }; // 기본 paging 객체를 생성하여 할당
+      newPage = 0;
+    }
+
+
     axios({
       url: '/selectMovieList',
       method: 'post',
       params: {
+        newPage : newPage,
         searchFilter : movVo.searchBean.searchFilter,
         searchText : movVo.searchBean.searchText
       }
     })
       .then(function (res) {
         const movieBeanList = res.data.movVo.movieBeanList;
-        setMovVo({movieBeanList}); // setMovVo로 상태를 업데이트
+        const paging = res.data.movVo.paging;
+        setMovVo(prevState => ({
+          ...prevState,
+          movieBeanList: movieBeanList,
+          paging: paging
+        }));
       })
       .catch(function (err) {
-        alert('등록 실패 (오류)');
+        alert('실패 (오류)');
       });
+  }
+
+
+  /** 페이지 이동 */
+  function handlePageChange(newPage) {
+    selectMovieList(newPage);
   }
 
 
