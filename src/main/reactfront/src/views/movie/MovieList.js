@@ -10,11 +10,13 @@ import {
   CFormSelect,
   CFormCheck,
   CForm,
-  CCol
+  CCol, CButton
 } from '@coreui/react';
 import ReactImg from '../../assets/images/react.jpg';
 import axios from 'axios';
 import Paging from '../uitils/Paging';
+import {cilLoopCircular, cilMagnifyingGlass} from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
 
 const MovieList = () => {
   const cardStyle = {
@@ -76,7 +78,7 @@ const MovieList = () => {
           />
         </CCol>*/}
 
-        <CCol md={6}>
+        <CCol md={5}>
         </CCol>
 
 
@@ -103,6 +105,23 @@ const MovieList = () => {
                       onChange={changeSearch}
                       onKeyDown={movieSearch}
           />
+        </CCol>
+        <CCol md={2}>
+          <CButton
+            color="black"
+            variant="outline"
+            className="me-2"
+            style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+            id="searchBtn"
+          >
+            <CIcon icon={cilMagnifyingGlass} />
+          </CButton>
+          {/* 초기화 */}
+          <CButton color="black" variant="outline"
+                   style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+                   >
+            <CIcon icon={cilLoopCircular} />
+          </CButton>
         </CCol>
       </CForm>
 

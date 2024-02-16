@@ -17,7 +17,8 @@ import Paging from "../../uitils/Paging";
 import {
   cilLoopCircular,
   cilTrash,
-  cilSwapVertical
+  cilSwapVertical,
+  cilMagnifyingGlass
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
@@ -129,7 +130,7 @@ function MovieListManage() {
               onClick={searchMovieList}
               id="searchBtn"
             >
-              검색
+              <CIcon icon={cilMagnifyingGlass} />
             </CButton>
 
 
