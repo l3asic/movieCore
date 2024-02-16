@@ -10,7 +10,7 @@ import {
   CFormSelect,
   CFormCheck,
   CForm,
-  CCol, CButton
+  CButton, CNavbar, CContainer, CNavbarBrand
 } from '@coreui/react';
 import ReactImg from '../../assets/images/react.jpg';
 import axios from 'axios';
@@ -44,86 +44,67 @@ const MovieList = () => {
     <>
       <h4 className="mb-3">영화 리스트 페이지 입니다</h4>
 
-      {/** 상단 상태 영역 */}
-      <CForm className="row g-3 mb-4">
-          {/*<CFormCheck inline id="inlineCheckbox1" value="option1" label="1"/>
-        <CFormCheck inline id="inlineCheckbox2" value="option2" label="2"/>
-        <CFormCheck inline id="inlineCheckbox3" value="option2" label="3"/>*/}
+      {/** 상단 네비 */}
+      <CNavbar colorScheme="light" className="bg-light">
+        <CContainer fluid>
+          <div className="d-flex align-items-center">
 
-        {/*<CCol md={3}>
-          <CFormSelect
-                       aria-label="Default select example"
-                       options={[
-                         {label: '전체 년도', value: 'All'},
-                         {label: '1970', value: '1970'},
-                         {label: '1980', value: '1980'},
-                         {label: '1990', value: '1990'},
-                         {label: '2000', value: '2000'},
-                         {label: '2010', value: '2010'},
-                         {label: '2020', value: '2020'}
-                       ]}
-          />
+            {/** 토탈 갯수 */}
+            <CNavbarBrand className="ms-3">Total : {movVo.paging.totalItems}</CNavbarBrand>
+          </div>
 
-        </CCol>
+          <CForm className="d-flex m-2">
 
-        <CCol md={3}>
-          <CFormSelect
-            aria-label="Default select example"
-            options={[
-              {label: '장르박스', value: 'All'},
-              {label: '제목', value: '2'},
-              {label: '제작국가', value: '3'},
-              {label: '개봉일', value: '4'}
-            ]}
-          />
-        </CCol>*/}
+            <CFormSelect
+              options={[
+                { label: '전체', value: 'all' },
+                { label: '영화 고유번호', value: 'movieCd' },
+                { label: '제목', value: 'movieNm' },
+                { label: '대표 장르', value: 'repGenreNm' },
+                { label: '상태', value: 'state' }
+              ]}
+              /*onChange={searchFilter} value={schFilter}*/
+            />
+            <CFormInput
+              type="search"
+              className="me-2"
+              placeholder="Search"
+              /*onChange={searchText}
+              value={schText}
+              name={schText}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  searchMovieList();
+                }
+              }}*/
+            />
 
-        <CCol md={5}>
-        </CCol>
+            <CButton
+              color="black"
+              variant="outline"
+              className="me-2"
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+              /*onClick={searchMovieList}*/
+              id="searchBtn"
+            >
+              <CIcon icon={cilMagnifyingGlass} />
+            </CButton>
 
 
-        <CCol md={2}>
-          <CFormSelect
-                       aria-label="Default select example"
-                       options={[
-                         {label: '전체', value: 'all'},
-                         {label: '제목', value: 'movieNm'},
-                         {label: '제작국가', value: 'nation'},
-                         {label: '개봉일', value: 'openDt'}
-                       ]}
-                       name="searchFilter"
-                       onChange={changeSearch}
-          />
-        </CCol>
+            {/* 초기화 */}
+            <CButton color="black" variant="outline"
+                     style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+              /*onClick={refreshFilterSearch}*/
+            >
+              <CIcon icon={cilLoopCircular} />
+            </CButton>
 
-        <CCol md={3}>
-          <CFormInput
-                      type="text"
-                      placeholder="검색"
-                      aria-label="default input example"
-                      name="searchText"
-                      onChange={changeSearch}
-                      onKeyDown={movieSearch}
-          />
-        </CCol>
-        <CCol md={2}>
-          <CButton
-            color="black"
-            variant="outline"
-            className="me-2"
-            style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-            id="searchBtn"
-          >
-            <CIcon icon={cilMagnifyingGlass} />
-          </CButton>
-          {/* 초기화 */}
-          <CButton color="black" variant="outline"
-                   style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-                   >
-            <CIcon icon={cilLoopCircular} />
-          </CButton>
-        </CCol>
-      </CForm>
+          </CForm>
+
+
+        </CContainer>
+      </CNavbar>
+
 
 
 

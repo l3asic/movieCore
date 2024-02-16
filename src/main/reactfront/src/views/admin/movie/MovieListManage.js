@@ -80,7 +80,7 @@ function MovieListManage() {
 
       {/** 상단 네비 */}
       <CNavbar colorScheme="light" className="bg-light">
-        <CContainer fluid>
+        <CContainer fluid style={{ padding: 0 }}>
           <div className="d-flex align-items-center">
 
             {/** 삭제 버튼 */}
@@ -98,6 +98,7 @@ function MovieListManage() {
 
 
           <CForm className="d-flex">
+            {/* 검색조건 */}
             <CFormSelect
               options={[
                 { label: '전체', value: 'all' },
@@ -108,6 +109,8 @@ function MovieListManage() {
               ]}
               onChange={searchFilter} value={schFilter}
             />
+
+            {/* 검색어 */}
             <CFormInput
               type="search"
               className="me-2"
@@ -135,7 +138,11 @@ function MovieListManage() {
 
 
             {/* 초기화 */}
-            <CButton color="black" variant="outline" style={{ whiteSpace: 'nowrap', border: '1px solid gray' }} onClick={refreshFilterSearch}>
+            <CButton
+              color="black"
+              variant="outline"
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+              onClick={refreshFilterSearch}>
               <CIcon icon={cilLoopCircular} />
             </CButton>
 
