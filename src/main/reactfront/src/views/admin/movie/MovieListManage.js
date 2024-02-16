@@ -205,7 +205,12 @@ function MovieListManage() {
         </CTableBody>
       </CTable>
 
-      <Paging paging={movVo.paging} onPageChange={handlePageChange} />
+      <Paging
+        paging={movVo.paging}
+        onPageChange={handlePageChange}
+        itemsPerPage={10}
+      />
+
     </>
   );
 

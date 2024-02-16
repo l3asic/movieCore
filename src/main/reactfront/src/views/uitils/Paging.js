@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CPagination, CPaginationItem } from '@coreui/react';
 
-const Paging = ({ paging, onPageChange }) => {
+const Paging = ({ paging, onPageChange, itemsPerPage  }) => {
   const { currentPage, totalPages, hasPreviousPage, hasNextPage } = paging;
 
   const renderPaginationItems = () => {
     const items = [];
-    const startPage = Math.floor((currentPage - 1) / 10) * 10 + 1;
-    const endPage = Math.min(startPage + 9, totalPages);
+    const startPage = Math.floor((currentPage - 1) / itemsPerPage ) * itemsPerPage  + 1;
+    const endPage = Math.min(startPage + itemsPerPage -1, totalPages);
 
     for (let i = startPage; i <= endPage; i++) {
       items.push(
@@ -68,6 +68,7 @@ Paging.propTypes = {
     hasNextPage: PropTypes.bool,
   }),
   onPageChange: PropTypes.func,
+  itemsPerPage: PropTypes.number.isRequired, // 추가된 prop
 };
 
 export default Paging;
