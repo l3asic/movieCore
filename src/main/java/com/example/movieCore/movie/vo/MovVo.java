@@ -37,4 +37,9 @@ public class MovVo {
     private String sortOdr;
 
 
+    /** 삭제/ 복원 모드 구분값 */
+    private String mode;
+
+
+
 }

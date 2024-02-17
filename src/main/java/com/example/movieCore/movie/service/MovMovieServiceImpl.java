@@ -24,8 +24,8 @@ public class MovMovieServiceImpl {
         return movMovieMapper.selectMovieListTotalCntAdmin(movVo);
     }
 
-    public int movieListStateDeleteAdmin(MovVo movVo) {
-        return movMovieMapper.movieListStateDeleteAdmin(movVo);
+    public int updateMovieStateAdmin(MovVo movVo) {
+        return movMovieMapper.updateMovieStateAdmin(movVo);
     }
 
 

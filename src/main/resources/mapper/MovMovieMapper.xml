@@ -121,10 +121,10 @@
     </select>
 
 
-    <!-- 영화 상태값 삭제로 변경 -->
-    <update id="movieListStateDeleteAdmin" parameterType="com.example.movieCore.movie.vo.MovVo">
+    <!-- 영화 상태값 변경 -->
+    <update id="updateMovieStateAdmin" parameterType="com.example.movieCore.movie.vo.MovVo">
         UPDATE MOV_MOVIE
-        SET STATE = 'D'
+        SET STATE = #{mode}
         WHERE MOVIE_CD IN
         <foreach item="movie" collection="movieBeanList" open="(" separator="," close=")">
             #{movie.movieCd}

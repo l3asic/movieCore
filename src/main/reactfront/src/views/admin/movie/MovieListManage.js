@@ -18,7 +18,8 @@ import {
   cilLoopCircular,
   cilTrash,
   cilSwapVertical,
-  cilMagnifyingGlass
+  cilMagnifyingGlass,
+  cilRecycle
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
@@ -83,11 +84,22 @@ function MovieListManage() {
         <CContainer fluid style={{ padding: 0 }}>
           <div className="d-flex align-items-center">
 
+            {/** 복원 버튼 */}
+            <CButton
+              color="black" variant="outline"
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px' }}
+              title="영화 상태 정상으로 변경"
+              onClick={() => updateMovieStateAdmin('restore')}
+            >
+              <CIcon icon={cilRecycle} />
+            </CButton>
+
             {/** 삭제 버튼 */}
             <CButton
               color="black" variant="outline"
-              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-              onClick={deleteTheMovieListAdmin}
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px'}}
+              title="영화 상태 삭제로 변경"
+              onClick={() => updateMovieStateAdmin('delete')}
             >
               <CIcon icon={cilTrash} />
             </CButton>
@@ -314,27 +326,28 @@ function MovieListManage() {
   }
 
 
-  /** 영화 삭제 상태로 변경 */
-  function deleteTheMovieListAdmin(){
+  /** 영화 상태 정상/삭제 로 변경 */
+  function updateMovieStateAdmin(mode){
 
     // 체크된 영화 목록 필터링
     const selectedMovies = movVo.movieBeanList.filter(movie => movie.selected);
 
     axios({
-      url: '/deleteMovieListAdmin',
+      url: '/updateMovieStateAdmin',
       method: 'post',
       data: {
-        movieBeanList: selectedMovies
+        movieBeanList: selectedMovies,
+        mode : mode
       }
     })
       .then(function (res) {
-        // 삭제 성공 시 처리
+        // 상태 변경 성공 시 처리
         alert(res.data.successMsg);
-        // 삭제 후 영화 목록 다시 불러오기
+        // 상태 변경 후 영화 목록 다시 불러오기
         selectMovieListAdmin();
       })
       .catch(function (err) {
-        // 삭제 실패 시 메세지
+        // 상태 변경 실패 시 메세지
         alert(err.data.successMsg);
       });
 

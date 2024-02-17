@@ -60,25 +60,32 @@ public class MovMovieController {
 
 
     /** 관리자 모듈 - 영화 상태값 삭제로 변경 */
-    @PostMapping(value = "/deleteMovieListAdmin")
+    @PostMapping(value = "/updateMovieStateAdmin")
     @ResponseBody
-    public Map<String, Object> deleteMovieListAdmin(@RequestBody MovVo movVo) throws Exception {
+    public Map<String, Object> updateMovieStateAdmin(@RequestBody MovVo movVo) throws Exception {
 
         boolean successResult = false;
         String successMsg = "";
         Map<String, Object> resMap = new HashMap<>();
 
         try {
-            // 영화 삭제
-            int sucCnt = movieService.movieListStateDeleteAdmin(movVo);
+
+            if(movVo.getMode().equals("restore")){
+                movVo.setMode("B");
+            }else if(movVo.getMode().equals("delete")){
+                movVo.setMode("D");
+            }
+
+            int sucCnt = 0;
+            sucCnt = movieService.updateMovieStateAdmin(movVo);
 
             if(movVo.getMovieBeanList().size() == sucCnt){
                 successResult =true;
-                successMsg = sucCnt + "개 영화가 삭제 되었습니다.";
+                successMsg = sucCnt + " 개의 영화 상태가 변경되었습니다.";
             }else{
                 successResult =false;
                 int failCnt = movVo.getMovieBeanList().size() - sucCnt;
-                successMsg = failCnt + " 개 영화가 실패 하였습니다.";
+                successMsg = failCnt + " 개의 영화 상태 변경이 실패 하였습니다.";
             }
 
         }catch (Exception e){

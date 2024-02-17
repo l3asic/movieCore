@@ -14,7 +14,7 @@ public interface MovMovieMapper {
 
     int selectMovieListTotalCntAdmin(MovVo movVo);
 
-    int movieListStateDeleteAdmin(MovVo movVo);
+    int updateMovieStateAdmin(MovVo movVo);
 
 
     ArrayList<MovieBean> selectMovieList(MovVo movVo);
