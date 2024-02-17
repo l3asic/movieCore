@@ -27,4 +27,15 @@ public class MovMovieServiceImpl {
     public int movieListStateDeleteAdmin(MovVo movVo) {
         return movMovieMapper.movieListStateDeleteAdmin(movVo);
     }
+
+
+    public ArrayList<MovieBean> selectMovieList(MovVo movVo) {
+        return movMovieMapper.selectMovieList(movVo);
+    }
+
+
+    public int selectMovieListTotalCnt(MovVo movVo) {
+        return movMovieMapper.selectMovieListTotalCnt(movVo);
+    }
+
 }

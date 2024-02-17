@@ -105,7 +105,7 @@ public class MovMovieController {
 
             movVo.setPaging(new Paging());
 
-            movVo.getPaging().setTotalItems(movieService.selectMovieListTotalCntAdmin(movVo));
+            movVo.getPaging().setTotalItems(movieService.selectMovieListTotalCnt(movVo));
 
             // 페이지 이동시
             if(movVo.getNewPage() != 0){
@@ -117,7 +117,7 @@ public class MovMovieController {
             // 일반 영화 목록은 1페이지당 9개씩 세팅
             movVo.getPaging().setItemsPerPage(9);
 
-            movVo.setMovieBeanList(movieService.selectMovieListAdmin(movVo));
+            movVo.setMovieBeanList(movieService.selectMovieList(movVo));
             resMap.put("movVo", movVo);
             successResult = true;
 

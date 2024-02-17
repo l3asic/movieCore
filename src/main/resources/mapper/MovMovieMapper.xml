@@ -19,7 +19,7 @@
 
     </resultMap>
 
-    <!-- 영화 리스트 토탈 갯수 조회 -->
+    <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
         SELECT
         count(MM.movie_cd) totalCnt
@@ -50,7 +50,7 @@
     </select>
 
 
-    <!-- 영화 리스트 조회 -->
+    <!-- 관리자 - 영화 리스트 조회 -->
     <select id="selectMovieListAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
         SELECT
         MM.movie_cd,
@@ -132,6 +132,108 @@
     </update>
 
 
+
+    <!-- 영화 모듈 - 영화 리스트 토탈 갯수 조회 -->
+    <select id="selectMovieListTotalCnt" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
+        SELECT
+        count(MM.movie_cd) totalCnt
+        FROM
+        MOV_MOVIE MM
+
+        WHERE
+            MM.STATE = 'B'
+        /* 제목 검색 */
+        <choose>
+            <when test="searchFilter == 'movieCd'">
+                AND MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'movieNm'">
+                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'repGenreNm'">
+                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                )
+            </otherwise>
+        </choose>
+    </select>
+
+
+    <!-- 영화 모듈 - 영화 리스트 조회 -->
+    <select id="selectMovieList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+        SELECT
+        MM.movie_cd,
+        MM.movie_nm,
+        MM.movie_nm_en,
+        MM.prdt_year,
+        MM.open_dt,
+        MM.type_nm,
+        MM.prdt_stat_nm,
+        MM.genre_alt,
+        MM.rep_genre_nm,
+        MM.STATE
+        FROM MOV_MOVIE MM
+        WHERE
+            MM.STATE = 'B'
+        /* 제목 검색 */
+        <choose>
+            <when test="searchFilter == 'movieCd'">
+                AND MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'movieNm'">
+                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <when test="searchFilter == 'repGenreNm'">
+                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                )
+            </otherwise>
+        </choose>
+
+        /* 정렬 */
+        <if test="sortKey != null and sortOdr != null">
+            ORDER BY
+            <choose>
+                <when test="sortKey == 'movieCd'">
+                    MM.movie_cd
+                </when>
+                <when test="sortKey == 'movieNm'">
+                    MM.movie_nm
+                </when>
+                <when test="sortKey == 'prdtYear'">
+                    MM.prdt_year
+                </when>
+                <when test="sortKey == 'repGenreNm'">
+                    MM.rep_genre_nm
+                </when>
+                <when test="sortKey == 'repGenreNm'">
+                    MM.state
+                </when>
+                <otherwise>
+                    MM.movie_cd
+                </otherwise>
+            </choose>
+            <if test="sortOdr == 'asc'">
+                ASC
+            </if>
+            <if test="sortOdr == 'desc'">
+                DESC
+            </if>
+        </if>
+
+        /* 페이징 */
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+    </select>
 
 
 </mapper>
