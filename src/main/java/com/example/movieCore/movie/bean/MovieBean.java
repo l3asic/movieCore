@@ -3,11 +3,14 @@ package com.example.movieCore.movie.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Getter
 @Setter
 public class MovieBean {
+
+    /** mov_movie 테이블 */
 
     private String movieCd;
     private String movieNm;
@@ -21,8 +24,30 @@ public class MovieBean {
     private String state;
 
 
+    /** mov_movie_info 테이블 */
+    private String movieNmOg;
+    private String showTm;
+    private String nationNm;
+    private String genreNm;
+    private String cast;
+    private String castEn;
+    private String showTypes;
+    private String showTypeGroupNm;
+    private String showTypeNm;
+    private String auditNo;
+    private String watchGradeNm;
+    private String pointYn;
+    private String pointAvg;
+    private String pointTotalCnt;
+    private String totalViewCnt;
+    private String previewUrl;
+
+
+
 
     /** 제작사들 */
+    private ArrayList<MovieCompanyBean> movieCompanyBeanList;
+
 
 
     /** 감독,배우,스태프들 */
@@ -32,6 +57,7 @@ public class MovieBean {
 
 
     /** 장르 */
+    private ArrayList<MovieGenreBean> movieGenreBeanList;
 
 
 

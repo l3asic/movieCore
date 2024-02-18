@@ -4,7 +4,6 @@
 
 <mapper namespace="com.example.movieCore.movie.mapperInterface.MovMovieMapper">
 
-
     <!-- 영화 빈 -->
     <resultMap type="com.example.movieCore.movie.bean.MovieBean" id="MovieBean">
         <result column="movie_cd" property="movieCd" jdbcType="VARCHAR"/>
@@ -16,8 +15,44 @@
         <result column="prdt_stat_nm" property="prdtStatNm" jdbcType="VARCHAR"/>
         <result column="genre_alt" property="genreAlt" jdbcType="VARCHAR"/>
         <result column="rep_genre_nm" property="repGenreNm" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
 
+        <!-- 영화 상세정보 -->
+        <result column="movie_nm_og" property="movieNmOg" jdbcType="VARCHAR"/>
+        <result column="show_tm" property="showTm" jdbcType="VARCHAR"/>
+        <result column="nation_nm" property="nationNm" jdbcType="VARCHAR"/>
+        <result column="genre_nm" property="genreNm" jdbcType="VARCHAR"/>
+        <result column="cast" property="cast" jdbcType="VARCHAR"/>
+        <result column="cast_en" property="castEn" jdbcType="VARCHAR"/>
+        <result column="show_types" property="showTypes" jdbcType="VARCHAR"/>
+        <result column="show_type_group_nm" property="showTypeGroupNm" jdbcType="VARCHAR"/>
+        <result column="show_type_nm" property="showTypeNm" jdbcType="VARCHAR"/>
+        <result column="audit_no" property="auditNo" jdbcType="VARCHAR"/>
+        <result column="watch_grade_nm" property="watchGradeNm" jdbcType="VARCHAR"/>
+        <result column="point_yn" property="pointYn" jdbcType="VARCHAR"/>
+        <result column="point_avg" property="pointAvg" jdbcType="VARCHAR"/>
+        <result column="point_total_cnt" property="pointTotalCnt" jdbcType="VARCHAR"/>
+        <result column="total_view_cnt" property="totalViewCnt" jdbcType="VARCHAR"/>
+        <result column="preview_url" property="previewUrl" jdbcType="VARCHAR"/>
+
+        <!-- 영화 회사 -->
+        <collection property="movieCompanyBeanList" ofType="com.example.movieCore.movie.bean.MovieCompanyBean">
+            <result column="company_cd" property="companyCd" jdbcType="VARCHAR"/>
+            <result column="company_nm" property="companyNm" jdbcType="VARCHAR"/>
+            <result column="company_nm_en" property="companyNmEn" jdbcType="VARCHAR"/>
+            <result column="company_part_names" property="companyPartNames" jdbcType="VARCHAR"/>
+            <result column="ceo_nm" property="ceoNm" jdbcType="VARCHAR"/>
+            <result column="filmo_names" property="filmoNames" jdbcType="VARCHAR"/>
+        </collection>
+
+        <!-- 영화 장르 -->
+        <collection property="movieGenreBeanList" ofType="com.example.movieCore.movie.bean.MovieGenreBean">
+            <result column="GENRE_CD" property="genreCd" jdbcType="VARCHAR"/>
+            <result column="GENRE_NM" property="genreNm" jdbcType="VARCHAR"/>
+        </collection>
     </resultMap>
+
+
 
     <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
@@ -286,10 +321,38 @@
             MM.prdt_stat_nm,
             MM.genre_alt,
             MM.rep_genre_nm,
-            MM.STATE
-        FROM MOV_MOVIE MM, MOV_MOVIE_INFO MMI
-        where MM.MOVIE_CD = MMI.MOVIE_CD
-            and MM.movie_cd = #{movieBean.movieCd}
+            MM.STATE,
+            MMI.movie_nm_og,
+            MMI.show_tm,
+            MMI.nation_nm,
+            MMI.genre_nm,
+            MMI.cast,
+            MMI.cast_en,
+            MMI.show_types,
+            MMI.show_type_group_nm,
+            MMI.show_type_nm,
+            MMI.audit_no,
+            MMI.watch_grade_nm,
+            MMI.point_yn,
+            MMI.point_avg,
+            MMI.point_total_cnt,
+            MMI.total_view_cnt,
+            MMI.preview_url,
+            MC.company_cd,
+            MC.company_nm,
+            MC.company_nm_en,
+            MC.company_part_names,
+            MC.ceo_nm,
+            MC.filmo_names,
+            MG.GENRE_CD,
+            MG.GENRE_NM
+        FROM MOV_MOVIE MM
+                 LEFT JOIN MOV_MOVIE_INFO MMI ON MM.MOVIE_CD = MMI.MOVIE_CD
+                 LEFT JOIN MOV_COMPANY_MAP MCM ON MM.MOVIE_CD = MCM.MOVIE_CD
+                 LEFT JOIN MOV_COMPANY MC ON MCM.COMPANY_CD = MC.COMPANY_CD
+                 LEFT JOIN MOV_GENRE_MAP MGM ON MM.MOVIE_CD = MGM.MOVIE_CD
+                 LEFT JOIN MOV_GENRE MG ON MGM.GENRE_CD = MG.GENRE_CD
+        WHERE MM.movie_cd = #{movieBean.movieCd}
     </select>
 
 
