@@ -105,16 +105,14 @@ public class BrdArticleController {
         Map resMap = new HashMap<>();
         try {
 
-            //  최초 조회 일시 (페이징 널상태)
-            if(brdVo.getBoardBean().getPaging() == null){
-                int totalCnt = 0;
-                brdVo.getBoardBean().setPaging(new Paging());
-                totalCnt = articleService.selectArticleListTotalCnt(brdVo);
-                brdVo.getBoardBean().getPaging().setTotalItems(totalCnt);
-            }
+            brdVo.setPaging(new Paging());
+            brdVo.getPaging().setTotalItems(articleService.selectArticleListTotalCnt(brdVo));
 
-            // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
-            brdVo.getBoardBean().getPaging().setCurrentPage(brdVo.getBoardBean().getPaging().getCurrentPage());
+            //  페이지 이동시 (최초 조회시에는 패스)
+            if(brdVo.getNewPage() != 0){
+                // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
+                brdVo.getPaging().setCurrentPage(brdVo.getNewPage());
+            }
 
 
             brdVo.setArticleBeanList(articleService.selectArticleList(brdVo));

@@ -43,9 +43,13 @@ public class BrdBoardBean {
     private String schSelect;
 
     /** 검색 내용 */
-    private String schText;
-
+    private String schText; 
+   
     /** 페이징 */
     private Paging paging;
+
+    /** 정렬 조건 */
+    private String sortKey;
+    private String sortOdr;
 
 }

@@ -167,7 +167,79 @@
                 )
             </otherwise>
         </choose>
-        LIMIT #{boardBean.paging.startIndex}, #{boardBean.paging.itemsPerPage}
+
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+
+    </select>
+
+    <select id="selectArticleList2" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
+
+        SELECT
+            BA.ATCL_ID,
+            BA.BRD_ID,
+            BA.MEM_ID,
+            BA.SUBJECT,
+            BA.CONTENT,
+            BA.VIEW_CNT,
+            BA.CREATE_DT,
+            BA.UPDATE_DT,
+            BA.EXPIRE_DT,
+            BA.EXPIRE_YN,
+            BA.STATE,
+            BA.ATCL_REPL_CNT
+        FROM
+            BRD_ARTICLE BA
+        WHERE
+            BA.STATE = 'B'
+        AND
+            BA.BRD_ID = #{boardBean.brdId}
+
+        <choose>
+            <when test="boardBean.schSelect == 'subject'">
+                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'content'">
+                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'memName'">
+                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                )
+            </otherwise>
+        </choose>
+        <if test="sortKey != null and sortOdr != null">
+            ORDER BY
+            <choose>
+                <when test="sortKey == 'subject'">
+                    BA.SUBJECT
+                </when>
+                <when test="sortKey == 'memName'">
+                    BA.MEM_ID
+                </when>
+                <when test="sortKey == 'createDt'">
+                    BA.CREATE_DT
+                </when>
+                <when test="sortKey == 'viewCnt'">
+                    BA.VIEW_CNT
+                </when>
+                <otherwise>
+                    BA.CREATE_DT DESC
+                </otherwise>
+            </choose>
+            <if test="sortOdr == 'asc'">
+                ASC
+            </if>
+            <if test="sortOdr == 'desc'">
+                DESC
+            </if>
+        </if>
+
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
 
     </select>
 
@@ -313,6 +385,64 @@
                 )
             </otherwise>
         </choose>
+
+    </select>
+
+    <select id="selectArticleListTotalCnt2" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
+        SELECT
+        COUNT(BA.ATCL_ID) totalCnt
+        FROM
+        BRD_ARTICLE BA
+
+        WHERE
+        BA.STATE = 'B'
+        AND
+        BA.BRD_ID = #{boardBean.brdId}
+        <choose>
+            <when test="boardBean.schSelect == 'subject'">
+                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'content'">
+                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <when test="boardBean.schSelect == 'memName'">
+                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+            </when>
+            <otherwise>
+                AND (
+                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                )
+            </otherwise>
+        </choose>
+        <if test="sortKey != null and sortOdr != null">
+            ORDER BY
+            <choose>
+                <when test="sortKey == 'subject'">
+                    BA.SUBJECT
+                </when>
+                <when test="sortKey == 'memName'">
+                    BA.MEM_ID
+                </when>
+                <when test="sortKey == 'createDt'">
+                    BA.CREATE_DT
+                </when>
+                <when test="sortKey == 'viewCnt'">
+                    BA.VIEW_CNT
+                </when>
+                <otherwise>
+                    BA.CREATE_DT DESC
+                </otherwise>
+            </choose>
+            <if test="sortOdr == 'asc'">
+                ASC
+            </if>
+            <if test="sortOdr == 'desc'">
+                DESC
+            </if>
+        </if>
+
     </select>
 
 

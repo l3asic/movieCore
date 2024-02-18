@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {
-  CTableBody, CTable, CTableHead, CTableHeaderCell, CTableRow, CFormSelect, CFormInput, CInputGroup, CButton
+  CTableBody, CTable, CTableHead, CTableHeaderCell, CTableRow, CFormSelect, CFormInput, CInputGroup, CButton, CFormText
 } from '@coreui/react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
+import CIcon from "@coreui/icons-react";
+import {cilJustifyCenter, cilSwapVertical} from "@coreui/icons";
 
 const ArticleListView = () => {
 
@@ -16,7 +18,10 @@ const ArticleListView = () => {
     },
     articleBeanList: [],
     boardBeanList: [],
-    paging: {},
+    paging: {
+      totalItems: 0, // 전체 갯수 초기값 설정
+      currentPage: 0, // 현재 페이지 초기값 설정
+    },
   });
 
 
@@ -26,8 +31,10 @@ const ArticleListView = () => {
     }, []
   );
 
-  const [schSelect, setSchSelect] = useState('');
-  const [schText, setSchText] = useState('');
+  let [schSelect, setSchSelect] = useState('');
+  let [schText, setSchText] = useState('');
+  let [sortKey, setSortKey] = useState(); // 정렬 기준 컬럼
+  let [sortOdr, setSortOdr] = useState(); // 정렬
 
   const searchSelect = event => {
     setSchSelect(event.target.value);
@@ -37,16 +44,26 @@ const ArticleListView = () => {
     setSchText(event.target.value);
   };
 
+  //정렬 함수
+  const sortColumn = (key) => {
+    if (sortKey === key) {
+      // 동일한 컬럼을 클릭한 경우 정렬 순서를 변경
+      sortOdr = (sortOdr === 'asc' ? 'desc' : 'asc');
+    } else {
+      // 다른 컬럼을 클릭한 경우 정렬 기준을 변경하고 기본 순서는 오름차순으로 설정
+      sortKey = key;
+      sortOdr = 'asc';
+    }
+    selectArticleList();
+  };
+
   /** 게시글 리스트 조회 */
   function selectArticleList(newPage){ debugger;
-    if (newPage != null) {
-      if ("searchBtn") { // "searchBtn" 버튼 클릭 여부 확인
-        brdVo.paging = null; // "searchBtn" 클릭 시 brdVo.paging을 null로 설정
-      } else {
+    if (newPage != null) { // 페이지 이동시
         brdVo.paging.currentPage = newPage;
-      }
     } else {
-      brdVo.paging = null;
+      brdVo.paging = { totalItems: 0, currentPage: 0 }; // 기본 paging 객체를 생성하여 할당
+      newPage = 0;
     }
 
     axios({
@@ -54,13 +71,15 @@ const ArticleListView = () => {
       method: 'post',
       params:{
         brdId : brdVo.brdBoardBean.brdId,
+        newPage : newPage,
         schSelect : schSelect,
         schText : schText,
-        paging: brdVo.paging
+        sortKey: sortKey, // 정렬 기준 컬럼
+        sortOdr: sortOdr // 정렬 순서
       }
 
     }).then(function (res){
-      const paging = res.data.brdVo.boardBean.paging;
+      const paging = res.data.brdVo.paging;
       let articleBeanList = res.data.brdVo.articleBeanList.map(article => {
         // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
         const date = new Date(article.createDt);
@@ -89,6 +108,8 @@ const ArticleListView = () => {
 
       setSchSelect('');
       setSchText('');
+      setSortKey(res.data.brdVo.boardBean.sortKey);
+      setSortOdr(res.data.brdVo.boardBean.sortOdr);
 
     }).catch(function (err){
       alert("조회 실패 (오류)");
@@ -200,11 +221,18 @@ const ArticleListView = () => {
       <CTable className="boardTableList">
         <CTableHead color="light">
           <CTableRow>
-            <CTableHeaderCell scope="col">번호</CTableHeaderCell>
-            <CTableHeaderCell scope="col">제목</CTableHeaderCell>
-            <CTableHeaderCell scope="col">작성자</CTableHeaderCell>
-            <CTableHeaderCell scope="col">작성일</CTableHeaderCell>
-            <CTableHeaderCell scope="col">조회수</CTableHeaderCell>
+            <CTableHeaderCell scope="col" >번호</CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="subject">제목
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('subject')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="memName">작성자
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('memName')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="createDt">작성일</CTableHeaderCell>
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('createDt')} />
+            <CTableHeaderCell scope="col" name="viewCnt">조회수
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('viewCnt')} />
+            </CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
@@ -219,7 +247,7 @@ const ArticleListView = () => {
           ))}
         </CTableBody>
       </CTable>
-      <Paging paging={brdVo.paging} onPageChange={handlePageChange} />
+      <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
 
     </div>
   )
