@@ -17,6 +17,7 @@ import axios from 'axios';
 import Paging from '../uitils/Paging';
 import {cilLoopCircular, cilMagnifyingGlass} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import { useNavigate } from 'react-router-dom';
 
 const MovieList = () => {
   const cardStyle = {
@@ -34,6 +35,8 @@ const MovieList = () => {
       searchText : ""
     }
   });
+
+  const navigate  = useNavigate();
 
 
   // 검색조건 및 검색어 관리
@@ -139,7 +142,11 @@ const MovieList = () => {
             movie.openDt = changeToFullYear(movie.openDt);
 
             rows[rows.length - 1].push(
-              <CCard key={index} movieCd={movie.movieCd} style={cardStyle}>
+              <CCard key={index}
+                     movieCd={movie.movieCd}
+                     style={cardStyle}
+                     onClick={moveToMovieInfo}
+              >
                 <CCardImage orientation="top" src={ReactImg} style={{ height: '400px' }} />
                 <CCardBody>
                   <CCardTitle>{movie.movieNm} ({movie.openDt})</CCardTitle>
@@ -264,6 +271,12 @@ const MovieList = () => {
     selectMovieList();
 
   }
+
+  /** 영화 상세정보로 이동 */
+  function moveToMovieInfo(){
+    navigate('/movie/MovieInfo');
+  }
+
 
 
 

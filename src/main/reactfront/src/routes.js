@@ -19,6 +19,8 @@ const ArticleListManage = React.lazy(() => import('./views/admin/brd/ArticleList
 // 영화
 // - 영화 리스트
 const MovieList = React.lazy(() => import('./views/movie/MovieList'))
+// - 영화 상세정보
+const MovieInfo = React.lazy(() => import('./views/movie/MovieInfo'))
 
 
 
@@ -120,6 +122,8 @@ const routes = [
   // 영화
   // - 영화 리스트
   { path: '/movie/MovieList', name: 'MovieList', element: MovieList },
+  // - 영화 상세정보
+  { path: '/movie/MovieInfo', name: 'MovieInfo', element: MovieInfo },
 
 
   // 게시판
