@@ -247,13 +247,17 @@ const MovieList = () => {
   /** 검색, 필터 초기화  */
   function refreshFilterSearch(){
 
-    // 검색조건 및 검색어 초기화 (useState 미사용으로 강제로 즉시 초기화)
+    // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
     schFilter = '';
     schText = '';
 
+    // 남겨진 검색조건 값도 초기화
+    setSchFilter('');
+    setSchText('');
+
     // 정렬 초기화
-    sortKey = '';
-    sortOdr = '';
+    // sortKey = '';
+    // sortOdr = '';
 
     // 초기화된 조건으로 리스트 조회
     selectMovieList();
