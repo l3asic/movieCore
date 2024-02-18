@@ -139,6 +139,37 @@ public class MovMovieController {
     }
 
 
+    /** 영화 모듈 - 선택 영화 상세 조회 */
+    @PostMapping(value = "/selectMovieInfo")
+    @ResponseBody
+    public Map<String, Object> selectMovieInfo(@RequestBody MovVo movVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+
+        try {
+            
+            // movieCd 값 기준 영화 상세정보 조회
+            movVo.setMovieBean(movieService.selectMovieInfo(movVo));
+            if(movVo.getMovieBean() != null){
+                resMap.put("movieBean", movVo.getMovieBean());
+                successResult = true;
+            }else{
+                successResult = false;
+            }
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+
+    }
+
+
 
 
 

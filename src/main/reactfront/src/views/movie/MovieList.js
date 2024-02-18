@@ -145,7 +145,7 @@ const MovieList = () => {
               <CCard key={index}
                      movieCd={movie.movieCd}
                      style={cardStyle}
-                     onClick={moveToMovieInfo}
+                     onClick={() => moveToMovieInfo(movie.movieCd)}
               >
                 <CCardImage orientation="top" src={ReactImg} style={{ height: '400px' }} />
                 <CCardBody>
@@ -273,8 +273,8 @@ const MovieList = () => {
   }
 
   /** 영화 상세정보로 이동 */
-  function moveToMovieInfo(){
-    navigate('/movie/MovieInfo');
+  function moveToMovieInfo(movieCd){
+    navigate('/movie/MovieInfo', { state: { movieCd } });
   }
 
 

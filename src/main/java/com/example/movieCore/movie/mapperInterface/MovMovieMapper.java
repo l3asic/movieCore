@@ -21,4 +21,5 @@ public interface MovMovieMapper {
 
     int selectMovieListTotalCnt(MovVo movVo);
 
+    MovieBean selectMovieInfo(MovVo movVo);
 }

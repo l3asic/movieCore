@@ -38,4 +38,7 @@ public class MovMovieServiceImpl {
         return movMovieMapper.selectMovieListTotalCnt(movVo);
     }
 
+    public MovieBean selectMovieInfo(MovVo movVo) {
+        return movMovieMapper.selectMovieInfo(movVo);
+    }
 }

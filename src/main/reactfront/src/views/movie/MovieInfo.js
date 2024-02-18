@@ -1,14 +1,30 @@
 
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import ReactImg from '../../assets/images/react.jpg';
 import {CAvatar, CCardImage} from "@coreui/react";
 import avatar2 from 'src/assets/images/avatars/2.jpg'
+import {useLocation} from "react-router-dom";
+import axios from "axios";
 
 
 export default function MovieInfo() {
 
+  const location = useLocation();
+  const { movieCd } = location.state;
+
+  const [movVo, setMovVo] = useState({
+    movieBean:{
+      movieCd : movieCd
+    }
+  });
+
+
+  /** 선택한 영화 정보 조회 */
+  useEffect(() => {
+    selectMovieInfo();
+  }, []);
 
 
 
@@ -448,6 +464,35 @@ export default function MovieInfo() {
 
     </>
   )
+
+
+  /** 선택 영화 상세 조회 */
+  function selectMovieInfo() {
+
+    axios({
+      url: '/selectMovieInfo',
+      method: 'post',
+      data: {
+        movieBean: movVo.movieBean,
+      }
+    })
+      .then(function (res) {
+
+        setMovVo(prevMovVo => ({
+          ...prevMovVo,
+          movieBean: res.data.movieBean
+        }));
+
+      })
+      .catch(function (err) {
+        debugger
+        alert("실패 (오류)");
+      });
+
+
+  }
+
+
 }
 
 
