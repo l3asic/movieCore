@@ -35,6 +35,22 @@ const MovieList = () => {
     }
   });
 
+
+  // 검색조건 및 검색어 관리
+  let [schFilter, setSchFilter] = useState('');
+  let [schText, setSchText] = useState('');
+  let [sortKey, setSortKey] = useState(); // 정렬 기준 컬럼
+  let [sortOdr, setSortOdr] = useState(); // 정렬
+
+
+  const searchFilter = event => {
+    setSchFilter(event.target.value);
+  };
+
+  const searchText = event => {
+    setSchText(event.target.value);
+  };
+
   /** 전체 영화 리스트 조회 */
   useEffect(() => {
     selectMovieList();
@@ -58,25 +74,28 @@ const MovieList = () => {
             <CFormSelect
               options={[
                 { label: '전체', value: 'all' },
-                { label: '영화 고유번호', value: 'movieCd' },
                 { label: '제목', value: 'movieNm' },
                 { label: '대표 장르', value: 'repGenreNm' },
-                { label: '상태', value: 'state' }
+                { label: '개봉년도', value: 'openDt' },
+                { label: '배우명', value: 'cast' },
+                { label: '관람등급', value: 'watchGradeNm' },
+                { label: '제작국가', value: 'nationNm' }
               ]}
-              /*onChange={searchFilter} value={schFilter}*/
+              onChange={searchFilter} value={schFilter}
             />
+
             <CFormInput
               type="search"
               className="me-2"
               placeholder="Search"
-              /*onChange={searchText}
+              onChange={searchText}
               value={schText}
               name={schText}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
                   searchMovieList();
                 }
-              }}*/
+              }}
             />
 
             <CButton
@@ -84,7 +103,7 @@ const MovieList = () => {
               variant="outline"
               className="me-2"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-              /*onClick={searchMovieList}*/
+              onClick={searchMovieList}
               id="searchBtn"
             >
               <CIcon icon={cilMagnifyingGlass} />
@@ -94,7 +113,7 @@ const MovieList = () => {
             {/* 초기화 */}
             <CButton color="black" variant="outline"
                      style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-              /*onClick={refreshFilterSearch}*/
+              onClick={refreshFilterSearch}
             >
               <CIcon icon={cilLoopCircular} />
             </CButton>
@@ -124,8 +143,8 @@ const MovieList = () => {
                 <CCardBody>
                   <CCardTitle>{movie.movieNm} ({movie.openDt})</CCardTitle>
                   <CCardText className="d-inline-flex">
-                    <p><small>{movie.repGenreNm} </small></p>
-                    <p><small> 제작국가 </small></p>
+                    <small>{movie.repGenreNm}</small>
+                    <small> 제작국가 </small>
                   </CCardText>
                   <CCardText>
                     <small className="text-medium-emphasis">별점</small>
@@ -170,8 +189,8 @@ const MovieList = () => {
       method: 'post',
       params: {
         newPage : newPage,
-        searchFilter : movVo.searchBean.searchFilter,
-        searchText : movVo.searchBean.searchText
+        searchFilter : schFilter,
+        searchText : schText
       }
     })
       .then(function (res) {
@@ -219,12 +238,26 @@ const MovieList = () => {
   }
 
 
+  /** 검색 버튼 클릭 시 */
+  function searchMovieList(){
+    selectMovieList();
+  }
 
-  /** 검색 시작 함수 */
-  function movieSearch(e) {
-    if (e.key === 'Enter') {
-      selectMovieList();
-    }
+
+  /** 검색, 필터 초기화  */
+  function refreshFilterSearch(){
+
+    // 검색조건 및 검색어 초기화 (useState 미사용으로 강제로 즉시 초기화)
+    schFilter = '';
+    schText = '';
+
+    // 정렬 초기화
+    sortKey = '';
+    sortOdr = '';
+
+    // 초기화된 조건으로 리스트 조회
+    selectMovieList();
+
   }
 
 
