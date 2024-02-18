@@ -112,6 +112,7 @@ function MovieListManage() {
           <CForm className="d-flex">
             {/* 검색조건 */}
             <CFormSelect
+              style={{ marginRight: '5px' }}
               options={[
                 { label: '전체', value: 'all' },
                 { label: '영화 고유번호', value: 'movieCd' },

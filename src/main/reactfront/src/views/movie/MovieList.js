@@ -72,6 +72,7 @@ const MovieList = () => {
           <CForm className="d-flex m-2">
 
             <CFormSelect
+              style={{ marginRight: '5px' }}
               options={[
                 { label: '전체', value: 'all' },
                 { label: '제목', value: 'movieNm' },
