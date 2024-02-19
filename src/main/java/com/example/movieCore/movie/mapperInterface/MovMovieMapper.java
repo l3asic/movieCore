@@ -31,4 +31,8 @@ public interface MovMovieMapper {
     ArrayList<MovieCompanyBean> selectMovieCompanyList(MovVo movVo);
 
     ArrayList<MovieNationBean> selectMovieNationList(MovVo movVo);
+
+    int addMovieViewCnt(MovVo movVo);
+
+    void reFreshMovieTotalViewCnt(MovVo movVo);
 }

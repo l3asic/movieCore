@@ -17,12 +17,17 @@ export default function MovieInfo() {
   const [movVo, setMovVo] = useState({
     movieBean:{
       movieCd : movieCd
-    }
+    },
+    memberBean:{}
   });
 
 
-  /** 선택한 영화 정보 조회 */
+
   useEffect(() => {
+    /** 영화 조회 수 증가 */
+    addMovieViewCnt();
+
+    /** 선택한 영화 정보 조회 */
     selectMovieInfo();
   }, []);
 
@@ -578,6 +583,34 @@ export default function MovieInfo() {
 
     </>
   )
+
+
+
+
+  /** 영화 조회수 증가 */
+  function addMovieViewCnt() {
+
+    // 사용자 정보 추출
+    movVo.memberBean = JSON.parse(localStorage.getItem('memberBean'));
+
+    axios({
+      url: '/addMovieViewCnt',
+      method: 'post',
+      data: {
+        movieBean: movVo.movieBean,
+        memberBean: movVo.memberBean
+      }
+    })
+      .then(function (res) {
+
+      })
+      .catch(function (err) {
+        alert("실패 (오류)");
+      });
+
+
+  }
+
 
 
   /** 선택 영화 상세 조회 */

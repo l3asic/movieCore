@@ -1,6 +1,8 @@
 package com.example.movieCore.movie.vo;
 
+import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.bean.MoviePersonnalViewLogBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.utils.Paging;
 import lombok.Getter;
@@ -18,10 +20,15 @@ public class MovVo {
     /** 영화 리스트 */
     private ArrayList<MovieBean> movieBeanList;
 
+    /** 영화 조회 리스트 */
+    private ArrayList<MoviePersonnalViewLogBean> moviePersonnalViewLogBeanList;
+
+    /** 사용자 정보 */
+    private LoginMemberBean memberBean;
+
 
     /** 검색 조건 */
     private SearchBean searchBean;
-
 
     /** 페이징 */
     private Paging paging;

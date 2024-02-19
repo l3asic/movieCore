@@ -393,6 +393,29 @@
         WHERE MM.movie_cd = #{movieBean.movieCd}
     </select>
 
+    <!-- 영화 조회 로그 추가 -->
+    <insert id="addMovieViewCnt" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO MOV_PERSONNAL_VIEW_LOG (MOVIE_CD, MEM_ID, VIEW_DT)
+        SELECT #{movieBean.movieCd}, #{memberBean.memId}, NOW()
+        FROM DUAL
+        WHERE NOT EXISTS (
+                SELECT 1
+                FROM MOV_PERSONNAL_VIEW_LOG
+                WHERE MOVIE_CD = #{movieBean.movieCd} AND MEM_ID = #{memberBean.memId}
+            )
+    </insert>
+
+    <!-- 영화 조회 수 갱신 -->
+    <update id="reFreshMovieTotalViewCnt" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        UPDATE MOV_MOVIE_INFO
+        SET
+            total_view_cnt = (select count(*) cnt
+                              from MOV_PERSONNAL_VIEW_LOG mpvl
+                              WHERE MOVIE_CD = #{movieBean.movieCd})
+        WHERE
+            MOVIE_CD = #{movieBean.movieCd}
+    </update>
+
 
 
 </mapper>

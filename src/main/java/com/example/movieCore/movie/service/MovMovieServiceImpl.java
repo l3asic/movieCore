@@ -56,4 +56,12 @@ public class MovMovieServiceImpl {
     public ArrayList<MovieNationBean> selectMovieNationList(MovVo movVo) {
         return movMovieMapper.selectMovieNationList(movVo);
     }
+
+    public int addMovieViewCnt(MovVo movVo) {
+        return movMovieMapper.addMovieViewCnt(movVo);
+    }
+
+    public void reFreshMovieTotalViewCnt(MovVo movVo) {
+        movMovieMapper.reFreshMovieTotalViewCnt(movVo);
+    }
 }

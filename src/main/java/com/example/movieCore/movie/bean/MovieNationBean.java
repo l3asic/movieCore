@@ -8,7 +8,6 @@ import lombok.Setter;
 public class MovieNationBean {
 
     /** 제작 국가 */
-
     private String nationCd	;
     private String korNm	;
     private String engNm;

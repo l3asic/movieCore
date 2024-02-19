@@ -182,6 +182,40 @@ public class MovMovieController {
 
 
 
+    /** 영화 모듈 - 조회수 증가 */
+    @PostMapping(value = "/addMovieViewCnt")
+    @ResponseBody
+    public Map<String, Object> addMovieViewCnt(@RequestBody MovVo movVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            int sucCnt = 0;
+
+            // 영화 <-> 사용자 기준 조회로그 추가
+            sucCnt = movieService.addMovieViewCnt(movVo);
+
+            // 조회로그 추가 되었을 시
+            if(sucCnt > 0){
+                // 영화 토탈 조회 수 갱신
+                movieService.reFreshMovieTotalViewCnt(movVo);
+            }
+            successResult = true;
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+
+    }
+
+
+
 
 
 
