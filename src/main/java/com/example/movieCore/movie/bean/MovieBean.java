@@ -54,6 +54,7 @@ public class MovieBean {
 
 
     /** 제작 국가 */
+    private ArrayList<MovieNationBean> movieNationBeanList;
 
 
     /** 장르 */

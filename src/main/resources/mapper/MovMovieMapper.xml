@@ -55,6 +55,14 @@
     </resultMap>
 
 
+    <!-- 영화 제작국가 리스트 -->
+    <resultMap type="com.example.movieCore.movie.bean.MovieNationBean" id="movieNationBeanList">
+        <result column="nation_cd" property="nationCd" jdbcType="VARCHAR"/>
+        <result column="kor_nm" property="korNm" jdbcType="VARCHAR"/>
+        <result column="eng_nm" property="engNm" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
 
     <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
@@ -369,6 +377,19 @@
         FROM MOV_MOVIE MM
              LEFT JOIN MOV_COMPANY_MAP MCM ON MM.MOVIE_CD = MCM.MOVIE_CD
              LEFT JOIN MOV_COMPANY MC ON MCM.COMPANY_CD = MC.COMPANY_CD
+        WHERE MM.movie_cd = #{movieBean.movieCd}
+    </select>
+
+
+    <!-- 영화 제작국가 리스트 조회 -->
+    <select id="selectMovieNationList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="movieNationBeanList">
+        SELECT
+            MN.nation_cd,
+            MN.kor_nm,
+            MN.eng_nm
+        FROM MOV_MOVIE MM
+             LEFT JOIN MOV_NATION_MAP MNM ON MM.MOVIE_CD = MNM.MOVIE_CD
+             LEFT JOIN MOV_NATION MN ON MNM.NATION_CD = MN.NATION_CD
         WHERE MM.movie_cd = #{movieBean.movieCd}
     </select>
 

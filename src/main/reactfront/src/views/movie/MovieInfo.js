@@ -268,7 +268,7 @@ export default function MovieInfo() {
                 <div className="card-body">
 
 
-                  {/* 상세 정보 한줄 */}
+                  {/* 영화 제목  영화 영문 제목 */}
                   <div className="row mb-4 mt-4">
                     <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 영화 제목 :  </strong> {movVo.movieBean.movieNm}
@@ -278,6 +278,7 @@ export default function MovieInfo() {
                     </div>
                   </div>
 
+                  {/* 대표장르  장르 */}
                   <div className="row mb-4 mt-4">
                     <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 대표 장르 :  </strong> {movVo.movieBean.repGenreNm}
@@ -287,15 +288,17 @@ export default function MovieInfo() {
                     </div>
                   </div>
 
+                  {/* 개봉일  제작 연도 */}
                   <div className="row mb-4 mt-4">
                     <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 개봉일 : </strong> {movVo.movieBean.openDtFullStr}
                     </div>
                     <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 제작연도 : </strong> {movVo.movieBean.prdtYear}
+                      <strong style={{ fontWeight: "normal" }}> 제작 연도 : </strong> {movVo.movieBean.prdtYear}
                     </div>
                   </div>
 
+                  {/* 제작 상태  관람 등급 */}
                   <div className="row mb-4 mt-4">
                     <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 제작 상태 : </strong> {movVo.movieBean.prdtStatNm}
@@ -305,6 +308,7 @@ export default function MovieInfo() {
                     </div>
                   </div>
 
+                  {/* 감독 명  출연진 */}
                   <div className="row mb-4">
                     <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 감독 명 : </strong> directorNm
@@ -314,24 +318,36 @@ export default function MovieInfo() {
                     </div>
                   </div>
 
+                  {/* 상영 시간  상영 형태 */}
                   <div className="row mb-4">
                     <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 상영 시간 : </strong> {movVo.movieBean.showTm} 분
                     </div>
+
+                    {movVo.movieBean.showTypeNm && (
                     <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 상영 형태 : </strong> showTypeNm
+                      <strong style={{ fontWeight: "normal" }}> 상영 형태 : </strong> {movVo.movieBean.showTypeNm}
                     </div>
+                    )}
                   </div>
 
-                  <div className="row mb-4">
-                    <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 제작국가 : </strong> korNm
+                  {/* 제작 국가 루프 맵*/}
+                  {movVo.movieBean.movieCompanyBeanList && movVo.movieBean.movieCompanyBeanList.length > 0 && (
+                    <div className="row mb-4">
+                      <div className="col-sm-6">
+                        <strong style={{ fontWeight: "normal" }}> 제작 국가 : </strong>
+
+                        {movVo.movieBean.movieNationBeanList.map((nation, index) => (
+                          <span key={index}>
+                              {index > 0 && ", "}
+                            {nation.korNm}
+                            </span>
+                        ))}
+
+                      </div>
                     </div>
 
-
-
-
-                  </div>
+                  )}
 
                   {/* 제작 및 배급사 루프 맵 */}
                   {movVo.movieBean.movieCompanyBeanList && movVo.movieBean.movieCompanyBeanList.length > 0 && (

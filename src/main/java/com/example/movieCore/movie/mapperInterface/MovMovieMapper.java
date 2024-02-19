@@ -3,6 +3,7 @@ package com.example.movieCore.movie.mapperInterface;
 import com.example.movieCore.movie.bean.MovieBean;
 import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieGenreBean;
+import com.example.movieCore.movie.bean.MovieNationBean;
 import com.example.movieCore.movie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -28,4 +29,6 @@ public interface MovMovieMapper {
     ArrayList<MovieGenreBean> selectMovieGenreList(MovVo movVo);
 
     ArrayList<MovieCompanyBean> selectMovieCompanyList(MovVo movVo);
+
+    ArrayList<MovieNationBean> selectMovieNationList(MovVo movVo);
 }

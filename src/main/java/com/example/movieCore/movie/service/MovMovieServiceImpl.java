@@ -3,6 +3,7 @@ package com.example.movieCore.movie.service;
 import com.example.movieCore.movie.bean.MovieBean;
 import com.example.movieCore.movie.bean.MovieCompanyBean;
 import com.example.movieCore.movie.bean.MovieGenreBean;
+import com.example.movieCore.movie.bean.MovieNationBean;
 import com.example.movieCore.movie.mapperInterface.MovMovieMapper;
 import com.example.movieCore.movie.vo.MovVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,9 @@ public class MovMovieServiceImpl {
 
     public ArrayList<MovieCompanyBean> selectMovieCompanyList(MovVo movVo) {
         return movMovieMapper.selectMovieCompanyList(movVo);
+    }
+
+    public ArrayList<MovieNationBean> selectMovieNationList(MovVo movVo) {
+        return movMovieMapper.selectMovieNationList(movVo);
     }
 }

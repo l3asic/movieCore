@@ -161,7 +161,8 @@ public class MovMovieController {
                 // 영화 컴퍼니 조회
                 movVo.getMovieBean().setMovieCompanyBeanList(movieService.selectMovieCompanyList(movVo));
                 
-                // 추후 제작 국가 조회
+                // 제작 국가 조회
+                movVo.getMovieBean().setMovieNationBeanList(movieService.selectMovieNationList(movVo));
 
                 resMap.put("movieBean", movVo.getMovieBean());
                 successResult = true;
