@@ -44,7 +44,7 @@ public class MovVo {
     private String sortOdr;
 
 
-    /** 삭제/ 복원 모드 구분값 */
+    /** 삭제/ 복원 모드 구분값 등 사용 용도 커스텀 컬럼 */
     private String mode;
 
 

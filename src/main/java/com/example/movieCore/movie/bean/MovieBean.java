@@ -42,6 +42,9 @@ public class MovieBean {
     private String totalViewCnt;
     private String previewUrl;
 
+    /** 영화 찜하기 정보 */
+    private boolean isFav;
+
 
 
 

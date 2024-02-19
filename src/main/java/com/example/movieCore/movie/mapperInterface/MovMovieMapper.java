@@ -1,9 +1,6 @@
 package com.example.movieCore.movie.mapperInterface;
 
-import com.example.movieCore.movie.bean.MovieBean;
-import com.example.movieCore.movie.bean.MovieCompanyBean;
-import com.example.movieCore.movie.bean.MovieGenreBean;
-import com.example.movieCore.movie.bean.MovieNationBean;
+import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -35,4 +32,10 @@ public interface MovMovieMapper {
     int addMovieViewCnt(MovVo movVo);
 
     void reFreshMovieTotalViewCnt(MovVo movVo);
+
+    void addMovieFav(MovVo movVo);
+
+    void deleteMovieFav(MovVo movVo);
+
+    int selectMovieFavorite(MovVo movVo);
 }

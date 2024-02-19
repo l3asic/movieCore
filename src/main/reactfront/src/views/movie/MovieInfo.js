@@ -7,6 +7,11 @@ import {CAvatar, CCardImage} from "@coreui/react";
 import avatar2 from 'src/assets/images/avatars/2.jpg'
 import {useLocation} from "react-router-dom";
 import axios from "axios";
+import CIcon from "@coreui/icons-react";
+
+import heartIcon from '../../assets/brand/heartIcon.png';
+import fillHeartIcon from '../../assets/brand/fillHeartIcon.png';
+
 
 
 export default function MovieInfo() {
@@ -30,6 +35,18 @@ export default function MovieInfo() {
     /** 선택한 영화 정보 조회 */
     selectMovieInfo();
   }, []);
+
+  const [isHeartFilled, setIsHeartFilled] = useState(movVo.movieBean.fav); // 하트 아이콘의 상태
+
+  // 하트 아이콘 클릭 시
+  const handleHeartClick = () => {
+
+    // 하트 아이콘 변경
+    setIsHeartFilled(prevState => !prevState);
+    // 영화 찜 추가
+    updateMovieFavorite();
+
+  };
 
 
 
@@ -60,7 +77,7 @@ export default function MovieInfo() {
 
             {/* 포스터 우측 출연진 정보 */}
             <div className="grid items-start gap-2">
-              <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "10px"}}>{movVo.movieBean.prdtYear}</p>
+              <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "20px"}}>{movVo.movieBean.prdtYear}</p>
               <div style={{marginBottom: "10px", display:"flex"}}>
                 <h1 className="text-3xl font-bold tracking-tighter md:text-4xl" >{movVo.movieBean.movieNm}</h1>
                 {movVo.movieBean.movieNmEn && (
@@ -70,14 +87,23 @@ export default function MovieInfo() {
                 )}
               </div>
 
-              {/* 장르 칸 (추후 예정) */}
-              <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "10px"}}>{movVo.movieBean.repGenreNm}</p>
+              {/* 대표 장르 칸 */}
+              <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "20px"}}>{movVo.movieBean.repGenreNm}</p>
 
-              {/* 별점칸 (추후 예정) */}
-              <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "80px"}}>별점 칸</p>
+              {/* 별점칸 (추후 예정) , 찜 칸 */}
+              <div style={{ marginBottom: "60px", display: "flex" }}>
+                <p className="text-sm tracking-wide md:text-base" style={{ marginRight: "400px" }}>별점 칸</p>
 
+                {/* 찜 : 하트 아이콘 */}
+                <img src={isHeartFilled ? fillHeartIcon : heartIcon} // 상태에 따라 아이콘 변경
+                     alt="Heart Icon"
+                     style={{ width: '40px', height: '40px' }}
+                     onClick={handleHeartClick} //
+                />
 
-              {/* 감독 칸 */}
+              </div>
+
+              {/* 감독 칸 (추후 예정) */}
               <div className="flex items-center gap-2" style={{display: "flex", marginBottom: "20px"}}>
                 {/*<img
                     alt="Director avatar"
@@ -98,7 +124,7 @@ export default function MovieInfo() {
                 </div>
               </div>
 
-              {/* 배우들 한줄 (3명씩) */}
+              {/* 배우들 한줄 (3명씩) (추후 예정) */}
               <div className="grid w-full grid-cols-2 items-start gap-4 md:grid-cols-3 lg:gap-6 "
                    style={{display: "flex", marginBottom: "20px"}}>
 
@@ -355,7 +381,7 @@ export default function MovieInfo() {
                   )}
 
                   {/* 제작 및 배급사 루프 맵 */}
-                  {movVo.movieBean.movieCompanyBeanList && movVo.movieBean.movieCompanyBeanList.length > 0 && (
+                  {movVo.movieBean.movieCompanyBeanList  && movVo.movieBean.movieCompanyBeanList[0] != null &&movVo.movieBean.movieCompanyBeanList.length > 0 && (
                     <div className="row mb-4">
                       <div className="col-sm-12">
                         <strong style={{fontWeight: "normal"}}> 제작 및 배급사 : </strong>
@@ -615,12 +641,15 @@ export default function MovieInfo() {
 
   /** 선택 영화 상세 조회 */
   function selectMovieInfo() {
+    // 사용자 정보 추출
+    movVo.memberBean = JSON.parse(localStorage.getItem('memberBean'));
 
     axios({
       url: '/selectMovieInfo',
       method: 'post',
       data: {
         movieBean: movVo.movieBean,
+        memberBean: movVo.memberBean
       }
     })
       .then(function (res) {
@@ -638,11 +667,43 @@ export default function MovieInfo() {
           movieBean: res.data.movieBean
         }));
 
+        setIsHeartFilled(res.data.movieBean.fav);
+
+
       })
       .catch(function (err) {
         alert("실패 (오류)");
       });
 
+
+  }
+
+
+  /** 영화 찜 수정 */
+  function updateMovieFavorite(){
+
+    var mode = "";
+    if(isHeartFilled){  // 하트가 채워져 있는 경우 (찜해제하기)
+      mode = "delete";
+    }else{// 하트를 비워져 있는 경우 (찜하기)
+      mode = "add";
+    }
+
+    axios({
+      url: '/updateMovieFavorite',
+      method: 'post',
+      data: {
+        movieBean: movVo.movieBean,
+        memberBean: movVo.memberBean,
+        mode : mode
+      }
+    })
+      .then(function (res) {
+
+      })
+      .catch(function (err) {
+        alert("실패 (오류)");
+      });
 
   }
 

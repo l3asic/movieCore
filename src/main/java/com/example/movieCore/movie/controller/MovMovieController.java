@@ -164,6 +164,12 @@ public class MovMovieController {
                 // 제작 국가 조회
                 movVo.getMovieBean().setMovieNationBeanList(movieService.selectMovieNationList(movVo));
 
+                // 영화 찜하기 정보 조회
+                boolean isFav = false;
+                isFav = movieService.selectMovieFavorite(movVo);
+                movVo.getMovieBean().setFav(isFav);
+
+
                 resMap.put("movieBean", movVo.getMovieBean());
                 successResult = true;
             }else{
@@ -203,6 +209,40 @@ public class MovMovieController {
                 movieService.reFreshMovieTotalViewCnt(movVo);
             }
             successResult = true;
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+
+    }
+
+    
+    /** 영화 모듈 - 찜 하기 */
+    @PostMapping(value = "/updateMovieFavorite")
+    @ResponseBody
+    public Map<String, Object> updateMovieFavorite(@RequestBody MovVo movVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+            
+            // 찜 추가
+            if(movVo.getMode().equals("add")){
+                movieService.addMovieFav(movVo);
+                successResult = true;
+                
+            // 찜 제거
+            }else if(movVo.getMode().equals("delete")){
+                movieService.deleteMovieFav(movVo);
+                successResult = true;
+                
+            }
+
 
         }catch (Exception e){
 

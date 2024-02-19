@@ -1,9 +1,6 @@
 package com.example.movieCore.movie.service;
 
-import com.example.movieCore.movie.bean.MovieBean;
-import com.example.movieCore.movie.bean.MovieCompanyBean;
-import com.example.movieCore.movie.bean.MovieGenreBean;
-import com.example.movieCore.movie.bean.MovieNationBean;
+import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.mapperInterface.MovMovieMapper;
 import com.example.movieCore.movie.vo.MovVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +60,21 @@ public class MovMovieServiceImpl {
 
     public void reFreshMovieTotalViewCnt(MovVo movVo) {
         movMovieMapper.reFreshMovieTotalViewCnt(movVo);
+    }
+
+    public void addMovieFav(MovVo movVo) {
+        movMovieMapper.addMovieFav(movVo);
+    }
+
+    public void deleteMovieFav(MovVo movVo) {
+        movMovieMapper.deleteMovieFav(movVo);
+    }
+
+    public boolean selectMovieFavorite(MovVo movVo) {
+        if(movMovieMapper.selectMovieFavorite(movVo) == 1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -417,5 +417,27 @@
     </update>
 
 
+    <!-- 영화 찜 추가 -->
+    <insert id="addMovieFav" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO MOV_FAVORITE (MOVIE_CD, MEM_ID)
+        VALUES (#{movieBean.movieCd}, #{memberBean.memId})
+    </insert>
+
+    <!-- 영화 찜 제거 -->
+    <delete id="deleteMovieFav" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        DELETE FROM MOV_FAVORITE
+        WHERE MOVIE_CD = #{movieBean.movieCd} AND MEM_ID = #{memberBean.memId}
+    </delete>
+
+    <!-- 영화 찜 정보 조회 -->
+    <select id="selectMovieFavorite" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer" >
+        SELECT count(*) cnt
+        FROM MOV_FAVORITE
+        WHERE MOVIE_CD = #{movieBean.movieCd} AND MEM_ID = #{memberBean.memId}
+    </select>
+
+
+
+
 
 </mapper>
