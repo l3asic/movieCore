@@ -259,15 +259,100 @@ export default function MovieInfo() {
         */}
       <section className="border-t py-6 lg:py-12 xl:py-16" style={{marginBottom: "50px"}}>
         <div className="container">
-          <div className="grid items-start gap-4 md:grid-cols-[1fr_2fr] xl:gap-8">
+          <div className="row justify-content-center" style={{ display: "flex" }}>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl">영화 상세 정보들</h2>
+              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>상세정보</h2>
             </div>
-            <div
-              className="space-y-4 text-sm tracking-wide leading-paragraph md:text-base lg:space-y-6 lg:text-lg xl:space-y-8 dark:text-gray-400">
-              <p>
-                상세 정보들 추가 예정
-              </p>
+            <div className="col-md-8">
+              <div className="card shadow-sm text-white" style={{ backgroundColor: "#2f363f" }}>
+                <div className="card-body">
+
+
+                  {/* 상세 정보 한줄 */}
+                  <div className="row mb-4 mt-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 영화 제목 :  </strong> {movVo.movieBean.movieNm}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 영화 영문 제목 :  </strong> {movVo.movieBean.movieNmEn}
+                    </div>
+                  </div>
+
+                  <div className="row mb-4 mt-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 대표 장르 :  </strong> {movVo.movieBean.repGenreNm}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 장르 : </strong> {movVo.movieBean.genreAlt}
+                    </div>
+                  </div>
+
+                  <div className="row mb-4 mt-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 개봉일 : </strong> {movVo.movieBean.openDtFullStr}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 제작연도 : </strong> {movVo.movieBean.prdtYear}
+                    </div>
+                  </div>
+
+                  <div className="row mb-4 mt-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 제작 상태 : </strong> {movVo.movieBean.prdtStatNm}
+                    </div>
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 관람 등급 : </strong> {movVo.movieBean.watchGradeNm}
+                    </div>
+                  </div>
+
+                  <div className="row mb-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 감독 명 : </strong> directorNm
+                    </div>
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 출연진 : </strong> actorNm
+                    </div>
+                  </div>
+
+                  <div className="row mb-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 상영 시간 : </strong> {movVo.movieBean.showTm} 분
+                    </div>
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 상영 형태 : </strong> showTypeNm
+                    </div>
+                  </div>
+
+                  <div className="row mb-4">
+                    <div className="col-sm-6">
+                      <strong style={{ fontWeight: "normal" }}> 제작국가 : </strong> korNm
+                    </div>
+
+
+
+
+                  </div>
+
+                  {/* 제작 및 배급사 루프 맵 */}
+                  {movVo.movieBean.movieCompanyBeanList && movVo.movieBean.movieCompanyBeanList.length > 0 && (
+                    <div className="row mb-4">
+                      <div className="col-sm-12">
+                        <strong style={{fontWeight: "normal"}}> 제작 및 배급사 : </strong>
+
+                        {movVo.movieBean.movieCompanyBeanList.map((company, index) => (
+                          <span key={index}>
+                            {index > 0 && ", "}
+                            {company.companyNm}
+                          </span>
+                        ))}
+
+                      </div>
+                    </div>
+                  )}
+
+
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -371,6 +456,8 @@ export default function MovieInfo() {
       {/* 회색 가로줄 하나 */}
       <div className="header-divider"
            style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+
+      {/** 추후 예매 기능 추가 */}
 
       {/** 연관 영화 섹션 */}
       {/*<section className="border-t border-gray-200 py-6 lg:py-12 xl:py-16">
@@ -488,6 +575,14 @@ export default function MovieInfo() {
       }
     })
       .then(function (res) {
+
+        /* 개봉일 포맷 (1990.07.07 형식) */
+        if(res.data.movieBean.openDt != null){
+          const openDt = new Date(res.data.movieBean.openDt);
+          const openDtFullStr =  openDt.getFullYear() + '.' + String(openDt.getMonth() + 1).padStart(2, '0') + '.' + String(openDt.getDate()).padStart(2, '0'); ;
+          res.data.movieBean.openDtFullStr = openDtFullStr;
+        }
+
 
         setMovVo(prevMovVo => ({
           ...prevMovVo,
