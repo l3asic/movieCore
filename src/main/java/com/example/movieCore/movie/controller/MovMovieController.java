@@ -152,7 +152,17 @@ public class MovMovieController {
             
             // movieCd 값 기준 영화 상세정보 조회
             movVo.setMovieBean(movieService.selectMovieInfo(movVo));
+
             if(movVo.getMovieBean() != null){
+
+                // 영화 장르 조회
+                movVo.getMovieBean().setMovieGenreBeanList(movieService.selectMovieGenreList(movVo));
+                
+                // 영화 컴퍼니 조회
+                movVo.getMovieBean().setMovieCompanyBeanList(movieService.selectMovieCompanyList(movVo));
+                
+                // 추후 제작 국가 조회
+
                 resMap.put("movieBean", movVo.getMovieBean());
                 successResult = true;
             }else{
