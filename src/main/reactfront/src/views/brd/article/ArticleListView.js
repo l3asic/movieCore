@@ -158,64 +158,64 @@ const ArticleListView = () => {
       });
   }
 
-  // function searchArticle(){
-  //   axios({
-  //     url: '/searchArticle',
-  //     method: 'get',
-  //     params:{
-  //       brdId : brdVo.brdBoardBean.brdId,
-  //       schSelect : schSelect,
-  //       schText : schText
-  //     }
-  //
-  //   }).then(function (res){
-  //     let searchResult = res.data.brdVo.articleBeanList.map(article => {
-  //       // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
-  //       const date = new Date(article.createDt);
-  //
-  //       // Date 객체를 '0000.00.00' 형식의 문자열로 변환
-  //       const formattedDate = date.toLocaleDateString('ko-KR', {
-  //         year: 'numeric',
-  //         month: '2-digit',
-  //         day: '2-digit'
-  //       }).replace(/\.$/, '');
-  //
-  //       // article 객체에 새로운 속성으로 변환된 날짜를 할당
-  //       return {
-  //         ...article,
-  //         createDt: formattedDate
-  //       };
-  //     });
-  //
-  //     // 검색된 결과를 상태로 설정하여 화면에 렌더링될 수 있도록 함
-  //     setBrdVo(prevState => ({
-  //       ...prevState,
-  //       articleBeanList: searchResult
-  //     }));
-  //     setSchSelect('');
-  //     setSchText('');
-  //     // ㅇ
-  //
-  //
-  //   }).catch(function (err){
-  //     alert("조회 실패 (오류)");
-  //   });
-  //
-  // }
+  function searchArticle(){
+    axios({
+      url: '/searchArticle',
+      method: 'get',
+      params:{
+        brdId : brdVo.brdBoardBean.brdId,
+        schSelect : schSelect,
+        schText : schText
+      }
+
+    }).then(function (res){
+      let searchResult = res.data.brdVo.articleBeanList.map(article => {
+        // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
+        const date = new Date(article.createDt);
+
+        // Date 객체를 '0000.00.00' 형식의 문자열로 변환
+        const formattedDate = date.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }).replace(/\.$/, '');
+
+        // article 객체에 새로운 속성으로 변환된 날짜를 할당
+        return {
+          ...article,
+          createDt: formattedDate
+        };
+      });
+
+      // 검색된 결과를 상태로 설정하여 화면에 렌더링될 수 있도록 함
+      setBrdVo(prevState => ({
+        ...prevState,
+        articleBeanList: searchResult
+      }));
+      setSchSelect('');
+      setSchText('');
+      // ㅇ
+
+
+    }).catch(function (err){
+      alert("조회 실패 (오류)");
+    });
+
+  }
 
   return (
     <div>
       <h2>게시판입니다</h2>
       <div>
       <CInputGroup className="mb-3" style={{width: "30%", display: "flex", float:"right"}}>
-        <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect}>
+        <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect} name="schSelect">
           <option value="all">전체</option>
           <option value="subject">제목</option>
           <option value="content">내용</option>
           <option value="memName">작성자</option>
         </CFormSelect>
-        <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name={schText}/>
-        <CButton size="sm" className="mb-3" color="secondary" onClick={selectArticleList} name="searchBtn">검색</CButton>
+        <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name="schText"/>
+        <CButton size="sm" className="mb-3" color="secondary" onClick={searchArticle} name="searchBtn">검색</CButton>
       </CInputGroup>
       </div>
       <CTable className="boardTableList">
@@ -228,8 +228,9 @@ const ArticleListView = () => {
             <CTableHeaderCell scope="col" name="memName">작성자
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('memName')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="createDt">작성일</CTableHeaderCell>
+            <CTableHeaderCell scope="col" name="createDt">작성일
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('createDt')} />
+            </CTableHeaderCell>
             <CTableHeaderCell scope="col" name="viewCnt">조회수
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('viewCnt')} />
             </CTableHeaderCell>
