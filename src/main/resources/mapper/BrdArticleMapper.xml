@@ -132,7 +132,7 @@
         SELECT
             BA.ATCL_ID,
             BA.BRD_ID,
-            BA.MEM_ID,
+            MMI.MEM_NAME,
             BA.SUBJECT,
             BA.CONTENT,
             BA.VIEW_CNT,
@@ -144,6 +144,10 @@
             BA.ATCL_REPL_CNT
         FROM
             BRD_ARTICLE BA
+
+        LEFT JOIN MEM_MEMBER_INFO MMI
+        ON BA.MEM_ID = MMI.MEM_ID
+
         WHERE
             BA.STATE = 'B'
         AND
@@ -157,84 +161,39 @@
                 AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
             </when>
             <when test="boardBean.schSelect == 'memName'">
-                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                AND MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
             </when>
             <otherwise>
                 AND (
                 BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
                 OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
                 )
             </otherwise>
         </choose>
-
-        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
-
-    </select>
-
-    <select id="selectArticleList2" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
-
-        SELECT
-            BA.ATCL_ID,
-            BA.BRD_ID,
-            BA.MEM_ID,
-            BA.SUBJECT,
-            BA.CONTENT,
-            BA.VIEW_CNT,
-            BA.CREATE_DT,
-            BA.UPDATE_DT,
-            BA.EXPIRE_DT,
-            BA.EXPIRE_YN,
-            BA.STATE,
-            BA.ATCL_REPL_CNT
-        FROM
-            BRD_ARTICLE BA
-        WHERE
-            BA.STATE = 'B'
-        AND
-            BA.BRD_ID = #{boardBean.brdId}
-
-        <choose>
-            <when test="boardBean.schSelect == 'subject'">
-                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'content'">
-                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'memName'">
-                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <otherwise>
-                AND (
-                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
-                )
-            </otherwise>
-        </choose>
-        <if test="sortKey != null and sortOdr != null">
+        <if test="boardBean.sortKey != null and boardBean.sortOdr != null">
             ORDER BY
             <choose>
-                <when test="sortKey == 'subject'">
+                <when test="boardBean.sortKey == 'subject'">
                     BA.SUBJECT
                 </when>
-                <when test="sortKey == 'memName'">
-                    BA.MEM_ID
+                <when test="boardBean.sortKey == 'memName'">
+                    MMI.MEM_NAME
                 </when>
-                <when test="sortKey == 'createDt'">
+                <when test="boardBean.sortKey == 'createDt'">
                     BA.CREATE_DT
                 </when>
-                <when test="sortKey == 'viewCnt'">
+                <when test="boardBean.sortKey == 'viewCnt'">
                     BA.VIEW_CNT
                 </when>
                 <otherwise>
-                    BA.CREATE_DT DESC
+                    BA.CREATE_DT
                 </otherwise>
             </choose>
-            <if test="sortOdr == 'asc'">
+            <if test="boardBean.sortOdr == 'asc'">
                 ASC
             </if>
-            <if test="sortOdr == 'desc'">
+            <if test="boardBean.sortOdr == 'desc'">
                 DESC
             </if>
         </if>
@@ -248,7 +207,7 @@
         SELECT
             BA.ATCL_ID,
             BA.BRD_ID,
-            BA.MEM_ID,
+            MMI.MEM_NAME,
             BA.SUBJECT,
             BA.CONTENT,
             BA.VIEW_CNT,
@@ -260,6 +219,10 @@
             BA.ATCL_REPL_CNT
         FROM
             BRD_ARTICLE BA
+
+        LEFT JOIN MEM_MEMBER_INFO MMI
+        ON BA.MEM_ID = MMI.MEM_ID
+
         WHERE
             BA.STATE = 'B'
         AND
@@ -272,13 +235,13 @@
                 AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
             </when>
             <when test="boardBean.schSelect == 'memName'">
-                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                AND MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
             </when>
             <otherwise>
                 AND (
                 BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
                 OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                OR MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
                 )
             </otherwise>
         </choose>
@@ -288,7 +251,7 @@
         SELECT
             BA.ATCL_ID,
             BA.BRD_ID,
-            BA.MEM_ID,
+            MMI.MEM_NAME,
             BA.SUBJECT,
             BA.CONTENT,
             BA.VIEW_CNT,
@@ -323,10 +286,14 @@
             BB.REPL_YN
         FROM
             BRD_ARTICLE BA
+
         LEFT JOIN BRD_BOARD BB
         ON BA.BRD_ID = BB.BRD_ID
         LEFT JOIN BRD_FOLDER BF
         ON BB.FOL_ID = BF.FOL_ID
+        LEFT JOIN MEM_MEMBER_INFO MMI
+        ON BA.MEM_ID = MMI.MEM_ID
+
         WHERE
             BA.STATE = 'B'
           AND
@@ -387,63 +354,5 @@
         </choose>
 
     </select>
-
-    <select id="selectArticleListTotalCnt2" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
-        SELECT
-        COUNT(BA.ATCL_ID) totalCnt
-        FROM
-        BRD_ARTICLE BA
-
-        WHERE
-        BA.STATE = 'B'
-        AND
-        BA.BRD_ID = #{boardBean.brdId}
-        <choose>
-            <when test="boardBean.schSelect == 'subject'">
-                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'content'">
-                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'memName'">
-                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <otherwise>
-                AND (
-                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
-                )
-            </otherwise>
-        </choose>
-        <if test="sortKey != null and sortOdr != null">
-            ORDER BY
-            <choose>
-                <when test="sortKey == 'subject'">
-                    BA.SUBJECT
-                </when>
-                <when test="sortKey == 'memName'">
-                    BA.MEM_ID
-                </when>
-                <when test="sortKey == 'createDt'">
-                    BA.CREATE_DT
-                </when>
-                <when test="sortKey == 'viewCnt'">
-                    BA.VIEW_CNT
-                </when>
-                <otherwise>
-                    BA.CREATE_DT DESC
-                </otherwise>
-            </choose>
-            <if test="sortOdr == 'asc'">
-                ASC
-            </if>
-            <if test="sortOdr == 'desc'">
-                DESC
-            </if>
-        </if>
-
-    </select>
-
 
 </mapper>

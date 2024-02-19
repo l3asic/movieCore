@@ -284,7 +284,8 @@ const ArticleReg = () => {
     brdVo.articleBean = articleBean;
 
     /** 테스트용 기본값 추가 세팅 */
-    brdVo.articleBean.memId = "001";
+    var memberBean = JSON.parse(localStorage.getItem('memberBean'));
+    brdVo.articleBean.memId = memberBean.memId;
     // brdVo.articleBean.atclBean.expireDt =  new Date(); // 날짜 타입 컨트롤러 값 전송시 추가 확인 필요
 
     axios({
