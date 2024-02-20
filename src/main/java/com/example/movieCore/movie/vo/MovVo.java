@@ -2,6 +2,7 @@ package com.example.movieCore.movie.vo;
 
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.movie.bean.MovieBean;
+import com.example.movieCore.movie.bean.MoviePersonalMoviePoint;
 import com.example.movieCore.movie.bean.MoviePersonnalViewLogBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.utils.Paging;
@@ -25,6 +26,9 @@ public class MovVo {
 
     /** 사용자 정보 */
     private LoginMemberBean memberBean;
+
+    /** 영화 평가 (별점, 한줄평) */
+    private MoviePersonalMoviePoint moviePersonalMoviePointBean;
 
 
     /** 검색 조건 */

@@ -180,6 +180,7 @@ public class MovMovieController {
 
         }
 
+        resMap.put("memberBean", movVo.getMemberBean());
         resMap.put("successResult", successResult);
 
         return resMap;
@@ -248,6 +249,47 @@ public class MovMovieController {
 
         }
 
+        resMap.put("successResult", successResult);
+
+        return resMap;
+
+    }
+
+
+
+    /** 영화 모듈 - 평가 (별점, 한줄평) 등록 */
+    @PostMapping(value = "/updateMovPersonalMoviePoint")
+    @ResponseBody
+    public Map<String, Object> updateMovPersonalMoviePoint(@RequestBody MovVo movVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            // 포인트 빈에 memId 세팅
+            movVo.getMoviePersonalMoviePointBean().setMemId(movVo.getMemberBean().getMemId());
+
+            // 업데이트 모드) 조회하고 없으면 인서트, 있으면 업데이트
+            if(movVo.getMode().equals("update")){
+                // 상태값 기본 세팅
+                movVo.getMoviePersonalMoviePointBean().setState("B");
+                movieService.updateMovPersonalMoviePoint(movVo);
+
+
+
+            // 삭제 모드
+            }else if(movVo.getMode().equals("delete")){
+
+            }
+
+
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("movVo", movVo);
         resMap.put("successResult", successResult);
 
         return resMap;

@@ -77,4 +77,8 @@ public class MovMovieServiceImpl {
             return false;
         }
     }
+
+    public void updateMovPersonalMoviePoint(MovVo movVo) {
+        movMovieMapper.updateMovPersonalMoviePoint(movVo);
+    }
 }

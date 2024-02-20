@@ -437,6 +437,22 @@
     </select>
 
 
+    <!-- 영화 평가(별점, 한줄평) 없을시 등록/ 이미 있을시 업데이트  -->
+    <insert id="updateMovPersonalMoviePoint" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO MOV_PERSONAL_MOVIE_POINT (mem_id, movie_cd, point, repl, state)
+        VALUES (#{moviePersonalMoviePointBean.memId},
+                #{moviePersonalMoviePointBean.movieCd},
+                #{moviePersonalMoviePointBean.point},
+                #{moviePersonalMoviePointBean.repl},
+                #{moviePersonalMoviePointBean.state})
+            ON DUPLICATE KEY UPDATE
+                                 point = VALUES(point),
+                                 repl = VALUES(repl),
+                                 state = VALUES(state)
+    </insert>
+
+
+
 
 
 

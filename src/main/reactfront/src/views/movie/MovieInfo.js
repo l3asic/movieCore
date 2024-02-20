@@ -3,7 +3,12 @@
 import React, {useEffect, useState} from 'react';
 
 import ReactImg from '../../assets/images/react.jpg';
-import {CAvatar, CCardImage} from "@coreui/react";
+import {
+  CAvatar,
+  CButton,
+  CFormInput, CFormSelect,
+  CInputGroup
+} from "@coreui/react";
 import avatar2 from 'src/assets/images/avatars/2.jpg'
 import {useLocation} from "react-router-dom";
 import axios from "axios";
@@ -23,22 +28,28 @@ export default function MovieInfo() {
     movieBean:{
       movieCd : movieCd
     },
-    memberBean:{}
+    memberBean:{},
+
+    moviePersonalMoviePointBean:{
+      point : "5" // 기본값 별 5개
+    }
+
   });
 
 
 
   useEffect(() => {
-    /** 영화 조회 수 증가 */
-    addMovieViewCnt();
-
     /** 선택한 영화 정보 조회 */
     selectMovieInfo();
+
+    /** 영화 조회 수 증가 */
+    addMovieViewCnt();
   }, []);
+
 
   const [isHeartFilled, setIsHeartFilled] = useState(movVo.movieBean.fav); // 하트 아이콘의 상태
 
-  // 하트 아이콘 클릭 시
+  /** 하트 아이콘 클릭 시 */
   const handleHeartClick = () => {
 
     // 하트 아이콘 변경
@@ -46,6 +57,33 @@ export default function MovieInfo() {
     // 영화 찜 추가
     updateMovieFavorite();
 
+  };
+
+  /** 별점 선택 시 */
+  const handlePointChange = (event) => {
+    // 선택한 별점 값을 가져옵니다.
+    const selectedRating = event.target.value;
+
+    // movVo 상태를 업데이트하여 movPersonalMoviePoint의 point 값을 설정합니다.
+    setMovVo(prevMovVo => ({
+      ...prevMovVo,
+      moviePersonalMoviePointBean: {
+        ...prevMovVo.moviePersonalMoviePointBean,
+        point: selectedRating
+      }
+    }));
+  };
+
+  /** 한줄평 입력 시*/
+  const handleReplChange = (event) => {
+    const replValue = event.target.value;
+    setMovVo(prevMovVo => ({
+      ...prevMovVo,
+      moviePersonalMoviePointBean: {
+        ...prevMovVo.moviePersonalMoviePointBean,
+        repl: replValue
+      }
+    }));
   };
 
 
@@ -90,7 +128,7 @@ export default function MovieInfo() {
               {/* 대표 장르 칸 */}
               <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "20px"}}>{movVo.movieBean.repGenreNm}</p>
 
-              {/* 별점칸 (추후 예정) , 찜 칸 */}
+              {/* 평균 별점 칸 (추후 예정) , 찜 칸 */}
               <div style={{ marginBottom: "60px", display: "flex" }}>
                 <p className="text-sm tracking-wide md:text-base" style={{ marginRight: "400px" }}>별점 칸</p>
 
@@ -422,10 +460,12 @@ export default function MovieInfo() {
               <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{marginRight: "50px"}}>Reviews</h2>
             </div>
 
-            <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr] xl:gap-8">
+            <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr] xl:gap-8" style={{width: "100%", display: "block"}}>
+
+
 
               {/* 사람 + 한줄평 내용 */}
-              <div className="flex items-start gap-4" style={{marginBottom: "30px"}}>
+              <div className="flex items-start gap-4" style={{marginBottom: "30px", marginTop: "10px"}}>
                 {/* 프사 + 이름 */}
                 <div className="flex items-center gap-4" style={{display: "flex"}}>
                   {/*<img
@@ -442,18 +482,18 @@ export default function MovieInfo() {
                   {/* 프사 칸 */}
                   <CAvatar src={avatar2}/>
 
-                  {/* 아이디 + 별점 + 한줄평 내용 */}
+                  {/* 아이디 + 별점 + 한줄평 정보 영역 */}
                   <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
                     {/* 아이디 칸 */}
                     <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>유저 아이디</h3>
                     {/* 별점 칸 */}
                     <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
-                      <span className="text-sm font-medium tracking-tighter">★(3.5) 별점</span>
+                      <span className="text-sm font-medium tracking-tighter ">★(3.5) 별점</span>
                     </div>
                     {/* 한줄평 내용 칸 */}
                     <p
                       className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                      한줄 평 내용
+                      한줄평 내용 01
                     </p>
                   </div>
                 </div>
@@ -496,7 +536,41 @@ export default function MovieInfo() {
 
 
             </div>
+
           </div>
+
+          {/* 별점 + 한줄평 입력 영역 */}
+          <CInputGroup className="mb-3" >
+
+            {/* 별점 매기기*/}
+            <CFormSelect className="mb-3" name="point"
+                         style={{width : "10%", height: '50px'}}
+                         onChange={handlePointChange}
+            >
+              <option value="5">★★★★★</option>
+              <option value="4">★★★★</option>
+              <option value="3">★★★</option>
+              <option value="2">★★</option>
+              <option value="1">★</option>
+            </CFormSelect>
+
+
+            {/* 한줄평 */}
+            <CFormInput name="repl" placeholder="한줄평 남기기"
+                        style={{width : "80%", height: '50px' }}
+                        onChange={handleReplChange}
+            />
+
+            <CButton type="button" color="primary"
+                     style={{height: '50px'}}
+                     onClick={() => updateMovPersonalMoviePoint("update")}
+            >
+              평가 등록
+            </CButton>
+
+          </CInputGroup>
+
+
         </div>
       </section>
 
@@ -616,9 +690,6 @@ export default function MovieInfo() {
   /** 영화 조회수 증가 */
   function addMovieViewCnt() {
 
-    // 사용자 정보 추출
-    movVo.memberBean = JSON.parse(localStorage.getItem('memberBean'));
-
     axios({
       url: '/addMovieViewCnt',
       method: 'post',
@@ -667,6 +738,11 @@ export default function MovieInfo() {
           movieBean: res.data.movieBean
         }));
 
+        setMovVo(prevMovVo => ({
+          ...prevMovVo,
+          memberBean: res.data.memberBean
+        }));
+
         setIsHeartFilled(res.data.movieBean.fav);
 
 
@@ -706,6 +782,34 @@ export default function MovieInfo() {
       });
 
   }
+
+
+  /** 평가(별점, 한줄평) 등록 및 수정시 */
+  function updateMovPersonalMoviePoint(mode){
+    movVo.moviePersonalMoviePointBean.movieCd = movVo.movieBean.movieCd;
+
+    axios({
+      url: '/updateMovPersonalMoviePoint',
+      method: 'post',
+      data: {
+        moviePersonalMoviePointBean : movVo.moviePersonalMoviePointBean,
+        memberBean: movVo.memberBean,
+        mode : mode
+      }
+    })
+      .then(function (res) {
+
+      })
+      .catch(function (err) {
+        alert("실패 (오류)");
+      });
+  }
+
+
+
+
+
+
 
 
 }

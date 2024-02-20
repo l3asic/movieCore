@@ -38,4 +38,6 @@ public interface MovMovieMapper {
     void deleteMovieFav(MovVo movVo);
 
     int selectMovieFavorite(MovVo movVo);
+
+    void updateMovPersonalMoviePoint(MovVo movVo);
 }
