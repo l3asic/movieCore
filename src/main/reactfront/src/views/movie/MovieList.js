@@ -143,7 +143,7 @@ const MovieList = () => {
 
             rows[rows.length - 1].push(
               <CCard key={index}
-                     movieCd={movie.movieCd}
+                     moviecd={movie.movieCd}
                      style={cardStyle}
                      onClick={() => moveToMovieInfo(movie.movieCd)}
               >
