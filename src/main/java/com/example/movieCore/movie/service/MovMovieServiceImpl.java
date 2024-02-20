@@ -81,4 +81,12 @@ public class MovMovieServiceImpl {
     public void updateMovPersonalMoviePoint(MovVo movVo) {
         movMovieMapper.updateMovPersonalMoviePoint(movVo);
     }
+
+    public MoviePersonalMoviePoint selectMoviePersonalMoviePointBean(MovVo movVo) {
+        return movMovieMapper.selectMoviePersonalMoviePointBean(movVo);
+    }
+
+    public void deleteMovPersonalMoviePoint(MovVo movVo) {
+        movMovieMapper.deleteMovPersonalMoviePoint(movVo);
+    }
 }

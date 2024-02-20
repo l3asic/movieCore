@@ -63,6 +63,16 @@
     </resultMap>
 
 
+    <!-- 영화 평가 빈 -->
+    <resultMap type="com.example.movieCore.movie.bean.MoviePersonalMoviePoint" id="moviePersonalMoviePointBean">
+        <result column="movie_cd" property="movieCd" jdbcType="VARCHAR"/>
+        <result column="mem_id" property="memId" jdbcType="VARCHAR"/>
+        <result column="point" property="point" jdbcType="VARCHAR"/>
+        <result column="repl" property="repl" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
 
     <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
@@ -450,6 +460,27 @@
                                  repl = VALUES(repl),
                                  state = VALUES(state)
     </insert>
+
+
+    <!-- 영화 평가 정보 조회 -->
+    <select id="selectMoviePersonalMoviePointBean" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="moviePersonalMoviePointBean" >
+        SELECT
+            movie_cd,
+            mem_id,
+            point,
+            repl,
+            state
+        FROM MOV_PERSONAL_MOVIE_POINT
+        WHERE MOVIE_CD = #{movieBean.movieCd} AND MEM_ID = #{memberBean.memId}
+    </select>
+
+
+    <!-- 영화 평가 정보 삭제 -->
+    <select id="deleteMovPersonalMoviePoint" parameterType="com.example.movieCore.movie.vo.MovVo"  >
+        DELETE FROM MOV_PERSONAL_MOVIE_POINT
+        WHERE MOVIE_CD = #{moviePersonalMoviePointBean.movieCd} AND MEM_ID = #{moviePersonalMoviePointBean.memId};
+    </select>
+
 
 
 

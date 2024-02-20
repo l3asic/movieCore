@@ -40,4 +40,8 @@ public interface MovMovieMapper {
     int selectMovieFavorite(MovVo movVo);
 
     void updateMovPersonalMoviePoint(MovVo movVo);
+
+    MoviePersonalMoviePoint selectMoviePersonalMoviePointBean(MovVo movVo);
+
+    void deleteMovPersonalMoviePoint(MovVo movVo);
 }

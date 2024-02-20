@@ -170,7 +170,20 @@ public class MovMovieController {
                 movVo.getMovieBean().setFav(isFav);
 
 
+                // 영화 평가 정보 조회
+                movVo.setMoviePersonalMoviePointBean(movieService.selectMoviePersonalMoviePointBean(movVo));
+
+                // 영화 평가 여부 값 세팅
+                if(movVo.getMoviePersonalMoviePointBean() != null){
+                    movVo.getMovieBean().setEvaluated(true);
+                }else {
+                    movVo.getMovieBean().setEvaluated(false);
+                }
+
+
+
                 resMap.put("movieBean", movVo.getMovieBean());
+                resMap.put("moviePersonalMoviePointBean", movVo.getMoviePersonalMoviePointBean());
                 successResult = true;
             }else{
                 successResult = false;
@@ -257,7 +270,7 @@ public class MovMovieController {
 
 
 
-    /** 영화 모듈 - 평가 (별점, 한줄평) 등록 */
+    /** 영화 모듈 - 평가 (별점, 한줄평) 등록  / 삭제  */
     @PostMapping(value = "/updateMovPersonalMoviePoint")
     @ResponseBody
     public Map<String, Object> updateMovPersonalMoviePoint(@RequestBody MovVo movVo) throws Exception {
@@ -276,12 +289,11 @@ public class MovMovieController {
                 movVo.getMoviePersonalMoviePointBean().setState("B");
                 movieService.updateMovPersonalMoviePoint(movVo);
 
-
-
-            // 삭제 모드
+            // 삭제 모드)
             }else if(movVo.getMode().equals("delete")){
-
+                movieService.deleteMovPersonalMoviePoint(movVo);
             }
+            successResult = true;
 
 
 

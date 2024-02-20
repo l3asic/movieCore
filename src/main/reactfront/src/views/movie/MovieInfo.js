@@ -49,6 +49,9 @@ export default function MovieInfo() {
 
   const [isHeartFilled, setIsHeartFilled] = useState(movVo.movieBean.fav); // 하트 아이콘의 상태
 
+  const [isEvaluated, setIsEvaluated] = useState(movVo.movieBean.evaluated); // 영화 평가 여부
+
+
   /** 하트 아이콘 클릭 시 */
   const handleHeartClick = () => {
 
@@ -59,7 +62,7 @@ export default function MovieInfo() {
 
   };
 
-  /** 별점 선택 시 */
+  /** 별점 선택 시 값 세팅 */
   const handlePointChange = (event) => {
     // 선택한 별점 값을 가져옵니다.
     const selectedRating = event.target.value;
@@ -74,7 +77,7 @@ export default function MovieInfo() {
     }));
   };
 
-  /** 한줄평 입력 시*/
+  /** 한줄평 입력 시 값 세팅*/
   const handleReplChange = (event) => {
     const replValue = event.target.value;
     setMovVo(prevMovVo => ({
@@ -539,37 +542,90 @@ export default function MovieInfo() {
 
           </div>
 
-          {/* 별점 + 한줄평 입력 영역 */}
-          <CInputGroup className="mb-3" >
+          {/** 평가여부 분기 (평가하였을시 : 출력칸 ,  미평가시 : 입력칸) */}
+          {isEvaluated ? (
+            /* 내 평가(별점 + 한줄평) 출력 영역 */
+            <CInputGroup className="mb-3">
+              {/* 별점 매기기*/}
+              <CFormSelect
+                className="mb-3"
+                name="point"
+                style={{ width: "10%", height: '50px' }}
+                onChange={handlePointChange}
+                disabled
+                value={movVo.moviePersonalMoviePointBean.point}
+              >
+                <option value="5">★★★★★</option>
+                <option value="4">★★★★</option>
+                <option value="3">★★★</option>
+                <option value="2">★★</option>
+                <option value="1">★</option>
+              </CFormSelect>
 
-            {/* 별점 매기기*/}
-            <CFormSelect className="mb-3" name="point"
-                         style={{width : "10%", height: '50px'}}
-                         onChange={handlePointChange}
-            >
-              <option value="5">★★★★★</option>
-              <option value="4">★★★★</option>
-              <option value="3">★★★</option>
-              <option value="2">★★</option>
-              <option value="1">★</option>
-            </CFormSelect>
+              {/* 한줄평 */}
+              <CFormInput
+                name="repl"
+                placeholder={movVo.moviePersonalMoviePointBean.repl}
+                style={{ width: "70%", height: '50px' }}
+                onChange={handleReplChange}
+                readOnly
+              />
 
+              <CButton
+                type="button"
+                color="dark"
+                variant="outline"
+                style={{ height: '50px' }}
+                onClick={updatePointInputBox}
+              >
+                수정
+              </CButton>
 
-            {/* 한줄평 */}
-            <CFormInput name="repl" placeholder="한줄평 남기기"
-                        style={{width : "80%", height: '50px' }}
-                        onChange={handleReplChange}
-            />
+              <CButton
+                type="button"
+                color="dark"
+                variant="outline"
+                style={{ height: '50px' }}
+                onClick={() => updateMovPersonalMoviePoint("delete")}
+              >
+                삭제
+              </CButton>
+            </CInputGroup>
+          ) : (
+            /* 별점 + 한줄평 입력 영역 */
+            <CInputGroup className="mb-3">
+              {/* 별점 매기기*/}
+              <CFormSelect
+                className="mb-3"
+                name="point"
+                style={{ width: "10%", height: '50px' }}
+                onChange={handlePointChange}
+              >
+                <option value="5">★★★★★</option>
+                <option value="4">★★★★</option>
+                <option value="3">★★★</option>
+                <option value="2">★★</option>
+                <option value="1">★</option>
+              </CFormSelect>
 
-            <CButton type="button" color="primary"
-                     style={{height: '50px'}}
-                     onClick={() => updateMovPersonalMoviePoint("update")}
-            >
-              평가 등록
-            </CButton>
+              {/* 한줄평 */}
+              <CFormInput
+                name="repl"
+                placeholder="한줄평 남기기"
+                style={{ width: "80%", height: '50px' }}
+                onChange={handleReplChange}
+              />
 
-          </CInputGroup>
-
+              <CButton
+                type="button"
+                color="primary"
+                style={{ height: '50px' }}
+                onClick={() => updateMovPersonalMoviePoint("update")}
+              >
+                평가 등록
+              </CButton>
+            </CInputGroup>
+          )}
 
         </div>
       </section>
@@ -735,15 +791,13 @@ export default function MovieInfo() {
 
         setMovVo(prevMovVo => ({
           ...prevMovVo,
-          movieBean: res.data.movieBean
-        }));
-
-        setMovVo(prevMovVo => ({
-          ...prevMovVo,
-          memberBean: res.data.memberBean
+          movieBean: res.data.movieBean,
+          moviePersonalMoviePointBean: res.data.moviePersonalMoviePointBean
         }));
 
         setIsHeartFilled(res.data.movieBean.fav);
+
+        setIsEvaluated(res.data.movieBean.evaluated);
 
 
       })
@@ -786,6 +840,19 @@ export default function MovieInfo() {
 
   /** 평가(별점, 한줄평) 등록 및 수정시 */
   function updateMovPersonalMoviePoint(mode){
+
+    // 포인트 빈 기본 객체세팅
+    if(movVo.moviePersonalMoviePointBean == null){
+      movVo.moviePersonalMoviePointBean = {
+        point : "5",
+        repl : ''
+      }
+    }
+    // 별 기본값 5 강제 세팅
+    if(movVo.moviePersonalMoviePointBean.point == null){
+      movVo.moviePersonalMoviePointBean.point = "5";
+    }
+
     movVo.moviePersonalMoviePointBean.movieCd = movVo.movieBean.movieCd;
 
     axios({
@@ -798,7 +865,8 @@ export default function MovieInfo() {
       }
     })
       .then(function (res) {
-
+        // 평가 정보, 여부 갱신
+        selectMovieInfo();
       })
       .catch(function (err) {
         alert("실패 (오류)");
@@ -807,6 +875,16 @@ export default function MovieInfo() {
 
 
 
+  /** 내 한줄 평 수정 버튼 클릭 시 */
+  function updatePointInputBox(){
+
+    // 한줄 평 인풋박스 입력으로 전환
+    setIsEvaluated(false);
+
+    // 별 5개 기본값 강제 세팅
+    movVo.moviePersonalMoviePointBean.point = "5";
+
+  }
 
 
 

@@ -45,6 +45,9 @@ public class MovieBean {
     /** 영화 찜하기 정보 */
     private boolean isFav;
 
+    /** 영화 평가여부 정보 */
+    private boolean isEvaluated;
+
 
 
 
