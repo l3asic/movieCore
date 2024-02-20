@@ -44,4 +44,6 @@ public interface MovMovieMapper {
     MoviePersonalMoviePoint selectMoviePersonalMoviePointBean(MovVo movVo);
 
     void deleteMovPersonalMoviePoint(MovVo movVo);
+
+    void updateMovieInfoPoint(MovVo movVo);
 }

@@ -293,6 +293,10 @@ public class MovMovieController {
             }else if(movVo.getMode().equals("delete")){
                 movieService.deleteMovPersonalMoviePoint(movVo);
             }
+
+            // 영화 상세정보 평가 값 갱신
+            movieService.updateMovieInfoPoint(movVo);
+
             successResult = true;
 
 

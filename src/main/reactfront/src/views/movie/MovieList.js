@@ -152,10 +152,10 @@ const MovieList = () => {
                   <CCardTitle>{movie.movieNm} ({movie.openDt})</CCardTitle>
                   <CCardText className="d-inline-flex">
                     <small>{movie.repGenreNm}</small>
-                    <small> 제작국가 </small>
+                    <small> / 제작국가 추가예정 </small>
                   </CCardText>
                   <CCardText>
-                    <small className="text-medium-emphasis">별점</small>
+                    <small className="text-medium-emphasis">★ {movie.pointAvg} ({movie.pointTotalCnt}) </small>
                   </CCardText>
                 </CCardBody>
               </CCard>

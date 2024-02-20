@@ -133,7 +133,7 @@ export default function MovieInfo() {
 
               {/* 평균 별점 칸 (추후 예정) , 찜 칸 */}
               <div style={{ marginBottom: "60px", display: "flex" }}>
-                <p className="text-sm tracking-wide md:text-base" style={{ marginRight: "400px" }}>별점 칸</p>
+                <h5 className="text-2xl tracking-wide md:text-base" style={{ marginRight: "350px" }}>★ {movVo.movieBean.pointAvg} ({movVo.movieBean.pointTotalCnt})</h5>
 
                 {/* 찜 : 하트 아이콘 */}
                 <img src={isHeartFilled ? fillHeartIcon : heartIcon} // 상태에 따라 아이콘 변경
@@ -544,53 +544,61 @@ export default function MovieInfo() {
 
           {/** 평가여부 분기 (평가하였을시 : 출력칸 ,  미평가시 : 입력칸) */}
           {isEvaluated ? (
-            /* 내 평가(별점 + 한줄평) 출력 영역 */
-            <CInputGroup className="mb-3">
-              {/* 별점 매기기*/}
-              <CFormSelect
-                className="mb-3"
-                name="point"
-                style={{ width: "10%", height: '50px' }}
-                onChange={handlePointChange}
-                disabled
-                value={movVo.moviePersonalMoviePointBean.point}
-              >
-                <option value="5">★★★★★</option>
-                <option value="4">★★★★</option>
-                <option value="3">★★★</option>
-                <option value="2">★★</option>
-                <option value="1">★</option>
-              </CFormSelect>
+            <div>
+              {/* 한줄 평 태그 */}
+              <div className="space-y-2">
+                <h4 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{marginBottom:"20px"}}>내 평가</h4>
+              </div>
 
-              {/* 한줄평 */}
-              <CFormInput
-                name="repl"
-                placeholder={movVo.moviePersonalMoviePointBean.repl}
-                style={{ width: "70%", height: '50px' }}
-                onChange={handleReplChange}
-                readOnly
-              />
+              {/* 내 평가(별점 + 한줄평) 출력 영역 */}
+              <CInputGroup className="mb-3">
 
-              <CButton
-                type="button"
-                color="dark"
-                variant="outline"
-                style={{ height: '50px' }}
-                onClick={updatePointInputBox}
-              >
-                수정
-              </CButton>
+                {/* 별점 매기기*/}
+                <CFormSelect
+                  className="mb-3"
+                  name="point"
+                  style={{width: "10%", height: '50px'}}
+                  onChange={handlePointChange}
+                  disabled
+                  value={movVo.moviePersonalMoviePointBean.point}
+                >
+                  <option value="5">★★★★★</option>
+                  <option value="4">★★★★</option>
+                  <option value="3">★★★</option>
+                  <option value="2">★★</option>
+                  <option value="1">★</option>
+                </CFormSelect>
 
-              <CButton
-                type="button"
-                color="dark"
-                variant="outline"
-                style={{ height: '50px' }}
-                onClick={() => updateMovPersonalMoviePoint("delete")}
-              >
-                삭제
-              </CButton>
-            </CInputGroup>
+                {/* 한줄평 */}
+                <CFormInput
+                  name="repl"
+                  placeholder={movVo.moviePersonalMoviePointBean.repl}
+                  style={{width: "70%", height: '50px'}}
+                  onChange={handleReplChange}
+                  readOnly
+                />
+
+                <CButton
+                  type="button"
+                  color="dark"
+                  variant="outline"
+                  style={{height: '50px'}}
+                  onClick={updatePointInputBox}
+                >
+                  수정
+                </CButton>
+
+                <CButton
+                  type="button"
+                  color="dark"
+                  variant="outline"
+                  style={{height: '50px'}}
+                  onClick={() => updateMovPersonalMoviePoint("delete")}
+                >
+                  삭제
+                </CButton>
+              </CInputGroup>
+            </div>
           ) : (
             /* 별점 + 한줄평 입력 영역 */
             <CInputGroup className="mb-3">
@@ -598,7 +606,7 @@ export default function MovieInfo() {
               <CFormSelect
                 className="mb-3"
                 name="point"
-                style={{ width: "10%", height: '50px' }}
+                style={{width: "10%", height: '50px'}}
                 onChange={handlePointChange}
               >
                 <option value="5">★★★★★</option>
@@ -612,14 +620,14 @@ export default function MovieInfo() {
               <CFormInput
                 name="repl"
                 placeholder="한줄평 남기기"
-                style={{ width: "80%", height: '50px' }}
+                style={{width: "80%", height: '50px'}}
                 onChange={handleReplChange}
               />
 
               <CButton
                 type="button"
                 color="primary"
-                style={{ height: '50px' }}
+                style={{height: '50px'}}
                 onClick={() => updateMovPersonalMoviePoint("update")}
               >
                 평가 등록

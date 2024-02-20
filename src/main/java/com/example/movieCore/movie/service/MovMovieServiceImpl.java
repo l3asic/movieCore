@@ -89,4 +89,8 @@ public class MovMovieServiceImpl {
     public void deleteMovPersonalMoviePoint(MovVo movVo) {
         movMovieMapper.deleteMovPersonalMoviePoint(movVo);
     }
+
+    public void updateMovieInfoPoint(MovVo movVo) {
+        movMovieMapper.updateMovieInfoPoint(movVo);
+    }
 }
