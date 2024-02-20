@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
 import CIcon from "@coreui/icons-react";
-import {cilJustifyCenter, cilSwapVertical} from "@coreui/icons";
+import {cilJustifyCenter, cilLoopCircular, cilSwapVertical} from "@coreui/icons";
 
 const ArticleListView = () => {
 
@@ -106,8 +106,6 @@ const ArticleListView = () => {
         paging
       }));
 
-      setSchSelect('');
-      setSchText('');
       setSortKey(res.data.brdVo.boardBean.sortKey);
       setSortOdr(res.data.brdVo.boardBean.sortOdr);
 
@@ -203,6 +201,26 @@ const ArticleListView = () => {
 
   }
 
+  /** 검색, 필터 초기화  */
+  function refreshFilterSearch(){
+
+    // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
+    schSelect = '';
+    schText = '';
+
+    // 남겨진 검색조건 값도 초기화
+    setSchSelect('');
+    setSchText('');
+
+    // 정렬 초기화
+    sortKey = '';
+    sortOdr = '';
+
+    // 초기화된 조건으로 리스트 조회
+    selectArticleList();
+
+  }
+
   return (
     <div>
       <h2>게시판입니다</h2>
@@ -216,6 +234,15 @@ const ArticleListView = () => {
         </CFormSelect>
         <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name="schText"/>
         <CButton size="sm" className="mb-3" color="secondary" onClick={searchArticle} name="searchBtn">검색</CButton>
+        {/* 초기화 */}
+        <CButton
+          className="mb-3"
+          color="black"
+          variant="outline"
+          style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+          onClick={refreshFilterSearch}>
+          <CIcon icon={cilLoopCircular} />
+        </CButton>
       </CInputGroup>
       </div>
       <CTable className="boardTableList">
