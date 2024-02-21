@@ -12,6 +12,5 @@ public class MigMoviePeopleInfoBean {
     private String sex;
     private String repRoleNm;
     private String filmos;
-    private String movieCd;
     private String homepages;
 }

@@ -191,7 +191,6 @@
                 SEX,
                 REP_ROLE_NM,
                 FILMO_NAMES,
-                MOVIE_CD,
                 HOMEPAGES
             )
         values
@@ -202,7 +201,6 @@
                 #{migMoviePeopleInfoBean.sex},
                 #{migMoviePeopleInfoBean.repRoleNm},
                 #{migMoviePeopleInfoBean.filmos},
-                #{migMoviePeopleInfoBean.movieCd},
                 #{migMoviePeopleInfoBean.homepages}
 
             )

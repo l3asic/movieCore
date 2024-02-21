@@ -347,8 +347,6 @@ public class MigMovManageController {
         // 디비서 영화인 리스트 조회
         movVo.setMigMoviePeopleBeanList(movManageService.selectMoviePeopleList(movVo));
 
-
-
         /** 발급받은 API 키  분담용  */
         String key1 = "7ed99cc4e7bce9910e15252a08c4ec17";
         String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
