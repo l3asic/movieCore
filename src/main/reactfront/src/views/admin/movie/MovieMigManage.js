@@ -13,30 +13,33 @@ function MovieMigManage() {
   return (
     <>
       <h3 className="mb-4">영화 이관 관리 페이지 입니다</h3>
-      <h4 > 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! </h4>
+      <h4> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!!  </h4>
       <CContainer>
         <CRow className="mt-4">
           <CCol>
-            < CButton color="danger" size="lg" onClick={callMovieApiSyncDB}> 영화 목록 API 호출 및 DB 이관 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMovieCompanyApiSyncDB}> 1. 영화 회사 API 호출 및 DB 이관 </ CButton>
           </CCol>
           <CCol>
-            < CButton color="dark" size="lg" onClick={callMovieCompanyApiSyncDB}> 영화 회사 API 호출 및 DB 이관 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMovieNationsApiSyncDB}> 2. 영화 제작 국가 API 호출 및 DB 이관 </ CButton>
           </CCol>
         </CRow>
+
         <CRow className="mt-4">
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callMoviePeopleApiSyncDB}> 영화 인 API 호출 및 DB 이관 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMoviePeopleApiSyncDB}> 3. 영화 인 API 호출 및 DB 이관 </ CButton>
           </CCol>
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callMoviePeopleInfoApiSyncDB}> 영화 인 상세정보 API 호출 및 DB
-              이관 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMoviePeopleInfoApiSyncDB}> 4. 영화 인 상세정보 API 호출 및 DB 이관 </ CButton>
           </CCol>
         </CRow>
+
         <CRow className="mt-4">
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callMovieNationsApiSyncDB}> 영화 제작 국가 API 호출 및 DB 이관 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMovieApiSyncDB}> 5. 영화 목록 API 호출 및 DB 이관 </ CButton>
           </CCol>
         </CRow>
+
+
       </CContainer>
     </>
   )

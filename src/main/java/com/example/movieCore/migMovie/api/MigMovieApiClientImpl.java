@@ -17,6 +17,15 @@ public class MigMovieApiClientImpl {
     private String key = "7ed99cc4e7bce9910e15252a08c4ec17";
     private String key2 = "61e605aeb1f2bb5b622129f67ce109e2";
 
+    private String key3 = "2de1d6d0dab3e485b0d97f0ff5b0bd25";
+    private String key4 = "7957ef755545f3af1d212a0ece169def";
+    private String key5 = "a4277be54018650843ae4f7b5b2a8984";
+    private String key6 = "7880a9b4189631c7ea79e950f48d1d83";
+    private String key7 = "836ad4f96d7c95ac85c96d2e5e8125f7";
+    private String key8 = "9c6dea5d953915b92a695607cb91e48b";
+    private String key9 = "973cd4977f769baff219c4d0867bdfba";
+    private String key10 = "d546837bf35ea5ff3622dcbccd80bed5";
+
     private final DataConverter dataConverter = new DataConverter();
 
 
@@ -184,7 +193,7 @@ public class MigMovieApiClientImpl {
         WebClient webClient = WebClient.create();
 
         // API 호출 URL 및 파라미터 조합
-        String fullUrl = String.format("%s?key=%s&curPage=%s&itemPerPage=%s", apiUrl, key2, curPage+"","100" );
+        String fullUrl = String.format("%s?key=%s&curPage=%s&itemPerPage=%s", apiUrl, key4, curPage+"","100" );
 
         // API 호출 및 응답 받기
         String responseBody = webClient.get()
