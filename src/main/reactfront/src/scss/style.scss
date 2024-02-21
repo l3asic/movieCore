@@ -39,3 +39,11 @@ $enable-rtl: true;
     width: 8%; /* 2 out of 20 (1:8:4:4:2 ratio) */
   }
 }
+
+.cursorPoint {
+  cursor: pointer;
+}
+
+.cursorDefault {
+  cursor: default;
+}

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
 import CIcon from "@coreui/icons-react";
 import {cilJustifyCenter, cilLoopCircular, cilSwapVertical} from "@coreui/icons";
+import scss from '../../../scss/style.scss';
 
 const ArticleListView = () => {
 
@@ -266,11 +267,11 @@ const ArticleListView = () => {
         <CTableBody>
           {brdVo.articleBeanList.map((article, index) => (
             <CTableRow key={index}>
-              <CTableHeaderCell scope="col">{index + 1}</CTableHeaderCell>
-              <CTableHeaderCell scope="col" value={article.atclId} onClick={() => selectArticleDetail(article.atclId)}>{article.subject}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">{article.memName}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">{article.createDt}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">{article.viewCnt}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">{index + 1}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorPoint" value={article.atclId} onClick={() => selectArticleDetail(article.atclId)}>{article.subject}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">{article.memName}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">{article.createDt}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">{article.viewCnt}</CTableHeaderCell>
             </CTableRow>
           ))}
         </CTableBody>
