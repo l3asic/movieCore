@@ -41,4 +41,6 @@ public interface MigMovManageMapper {
     void insertMovieGenreMap(MigMovVo movVo);
 
     int checkPeopleInfo(String peopleCd);
+
+    int callDBTest();
 }

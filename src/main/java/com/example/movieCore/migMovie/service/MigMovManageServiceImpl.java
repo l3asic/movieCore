@@ -77,4 +77,8 @@ public class MigMovManageServiceImpl {
     public int checkPeopleInfo(String peopleCd) {
         return migMovManageMapper.checkPeopleInfo(peopleCd);
     }
+
+    public int callDBTest() {
+       return migMovManageMapper.callDBTest();
+    }
 }

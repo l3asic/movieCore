@@ -572,6 +572,29 @@ public class MigMovManageController {
 
 
 
+    /** 디비테스트 용 */
+    @PostMapping(value = "/callDBTest")
+    @ResponseBody
+    public Map<String, Object> callDBTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+
+        int rtnNum = 0;
+        rtnNum = movManageService.callDBTest();
+
+        System.out.println(rtnNum);
+
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("rtnNum", rtnNum);
+        return resMap;
+
+    }
+
+
+
+
+
 
 
 

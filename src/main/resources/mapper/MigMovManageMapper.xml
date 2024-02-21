@@ -313,6 +313,12 @@
     </select>
 
 
+    <!-- 디비 테스트 -->
+    <select id="callDBTest" parameterType="String" resultType="integer">
+        select 4 from dual
+    </select>
+
+
 
 
 

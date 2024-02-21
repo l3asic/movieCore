@@ -39,6 +39,12 @@ function MovieMigManage() {
           </CCol>
         </CRow>
 
+        <CRow className="mt-4">
+          <CCol>
+            < CButton color="secondary" size="lg" onClick={callDBTest}> 99. db 테스트 </ CButton>
+          </CCol>
+        </CRow>
+
 
       </CContainer>
     </>
@@ -127,6 +133,23 @@ function callMovieNationsApiSyncDB() {
     params: {}
 
   }).then(function (res) {
+  }).catch(function (err) {
+    alert("실패 (오류)");
+  });
+
+}
+
+
+/** 영화 제작 국가 api 호출 */
+function callDBTest() {
+  axios({
+    url: '/callDBTest',
+    method: 'post',
+    params: {}
+
+  }).then(function (res) {
+    alert(res.data.rtnNum);
+
   }).catch(function (err) {
     alert("실패 (오류)");
   });
