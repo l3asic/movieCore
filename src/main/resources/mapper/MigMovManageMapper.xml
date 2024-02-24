@@ -311,6 +311,38 @@
     </select>
 
 
+
+    <!-- 영화인 이름 검색 -->
+    <select id="selectPeopleCdByNm" parameterType="String" resultMap="migMoviePeopleBean">
+        select
+        people_cd,
+        people_nm,
+        people_nm_en,
+        rep_role_nm,
+        filmo_names
+        from
+        MOV_PEOPLE
+        where
+        people_nm = #{peopleNm}
+    </select>
+
+
+    <!-- 영화 감독 매핑 인서트 -->
+    <insert id="insertMoviePeopleMap" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
+        insert into MOV_PEOPLE_MAP
+        (
+            PEOPLE_CD,
+            movie_cd,
+            rep_role_nm
+        )
+        VALUES (
+                   #{migMoviePeopleBean.peopleCd},
+                   #{migMovieBean.movieCd},
+                   #{migMoviePeopleBean.repRoleNm}
+               )
+    </insert>
+
+
     <!-- 디비 테스트 -->
     <select id="callDBTest" parameterType="String" resultType="integer">
         select 4 from dual

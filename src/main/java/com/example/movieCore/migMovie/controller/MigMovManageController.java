@@ -2,9 +2,7 @@ package com.example.movieCore.migMovie.controller;
 
 import com.example.movieCore.migMovie.api.DataConverter;
 import com.example.movieCore.migMovie.api.MigMovieApiClientImpl;
-import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
-import com.example.movieCore.migMovie.bean.MigMovieInfoBean;
-import com.example.movieCore.migMovie.bean.MigMovieNationBean;
+import com.example.movieCore.migMovie.bean.*;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
 import com.example.movieCore.migMovie.vo.MigMovVo;
 import com.example.movieCore.utils.MakeUUID;
@@ -219,6 +217,105 @@ public class MigMovManageController {
                     } // 장르 for
 
                 }
+
+                
+                
+                
+                /** 영화인 매핑 이관코드 */
+
+                /** 감독 매핑 인서트 */
+                for (int l = 0; l < movVo.getMigMovieInfoBean().getDirectors().size(); l++) {
+
+                    String peopleNm = (String) ((LinkedHashMap) movVo.getMigMovieInfoBean().getDirectors().get(l)).get("peopleNm");
+
+                    // 감독이름으로 영화인 테이블에서 peopleCd 조회
+                    ArrayList<MigMoviePeopleBean> directorBeanList = movManageService.selectPeopleCdByNm(peopleNm);
+
+                    if(directorBeanList != null && directorBeanList.size()>0){
+                        for (int i = 0; i < directorBeanList.size(); i++) {
+
+                            // 검색된 사람이 한명이면 바로 할당
+                            if(directorBeanList.size() == 1) {
+                                movVo.setMigMoviePeopleBean(directorBeanList.get(i));
+
+                                break;
+
+                                // 필모에 영화명이 있다면 할당
+                            } else if (directorBeanList.get(i).getFilmoNames() != null
+                                    && directorBeanList.get(i).getFilmoNames().indexOf(movVo.getMigMovieBean().getMovieNm()) > -1
+                            ) {
+                                movVo.setMigMoviePeopleBean(directorBeanList.get(i));
+
+                                break;
+
+                                // 감독이면 할당 (동명이인 감독 두명일수도)
+                            }else if(directorBeanList.get(i).getRepRoleNm().equals("감독")){
+                                movVo.setMigMoviePeopleBean(directorBeanList.get(i));
+
+                                break;
+
+                            }
+
+                        } // for i
+
+                        // 영화 감독 매핑 인서트
+                        movManageService.insertMoviePeopleMap(movVo);
+                    }else {
+                        System.out.println("검색된 감독이 없음?");
+                    }
+
+
+
+
+                }
+
+
+                /** 배우 매핑 인서트 */
+                for (int l = 0; l < movVo.getMigMovieInfoBean().getActors().size(); l++) {
+
+                    String peopleNm = (String) ((LinkedHashMap) movVo.getMigMovieInfoBean().getActors().get(l)).get("peopleNm");
+
+                    // 배우 이름으로 영화인 테이블에서 peopleCd 조회
+                    ArrayList<MigMoviePeopleBean> actorBeanList = movManageService.selectPeopleCdByNm(peopleNm);
+
+                    if(actorBeanList != null && actorBeanList.size()>0){
+                        for (int i = 0; i < actorBeanList.size(); i++) {
+
+                            // 검색된 사람이 한명이면 바로 할당
+                            if(actorBeanList.size() == 1) {
+                                movVo.setMigMoviePeopleBean(actorBeanList.get(i));
+
+                                break;
+
+                                // 필모에 영화명이 있다면 할당
+                            } else if (actorBeanList.get(i).getFilmoNames() != null
+                                    && actorBeanList.get(i).getFilmoNames().indexOf(movVo.getMigMovieBean().getMovieNm()) > -1
+                            ) {
+                                movVo.setMigMoviePeopleBean(actorBeanList.get(i));
+
+                                break;
+
+                                // 배우면 할당 (동명이인 배우 두명일수도)
+                            }else if(actorBeanList.get(i).getRepRoleNm().equals("배우")){
+                                movVo.setMigMoviePeopleBean(actorBeanList.get(i));
+
+                                break;
+
+                            }
+
+                        } // for i
+
+                        // 영화 배우 매핑 인서트
+                        movManageService.insertMoviePeopleMap(movVo);
+                    }else {
+                        System.out.println("검색된 배우가 없음?");
+                    }
+
+
+
+
+                }
+
 
 
 

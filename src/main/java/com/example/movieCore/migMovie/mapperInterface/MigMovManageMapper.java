@@ -43,4 +43,8 @@ public interface MigMovManageMapper {
     int checkPeopleInfo(String peopleCd);
 
     int callDBTest();
+
+    ArrayList<MigMoviePeopleBean> selectPeopleCdByNm(String peopleNm);
+
+    void insertMoviePeopleMap(MigMovVo movVo);
 }

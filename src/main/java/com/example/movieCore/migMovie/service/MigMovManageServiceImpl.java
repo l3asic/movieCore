@@ -81,4 +81,12 @@ public class MigMovManageServiceImpl {
     public int callDBTest() {
        return migMovManageMapper.callDBTest();
     }
+
+    public ArrayList<MigMoviePeopleBean> selectPeopleCdByNm(String peopleNm) {
+        return migMovManageMapper.selectPeopleCdByNm(peopleNm);
+    }
+
+    public void insertMoviePeopleMap(MigMovVo movVo) {
+        migMovManageMapper.insertMoviePeopleMap(movVo);
+    }
 }
