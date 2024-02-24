@@ -10,6 +10,7 @@ import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -259,7 +260,11 @@ public class MigMovManageController {
                         } // for i
 
                         // 영화 감독 매핑 인서트
-                        movManageService.insertMoviePeopleMap(movVo);
+                        try {
+                            movManageService.insertMoviePeopleMap(movVo);
+                        }catch (DuplicateKeyException e){
+
+                        }
                     }else {
                         System.out.println("검색된 감독이 없음?");
                     }
@@ -306,7 +311,11 @@ public class MigMovManageController {
                         } // for i
 
                         // 영화 배우 매핑 인서트
-                        movManageService.insertMoviePeopleMap(movVo);
+                        try {
+                            movManageService.insertMoviePeopleMap(movVo);
+                        }catch (DuplicateKeyException e){
+
+                        }
                     }else {
                         System.out.println("검색된 배우가 없음?");
                     }
