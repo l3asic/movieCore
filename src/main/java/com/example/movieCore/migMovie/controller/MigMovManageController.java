@@ -356,7 +356,7 @@ public class MigMovManageController {
         String key6 = "7880a9b4189631c7ea79e950f48d1d83";
         String key7 = "836ad4f96d7c95ac85c96d2e5e8125f7";
         String key8 = "9c6dea5d953915b92a695607cb91e48b";
-        String key9 = "973cd4977f769baff219c4d0867bdfba";
+        String key9 = "f72356a7dcb9b78b3e1e3768bb29a04e"; // 41번으로 교체
         String key10 = "d546837bf35ea5ff3622dcbccd80bed5";
         String key11 = "fc5475472496209a244f34c434e6e5ef";
         String key12 = "382ae0a5ec52ebdc9d00af23359cab17";
@@ -494,8 +494,6 @@ public class MigMovManageController {
                 customKey = key39;
             }else if(divideCnt==105999){
                 customKey = key40;
-            }else {
-                System.out.println("문제?");
             }
 
 
