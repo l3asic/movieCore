@@ -225,7 +225,7 @@ public class MigMovManageController {
                 /** 영화인 매핑 이관코드 */
 
                 /** 감독 매핑 인서트 */
-                for (int l = 0; l < movVo.getMigMovieInfoBean().getDirectors().size(); l++) {
+                for (int l = 0; movVo.getMigMovieInfoBean().getDirectors() != null && l < movVo.getMigMovieInfoBean().getDirectors().size(); l++) {
 
                     String peopleNm = (String) ((LinkedHashMap) movVo.getMigMovieInfoBean().getDirectors().get(l)).get("peopleNm");
 
@@ -261,7 +261,11 @@ public class MigMovManageController {
 
                         // 영화 감독 매핑 인서트
                         try {
+                            if(movVo.getMigMoviePeopleBean() != null){
                             movManageService.insertMoviePeopleMap(movVo);
+                                movVo.setMigMoviePeopleBean(null);
+                            }
+
                         }catch (DuplicateKeyException e){
 
                         }
@@ -312,7 +316,10 @@ public class MigMovManageController {
 
                         // 영화 배우 매핑 인서트
                         try {
+                            if(movVo.getMigMoviePeopleBean() != null){
                             movManageService.insertMoviePeopleMap(movVo);
+                                movVo.setMigMoviePeopleBean(null);
+                            }
                         }catch (DuplicateKeyException e){
 
                         }
