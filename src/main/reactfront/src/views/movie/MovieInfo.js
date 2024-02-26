@@ -105,7 +105,7 @@ export default function MovieInfo() {
                style={{display: "flex", marginTop: "20px", marginBottom: "50px"}}>
 
             {/* 영화 포스터 */}
-            <div className="flex items-start gap-4 md:items-center" style={{marginRight: "200px"}}>
+            <div className="flex items-start gap-4 md:items-center" style={{marginRight: "150px"}}>
               <img
                 alt="Movie poster"
                 className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
