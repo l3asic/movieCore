@@ -63,6 +63,16 @@
     </resultMap>
 
 
+    <!-- 영화인 리스트 -->
+    <resultMap type="com.example.movieCore.movie.bean.MoviePeopleBean" id="moviePeopleBeanList">
+        <result column="people_cd" property="peopleCd" jdbcType="VARCHAR"/>
+        <result column="people_nm" property="peopleNm" jdbcType="VARCHAR"/>
+        <result column="people_nm_en" property="peopleNmEn" jdbcType="VARCHAR"/>
+        <result column="rep_role_nm" property="repRoleNm" jdbcType="VARCHAR"/>
+        <result column="filmo_names" property="filmoNames" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
     <!-- 영화 평가 빈 -->
     <resultMap type="com.example.movieCore.movie.bean.MoviePersonalMoviePoint" id="moviePersonalMoviePointBean">
         <result column="movie_cd" property="movieCd" jdbcType="VARCHAR"/>
@@ -404,6 +414,22 @@
              LEFT JOIN MOV_NATION MN ON MNM.NATION_CD = MN.NATION_CD
         WHERE MM.movie_cd = #{movieBean.movieCd}
     </select>
+
+
+    <!-- 해당 영화의 감독, 배우 리스트 조회 -->
+    <select id="selectMoviePeopleList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="moviePeopleBeanList">
+        SELECT
+            MP.PEOPLE_CD,
+            MP.PEOPLE_NM,
+            MP.PEOPLE_NM_EN,
+            MP.REP_ROLE_NM,
+            MP.FILMO_NAMES
+        FROM MOV_MOVIE MM
+             LEFT JOIN MOV_PEOPLE_MAP MPM ON MM.MOVIE_CD = MPM.MOVIE_CD
+             LEFT JOIN MOV_PEOPLE MP ON MPM.PEOPLE_CD = MP.PEOPLE_CD
+        WHERE MM.movie_cd = #{movieBean.movieCd}
+    </select>
+
 
     <!-- 영화 조회 로그 추가 -->
     <insert id="addMovieViewCnt" parameterType="com.example.movieCore.movie.vo.MovVo" >

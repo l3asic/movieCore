@@ -158,8 +158,12 @@ export default function MovieInfo() {
                     width="40"
                   />*/}
                 <CAvatar src={avatar2}/>
+
+
                 <div className="flex flex-col">
-                  <span className="font-semibold">감독 명</span>
+                  {movVo.movieBean.movieDirectorBeanList && movVo.movieBean.movieDirectorBeanList.map((director, index) => (
+                    <span key={index} className="font-semibold">{director.peopleNm}</span>
+                  ))}
                   <span className="font-semibold"> / </span>
                   <span className="text-xs tracking-wide uppercase">감독</span>
                 </div>
@@ -796,6 +800,8 @@ export default function MovieInfo() {
           res.data.movieBean.openDtFullStr = openDtFullStr;
         }
 
+        debugger;
+
 
         setMovVo(prevMovVo => ({
           ...prevMovVo,
@@ -806,6 +812,8 @@ export default function MovieInfo() {
         setIsHeartFilled(res.data.movieBean.fav);
 
         setIsEvaluated(res.data.movieBean.evaluated);
+
+        debugger;
 
 
       })
