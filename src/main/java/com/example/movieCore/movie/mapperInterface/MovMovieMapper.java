@@ -48,4 +48,6 @@ public interface MovMovieMapper {
     void updateMovieInfoPoint(MovVo movVo);
 
     ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo);
+
+    ArrayList<MoviePersonalMoviePoint> selectMoviePersonalMoviePointBeanList(MovVo movVo);
 }

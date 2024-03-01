@@ -204,7 +204,7 @@ public class MovMovieController {
                 movVo.getMovieBean().setFav(isFav);
 
 
-                // 영화 평가 정보 조회
+                // 영화 나의 평가 정보 조회
                 movVo.setMoviePersonalMoviePointBean(movieService.selectMoviePersonalMoviePointBean(movVo));
 
                 // 영화 평가 여부 값 세팅
@@ -214,6 +214,9 @@ public class MovMovieController {
                     movVo.getMovieBean().setEvaluated(false);
                 }
 
+
+                // 영화의 평가 정보들 조회
+                movVo.getMovieBean().setMoviePersonalMoviePointBeanList(movieService.selectMoviePersonalMoviePointBeanList(movVo));
 
 
                 resMap.put("movieBean", movVo.getMovieBean());

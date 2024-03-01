@@ -77,6 +77,10 @@ public class MovieBean {
     private ArrayList<MovieGenreBean> movieGenreBeanList;
 
 
+    /** 영화 평가 리스트 */
+    private ArrayList<MoviePersonalMoviePoint> moviePersonalMoviePointBeanList;
+
+
 
 
 

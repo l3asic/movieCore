@@ -369,13 +369,13 @@ export default function MovieInfo() {
 
             <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr] xl:gap-8" style={{width: "100%", display: "block"}}>
 
-
-
               {/* 사람 + 한줄평 내용 */}
-              <div className="flex items-start gap-4" style={{marginBottom: "30px", marginTop: "10px"}}>
-                {/* 프사 + 이름 */}
-                <div className="flex items-center gap-4" style={{display: "flex"}}>
-                  {/*<img
+              {
+                movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.map((pointBean, index) => (
+                  <div key={index} className="flex items-start gap-4" style={{marginBottom: "30px"}}>
+                    {/* 프사 + 이름 */}
+                    <div className="flex items-center gap-4" style={{display: "flex"}}>
+                      {/*<img
                       alt="User avatar"
                       className="rounded-full object-cover"
                       height="80"
@@ -386,60 +386,27 @@ export default function MovieInfo() {
                       }}
                       width="80"
                     />*/}
-                  {/* 프사 칸 */}
-                  <CAvatar src={avatar2}/>
+                      {/* 프사 칸 */}
+                      <CAvatar src={avatar2}/>
 
-                  {/* 아이디 + 별점 + 한줄평 정보 영역 */}
-                  <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
-                    {/* 아이디 칸 */}
-                    <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>유저 아이디</h3>
-                    {/* 별점 칸 */}
-                    <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
-                      <span className="text-sm font-medium tracking-tighter ">★(3.5) 별점</span>
+                      {/* 아이디 + 별점 + 한줄평 내용 */}
+                      <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
+                        {/* 아이디 칸 */}
+                        <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>{pointBean.memName}</h3>
+                        {/* 별점 칸 */}
+                        <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
+                          <span className="text-sm font-medium tracking-tighter">★({pointBean.point}) </span>
+                        </div>
+                        {/* 한줄평 내용 칸 */}
+                        <p
+                          className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
+                          {pointBean.repl}
+                        </p>
+                      </div>
                     </div>
-                    {/* 한줄평 내용 칸 */}
-                    <p
-                      className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                      한줄평 내용 01
-                    </p>
                   </div>
-                </div>
-              </div>
-
-              {/* 사람 + 한줄평 내용 */}
-              <div className="flex items-start gap-4" style={{marginBottom: "30px"}}>
-                {/* 프사 + 이름 */}
-                <div className="flex items-center gap-4" style={{display: "flex"}}>
-                  {/*<img
-                      alt="User avatar"
-                      className="rounded-full object-cover"
-                      height="80"
-                      src={ReactImg}
-                      style={{
-                        aspectRatio: "80/80",
-                        objectFit: "cover",
-                      }}
-                      width="80"
-                    />*/}
-                  {/* 프사 칸 */}
-                  <CAvatar src={avatar2}/>
-
-                  {/* 아이디 + 별점 + 한줄평 내용 */}
-                  <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
-                    {/* 아이디 칸 */}
-                    <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>유저 아이디</h3>
-                    {/* 별점 칸 */}
-                    <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
-                      <span className="text-sm font-medium tracking-tighter">★(3.5) 별점</span>
-                    </div>
-                    {/* 한줄평 내용 칸 */}
-                    <p
-                      className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                      한줄 평 내용
-                    </p>
-                  </div>
-                </div>
-              </div>
+                ))
+              }
 
 
             </div>

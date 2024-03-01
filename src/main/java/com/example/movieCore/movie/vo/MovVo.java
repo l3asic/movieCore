@@ -27,7 +27,7 @@ public class MovVo {
     /** 사용자 정보 */
     private LoginMemberBean memberBean;
 
-    /** 영화 평가 (별점, 한줄평) */
+    /** 나의 영화 평가 (별점, 한줄평) */
     private MoviePersonalMoviePoint moviePersonalMoviePointBean;
 
 

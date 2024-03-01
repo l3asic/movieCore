@@ -97,4 +97,8 @@ public class MovMovieServiceImpl {
     public ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo) {
         return movMovieMapper.selectMoviePeopleList(movVo);
     }
+
+    public ArrayList<MoviePersonalMoviePoint> selectMoviePersonalMoviePointBeanList(MovVo movVo) {
+        return movMovieMapper.selectMoviePersonalMoviePointBeanList(movVo);
+    }
 }
