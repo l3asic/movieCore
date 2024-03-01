@@ -89,6 +89,24 @@ export default function MovieInfo() {
     }));
   };
 
+  /** 한줄평 접기 / 더보기 */
+  const [visibleItems, setVisibleItems] = useState(3); // 초기에 보여줄 항목 수
+  const [expanded, setExpanded] = useState(false); // 펼쳐진 상태 추적
+
+  const handleShowMore = () => {
+    setVisibleItems(movVo.movieBean.moviePersonalMoviePointBeanList.length); // 모든 항목을 보이도록 설정
+    setExpanded(true); // 펼쳐진 상태로 설정
+  };
+
+  const handleToggleExpand = () => {
+    if (expanded) {
+      setVisibleItems(3); // 최초 상태인 3개 항목만 보이도록 설정
+    } else {
+      setVisibleItems(movVo.movieBean.moviePersonalMoviePointBeanList.length); // 모든 항목을 보이도록 설정
+    }
+    setExpanded(!expanded); // 펼쳐진 상태를 토글
+  };
+
 
 
   return (
@@ -371,7 +389,7 @@ export default function MovieInfo() {
 
               {/* 사람 + 한줄평 내용 */}
               {
-                movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.map((pointBean, index) => (
+                movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.slice(0, visibleItems).map((pointBean, index) => (
                   <div key={index} className="flex items-start gap-4" style={{marginBottom: "30px"}}>
                     {/* 프사 + 이름 */}
                     <div className="flex items-center gap-4" style={{display: "flex"}}>
@@ -408,6 +426,14 @@ export default function MovieInfo() {
                 ))
               }
 
+
+              {/** 더보기 / 접기 영역 */}
+              {movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.length > visibleItems && (
+                <CButton className="mb-3" color="dark" variant="ghost" onClick={handleShowMore}>{expanded ? '접기' : '더보기'}</CButton> // 상태에 따라 버튼 텍스트 변경
+              )}
+              {expanded && (
+                <CButton className="mb-3" color="dark" variant="ghost" onClick={handleToggleExpand}>접기</CButton> // 펼쳐진 상태일 때만 접기 버튼 렌더링
+              )}
 
             </div>
 
