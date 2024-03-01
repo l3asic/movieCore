@@ -189,7 +189,7 @@ public class MovMovieController {
                     }
 
                     // 분류 후 최종 값 핟랑
-                    movVo.getMovieBean().setMovieDiretorBeanList(directorBeanList);
+                    movVo.getMovieBean().setMovieDirectorBeanList(directorBeanList);
                     movVo.getMovieBean().setMovieActorBeanList(actorBeanList);
                     movVo.getMovieBean().setMovieStaffBeanList(staffBeanList);
 

@@ -60,7 +60,7 @@ public class MovieBean {
     private ArrayList<MoviePeopleBean> moviePeopleBeanList;
 
     /** 감독들 */
-    private ArrayList<MoviePeopleBean> movieDiretorBeanList;
+    private ArrayList<MoviePeopleBean> movieDirectorBeanList;
 
     /** 배우 */
     private ArrayList<MoviePeopleBean> movieActorBeanList;
