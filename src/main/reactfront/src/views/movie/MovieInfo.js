@@ -429,7 +429,7 @@ export default function MovieInfo() {
 
               {/** 더보기 / 접기 영역 */}
               {movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.length > visibleItems && (
-                <CButton className="mb-3" color="dark" variant="ghost" onClick={handleShowMore}>{expanded ? '접기' : '더보기'}</CButton> // 상태에 따라 버튼 텍스트 변경
+                <CButton className="mb-3" color="dark" variant="ghost" onClick={handleShowMore}>{expanded ? '접기' : '... 더보기'}</CButton> // 상태에 따라 버튼 텍스트 변경
               )}
               {expanded && (
                 <CButton className="mb-3" color="dark" variant="ghost" onClick={handleToggleExpand}>접기</CButton> // 펼쳐진 상태일 때만 접기 버튼 렌더링
