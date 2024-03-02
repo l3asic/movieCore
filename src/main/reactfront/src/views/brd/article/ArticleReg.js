@@ -31,6 +31,16 @@ const ArticleReg = () => {
   });
 
 
+  // 파일 상태
+  const [file, setFile] = useState(null);
+
+  // 파일 선택 핸들러
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+
+
   /** 전체 폴더와 게시판 조회 */
   useEffect(() => {
     selectAllFolderBoardList();
@@ -171,8 +181,8 @@ const ArticleReg = () => {
 
         <CCol md={12}>
           <div className="mb-3">
-            {/*<CFormLabel htmlFor="formFileMultiple">파일 첨부</CFormLabel>*/}
-            <CFormInput type="file" id="formFileMultiple" multiple/>
+            <CFormLabel htmlFor="formFileMultiple">파일 첨부</CFormLabel>
+            <CFormInput type="file" id="formFileMultiple" multiple onChange={handleFileChange} />
           </div>
         </CCol>
 
@@ -214,7 +224,7 @@ const ArticleReg = () => {
 
         < div className = " d-grid gap-2 d-md-flex justify-content-md-end pb-3" >
           < CButton color = "dark" size="lg" > 임시 저장 </ CButton >
-          < CButton  className = " me-md-2 " size="lg" onClick={atclRegistry}> 게시글 등록 </ CButton >
+          < CButton  className = " me-md-2 " size="lg" onClick={submitArticle}> 게시글 등록 </ CButton >
         </ div >
       </CForm>
 
@@ -278,8 +288,35 @@ const ArticleReg = () => {
   }
 
 
+  // 파일 업로드 함수
+  function atclFileUpload(brdVo) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('brdVo', JSON.stringify(brdVo)); // brdVo 객체를 직접 FormData에 추가
+
+    return axios.post('/atclFileUpload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(res => {
+        // 파일 업로드 성공 시 처리
+        console.log('File uploaded:', res.data);
+        return res;
+      })
+      .catch(error => {
+        // 파일 업로드 실패 시 처리
+        console.error('Error uploading file:', error);
+        throw error;
+      });
+  }
+
+
+
+
+
   /** 게시글 최종 작성(등록) */
-  function atclRegistry(){
+  function submitArticle (){
 
     brdVo.articleBean = articleBean;
 
@@ -301,7 +338,13 @@ const ArticleReg = () => {
 
     }).then(function (res){
       if(res.data.succesResult){
-        alert("등록 성공");
+
+        // 첨부파일 추가 처리
+        if (file) {
+          debugger;
+          atclFileUpload(res.data.brdVo);
+        }
+
       }else{
         alert("등록 그냥 실패?");
       }
