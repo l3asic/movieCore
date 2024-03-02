@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
@@ -157,8 +158,10 @@ public class BrdArticleController {
 
     }
 
-    /** 게시글 상세내역 디비서 셀렉트  */
-    @PostMapping (value = "/selectArticleDetail")
+    /**
+     * 게시글 상세내역 디비서 셀렉트
+     */
+    @PostMapping(value = "/selectArticleDetail")
     @ResponseBody
     public Map<String, Object> selectArticleDetail(HttpServletRequest request, HttpServletResponse response, BrdArticleBean articleBean) throws Exception {
 
@@ -183,6 +186,40 @@ public class BrdArticleController {
         resMap.put("succesResult", succesResult);
 
         return resMap;
+    }
+
+
+
+    /** 삭제 */
+    @PostMapping(value = "/deleteArticle")
+    @ResponseBody
+    public Map<String, Object> deleteArticle(@RequestBody BrdVo brdVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        int successCnt = 0;
+        try {
+            successCnt = articleService.deleteArticle(brdVo);
+            if(successCnt > 0) {
+                successResult = true;
+            }
+
+        }catch (Exception e){
+
         }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+
+    }
+
+
+
+
+
+
+
 
     }

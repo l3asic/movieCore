@@ -41,4 +41,8 @@ public class BrdArticleServiceImpl {
     public int selectArticleListTotalCnt(BrdVo brdVo) {
         return brdArticleMapper.selectArticleListTotalCnt(brdVo);
     }
+
+    public int deleteArticle(BrdVo brdVo) {
+        return brdArticleMapper.deleteArticle(brdVo);
+    }
 }

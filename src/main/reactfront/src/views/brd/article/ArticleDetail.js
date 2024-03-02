@@ -6,6 +6,7 @@ import {
 } from '@coreui/react'
 import axios from "axios";
 import {useLocation, useNavigate} from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ArticleDetail = () => {
 
@@ -13,8 +14,33 @@ const ArticleDetail = () => {
   const { articleData } = location.state || {}; // 전달된 데이터
   const navigate = useNavigate();
 
-  function updateArticle(atclId){ debugger;
+  function updateArticle(atclId){
     navigate('/brd/ArticleUpdate', { state: { articleData: articleData } });
+  }
+
+  function deleteArticle(atclId){
+    Swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 삭제 로직 실행
+        axios({
+              url: '/deleteArticle',
+              method: 'post',
+              data: {
+                articleBean : { atclId: atclId }
+              }
+            }).then(function (res) {
+              if(res.data.successResult){
+                alert("삭제 되었습니다.");
+                navigate('/brd/ArticleListView');}
+              });
+      }
+    });
   }
 
   return (
@@ -94,6 +120,7 @@ const ArticleDetail = () => {
 
         < div className = " d-grid gap-2 d-md-flex justify-content-md-end pb-3" >
           < CButton className = " me-md-2 " size="sm" value={articleData[0].atclId} onClick={() => updateArticle(articleData[0].atclId)} > 수정 </ CButton >
+          < CButton className = " me-md-2 " size="sm" value={articleData[0].atclId} onClick={() => deleteArticle(articleData[0].atclId)} > 삭제 </ CButton >
           < CButton  color = "dark" size="sm" onClick={() => navigate(-1)}> 목록으로 </ CButton >
         </ div >
       </CForm>

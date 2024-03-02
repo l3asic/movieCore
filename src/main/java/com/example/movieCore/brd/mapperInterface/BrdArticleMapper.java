@@ -22,4 +22,6 @@ public interface BrdArticleMapper {
     ArrayList<BrdBoardBean> selectBoardList(BrdVo brdVo);
 
     int selectArticleListTotalCnt(BrdVo brdVo);
+
+    int deleteArticle(BrdVo brdVo);
 }

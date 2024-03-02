@@ -355,4 +355,16 @@
 
     </select>
 
+
+    <update id="deleteArticle" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+        UPDATE
+            BRD_ARTICLE
+        SET
+            STATE = 'D'
+
+        WHERE
+            ATCL_ID = #{articleBean.atclId}
+
+    </update>
+
 </mapper>
