@@ -14,7 +14,7 @@ const ArticleDetail = () => {
   const navigate = useNavigate();
 
   function updateArticle(atclId){ debugger;
-    navigate('/brd/ArticleReg', { state: { articleData: articleData } });
+    navigate('/brd/ArticleUpdate', { state: { articleData: articleData } });
   }
 
   return (
