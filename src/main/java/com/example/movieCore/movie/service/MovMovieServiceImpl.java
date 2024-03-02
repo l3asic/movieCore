@@ -93,4 +93,12 @@ public class MovMovieServiceImpl {
     public void updateMovieInfoPoint(MovVo movVo) {
         movMovieMapper.updateMovieInfoPoint(movVo);
     }
+
+    public ArrayList<MoviePeopleBean> selectMoviePeopleList(MovVo movVo) {
+        return movMovieMapper.selectMoviePeopleList(movVo);
+    }
+
+    public ArrayList<MoviePersonalMoviePoint> selectMoviePersonalMoviePointBeanList(MovVo movVo) {
+        return movMovieMapper.selectMoviePersonalMoviePointBeanList(movVo);
+    }
 }

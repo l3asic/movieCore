@@ -86,10 +86,6 @@ public class MigMovManageController {
 
 
 
-                // 개봉일 없을시 예외 처리
-                if (movVo.getMigMovieBean().getOpenDt() == null || movVo.getMigMovieBean().getOpenDt().isEmpty() || movVo.getMigMovieBean().getOpenDt().equals(""))  {
-                    movVo.getMigMovieBean().setOpenDt(null);
-                }
                     // 개봉일 없을시 예외 처리
                     if (movVo.getMigMovieBean().getOpenDt() == null || movVo.getMigMovieBean().getOpenDt().isEmpty() || movVo.getMigMovieBean().getOpenDt().equals(""))  {
                         movVo.getMigMovieBean().setOpenDt(null);

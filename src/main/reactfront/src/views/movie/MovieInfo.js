@@ -89,6 +89,24 @@ export default function MovieInfo() {
     }));
   };
 
+  /** 한줄평 접기 / 더보기 */
+  const [visibleItems, setVisibleItems] = useState(3); // 초기에 보여줄 항목 수
+  const [expanded, setExpanded] = useState(false); // 펼쳐진 상태 추적
+
+  const handleShowMore = () => {
+    setVisibleItems(movVo.movieBean.moviePersonalMoviePointBeanList.length); // 모든 항목을 보이도록 설정
+    setExpanded(true); // 펼쳐진 상태로 설정
+  };
+
+  const handleToggleExpand = () => {
+    if (expanded) {
+      setVisibleItems(3); // 최초 상태인 3개 항목만 보이도록 설정
+    } else {
+      setVisibleItems(movVo.movieBean.moviePersonalMoviePointBeanList.length); // 모든 항목을 보이도록 설정
+    }
+    setExpanded(!expanded); // 펼쳐진 상태를 토글
+  };
+
 
 
   return (
@@ -105,7 +123,7 @@ export default function MovieInfo() {
                style={{display: "flex", marginTop: "20px", marginBottom: "50px"}}>
 
             {/* 영화 포스터 */}
-            <div className="flex items-start gap-4 md:items-center" style={{marginRight: "200px"}}>
+            <div className="flex items-start gap-4 md:items-center" style={{marginRight: "150px"}}>
               <img
                 alt="Movie poster"
                 className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
@@ -158,156 +176,47 @@ export default function MovieInfo() {
                     width="40"
                   />*/}
                 <CAvatar src={avatar2}/>
+
+                {/** 감독 */}
+
                 <div className="flex flex-col">
-                  <span className="font-semibold">감독 명</span>
-                  <span className="font-semibold"> / </span>
-                  <span className="text-xs tracking-wide uppercase">감독</span>
+                  {movVo.movieBean.movieDirectorBeanList && movVo.movieBean.movieDirectorBeanList.map((director, index) => (
+                    <div key={index}>
+                      <span  className="font-semibold">{director.peopleNm}</span>
+                      <span className="font-semibold"> / </span>
+                      <span className="text-xs tracking-wide uppercase">{director.repRoleNm}</span>
+                    </div>
+                  ))}
                 </div>
+
               </div>
 
               {/* 배우들 한줄 (3명씩) (추후 예정) */}
               <div className="grid w-full grid-cols-2 items-start gap-4 md:grid-cols-3 lg:gap-6 "
                    style={{display: "flex", marginBottom: "20px"}}>
 
-                {/* 배우 한칸 */}
-                <div className="flex items-center gap-2" style={{display: "flex"}}>
-                  {/* 배우 사진 */}
-                  <img
-                    alt="Actor avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />
-                  {/* 배우명, 역할명 */}
-                  <div className="flex flex-col">
-                    <span className="font-semibold">배우 명</span>
-                    <span className="font-semibold">/</span>
-                    <span className="text-xs tracking-wide uppercase">역할 명</span>
+                {movVo.movieBean.movieActorBeanList && movVo.movieBean.movieActorBeanList.map((actor, index) => (
+                  <div key={index} className="flex items-center gap-2" style={{display: "flex"}}>
+                    {/* 배우 사진 */}
+                    <img
+                      alt="Actor avatar"
+                      className="rounded-full object-cover"
+                      height="40"
+                      src={ReactImg}
+                      style={{
+                        aspectRatio: "40/40",
+                        objectFit: "cover",
+                      }}
+                      width="40"
+                    />
+                    {/* 배우명, 역할명 */}
+                    <div className="flex flex-col">
+                      <span className="font-semibold">{actor.peopleNm}</span>
+                      <span className="font-semibold"> / </span>
+                      <span className="text-xs tracking-wide uppercase">{actor.repRoleNm}</span>
+                    </div>
                   </div>
-                </div>
-
-                {/* 배우 한칸 */}
-                <div className="flex items-center gap-2" style={{display: "flex"}}>
-                  {/* 배우 사진 */}
-                  <img
-                    alt="Actor avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />
-                  {/* 배우명, 역할명 */}
-                  <div className="flex flex-col">
-                    <span className="font-semibold">배우 명</span>
-                    <span className="font-semibold">/</span>
-                    <span className="text-xs tracking-wide uppercase">역할 명</span>
-                  </div>
-                </div>
-
-                {/* 배우 한칸 */}
-                <div className="flex items-center gap-2" style={{display: "flex"}}>
-                  {/* 배우 사진 */}
-                  <img
-                    alt="Actor avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />
-                  {/* 배우명, 역할명 */}
-                  <div className="flex flex-col">
-                    <span className="font-semibold">배우 명</span>
-                    <span className="font-semibold">/</span>
-                    <span className="text-xs tracking-wide uppercase">역할 명</span>
-                  </div>
-                </div>
-
-
-              </div>
-
-              {/* 배우들 한줄 (3명씩) */}
-              <div className="grid w-full grid-cols-2 items-start gap-4 md:grid-cols-3 lg:gap-6 "
-                   style={{display: "flex"}}>
-
-                {/* 배우 한칸 */}
-                <div className="flex items-center gap-2" style={{display: "flex"}}>
-                  {/* 배우 사진 */}
-                  <img
-                    alt="Actor avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />
-                  {/* 배우명, 역할명 */}
-                  <div className="flex flex-col">
-                    <span className="font-semibold">배우 명</span>
-                    <span className="font-semibold">/</span>
-                    <span className="text-xs tracking-wide uppercase">역할 명</span>
-                  </div>
-                </div>
-
-                {/* 배우 한칸 */}
-                <div className="flex items-center gap-2" style={{display: "flex"}}>
-                  {/* 배우 사진 */}
-                  <img
-                    alt="Actor avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />
-                  {/* 배우명, 역할명 */}
-                  <div className="flex flex-col">
-                    <span className="font-semibold">배우 명</span>
-                    <span className="font-semibold">/</span>
-                    <span className="text-xs tracking-wide uppercase">역할 명</span>
-                  </div>
-                </div>
-
-                {/* 배우 한칸 */}
-                <div className="flex items-center gap-2" style={{display: "flex"}}>
-                  {/* 배우 사진 */}
-                  <img
-                    alt="Actor avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />
-                  {/* 배우명, 역할명 */}
-                  <div className="flex flex-col">
-                    <span className="font-semibold">배우 명</span>
-                    <span className="font-semibold">/</span>
-                    <span className="text-xs tracking-wide uppercase">역할 명</span>
-                  </div>
-                </div>
-
+                ))}
 
               </div>
 
@@ -383,21 +292,34 @@ export default function MovieInfo() {
                   {/* 감독 명  출연진 */}
                   <div className="row mb-4">
                     <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 감독 명 : </strong> directorNm
+                      <strong style={{fontWeight: "normal"}}> 감독 명 : </strong>
+                      {movVo.movieBean.movieDirectorBeanList && movVo.movieBean.movieDirectorBeanList.map((director, index) => (
+                        <span key={index} className="font-semibold">
+                          {index > 0 && ", "}
+                            {director.peopleNm}
+                        </span>
+                      ))}
                     </div>
                     <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 출연진 : </strong> actorNm
+                      <strong style={{fontWeight: "normal"}}> 출연진 : </strong>
+                        {movVo.movieBean.movieActorBeanList && movVo.movieBean.movieActorBeanList.map((actor, index) => (
+                          <span key={index} className="font-semibold">
+                            {index > 0 && ", "}
+                            {actor.peopleNm}
+                          </span>
+                        ))}
                     </div>
                   </div>
 
                   {/* 상영 시간  상영 형태 */}
                   <div className="row mb-4">
                     <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 상영 시간 : </strong> {movVo.movieBean.showTm} 분
+                      <strong style={{fontWeight: "normal"}}> 상영 시간 : </strong>
+                      {movVo.movieBean.showTm && `${movVo.movieBean.showTm} 분`}
                     </div>
 
                     {movVo.movieBean.showTypeNm && (
-                    <div className="col-sm-6">
+                      <div className="col-sm-6">
                       <strong style={{ fontWeight: "normal" }}> 상영 형태 : </strong> {movVo.movieBean.showTypeNm}
                     </div>
                     )}
@@ -465,13 +387,13 @@ export default function MovieInfo() {
 
             <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr] xl:gap-8" style={{width: "100%", display: "block"}}>
 
-
-
               {/* 사람 + 한줄평 내용 */}
-              <div className="flex items-start gap-4" style={{marginBottom: "30px", marginTop: "10px"}}>
-                {/* 프사 + 이름 */}
-                <div className="flex items-center gap-4" style={{display: "flex"}}>
-                  {/*<img
+              {
+                movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.slice(0, visibleItems).map((pointBean, index) => (
+                  <div key={index} className="flex items-start gap-4" style={{marginBottom: "30px"}}>
+                    {/* 프사 + 이름 */}
+                    <div className="flex items-center gap-4" style={{display: "flex"}}>
+                      {/*<img
                       alt="User avatar"
                       className="rounded-full object-cover"
                       height="80"
@@ -482,61 +404,36 @@ export default function MovieInfo() {
                       }}
                       width="80"
                     />*/}
-                  {/* 프사 칸 */}
-                  <CAvatar src={avatar2}/>
+                      {/* 프사 칸 */}
+                      <CAvatar src={avatar2}/>
 
-                  {/* 아이디 + 별점 + 한줄평 정보 영역 */}
-                  <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
-                    {/* 아이디 칸 */}
-                    <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>유저 아이디</h3>
-                    {/* 별점 칸 */}
-                    <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
-                      <span className="text-sm font-medium tracking-tighter ">★(3.5) 별점</span>
+                      {/* 아이디 + 별점 + 한줄평 내용 */}
+                      <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
+                        {/* 아이디 칸 */}
+                        <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>{pointBean.memName}</h3>
+                        {/* 별점 칸 */}
+                        <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
+                          <span className="text-sm font-medium tracking-tighter">★({pointBean.point}) </span>
+                        </div>
+                        {/* 한줄평 내용 칸 */}
+                        <p
+                          className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
+                          {pointBean.repl}
+                        </p>
+                      </div>
                     </div>
-                    {/* 한줄평 내용 칸 */}
-                    <p
-                      className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                      한줄평 내용 01
-                    </p>
                   </div>
-                </div>
-              </div>
+                ))
+              }
 
-              {/* 사람 + 한줄평 내용 */}
-              <div className="flex items-start gap-4" style={{marginBottom: "30px"}}>
-                {/* 프사 + 이름 */}
-                <div className="flex items-center gap-4" style={{display: "flex"}}>
-                  {/*<img
-                      alt="User avatar"
-                      className="rounded-full object-cover"
-                      height="80"
-                      src={ReactImg}
-                      style={{
-                        aspectRatio: "80/80",
-                        objectFit: "cover",
-                      }}
-                      width="80"
-                    />*/}
-                  {/* 프사 칸 */}
-                  <CAvatar src={avatar2}/>
 
-                  {/* 아이디 + 별점 + 한줄평 내용 */}
-                  <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
-                    {/* 아이디 칸 */}
-                    <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>유저 아이디</h3>
-                    {/* 별점 칸 */}
-                    <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
-                      <span className="text-sm font-medium tracking-tighter">★(3.5) 별점</span>
-                    </div>
-                    {/* 한줄평 내용 칸 */}
-                    <p
-                      className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                      한줄 평 내용
-                    </p>
-                  </div>
-                </div>
-              </div>
-
+              {/** 더보기 / 접기 영역 */}
+              {movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.length > visibleItems && (
+                <CButton className="mb-3" color="dark" variant="ghost" onClick={handleShowMore}>{expanded ? '접기' : '... 더보기'}</CButton> // 상태에 따라 버튼 텍스트 변경
+              )}
+              {expanded && (
+                <CButton className="mb-3" color="dark" variant="ghost" onClick={handleToggleExpand}>접기</CButton> // 펼쳐진 상태일 때만 접기 버튼 렌더링
+              )}
 
             </div>
 
@@ -795,7 +692,6 @@ export default function MovieInfo() {
           const openDtFullStr =  openDt.getFullYear() + '.' + String(openDt.getMonth() + 1).padStart(2, '0') + '.' + String(openDt.getDate()).padStart(2, '0'); ;
           res.data.movieBean.openDtFullStr = openDtFullStr;
         }
-
 
         setMovVo(prevMovVo => ({
           ...prevMovVo,

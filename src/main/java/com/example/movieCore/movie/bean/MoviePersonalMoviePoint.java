@@ -11,6 +11,7 @@ public class MoviePersonalMoviePoint {
 
     private String movieCd;
     private String memId;
+    private String memName;
     private String point;
     private String repl;
     private String state;

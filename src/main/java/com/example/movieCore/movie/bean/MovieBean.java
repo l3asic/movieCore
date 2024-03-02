@@ -57,6 +57,16 @@ public class MovieBean {
 
 
     /** 감독,배우,스태프들 */
+    private ArrayList<MoviePeopleBean> moviePeopleBeanList;
+
+    /** 감독들 */
+    private ArrayList<MoviePeopleBean> movieDirectorBeanList;
+
+    /** 배우 */
+    private ArrayList<MoviePeopleBean> movieActorBeanList;
+
+    /** 스태프 */
+    private ArrayList<MoviePeopleBean> movieStaffBeanList;
 
 
     /** 제작 국가 */
@@ -65,6 +75,10 @@ public class MovieBean {
 
     /** 장르 */
     private ArrayList<MovieGenreBean> movieGenreBeanList;
+
+
+    /** 영화 평가 리스트 */
+    private ArrayList<MoviePersonalMoviePoint> moviePersonalMoviePointBeanList;
 
 
 

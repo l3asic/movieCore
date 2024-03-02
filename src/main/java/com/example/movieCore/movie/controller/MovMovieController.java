@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.controller;
 
+import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -174,13 +176,45 @@ public class MovMovieController {
                 // 제작 국가 조회
                 movVo.getMovieBean().setMovieNationBeanList(movieService.selectMovieNationList(movVo));
 
+                // 영화 인 조회
+                movVo.getMovieBean().setMoviePeopleBeanList(movieService.selectMoviePeopleList(movVo));
+
+                // 감독/ 배우 / 스태프 / 기타  분류 및 할당
+                if(movVo.getMovieBean().getMoviePeopleBeanList() != null){
+                     ArrayList<MoviePeopleBean> peopleBeanList =  movVo.getMovieBean().getMoviePeopleBeanList();
+                     ArrayList<MoviePeopleBean> directorBeanList = new ArrayList<>();
+                     ArrayList<MoviePeopleBean> actorBeanList = new ArrayList<>();
+                     ArrayList<MoviePeopleBean> staffBeanList = new ArrayList<>();
+
+                    for (int i = 0; i < peopleBeanList.size(); i++) {
+
+                        if(peopleBeanList.get(i).getRepRoleNm().equals("감독")){
+                            directorBeanList.add(peopleBeanList.get(i));
+                        }else if(peopleBeanList.get(i).getRepRoleNm().equals("배우")){
+                            actorBeanList.add(peopleBeanList.get(i));
+                        }else{  // 나머지는 스태프
+                            staffBeanList.add(peopleBeanList.get(i));
+                        }
+
+                    }
+
+                    // 분류 후 최종 값 핟랑
+                    movVo.getMovieBean().setMovieDirectorBeanList(directorBeanList);
+                    movVo.getMovieBean().setMovieActorBeanList(actorBeanList);
+                    movVo.getMovieBean().setMovieStaffBeanList(staffBeanList);
+
+                }
+
+
+
+
                 // 영화 찜하기 정보 조회
                 boolean isFav = false;
                 isFav = movieService.selectMovieFavorite(movVo);
                 movVo.getMovieBean().setFav(isFav);
 
 
-                // 영화 평가 정보 조회
+                // 영화 나의 평가 정보 조회
                 movVo.setMoviePersonalMoviePointBean(movieService.selectMoviePersonalMoviePointBean(movVo));
 
                 // 영화 평가 여부 값 세팅
@@ -190,6 +224,9 @@ public class MovMovieController {
                     movVo.getMovieBean().setEvaluated(false);
                 }
 
+
+                // 영화의 평가 정보들 조회
+                movVo.getMovieBean().setMoviePersonalMoviePointBeanList(movieService.selectMoviePersonalMoviePointBeanList(movVo));
 
 
                 resMap.put("movieBean", movVo.getMovieBean());
