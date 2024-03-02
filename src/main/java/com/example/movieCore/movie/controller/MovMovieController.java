@@ -125,6 +125,16 @@ public class MovMovieController {
             movVo.getPaging().setItemsPerPage(9);
 
             movVo.setMovieBeanList(movieService.selectMovieList(movVo));
+
+            // 영화 제작국가 조회 세팅
+            if(movVo.getMovieBeanList() != null){
+                for (int i = 0; i < movVo.getMovieBeanList().size(); i++) {
+                    movVo.setMovieBean(movVo.getMovieBeanList().get(i));
+                    movVo.getMovieBeanList().get(i).setMovieNationBeanList(movieService.selectMovieNationList(movVo));
+                }
+
+            }
+
             resMap.put("movVo", movVo);
             successResult = true;
 

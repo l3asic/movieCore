@@ -149,10 +149,14 @@ const MovieList = () => {
               >
                 <CCardImage orientation="top" src={ReactImg} style={{ height: '400px' }} />
                 <CCardBody>
-                  <CCardTitle>{movie.movieNm} ({movie.openDt})</CCardTitle>
+                  {/* 개봉일 */}
+                  <CCardTitle>{movie.movieNm} {movie.openDtYearStr && `(${movie.openDtYearStr})`}</CCardTitle>
                   <CCardText className="d-inline-flex">
                     <small>{movie.repGenreNm}</small>
-                    <small> / 제작국가 추가예정 </small>
+                  </CCardText>
+                  <CCardText className="text-medium-emphasis">
+
+                    <small>{movie.nationAlt} </small>
                   </CCardText>
                   <CCardText>
                     <small className="text-medium-emphasis">★ {movie.pointAvg} ({movie.pointTotalCnt}) </small>
@@ -202,6 +206,28 @@ const MovieList = () => {
       }
     })
       .then(function (res) {
+
+        for (var i = 0; i < res.data.movVo.movieBeanList.length; i++) {
+
+          /* 개봉일 포맷 (1990.07.07 형식) */
+          if(res.data.movVo.movieBeanList[i].openDt != null){
+            const openDt = new Date(res.data.movVo.movieBeanList[i].openDt);
+            const openDtFullStr =  openDt.getFullYear() + '.' + String(openDt.getMonth() + 1).padStart(2, '0') + '.' + String(openDt.getDate()).padStart(2, '0'); ;
+            res.data.movVo.movieBeanList[i].openDtFullStr = openDtFullStr;
+            res.data.movVo.movieBeanList[i].openDtYearStr = openDt.getFullYear();
+          }
+
+          /* 제작국가 한줄 처리 */
+          if(res.data.movVo.movieBeanList[i].movieNationBeanList != null){
+            res.data.movVo.movieBeanList[i].nationAlt = '';
+            for (var j = 0; j < res.data.movVo.movieBeanList[i].movieNationBeanList.length; j++) {
+              res.data.movVo.movieBeanList[i].nationAlt =
+              res.data.movVo.movieBeanList[i].nationAlt + ' ' + res.data.movVo.movieBeanList[i].movieNationBeanList[j].korNm;
+            }
+          }
+
+        }
+
         const movieBeanList = res.data.movVo.movieBeanList;
         const paging = res.data.movVo.paging;
         setMovVo(prevState => ({
