@@ -45,4 +45,12 @@ public class BrdArticleServiceImpl {
     public int deleteArticle(BrdVo brdVo) {
         return brdArticleMapper.deleteArticle(brdVo);
     }
+
+    public void insertFileBean(BrdVo brdVo) {
+        brdArticleMapper.insertFileBean(brdVo);
+    }
+
+    public void insertArticleFileMap(BrdVo brdVo) {
+        brdArticleMapper.insertArticleFileMap(brdVo);
+    }
 }

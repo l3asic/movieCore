@@ -300,14 +300,13 @@ const ArticleReg = () => {
       }
     })
       .then(res => {
-        // 파일 업로드 성공 시 처리
-        console.log('File uploaded:', res.data);
-        return res;
+        debugger;
+        alert("성공");
+
       })
       .catch(error => {
-        // 파일 업로드 실패 시 처리
-        console.error('Error uploading file:', error);
-        throw error;
+        debugger;
+        alert("오류남");
       });
   }
 

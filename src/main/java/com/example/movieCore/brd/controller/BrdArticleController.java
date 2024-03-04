@@ -4,6 +4,8 @@ import com.example.movieCore.brd.bean.BrdArticleBean;
 import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.service.BrdArticleServiceImpl;
 import com.example.movieCore.brd.vo.BrdVo;
+import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.utils.MakeFileBean;
 import com.example.movieCore.utils.MakeUUID;
 import com.example.movieCore.utils.Paging;
 import com.google.gson.Gson;
@@ -31,7 +33,7 @@ public class BrdArticleController {
 
     private final BrdArticleServiceImpl articleService;
 
-    private static final String UPLOAD_DIR = "/movieCore/uploadFiles/brd"; // 파일 업로드 경로
+
 
 
     /** 게시글 등록 시 */
@@ -239,36 +241,23 @@ public class BrdArticleController {
         Map resMap = new HashMap<>();
         boolean succesResult = false;
 
-        String fullPath = "";
-
         try {
-            // 상세 폴더 경로 추가
 
-            // 상세경로를 날짜로 포멧팅
-            LocalDate today = LocalDate.now();
-            String formattedToday = today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-            fullPath = UPLOAD_DIR + "/" +formattedToday;
+            MakeFileBean makeFileBean = new MakeFileBean();
 
-            // 파일이 비어있지 않은 경우에만 업로드를 진행합니다.
-            if (!file.isEmpty()) {
-                // 업로드할 디렉토리가 없다면 생성합니다.
-                Path uploadPath = Paths.get(fullPath);
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
+            // 파일 업로드 및 파일 빈 값 할당
+            FileBean fileBean = makeFileBean.makingFileBean("BRD",file);
+            brdVo.setFileBean(fileBean);
 
-                // 파일을 지정된 경로에 저장합니다.
-                Path filePath = uploadPath.resolve(file.getOriginalFilename());
-                Files.copy(file.getInputStream(), filePath);
+            // 파일빈 디비 인서트
+            articleService.insertFileBean(brdVo);
 
+            // 게시글 <-> 첨부파일 매핑 인서트
+            articleService.insertArticleFileMap(brdVo);
 
-                /** 파일매핑 , 파일경로 테이블에 저장 코드 추가 할것 @@@@ */
+            succesResult =true;
 
-
-                succesResult = true;
-
-            }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

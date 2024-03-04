@@ -367,4 +367,51 @@
 
     </update>
 
+
+    <!-- 게시글 첨부파일 인서트 -->
+    <insert id="insertFileBean" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+        INSERT INTO
+            CMM_FILE (
+                      FILE_ID,
+                      MODULE,
+                      FILE_NAME,
+                      LOCAL_NAME,
+                      FILE_EXT,
+                      URL,
+                      VOLUME,
+                      CREATE_DT
+                      )
+        VALUES
+            (
+             #{fileBean.fileId},
+             #{fileBean.module},
+             #{fileBean.fileName},
+             #{fileBean.localName},
+             #{fileBean.fileExt},
+             #{fileBean.url},
+             #{fileBean.volume},
+             #{fileBean.createDt}
+             )
+
+    </insert>
+
+
+    <!-- 게시글 <-> 첨부파일 매핑 인서트 -->
+    <insert id="insertArticleFileMap" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+        INSERT INTO
+            BRD_FILE_MAPPING (
+                      ATCL_ID,
+                      FILE_ID
+                      )
+        VALUES
+            (
+             #{articleBean.atclId},
+             #{fileBean.fileId}
+             )
+
+    </insert>
+
+
+
+
 </mapper>

@@ -24,4 +24,8 @@ public interface BrdArticleMapper {
     int selectArticleListTotalCnt(BrdVo brdVo);
 
     int deleteArticle(BrdVo brdVo);
+
+    void insertFileBean(BrdVo brdVo);
+
+    void insertArticleFileMap(BrdVo brdVo);
 }
