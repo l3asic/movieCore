@@ -13,4 +13,8 @@ public interface BrdFolderMapper {
 
 
     ArrayList<BrdFolderBean> selectAllFolderList();
+
+    int selectFolderListAdminTotalCnt(BrdVo brdVo);
+
+    ArrayList<BrdFolderBean> selectFolderListAdmin(BrdVo brdVo);
 }

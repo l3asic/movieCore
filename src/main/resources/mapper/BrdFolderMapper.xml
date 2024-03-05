@@ -65,8 +65,32 @@
             bf.state = 'B'
     </select>
 
+    <!-- 관리자모듈- 폴더 리스트 조회 -->
+    <select id="selectFolderListAdminTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
+        SELECT
+        COUNT(BF.FOL_ID) totalCnt
+        FROM
+        BRD_FOLDER BF
 
+    </select>
 
+    <select id="selectFolderListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="folderBean" >
+        SELECT
+        BF.FOL_ID,
+        BF.MEM_ID,
+        BF.FOL_NAME,
+        BF.FOL_LOC,
+        BF.DEPTH,
+        CASE WHEN BF.STATE = 'D' THEN '삭제'
+        ELSE '사용' END STATE,
+        BF.ODR,
+        BF.CREATE_DT
+        FROM
+        BRD_FOLDER BF
+
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+
+    </select>
 
 
 </mapper>

@@ -24,4 +24,12 @@ public class BrdFolderServiceImpl {
     public ArrayList<BrdFolderBean> selectAllFolderList() {
         return brdFolderMapper.selectAllFolderList();
     }
+
+    public int selectFolderListAdminTotalCnt(BrdVo brdVo) {
+        return brdFolderMapper.selectFolderListAdminTotalCnt(brdVo);
+    }
+
+    public ArrayList<BrdFolderBean> selectFolderListAdmin(BrdVo brdVo) {
+        return brdFolderMapper.selectFolderListAdmin(brdVo);
+    }
 }

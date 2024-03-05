@@ -4,6 +4,7 @@ import com.example.movieCore.brd.bean.BrdFolderBean;
 import com.example.movieCore.brd.service.BrdFolderServiceImpl;
 import com.example.movieCore.brd.vo.BrdVo;
 import com.example.movieCore.utils.MakeUUID;
+import com.example.movieCore.utils.Paging;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +97,45 @@ public class BrdFolderController {
             succesResult = true;
         }catch (Exception e){
             e.printStackTrace();
+
+        }
+
+        resMap.put("succesResult",succesResult);
+
+        return resMap;
+
+
+    }
+
+    /** 관리자 모듈 - 폴더 리스트 조회 */
+    @PostMapping(value = "/selectFolderListAdmin")
+    @ResponseBody
+    public Map<String, Object> selectFolderListAdmin(HttpServletRequest request, HttpServletResponse response, BrdFolderBean folderBean) throws Exception{
+
+
+        /** 폴더 리스트 조회디비서 셀렉트  */
+        BrdVo brdVo = new BrdVo();
+        brdVo.setFolderBean(folderBean);
+
+        boolean succesResult = false;
+
+        Map resMap = new HashMap<>();
+        try {
+
+            brdVo.setPaging(new Paging());
+            brdVo.getPaging().setTotalItems(folderService.selectFolderListAdminTotalCnt(brdVo));
+
+            //  페이지 이동시 (최초 조회시에는 패스)
+            if(brdVo.getNewPage() != 0){
+                // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
+                brdVo.getPaging().setCurrentPage(brdVo.getNewPage());
+            }
+
+
+            brdVo.setFolderBeanList(folderService.selectFolderListAdmin(brdVo));
+            resMap.put("brdVo",brdVo);
+            succesResult = true;
+        }catch (Exception e){
 
         }
 
