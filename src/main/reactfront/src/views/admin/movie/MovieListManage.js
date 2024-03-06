@@ -22,8 +22,11 @@ import {
   cilRecycle
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import {useNavigate} from "react-router-dom";
 
 function MovieListManage() {
+  const navigate = useNavigate();
+
 
   // 영화 객체 관리
   const [movVo, setMovVo] = useState({
@@ -217,7 +220,7 @@ function MovieListManage() {
                 />
               </CTableDataCell>
               <CTableDataCell>{movie.movieCd}</CTableDataCell>
-              <CTableDataCell>{movie.movieNm}</CTableDataCell>
+              <CTableDataCell onClick={() => movieInfoManage(movie.movieCd)}>{movie.movieNm}</CTableDataCell>
               <CTableDataCell>{movie.prdtYear}</CTableDataCell>
               <CTableDataCell>{movie.repGenreNm}</CTableDataCell>
               <CTableDataCell state={movie.state}>{movie.stateText}</CTableDataCell>
@@ -356,6 +359,12 @@ function MovieListManage() {
         alert(err.data.successMsg);
       });
 
+  }
+
+
+  /** 영화 상세 관리 페이지 이동 */
+  function movieInfoManage(movieCd){
+    navigate('/admin/MovieInfoManage', { state: { movieCd: movieCd } });
   }
 
 
