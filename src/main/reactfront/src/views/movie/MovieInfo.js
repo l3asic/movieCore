@@ -128,9 +128,9 @@ export default function MovieInfo() {
                 alt="Movie poster"
                 className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
                 height="450"
-                src={ReactImg}
-                width="300"
-                style={{borderRadius: '10px'}}
+                src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : ReactImg}
+                width="320"
+                style={{ borderRadius: '10px' }}
               />
             </div>
 

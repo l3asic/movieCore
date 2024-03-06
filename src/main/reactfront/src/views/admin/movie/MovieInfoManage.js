@@ -139,7 +139,6 @@ export default function MovieInfoManage() {
                   alt="Movie poster"
                   className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
                   height="450"
-                  /*src={movVo.movieBean.fileBean.src}*/
                   src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : ReactImg}
                   width="320"
                   style={{ borderRadius: '10px' }}
