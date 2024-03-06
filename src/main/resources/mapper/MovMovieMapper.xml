@@ -584,15 +584,15 @@
         )
         VALUES
             (
-                #{fileBean.fileId},
-                #{fileBean.module},
-                #{fileBean.fileName},
-                #{fileBean.localName},
-                #{fileBean.fileExt},
-                #{fileBean.url},
-                #{fileBean.volume},
-                #{fileBean.createDt},
-                #{fileBean.src}
+                #{movieBean.fileBean.fileId},
+                #{movieBean.fileBean.module},
+                #{movieBean.fileBean.fileName},
+                #{movieBean.fileBean.localName},
+                #{movieBean.fileBean.fileExt},
+                #{movieBean.fileBean.url},
+                #{movieBean.fileBean.volume},
+                #{movieBean.fileBean.createDt},
+                #{movieBean.fileBean.src}
             )
     </insert>
 
@@ -608,7 +608,7 @@
         VALUES
             (
              #{movieBean.movieCd},
-             #{fileBean.fileId},
+             #{movieBean.fileBean.fileId},
              'POSTER',
              NOW()
             )

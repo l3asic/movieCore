@@ -31,9 +31,6 @@ public class MovVo {
     /** 나의 영화 평가 (별점, 한줄평) */
     private MoviePersonalMoviePoint moviePersonalMoviePointBean;
     
-    /** 영화 포스터 파일 정보 */
-    private FileBean fileBean;
-
 
     /** 검색 조건 */
     private SearchBean searchBean;

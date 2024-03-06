@@ -147,7 +147,11 @@ const MovieList = () => {
                      style={cardStyle}
                      onClick={() => moveToMovieInfo(movie.movieCd)}
               >
-                <CCardImage orientation="top" src={ReactImg} style={{ height: '400px' }} />
+
+                <CCardImage orientation="top"
+                            src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : ReactImg}
+                            style={{ height: '400px' }} />
+
                 <CCardBody>
                   {/* 개봉일 */}
                   <CCardTitle>{movie.movieNm} {movie.openDtYearStr && `(${movie.openDtYearStr})`}</CCardTitle>

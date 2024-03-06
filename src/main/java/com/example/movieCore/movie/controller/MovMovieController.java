@@ -133,11 +133,16 @@ public class MovMovieController {
 
             movVo.setMovieBeanList(movieService.selectMovieList(movVo));
 
-            // 영화 제작국가 조회 세팅
+
             if(movVo.getMovieBeanList() != null){
                 for (int i = 0; i < movVo.getMovieBeanList().size(); i++) {
+                    // 영화 제작국가 조회 세팅
                     movVo.setMovieBean(movVo.getMovieBeanList().get(i));
                     movVo.getMovieBeanList().get(i).setMovieNationBeanList(movieService.selectMovieNationList(movVo));
+
+                    // 영화 포스터 세팅
+                    movVo.getMovieBeanList().get(i).setFileBean(movieService.selectMoviePosterBean(movVo));
+
                 }
 
             }
@@ -234,12 +239,11 @@ public class MovMovieController {
                 movVo.getMovieBean().setMoviePersonalMoviePointBeanList(movieService.selectMoviePersonalMoviePointBeanList(movVo));
 
                 // 영화 포스터 정보 조회
-                movVo.setFileBean(movieService.selectMoviePosterBean(movVo));
+                movVo.getMovieBean().setFileBean(movieService.selectMoviePosterBean(movVo));
 
 
                 resMap.put("movieBean", movVo.getMovieBean());
                 resMap.put("moviePersonalMoviePointBean", movVo.getMoviePersonalMoviePointBean());
-                resMap.put("fileBean", movVo.getFileBean());
                 successResult = true;
             }else{
                 successResult = false;
@@ -413,7 +417,7 @@ public class MovMovieController {
 
             // 파일 업로드 및 파일 빈 값 할당
             FileBean fileBean = makeFileBean.makingFileBean("MOV",file);
-            movVo.setFileBean(fileBean);
+            movVo.getMovieBean().setFileBean(fileBean);
 
             // 포스터 파일빈 디비 인서트
             movieService.insertFileBean(movVo);

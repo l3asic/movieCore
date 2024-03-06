@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.bean;
 
+import com.example.movieCore.cmm.FileBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -79,6 +80,10 @@ public class MovieBean {
 
     /** 영화 평가 리스트 */
     private ArrayList<MoviePersonalMoviePoint> moviePersonalMoviePointBeanList;
+
+
+    /** 영화 포스터 파일 정보 */
+    private FileBean fileBean;
 
 
 

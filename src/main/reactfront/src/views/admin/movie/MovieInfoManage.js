@@ -135,16 +135,15 @@ export default function MovieInfoManage() {
             {/* 영화 포스터 */}
             <div className="flex items-start gap-4 md:items-center" style={{marginRight: "150px"}}>
 
-              {movVo.fileBean && movVo.fileBean.src && (
                 <img
                   alt="Movie poster"
                   className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
                   height="450"
-                  src={movVo.fileBean.src}
+                  /*src={movVo.movieBean.fileBean.src}*/
+                  src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : ReactImg}
                   width="320"
                   style={{ borderRadius: '10px' }}
                 />
-              )}
 
               {/**/}
               {/* 포스터 파일 수정 */}
@@ -779,7 +778,6 @@ export default function MovieInfoManage() {
           ...prevMovVo,
           movieBean: res.data.movieBean,
           moviePersonalMoviePointBean: res.data.moviePersonalMoviePointBean,
-          fileBean:res.data.fileBean
         }));
 
         setIsHeartFilled(res.data.movieBean.fav);
