@@ -546,5 +546,13 @@
 
 
 
+    <!-- 영화 한줄평 상태 변경 -->
+    <update id="updateMovieState" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        UPDATE MOV_PERSONAL_MOVIE_POINT
+        SET state = #{mode}
+        WHERE movie_cd = #{moviePersonalMoviePointBean.movieCd} AND mem_id = #{moviePersonalMoviePointBean.memId}
+    </update>
+
+
 
 </mapper>

@@ -61,7 +61,7 @@ public class MovMovieController {
 
 
 
-    /** 관리자 모듈 - 영화 상태값 삭제로 변경 */
+    /** 관리자 모듈 - 영화 상태값 정상/삭제로 변경 */
     @PostMapping(value = "/updateMovieStateAdmin")
     @ResponseBody
     public Map<String, Object> updateMovieStateAdmin(@RequestBody MovVo movVo) throws Exception {
@@ -359,7 +359,34 @@ public class MovMovieController {
 
     }
 
+    /** 관리자 모듈 - 영화리뷰 상태값 정상/삭제로 변경 */
+    @PostMapping(value = "/updateMovieState")
+    @ResponseBody
+    public Map<String, Object> updateReviewState(@RequestBody MovVo movVo) throws Exception {
 
+        boolean successResult = false;
+        String successMsg = "";
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            if(movVo.getMode().equals("restore")){
+                movVo.setMode("B");
+            }else if(movVo.getMode().equals("delete")){
+                movVo.setMode("D");
+            }
+
+            movieService.updateMovieState(movVo);
+
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
 
 
 

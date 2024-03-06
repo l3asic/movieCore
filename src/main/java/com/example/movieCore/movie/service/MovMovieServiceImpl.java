@@ -101,4 +101,8 @@ public class MovMovieServiceImpl {
     public ArrayList<MoviePersonalMoviePoint> selectMoviePersonalMoviePointBeanList(MovVo movVo) {
         return movMovieMapper.selectMoviePersonalMoviePointBeanList(movVo);
     }
+
+    public void updateMovieState(MovVo movVo) {
+        movMovieMapper.updateMovieState(movVo);
+    }
 }

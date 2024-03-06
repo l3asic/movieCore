@@ -16,12 +16,11 @@ import CIcon from "@coreui/icons-react";
 
 import heartIcon from '../../../assets/brand/heartIcon.png';
 import fillHeartIcon from '../../../assets/brand/fillHeartIcon.png';
+import {cilRecycle, cilTrash} from "@coreui/icons";
 
 
 
 export default function MovieInfoManage() {
-
-  debugger;
 
   const location = useLocation();
   const { movieCd } = location.state;
@@ -417,11 +416,45 @@ export default function MovieInfoManage() {
                         <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
                           <span className="text-sm font-medium tracking-tighter">★({pointBean.point}) </span>
                         </div>
-                        {/* 한줄평 내용 칸 */}
-                        <p
-                          className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                          {pointBean.repl}
-                        </p>
+                        <div style={{display:"flex" }}>
+                            {/* 한줄평 내용 칸 */}
+                            <p
+                              className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
+                              {pointBean.repl}
+                            </p>
+
+                          <div style={{marginLeft:"500px", display:"flex"}}>
+
+                            <p
+                              className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400"
+                              style={{marginRight:"20px"}}
+                            >
+                              상태 ({pointBean.stateText})
+                            </p>
+
+                            {/** 복원 버튼 */}
+                            <CButton
+                              color="black" variant="outline"
+                              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px' }}
+                              title="리뷰 상태 정상으로 복구"
+                              onClick={() => updateReviewState('restore',pointBean)}
+                            >
+                              <CIcon icon={cilRecycle} />
+                            </CButton>
+
+                            {/** 삭제 버튼 */}
+                            <CButton
+                              color="black" variant="outline"
+                              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px'}}
+                              title="리뷰 상태 삭제로 변경"
+                              onClick={() => updateReviewState('delete',pointBean)}
+                            >
+                              <CIcon icon={cilTrash} />
+                            </CButton>
+                          </div>
+
+                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -697,6 +730,24 @@ export default function MovieInfoManage() {
           res.data.movieBean.openDtFullStr = openDtFullStr;
         }
 
+
+        if(res.data.movieBean.moviePersonalMoviePointBeanList != null && res.data.movieBean.moviePersonalMoviePointBeanList.length > 0){
+          var pointBeanList = res.data.movieBean.moviePersonalMoviePointBeanList;
+          for (var i = 0; i < pointBeanList.length; i++) {
+            if(pointBeanList[i].state == "B"){
+              pointBeanList[i].stateText = "정상";
+            }else if(pointBeanList[i].state == "D"){
+              pointBeanList[i].stateText = "삭제";
+            }
+
+          }
+          res.data.movieBean.moviePersonalMoviePointBeanList = pointBeanList;
+
+        }
+
+
+
+
         setMovVo(prevMovVo => ({
           ...prevMovVo,
           movieBean: res.data.movieBean,
@@ -793,6 +844,33 @@ export default function MovieInfoManage() {
     movVo.moviePersonalMoviePointBean.point = "5";
 
   }
+
+
+  /** 리뷰 상태 정상/삭제 로 변경 */
+  function updateReviewState(mode, pointBean){
+
+    // 체크된 영화 목록 필터링
+    // const selectedMovies = movVo.movieBeanList.filter(movie => movie.selected);
+
+    axios({
+      url: '/updateMovieState',
+      method: 'post',
+      data: {
+        moviePersonalMoviePointBean : pointBean,
+        mode : mode
+      }
+    })
+      .then(function (res) {
+        // 상태 변경 후 영화 목록 다시 불러오기
+        selectMovieInfo()();
+      })
+      .catch(function (err) {
+      });
+
+  }
+
+
+
 
 
 
