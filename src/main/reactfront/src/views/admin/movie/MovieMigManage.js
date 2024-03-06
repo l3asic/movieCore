@@ -41,9 +41,13 @@ function MovieMigManage() {
 
         <CRow className="mt-4">
           <CCol>
+            < CButton color="secondary" size="lg" onClick={callPosterTest}> 98. 영화 포스터 테스트 </ CButton>
+          </CCol>
+          <CCol>
             < CButton color="secondary" size="lg" onClick={callDBTest}> 99. db 테스트 </ CButton>
           </CCol>
         </CRow>
+
 
 
       </CContainer>
@@ -140,7 +144,7 @@ function callMovieNationsApiSyncDB() {
 }
 
 
-/** 영화 제작 국가 api 호출 */
+/** 디비 접속 테스트 */
 function callDBTest() {
   axios({
     url: '/callDBTest',
@@ -149,6 +153,23 @@ function callDBTest() {
 
   }).then(function (res) {
     alert(res.data.rtnNum);
+
+  }).catch(function (err) {
+    alert("실패 (오류)");
+  });
+
+}
+
+
+/** 영화 포스터 테스트 */
+function callPosterTest() {
+  axios({
+    url: '/callPosterTest',
+    method: 'post',
+    params: {}
+
+  }).then(function (res) {
+    debugger;
 
   }).catch(function (err) {
     alert("실패 (오류)");

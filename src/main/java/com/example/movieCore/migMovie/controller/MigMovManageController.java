@@ -707,6 +707,24 @@ public class MigMovManageController {
 
 
 
+    /** 영화 포스터 테스트 용 */
+    @PostMapping(value = "/callPosterTest")
+    @ResponseBody
+    public Map<String, Object> callPosterTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        System.out.println("도착");
+
+//        movManageService.callDBTest();
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("result", "result");
+        return resMap;
+
+    }
+
+
+
 
 
 
