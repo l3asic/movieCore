@@ -52,4 +52,8 @@ public interface MovMovieMapper {
     ArrayList<MoviePersonalMoviePoint> selectMoviePersonalMoviePointBeanList(MovVo movVo);
 
     void updateMovieState(MovVo movVo);
+
+    void insertFileBean(MovVo movVo);
+
+    void insertMovieFileMap(MovVo movVo);
 }

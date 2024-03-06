@@ -1,15 +1,20 @@
 package com.example.movieCore.movie.controller;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
+import com.example.movieCore.utils.MakeFileBean;
 import com.example.movieCore.utils.Paging;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -384,6 +389,41 @@ public class MovMovieController {
         }
 
         resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
+    /** 영화 포스터 등록/변경 */
+    @PostMapping("/moviePosterUpload")
+    public Map<String, Object> moviePosterUpload(@RequestParam("file") MultipartFile file, @RequestParam("movVo") String movVoString) {
+        MovVo movVo = new Gson().fromJson(movVoString, MovVo.class);
+
+        Map resMap = new HashMap<>();
+        boolean succesResult = false;
+
+        try {
+
+            MakeFileBean makeFileBean = new MakeFileBean();
+
+            // 파일 업로드 및 파일 빈 값 할당
+            FileBean fileBean = makeFileBean.makingFileBean("MOV",file);
+            movVo.setFileBean(fileBean);
+
+            // 포스터 파일빈 디비 인서트
+            movieService.insertFileBean(movVo);
+
+            // 영화 <-> 포스터 파일 매핑 인서트
+            movieService.insertMovieFileMap(movVo);
+
+            succesResult =true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        resMap.put("succesResult", succesResult);
 
         return resMap;
     }

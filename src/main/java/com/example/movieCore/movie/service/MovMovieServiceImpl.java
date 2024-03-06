@@ -105,4 +105,12 @@ public class MovMovieServiceImpl {
     public void updateMovieState(MovVo movVo) {
         movMovieMapper.updateMovieState(movVo);
     }
+
+    public void insertFileBean(MovVo movVo) {
+        movMovieMapper.insertFileBean(movVo);
+    }
+
+    public void insertMovieFileMap(MovVo movVo) {
+        movMovieMapper.insertMovieFileMap(movVo);
+    }
 }

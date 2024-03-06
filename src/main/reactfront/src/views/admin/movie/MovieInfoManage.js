@@ -38,6 +38,15 @@ export default function MovieInfoManage() {
   });
 
 
+  // 파일 상태
+  const [file, setFile] = useState(null);
+
+  // 파일 선택 핸들러
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+
 
   useEffect(() => {
     /** 선택한 영화 정보 조회 */
@@ -130,9 +139,26 @@ export default function MovieInfoManage() {
                 className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
                 height="450"
                 src={ReactImg}
-                width="300"
+                width="320"
                 style={{borderRadius: '10px'}}
               />
+
+              {/**/}
+              {/* 포스터 파일 수정 */}
+              <div className="mb-3" style={{display: "flex"}}>
+                <CFormInput
+                  type="file"
+                  id="formFileMultiple"
+                  style={{marginTop : "20px", width : "250px"}}
+                  multiple
+                  onChange={handleFileChange}
+                />
+                <CButton
+                  color="dark"
+                  style={{marginTop : "20px", marginLeft : "15px"}}
+                  onClick={moviePosterUpload}>변경</CButton>
+              </div>
+
             </div>
 
             {/* 포스터 우측 출연진 정보 */}
@@ -708,7 +734,6 @@ export default function MovieInfoManage() {
 
   /** 선택 영화 상세 조회 */
   function selectMovieInfo() {
-    debugger;
     // 사용자 정보 추출
     movVo.memberBean = JSON.parse(localStorage.getItem('memberBean'));
 
@@ -721,7 +746,6 @@ export default function MovieInfoManage() {
       }
     })
       .then(function (res) {
-        debugger;
 
         /* 개봉일 포맷 (1990.07.07 형식) */
         if(res.data.movieBean.openDt != null){
@@ -868,6 +892,35 @@ export default function MovieInfoManage() {
       });
 
   }
+
+
+  /** 영화 포스터 등록/변경 */
+  function moviePosterUpload() {
+    if(file){
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('movVo', JSON.stringify(movVo)); // movVo 객체를 직접 FormData에 추가
+
+      return axios.post('/moviePosterUpload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(res => {
+          debugger;
+          alert("성공");
+
+        })
+        .catch(error => {
+          debugger;
+        });
+    }else{
+      return ;
+    }
+
+  }
+
+
 
 
 

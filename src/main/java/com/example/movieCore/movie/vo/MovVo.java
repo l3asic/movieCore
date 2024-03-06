@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.vo;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.movie.bean.MovieBean;
 import com.example.movieCore.movie.bean.MoviePersonalMoviePoint;
@@ -29,6 +30,9 @@ public class MovVo {
 
     /** 나의 영화 평가 (별점, 한줄평) */
     private MoviePersonalMoviePoint moviePersonalMoviePointBean;
+    
+    /** 영화 포스터 파일 정보 */
+    private FileBean fileBean;
 
 
     /** 검색 조건 */

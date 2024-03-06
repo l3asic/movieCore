@@ -545,7 +545,6 @@
     </select>
 
 
-
     <!-- 영화 한줄평 상태 변경 -->
     <update id="updateMovieState" parameterType="com.example.movieCore.movie.vo.MovVo" >
         UPDATE MOV_PERSONAL_MOVIE_POINT
@@ -553,6 +552,50 @@
         WHERE movie_cd = #{moviePersonalMoviePointBean.movieCd} AND mem_id = #{moviePersonalMoviePointBean.memId}
     </update>
 
+
+    <!-- 영화 포스터 파일 인서트 -->
+    <insert id="insertFileBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO
+            CMM_FILE (
+            FILE_ID,
+            MODULE,
+            FILE_NAME,
+            LOCAL_NAME,
+            FILE_EXT,
+            URL,
+            VOLUME,
+            CREATE_DT
+        )
+        VALUES
+            (
+                #{fileBean.fileId},
+                #{fileBean.module},
+                #{fileBean.fileName},
+                #{fileBean.localName},
+                #{fileBean.fileExt},
+                #{fileBean.url},
+                #{fileBean.volume},
+                #{fileBean.createDt}
+            )
+    </insert>
+
+    <!-- 영화 포스터 파일 매핑 인서트 -->
+    <insert id="insertMovieFileMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO
+            MOV_FILE_MAPPING (
+                              MOVIE_CD,
+                              FILE_ID,
+                              ROLE,
+                              CREATE_DT
+        )
+        VALUES
+            (
+             #{movieBean.movieCd},
+             #{fileBean.fileId},
+             'POSTER',
+             NOW()
+            )
+    </insert>
 
 
 </mapper>
