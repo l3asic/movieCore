@@ -300,13 +300,10 @@ const ArticleReg = () => {
       }
     })
       .then(res => {
-        debugger;
         alert("성공");
 
       })
       .catch(error => {
-        debugger;
-        alert("오류남");
       });
   }
 
@@ -340,7 +337,6 @@ const ArticleReg = () => {
 
         // 첨부파일 추가 처리
         if (file) {
-          debugger;
           atclFileUpload(res.data.brdVo);
         }
 
