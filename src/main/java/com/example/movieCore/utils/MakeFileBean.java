@@ -15,7 +15,7 @@ import java.io.IOException;
 public class MakeFileBean {
 
 
-    private final String UPLOAD_DIR = "/movieCore/uploadFiles"; // 파일 업로드 기본 경로
+    private final String UPLOAD_DIR = "/movieCore/src/main/reactfront/src/uploadFiles"; // 파일 업로드 기본 경로
 
 
     /** 
