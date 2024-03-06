@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import {
-  CTableBody, CTable, CTableHead, CTableHeaderCell, CTableRow, CFormSelect, CFormInput, CInputGroup, CButton, CFormText
+  CTableBody,
+  CTable,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
+  CFormSelect,
+  CFormInput,
+  CInputGroup,
+  CButton,
+  CFormText,
+  CCardImage
 } from '@coreui/react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +18,7 @@ import Paging from "../../uitils/Paging";
 import CIcon from "@coreui/icons-react";
 import {cilJustifyCenter, cilLoopCircular, cilSwapVertical} from "@coreui/icons";
 import scss from '../../../scss/style.scss';
+import TestImg from "../../../uploadFiles/BRD/2024/03/07/영화 강아지.jpg";
 
 const ArticleListView = () => {
 
@@ -224,6 +235,10 @@ const ArticleListView = () => {
 
   return (
     <div>
+      {/** 배너 영역 */}
+      <div>
+        <CCardImage orientation="top" src={TestImg} style={{height:"200px", marginBottom:"30px"}}/>
+      </div>
       <h2>게시판입니다</h2>
       <div>
       <CInputGroup className="mb-3" style={{width: "30%", display: "flex", float:"right"}}>
