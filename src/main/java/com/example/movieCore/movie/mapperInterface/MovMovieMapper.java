@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.mapperInterface;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -56,4 +57,6 @@ public interface MovMovieMapper {
     void insertFileBean(MovVo movVo);
 
     void insertMovieFileMap(MovVo movVo);
+
+    FileBean selectMoviePosterBean(MovVo movVo);
 }

@@ -17,8 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
 import CIcon from "@coreui/icons-react";
 import {cilJustifyCenter, cilLoopCircular, cilSwapVertical} from "@coreui/icons";
-import scss from '../../../scss/style.scss';
-import TestImg from "../../../uploadFiles/BRD/2024/03/07/영화 강아지.jpg";
+import ReactImg from '../../../assets/images/react.jpg';
 
 const ArticleListView = () => {
 
@@ -237,7 +236,7 @@ const ArticleListView = () => {
     <div>
       {/** 배너 영역 */}
       <div>
-        <CCardImage orientation="top" src={TestImg} style={{height:"200px", marginBottom:"30px"}}/>
+        <CCardImage orientation="top" src={ReactImg} style={{height:"200px", marginBottom:"30px"}}/>
       </div>
       <h2>게시판입니다</h2>
       <div>

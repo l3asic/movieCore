@@ -379,8 +379,9 @@
                       FILE_EXT,
                       URL,
                       VOLUME,
-                      CREATE_DT
-                      )
+                      CREATE_DT,
+                      SRC
+        )
         VALUES
             (
              #{fileBean.fileId},
@@ -390,7 +391,8 @@
              #{fileBean.fileExt},
              #{fileBean.url},
              #{fileBean.volume},
-             #{fileBean.createDt}
+             #{fileBean.createDt},
+             #{fileBean.src}
              )
 
     </insert>

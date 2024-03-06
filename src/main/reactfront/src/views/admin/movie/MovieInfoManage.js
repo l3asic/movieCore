@@ -134,14 +134,17 @@ export default function MovieInfoManage() {
 
             {/* 영화 포스터 */}
             <div className="flex items-start gap-4 md:items-center" style={{marginRight: "150px"}}>
-              <img
-                alt="Movie poster"
-                className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                height="450"
-                src={ReactImg}
-                width="320"
-                style={{borderRadius: '10px'}}
-              />
+
+              {movVo.fileBean && movVo.fileBean.src && (
+                <img
+                  alt="Movie poster"
+                  className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
+                  height="450"
+                  src={movVo.fileBean.src}
+                  width="320"
+                  style={{ borderRadius: '10px' }}
+                />
+              )}
 
               {/**/}
               {/* 포스터 파일 수정 */}
@@ -155,7 +158,7 @@ export default function MovieInfoManage() {
                 />
                 <CButton
                   color="dark"
-                  style={{marginTop : "20px", marginLeft : "15px"}}
+                  style={{marginTop : "20px", marginLeft : "10px"}}
                   onClick={moviePosterUpload}>변경</CButton>
               </div>
 
@@ -775,7 +778,8 @@ export default function MovieInfoManage() {
         setMovVo(prevMovVo => ({
           ...prevMovVo,
           movieBean: res.data.movieBean,
-          moviePersonalMoviePointBean: res.data.moviePersonalMoviePointBean
+          moviePersonalMoviePointBean: res.data.moviePersonalMoviePointBean,
+          fileBean:res.data.fileBean
         }));
 
         setIsHeartFilled(res.data.movieBean.fav);
@@ -907,12 +911,10 @@ export default function MovieInfoManage() {
         }
       })
         .then(res => {
-          debugger;
           alert("성공");
 
         })
         .catch(error => {
-          debugger;
         });
     }else{
       return ;

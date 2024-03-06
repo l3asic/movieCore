@@ -233,9 +233,13 @@ public class MovMovieController {
                 // 영화의 평가 정보들 조회
                 movVo.getMovieBean().setMoviePersonalMoviePointBeanList(movieService.selectMoviePersonalMoviePointBeanList(movVo));
 
+                // 영화 포스터 정보 조회
+                movVo.setFileBean(movieService.selectMoviePosterBean(movVo));
+
 
                 resMap.put("movieBean", movVo.getMovieBean());
                 resMap.put("moviePersonalMoviePointBean", movVo.getMoviePersonalMoviePointBean());
+                resMap.put("fileBean", movVo.getFileBean());
                 successResult = true;
             }else{
                 successResult = false;

@@ -83,6 +83,21 @@
         <result column="state" property="state" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <!-- 영화 파일 빈 -->
+    <resultMap type="com.example.movieCore.cmm.FileBean" id="movieFileMap">
+        <result column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+        <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+        <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+        <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+        <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="VARCHAR"/>
+        <result column="src" property="src" jdbcType="VARCHAR"/>
+        <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+        <result column="MAP_DT" property="mapDt" jdbcType="VARCHAR"/>
+    </resultMap>
+
 
 
     <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
@@ -564,7 +579,8 @@
             FILE_EXT,
             URL,
             VOLUME,
-            CREATE_DT
+            CREATE_DT,
+            src
         )
         VALUES
             (
@@ -575,7 +591,8 @@
                 #{fileBean.fileExt},
                 #{fileBean.url},
                 #{fileBean.volume},
-                #{fileBean.createDt}
+                #{fileBean.createDt},
+                #{fileBean.src}
             )
     </insert>
 
@@ -586,7 +603,7 @@
                               MOVIE_CD,
                               FILE_ID,
                               ROLE,
-                              CREATE_DT
+                              MAP_DT
         )
         VALUES
             (
@@ -596,6 +613,36 @@
              NOW()
             )
     </insert>
+
+    <!-- 영화 포스터 파일 조회 -->
+    <select id="selectMoviePosterBean" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="movieFileMap">
+        SELECT
+            mfm.MOVIE_CD,
+            mfm.FILE_ID,
+            mfm.ROLE,
+            mfm.MAP_DT,
+
+            cf.FILE_ID,
+            cf.MODULE,
+            cf.FILE_NAME,
+            cf.LOCAL_NAME,
+            cf.FILE_EXT,
+            cf.URL,
+            cf.VOLUME,
+            cf.CREATE_DT,
+            cf.src
+        FROM
+            MOV_FILE_MAPPING mfm
+            JOIN
+            CMM_FILE cf ON mfm.FILE_ID = cf.FILE_ID
+        WHERE
+            mfm.movie_cd = #{movieBean.movieCd}
+          AND mfm.ROLE = 'POSTER'
+        ORDER BY
+            mfm.MAP_DT DESC
+            LIMIT 1;
+    </select>
+
 
 
 </mapper>

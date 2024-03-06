@@ -15,7 +15,9 @@ import java.io.IOException;
 public class MakeFileBean {
 
 
-    private final String UPLOAD_DIR = "/movieCore/src/main/reactfront/src/uploadFiles"; // 파일 업로드 기본 경로
+    private final String UPLOAD_DIR = "/movieCore/src/main/reactfront/public/uploadFiles"; // 파일 업로드 기본 경로
+
+    private final String SHORT_FILE_PATH = "uploadFiles"; // 짧은 파일 경로
 
 
     /** 
@@ -93,6 +95,12 @@ public class MakeFileBean {
 
             // 파일 날짜
             fileBean.setCreateDt(java.sql.Date.valueOf(today));
+
+
+            // 짧은 파일 경로 (업로드파일즈/모듈명/날짜/파일이름.확장자)
+            fileBean.setSrc(SHORT_FILE_PATH + "/" + moduleName + "/"+  formattedToday + "/" + fileBean.getLocalName());
+
+
 
         }
 

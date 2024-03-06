@@ -18,6 +18,12 @@ public class FileBean {
     private String url;
     private String volume;
     private Date createDt;
+    private String src;
+
+
+    /** 영화 모듈용 컬럼 */
+    private String role;
+    private Date mapDt;
 
 
 

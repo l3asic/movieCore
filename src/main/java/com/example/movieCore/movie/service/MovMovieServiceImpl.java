@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.service;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.mapperInterface.MovMovieMapper;
 import com.example.movieCore.movie.vo.MovVo;
@@ -112,5 +113,9 @@ public class MovMovieServiceImpl {
 
     public void insertMovieFileMap(MovVo movVo) {
         movMovieMapper.insertMovieFileMap(movVo);
+    }
+
+    public FileBean selectMoviePosterBean(MovVo movVo) {
+        return movMovieMapper.selectMoviePosterBean(movVo);
     }
 }
