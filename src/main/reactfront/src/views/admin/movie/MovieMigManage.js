@@ -37,12 +37,17 @@ function MovieMigManage() {
           <CCol>
             < CButton color="secondary" size="lg" onClick={callMovieApiSyncDB}> 5. 영화 목록 API 호출 및 DB 이관 </ CButton>
           </CCol>
+
         </CRow>
 
         <CRow className="mt-4">
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callPosterTest}> 98. 영화 포스터 테스트 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callKMDBApi}> 6. KMDB API 호출 (영화 포스터, 줄거리, 예고편 이관) </ CButton>
           </CCol>
+        </CRow>
+
+        <CRow className="mt-4">
+
           <CCol>
             < CButton color="secondary" size="lg" onClick={callDBTest}> 99. db 테스트 </ CButton>
           </CCol>
@@ -162,14 +167,13 @@ function callDBTest() {
 
 
 /** 영화 포스터 테스트 */
-function callPosterTest() {
+function callKMDBApi() {
   axios({
-    url: '/callPosterTest',
+    url: '/callKMDBApi',
     method: 'post',
     params: {}
 
   }).then(function (res) {
-    debugger;
 
   }).catch(function (err) {
     alert("실패 (오류)");

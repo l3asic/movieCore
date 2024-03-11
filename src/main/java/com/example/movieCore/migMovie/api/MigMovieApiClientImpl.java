@@ -5,6 +5,7 @@ import com.example.movieCore.migMovie.vo.MigMovVo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -319,6 +320,72 @@ public class MigMovieApiClientImpl {
 
 
         return movVo;
+
+
+
+
+
+
+    }
+
+    /**
+     *  포스터 조회 위한 KMDB api 호출
+     */
+    public void callKMDBApi(){
+
+        String ServiceKey = "G840O55BG4Z36A99PLBA";
+
+        // API 엔드포인트 URL
+
+        // api 호출 예시
+//        "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_xml2.jsp?collection=kmdb_new2&detail=N&title=기생충&director=봉준호&ServiceKey=G840O55BG4Z36A99PLBA";
+//        String apiUrlBasic = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_xml2.jsp?collection=kmdb_new2&detail=N&title=" + "영화제목" + "&director=" + "감독명" +  "&ServiceKey=" + "서비스키";
+        String apiUrlBasic = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y";
+
+
+        try {
+             String apiUrl = apiUrlBasic + "&title=" + "기생충" + "&director=" + "봉준호" + "&ServiceKey=" + ServiceKey;
+             // String apiUrl = apiUrlBasic + "&title=" + "기생충" +"&ServiceKey=" + ServiceKey;
+
+            // RestTemplate 객체 생성
+            RestTemplate restTemplate = new RestTemplate();
+
+            // API 호출 및 응답 받기
+            String jsonResponse = restTemplate.getForObject(apiUrl, String.class);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+//            MigKMDBApiBean migKMDBApiBean = objectMapper.readValue(jsonResponse, MigKMDBApiBean.class);
+
+            List<MigKMDBApiBean> migKMDBApiBeans = dataConverter.KmdbConvert(jsonResponse);
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        System.out.println("호출완료");
+
+
+
+
 
 
 

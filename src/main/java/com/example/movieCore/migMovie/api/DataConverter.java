@@ -1,6 +1,8 @@
 package com.example.movieCore.migMovie.api;
 
 import com.example.movieCore.migMovie.bean.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -270,6 +272,95 @@ public class DataConverter {
         migMovieNationBean.setEngNm((String) linkedHashMap.get("engNm"));
 
         return migMovieNationBean;
+    }
+
+
+
+    public List<MigKMDBApiBean> KmdbConvert(String jsonResponse){
+
+        // 각 MigKMDBApiBean 정보를 담을 리스트 생성
+        List<MigKMDBApiBean> migKMDBApiBeans = new ArrayList<>();
+
+        try {
+            // JSON 파싱을 위한 ObjectMapper 객체 생성
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // JSON 데이터를 JsonNode로 읽어들임
+            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+            // "Data" 배열에 대한 노드 가져오기
+            JsonNode dataArray = jsonNode.get("Data");
+
+
+            // "Data" 배열을 반복하며 각 항목을 MigKMDBApiBean 객체로 매핑
+            if (dataArray.isArray()) {
+                for (JsonNode dataNode : dataArray) {
+                    // "Result" 배열 가져오기
+                    JsonNode resultArray = dataNode.get("Result");
+
+                    // "Result" 배열이 null이 아니고, 배열의 첫 번째 요소가 존재할 경우
+                    if (resultArray != null && resultArray.isArray() && resultArray.size() > 0) {
+                        // 배열의 첫 번째 요소에서 필요한 속성들 추출
+                        JsonNode firstResult = resultArray.get(0);
+                        MigKMDBApiBean migKMDBApiBean = objectMapper.treeToValue(firstResult, MigKMDBApiBean.class);
+
+
+
+                        // 예고편 url 가공
+                        JsonNode vodsNode = firstResult.get("vods");
+                        if(vodsNode != null && vodsNode.isObject()){
+                            JsonNode vodNode = vodsNode.get("vod");
+                            String vodUrl = vodNode.get(0).get("vodUrl").asText();
+                            migKMDBApiBean.setVodUrl(vodUrl);
+                        }
+
+
+                        // 플롯 데이터 가공
+                        JsonNode plotsNode = firstResult.get("plots");
+                        if (plotsNode != null && plotsNode.isObject()) {
+                            // "plot" 키의 값을 가져오기
+                            JsonNode plotValue = plotsNode.get("plot");
+
+                            if (plotValue != null) {
+                                if (plotValue.isArray()) {
+                                    // 배열일 경우 처리 방법
+                                    for (JsonNode plotNode : plotValue) {
+                                        if(plotNode.get("plotLang").asText().equals("한국어") ){
+                                            JsonNode plotTextNode = plotNode.get("plotText");
+                                            String plotText =  plotTextNode.asText();
+                                            migKMDBApiBean.setPlot(plotText);
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
+
+                        // 포스터들 데이터 가공
+                        if(migKMDBApiBean.getPosters() != null){
+                            migKMDBApiBean.setPosterList(new ArrayList<>());
+                            String[] posterArray = migKMDBApiBean.getPosters().split("\\|");
+                            for (String poster : posterArray) {
+                                migKMDBApiBean.getPosterList().add(poster);
+                            }
+                            // 첫번째 포스터로 메인 포스터 할당
+                            migKMDBApiBean.setPosterUrl(migKMDBApiBean.getPosterList().get(0));
+                        }
+
+
+                        // MigKMDBApiBean 객체 리스트에 추가
+                        migKMDBApiBeans.add(migKMDBApiBean);
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return migKMDBApiBeans;
     }
 
 

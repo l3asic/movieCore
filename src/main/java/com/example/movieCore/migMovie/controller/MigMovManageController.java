@@ -707,14 +707,24 @@ public class MigMovManageController {
 
 
 
-    /** 영화 포스터 테스트 용 */
-    @PostMapping(value = "/callPosterTest")
+    /** KMDB Api 호출 (영화 포스터, 줄거리, 예고편 이관) */
+    @PostMapping(value = "/callKMDBApi")
     @ResponseBody
-    public Map<String, Object> callPosterTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Map<String, Object> callKMDBApi(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        System.out.println("도착");
 
-//        movManageService.callDBTest();
+        // 1. 디비에서 영화 리스트 조회
+
+        // 2. 영화명과 감독명 api로 전달
+
+        // 3. api에서 포스터, 줄거리, 예고편 데이터 리턴
+
+        // 4. 디비에 업데이트
+
+
+
+        MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
+        movieApiClient.callKMDBApi();
 
 
         Map<String, Object> resMap = new HashMap<>();
