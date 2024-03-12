@@ -1,5 +1,6 @@
 package com.example.movieCore.migMovie.service;
 
+import com.example.movieCore.migMovie.bean.MigMovieBean;
 import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
 import com.example.movieCore.migMovie.bean.MigMovieNationBean;
 import com.example.movieCore.migMovie.bean.MigMoviePeopleBean;
@@ -88,5 +89,25 @@ public class MigMovManageServiceImpl {
 
     public void insertMoviePeopleMap(MigMovVo movVo) {
         migMovManageMapper.insertMoviePeopleMap(movVo);
+    }
+
+    public ArrayList<MigMovieBean> selectMovieList() {
+        return migMovManageMapper.selectMovieList();
+    }
+
+    public String selectDirector(MigMovVo movVo) {
+        return migMovManageMapper.selectDirector(movVo);
+    }
+
+    public void updateURL(MigMovVo movVo) {
+        migMovManageMapper.updateURL(movVo);
+    }
+
+    public void insertMovieFileMap(MigMovVo movVo) {
+        migMovManageMapper.insertMovieFileMap(movVo);
+    }
+
+    public void insertFileBean(MigMovVo movVo) {
+        migMovManageMapper.insertFileBean(movVo);
     }
 }

@@ -331,21 +331,34 @@ public class MigMovieApiClientImpl {
     /**
      *  포스터 조회 위한 KMDB api 호출
      */
-    public void callKMDBApi(){
+    public List<MigKMDBApiBean> callKMDBApi(MigMovVo movVo){
 
         String ServiceKey = "G840O55BG4Z36A99PLBA";
+
+        List<MigKMDBApiBean> migKMDBApiBeans =null;
 
         // API 엔드포인트 URL
 
         // api 호출 예시
-//        "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_xml2.jsp?collection=kmdb_new2&detail=N&title=기생충&director=봉준호&ServiceKey=G840O55BG4Z36A99PLBA";
+//        "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=N&title=기생충&director=봉준호&ServiceKey=G840O55BG4Z36A99PLBA";
 //        String apiUrlBasic = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_xml2.jsp?collection=kmdb_new2&detail=N&title=" + "영화제목" + "&director=" + "감독명" +  "&ServiceKey=" + "서비스키";
         String apiUrlBasic = "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y";
 
 
         try {
-             String apiUrl = apiUrlBasic + "&title=" + "기생충" + "&director=" + "봉준호" + "&ServiceKey=" + ServiceKey;
+//             String apiUrl = apiUrlBasic + "&title=" + "기생충" + "&director=" + "봉준호" + "&ServiceKey=" + ServiceKey;
+
+             String apiUrl = apiUrlBasic + "&title=" +movVo.getMigMovieBean().getMovieNm();
+             // + "&title=" + "기생충" + "&director=" + "봉준호" + "&ServiceKey=" + ServiceKey;
              // String apiUrl = apiUrlBasic + "&title=" + "기생충" +"&ServiceKey=" + ServiceKey;
+
+            // 감독 검색 조건 추가
+            if(movVo.getMigMovieBean().getPeopleNm() != null && !movVo.getMigMovieBean().getPeopleNm().equals("")){
+                apiUrl += "&director="+ movVo.getMigMovieBean().getPeopleNm();
+            }
+            
+            // 서비스키 추가
+            apiUrl += "&ServiceKey=" + ServiceKey;
 
             // RestTemplate 객체 생성
             RestTemplate restTemplate = new RestTemplate();
@@ -353,12 +366,7 @@ public class MigMovieApiClientImpl {
             // API 호출 및 응답 받기
             String jsonResponse = restTemplate.getForObject(apiUrl, String.class);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-
-//            MigKMDBApiBean migKMDBApiBean = objectMapper.readValue(jsonResponse, MigKMDBApiBean.class);
-
-            List<MigKMDBApiBean> migKMDBApiBeans = dataConverter.KmdbConvert(jsonResponse);
-
+            migKMDBApiBeans = dataConverter.KmdbConvert(jsonResponse);
 
 
         } catch (Exception e) {
@@ -366,33 +374,11 @@ public class MigMovieApiClientImpl {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        System.out.println("호출완료");
-
-
-
-
-
-
-
-
-
+        return migKMDBApiBeans;
 
     }
+
+
 
 
 

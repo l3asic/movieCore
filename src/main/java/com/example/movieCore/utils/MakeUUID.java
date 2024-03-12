@@ -22,6 +22,12 @@ public class MakeUUID {
         return moduleName + parseToShortUUID(uuid.toString());
     }
 
+    // 20자리의 UUID 생성
+    public String makeLongUUID(String moduleName) {
+        UUID uuid = UUID.randomUUID();
+        return moduleName + parseToLongUUID(uuid.toString());
+    }
+
     public String parseToIntRadixUUID(String uuid, int radix) {
         int l = ByteBuffer.wrap(uuid.getBytes()).getInt();
         return Integer.toString(l, radix);

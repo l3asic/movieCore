@@ -1,5 +1,6 @@
 package com.example.movieCore.migMovie.mapperInterface;
 
+import com.example.movieCore.migMovie.bean.MigMovieBean;
 import com.example.movieCore.migMovie.bean.MigMovieGenreBean;
 import com.example.movieCore.migMovie.bean.MigMovieNationBean;
 import com.example.movieCore.migMovie.bean.MigMoviePeopleBean;
@@ -47,4 +48,14 @@ public interface MigMovManageMapper {
     ArrayList<MigMoviePeopleBean> selectPeopleCdByNm(String peopleNm);
 
     void insertMoviePeopleMap(MigMovVo movVo);
+
+    ArrayList<MigMovieBean> selectMovieList();
+
+    String selectDirector(MigMovVo movVo);
+
+    void updateURL(MigMovVo movVo);
+
+    void insertMovieFileMap(MigMovVo movVo);
+
+    void insertFileBean(MigMovVo movVo);
 }

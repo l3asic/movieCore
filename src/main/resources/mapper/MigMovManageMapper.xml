@@ -20,6 +20,17 @@
     </resultMap>
 
 
+    <!-- 영화 빈 -->
+    <resultMap type="com.example.movieCore.migMovie.bean.MigMovieBean" id="MovieBean">
+        <result column="movie_cd" property="movieCd" jdbcType="VARCHAR"/>
+        <result column="movie_nm" property="movieNm" jdbcType="VARCHAR"/>
+        <result column="people_nm" property="peopleNm" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+
+
+
     <!-- 영화 정보 인서트 -->
     <insert id="insertMovieBean" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" >
         insert into MOV_MOVIE
@@ -343,12 +354,92 @@
     </insert>
 
 
+    <!-- 영화 리스트 조회 -->
+    <select id="selectMovieList" resultMap="MovieBean">
+
+        SELECT
+            mm.MOVIE_CD,
+            mm.MOVIE_NM
+        FROM
+            MOV_MOVIE mm
+
+    </select>
+
+    <!-- 영화 감독 조회 -->
+    <select id="selectDirector" parameterType="com.example.movieCore.migMovie.vo.MigMovVo" resultType="String">
+
+        SELECT
+            mp.people_nm
+        FROM
+            MOV_PEOPLE_MAP mpm
+                JOIN
+            MOV_PEOPLE mp ON mpm.people_cd = mp.people_cd
+        where
+            mpm.REP_ROLE_NM = '감독'
+            and mpm.movie_cd = #{migMovieBean.movieCd}
+            LIMIT 1
+
+    </select>
+
+
+    <!-- 영화 줄거리, 예고편 갱신  -->
+    <update id="updateURL" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
+        UPDATE MOV_MOVIE_INFO
+        SET plot = #{migMovieInfoBean.plot}
+        <if test="migMovieInfoBean.previewUrl != null and migMovieInfoBean.previewUrl != ''">
+            ,PREVIEW_URL = #{migMovieInfoBean.previewUrl}
+        </if>
+        WHERE movie_cd = #{migMovieInfoBean.movieCd}
+    </update>
+
+
+    <!-- 영화 포스터 파일 매핑 인서트 (api 버전) -->
+    <insert id="insertMovieFileMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO
+            MOV_FILE_MAPPING
+            (
+                MOVIE_CD,
+                FILE_ID,
+                ROLE,
+                MAP_DT
+            )
+        VALUES
+            (
+                #{migMovieInfoBean.movieCd},
+                #{migMovieInfoBean.fileId},
+                'POSTER',
+                NOW()
+            )
+    </insert>
+
+
+    <!-- 영화 포스터 파일 인서트 (api 버전) -->
+    <insert id="insertFileBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO
+            CMM_FILE (
+            FILE_ID,
+            MODULE,
+            URL,
+            CREATE_DT,
+            src
+        )
+        VALUES
+            (
+                #{migMovieInfoBean.fileId},
+                'API',
+                #{migMovieInfoBean.posterUrl},
+                NOW(),
+                #{migMovieInfoBean.posterUrl}
+            )
+    </insert>
+
+
+
+
     <!-- 디비 테스트 -->
     <select id="callDBTest" parameterType="String" resultType="integer">
         select 4 from dual
     </select>
-
-
 
 
 

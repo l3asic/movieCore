@@ -48,7 +48,11 @@ public class MigMovieInfoBean {
     private int pointTotalCnt;
     private int totalViewCnt;
     private String state;
+
     private String previewUrl;
+    private String plot;
+    private String posterUrl;
+    private String fileId;
 
 
 
