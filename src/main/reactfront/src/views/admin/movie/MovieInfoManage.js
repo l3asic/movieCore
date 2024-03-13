@@ -43,7 +43,32 @@ export default function MovieInfoManage() {
 
   // 파일 선택 핸들러
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // 파일의 미리보기 생성
+        setPreviewImageData(e.target.result);
+      };
+      // 파일을 읽어옴
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  // 미리보기 이미지 상태 업데이트
+  const setPreviewImageData = (imageData) => {
+    // 이미지 데이터를 상태에 업데이트
+    setMovVo(prevMovVo => ({
+      ...prevMovVo, // 기존 movVo 객체를 그대로 복사
+      movieBean: {
+        ...prevMovVo.movieBean, // 기존 movieBean 객체를 그대로 복사
+        fileBean: {
+          ...prevMovVo.movieBean.fileBean, // 기존 fileBean 객체를 그대로 복사
+          src: imageData // src 속성만 변경
+        }
+      }
+    }));
+
   };
 
 
@@ -391,6 +416,46 @@ export default function MovieInfoManage() {
 
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* 회색 가로줄 하나 */}
+      <div className="header-divider"
+           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+
+
+      {/** 예고편 영역 */}
+      <section className="border-t py-6 lg:py-12 xl:py-16" style={{marginBottom: "50px"}}>
+        <div className="container">
+          <div className="row justify-content-center" style={{ display: "flex" }}>
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>상세정보</h2>
+            </div>
+            <div className="col-md-8">
+              <div>
+                {/* 동영상을 재생할 영역 */}
+                {movVo.movieBean.previewUrl && (
+                  <video controls width="500" height="auto">
+                    {/* 동영상 소스 지정 */}
+                    <source src={movVo.movieBean.previewUrl} type="video/mp4" />
+                    {/* 지원되지 않는 브라우저 메시지 */}
+                    해당 브라우저는 비디오 태그를 지원하지 않습니다.
+                  </video>
+                )}
+              </div>
+              <p>
+                {/* 링크 렌더링 */}
+                {movVo.movieBean.previewUrl && (
+                  <>
+                    영상이 재생 되지 않을 시&nbsp;
+                    <a href={movVo.movieBean.previewUrl} target="_blank" rel="noopener noreferrer">링크</a>
+                    &nbsp;를 클릭
+                  </>
+                )}
+              </p>
             </div>
           </div>
         </div>

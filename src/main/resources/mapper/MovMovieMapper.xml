@@ -34,6 +34,7 @@
         <result column="point_total_cnt" property="pointTotalCnt" jdbcType="VARCHAR"/>
         <result column="total_view_cnt" property="totalViewCnt" jdbcType="VARCHAR"/>
         <result column="preview_url" property="previewUrl" jdbcType="VARCHAR"/>
+        <result column="plot" property="plot" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -384,7 +385,8 @@
             MMI.point_avg,
             MMI.point_total_cnt,
             MMI.total_view_cnt,
-            MMI.preview_url
+            MMI.preview_url,
+            MMI.plot
         FROM MOV_MOVIE MM
                  LEFT JOIN MOV_MOVIE_INFO MMI ON MM.MOVIE_CD = MMI.MOVIE_CD
         WHERE MM.movie_cd = #{movieBean.movieCd}

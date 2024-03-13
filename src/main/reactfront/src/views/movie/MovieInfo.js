@@ -269,6 +269,11 @@ export default function MovieInfo() {
                     </div>
                   </div>
 
+                  {/* 줄거리 */}
+                  <div className="row mb-4 mt-4" >
+                    <strong style={{ fontWeight: "normal"}}> 줄거리  </strong> <p style={{marginTop:"10px" }}>{movVo.movieBean.plot}</p>
+                  </div>
+
                   {/* 개봉일  제작 연도 */}
                   <div className="row mb-4 mt-4">
                     <div className="col-sm-6">
@@ -372,6 +377,48 @@ export default function MovieInfo() {
       {/* 회색 가로줄 하나 */}
       <div className="header-divider"
            style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+
+
+      {/** 예고편 영역 */}
+      <section className="border-t py-6 lg:py-12 xl:py-16" style={{marginBottom: "50px"}}>
+        <div className="container">
+          <div className="row justify-content-center" style={{ display: "flex" }}>
+            <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>상세정보</h2>
+            </div>
+            <div className="col-md-8">
+              <div>
+                {/* 동영상을 재생할 영역 */}
+                {movVo.movieBean.previewUrl && (
+                  <video controls width="500" height="auto">
+                    {/* 동영상 소스 지정 */}
+                    <source src={movVo.movieBean.previewUrl} type="video/mp4" />
+                    {/* 지원되지 않는 브라우저 메시지 */}
+                    해당 브라우저는 비디오 태그를 지원하지 않습니다.
+                  </video>
+                )}
+              </div>
+              <p>
+                {/* 링크 렌더링 */}
+                {movVo.movieBean.previewUrl && (
+                  <>
+                    영상이 재생 되지 않을 시&nbsp;
+                    <a href={movVo.movieBean.previewUrl} target="_blank" rel="noopener noreferrer">링크</a>
+                    &nbsp;를 클릭
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* 회색 가로줄 하나 */}
+      <div className="header-divider"
+           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+
+
 
 
       {/** 한줄 평 섹션 */}

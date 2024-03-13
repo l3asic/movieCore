@@ -42,6 +42,7 @@ public class MovieBean {
     private String pointTotalCnt;
     private String totalViewCnt;
     private String previewUrl;
+    private String plot;
 
     /** 영화 찜하기 정보 */
     private boolean isFav;
