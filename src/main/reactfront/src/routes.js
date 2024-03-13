@@ -38,6 +38,15 @@ const ArticleDetail = React.lazy(() => import('./views/brd/article/ArticleDetail
 // - 게시글 수정
 const ArticleUpdate = React.lazy(() => import('./views/brd/article/ArticleUpdate'))
 
+
+// 마이페이지
+// - 비밀번호 확인
+const CheckPassword = React.lazy(() => import('./views/member/myInformation/CheckPassword'))
+// - 내 정보
+const Profile = React.lazy(() => import('./views/member/myInformation/Profile'))
+
+
+
 // QnA
 // - 시스템 공지사항
 const SystemNotice = React.lazy(() => import('./views/qna/systemNotice/SystemNotice'))
@@ -144,6 +153,12 @@ const routes = [
   // - 게시글 수정화면
   { path: '/brd/ArticleUpdate', name: 'ArticleUpdate', element: ArticleUpdate },
 
+
+  // 마이페이지
+  // - 비밀번호 확인
+  { path: '/member/myInformation/CheckPassword', name: 'CheckPassword', element: CheckPassword },
+  // - 내 정보
+  { path: '/member/myInformation/Profile', name: 'Profile', element: Profile },
 
 
   // QnA

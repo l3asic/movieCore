@@ -29,6 +29,8 @@ import PropTypes from "prop-types";
 
 const AppHeaderDropdown = ({ onLogout }) => {
 
+  const navigate = useNavigate();
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -44,8 +46,12 @@ const AppHeaderDropdown = ({ onLogout }) => {
 
 
         <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
-        <CDropdownItem href="#">ㅣ
-          <CIcon icon={cilUser} className="me-2" />
+        <CDropdownItem
+          onClick={MoveToProfile} >
+          <CIcon
+            icon={cilUser}
+            className="me-2"
+          />
           Profile
         </CDropdownItem>
         <CDropdownDivider />
@@ -65,6 +71,14 @@ const AppHeaderDropdown = ({ onLogout }) => {
       </CDropdownMenu>
     </CDropdown>
   )
+
+
+
+  /** 내 정보 페이지로 이동 */
+  function MoveToProfile(){
+    navigate('/member/myInformation/CheckPassword');
+  }
+
 }
 
 // props 유효성 검사
