@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {
   CButton,
@@ -23,6 +23,7 @@ import {
   cilUser
 } from '@coreui/icons'
 import axios from "axios";
+import ReactImg from "../../../assets/images/react.jpg";
 
 const Profile = () => {
 
@@ -41,6 +42,50 @@ const Profile = () => {
 
 
 
+
+  // 파일 상태
+  const [file, setFile] = useState(null);
+
+  // 파일 선택 핸들러
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // 파일의 미리보기 생성
+        setPreviewImageData(e.target.result);
+      };
+      // 파일을 읽어옴
+      reader.readAsDataURL(selectedFile);
+
+      // 파일 상태 업데이트
+      setFile(selectedFile);
+    }
+  };
+
+
+  // 미리보기 이미지 상태 업데이트
+  const setPreviewImageData = (imageData) => {
+    // 이미지 데이터를 상태에 업데이트
+    setMemberInfo(prevMemberInfo => ({
+      ...prevMemberInfo,
+        fileBean: {
+          ...prevMemberInfo.fileBean, // 기존 fileBean 객체를 그대로 복사
+          src: imageData // src 속성만 변경
+        }
+    }));
+
+  };
+
+
+  useEffect(() => {
+    /** 프로필 사진 조회 */
+    selectProfileImg();
+
+  }, []);
+
+
+
   return (
 
     <>
@@ -53,57 +98,97 @@ const Profile = () => {
                   <CForm>
                     <h1>내 정보 관리</h1>
                     <p className="text-medium-emphasis">* 항목은 필수 입니다</p>
-                    {/* 아이디 칸*/}
-                    *
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilAddressBook} />
-                      </CInputGroupText>
-                      <CFormInput name="loginId" placeholder="아이디" value={memberInfo.loginId}  disabled></CFormInput>
-                    </CInputGroup>
 
-                    {/* 비밀번호 렌더링 버튼 칸*/}
-                    {changePassword ? null : (
-                      <CInputGroup className="mb-3" style={{height : "35px", marginTop : "30px"}}>
+                    {/* 프로필 사진 */}
+                    <div className="flex items-start gap-4 md:items-center" style={{display : "flex"}}>
+
+                      <img
+                        alt="Movie poster"
+                        className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
+                        height="200px"
+                        src={memberInfo.fileBean && memberInfo.fileBean.src ? memberInfo.fileBean.src : ReactImg}
+                        /*src={ReactImg}*/
+                        width="150px"
+                        style={{ borderRadius: '10px' }}
+                      />
+
+                      {/** 아이디 + 비밀번호 */}
+                      <div>
+
+                      {/* 아이디 칸*/}
+                      <CInputGroup className="mb-3" style={{width: "350px", height: "40px"}}>
                         <CInputGroupText>
-                          <CIcon icon={cilLockLocked} />
+                          <CIcon icon={cilAddressBook}/>
                         </CInputGroupText>
-                        <CButton color="dark" style={{ width: '50%', height: '100%'}} onClick={handlePasswordChangeClick}>
-                          비밀번호 변경
-                        </CButton>
+                        <CFormInput name="loginId" placeholder="아이디" value={memberInfo.loginId} disabled></CFormInput>
                       </CInputGroup>
-                    )}
 
-                    {/* 비밀번호 변경 폼 */}
-                    {changePassword && (
-                      <>
-
-                        <CButton
-                          color="dark"
-                          variant="ghost"
-                          style={{marginBottom : "5px"}}
-                          onClick={handlePasswordChangeClick}
-                        >
-                          <CIcon size="lg" color="dark" icon={cilArrowCircleLeft}   />
-                        </CButton>
-
-                        {/* 비밀번호 칸*/}
-                        <CInputGroup className="mb-3">
+                      {/* 비밀번호 렌더링 버튼 칸*/}
+                      {changePassword ? null : (
+                        <CInputGroup className="mb-3" style={{height : "35px", marginTop : "30px"}}>
                           <CInputGroupText>
                             <CIcon icon={cilLockLocked} />
                           </CInputGroupText>
-                          <CFormInput name="loginPassword" type="password" placeholder="비밀번호" onChange={changeMemberInfo} />
+                          <CButton color="dark" style={{ width: '50%', height: '100%'}} onClick={handlePasswordChangeClick}>
+                            비밀번호 변경
+                          </CButton>
                         </CInputGroup>
+                      )}
 
-                        {/* 비밀번호 확인 칸*/}
-                        <CInputGroup className="mb-4">
-                          <CInputGroupText>
-                            <CIcon icon={cilLockLocked} />
-                          </CInputGroupText>
-                          <CFormInput name="loginPasswordConfirm" type="password" placeholder="비밀번호 확인" onChange={changeMemberInfo} />
-                        </CInputGroup>
-                      </>
-                    )}
+                      {/* 비밀번호 변경 폼 */}
+                      {changePassword && (
+                        <>
+
+                          {/* 비밀번호 변경 안함 버튼*/}
+                          <CButton
+                            color="dark"
+                            variant="ghost"
+                            style={{marginBottom : "5px", marginTop : "15px"}}
+                            onClick={handlePasswordChangeClick}
+                          >
+                            <CIcon size="lg" color="dark"  icon={cilArrowCircleLeft}   />
+                          </CButton>
+
+                          {/* 비밀번호 칸*/}
+                          <CInputGroup className="mb-1">
+                            <CInputGroupText>
+                              <CIcon icon={cilLockLocked} />
+                            </CInputGroupText>
+                            <CFormInput name="loginPassword" type="password" placeholder="비밀번호" onChange={changeMemberInfo} />
+                          </CInputGroup>
+
+                          {/* 비밀번호 확인 칸*/}
+                          <CInputGroup className="">
+                            <CInputGroupText>
+                              <CIcon icon={cilLockLocked} />
+                            </CInputGroupText>
+                            <CFormInput name="loginPasswordConfirm" type="password" placeholder="비밀번호 확인" onChange={changeMemberInfo} />
+                          </CInputGroup>
+                        </>
+                      )}
+                      </div>
+
+                    </div>
+
+                    {/* 프로필 사진 수정 */}
+                    <div className="mb-3" style={{display: "flex",  height : "55px"}}>
+                      <CFormInput
+                        type="file"
+                        id="formFileMultiple"
+                        style={{marginTop : "20px", width : "250px"}}
+                        multiple
+                        onChange={handleFileChange}
+                      />
+                      <CButton
+                        color="secondary"
+                        style={{marginTop : "20px", marginLeft : "10px"}}
+                        /*onClick={profileImgUpload}*/
+                      >
+                        변경
+                      </CButton>
+                    </div>
+
+
 
                     {/* 이름 칸 */}
                     *
@@ -155,11 +240,13 @@ const Profile = () => {
                       <CInputGroupText>@</CInputGroupText>
                       <CFormInput name="email" placeholder="이메일" onChange={changeMemberInfo} value={memberInfo.email}/>
                     </CInputGroup>
-                    <div className="d-grid">
-                      <CButton color="success" onClick={updateMemberInfo}>
+
+                    <div className="d-grid" style={{marginTop : "20px"}}>
+                      <CButton color="dark" onClick={updateMemberInfo}>
                         내 정보 수정
                       </CButton>
                     </div>
+
                   </CForm>
                 </CCardBody>
               </CCard>
@@ -202,7 +289,7 @@ const Profile = () => {
     }).open();
   }
 
-  /** 회원가입 버튼 클릭 */
+  /** 내 정보 수정 버튼 클릭 */
   function updateMemberInfo(){
 
     // 유효성 검사
@@ -227,6 +314,11 @@ const Profile = () => {
       }
 
     }).then(function (res){
+
+      if(file){
+        profileImgUpload();
+      }
+
       if(res.data.successResult){
         alert("내 정보 변경 완료");
 
@@ -285,6 +377,55 @@ const Profile = () => {
     // 유효성 검사 통과
     return true;
   }
+
+
+  /** 프사 조회 */
+  function selectProfileImg(){
+
+    axios({
+      url: '/selectProfileImg',
+      method: 'post',
+      data: {
+        memId : memberInfo.memId
+      }
+    })
+      .then(function (res) {
+        setMemberInfo(prevMemberInfo => ({
+          ...prevMemberInfo, // 이전 상태의 모든 속성 복사
+          fileBean: res.data.memVo.memberBean.fileBean // fileBean만 새로운 값으로 업데이트
+        }));
+
+      })
+      .catch(function (err) {
+      });
+
+  }
+
+
+  /** 프로필 사진 등록/변경 */
+  function profileImgUpload() {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('memberInfo', JSON.stringify(memberInfo)); // movVo 객체를 직접 FormData에 추가
+
+    return axios.post('/profileImgUpload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(res => {
+
+
+      })
+      .catch(error => {
+      });
+
+  }
+
+
+
+
+
 
 
 

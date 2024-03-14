@@ -16,6 +16,24 @@
         <result column="TAGS" property="tags" />
     </resultMap>-->
 
+
+    <!-- 사용자 프로필 사진 빈 -->
+    <resultMap type="com.example.movieCore.cmm.FileBean" id="memFileBean">
+        <result column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+        <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+        <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+        <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+        <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+        <result column="URL" property="url" jdbcType="VARCHAR"/>
+        <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="VARCHAR"/>
+        <result column="src" property="src" jdbcType="VARCHAR"/>
+        <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+        <result column="MAP_DT" property="mapDt" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
     <insert id="signUp" parameterType="com.example.movieCore.login.vo.LoginMemberVo" >
         insert into MEM_MEMBER_INFO (
                                      MEM_ID,
@@ -80,6 +98,7 @@
     </select>
 
 
+    <!-- 사용자 정보 수정 -->
     <update id="updateMemberInfo" parameterType="com.example.movieCore.login.vo.LoginMemberVo">
         UPDATE MEM_MEMBER_INFO
         SET
@@ -94,6 +113,74 @@
         WHERE MEM_ID = #{memberBean.memId}
 
     </update>
+
+
+    <!-- 사용자 프로필 사진 조회 -->
+    <select id="selectProfileImg" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultMap="memFileBean">
+        SELECT
+            cf.FILE_ID,
+            cf.MODULE,
+            cf.FILE_NAME,
+            cf.LOCAL_NAME,
+            cf.FILE_EXT,
+            cf.URL,
+            cf.VOLUME,
+            cf.CREATE_DT,
+            cf.SRC
+        FROM MEM_MEMBER_INFO mmi
+                 LEFT JOIN MEM_FILE_MAPPING mfm ON mmi.MEM_ID = mfm.MEM_ID
+                 LEFT JOIN CMM_FILE cf ON mfm.FILE_ID = cf.FILE_ID
+        WHERE mmi.MEM_ID = #{memberBean.memId}
+    </select>
+
+
+    <!-- 프사 파일빈 인서트  -->
+    <insert id="insertFileBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO
+            CMM_FILE (
+            FILE_ID,
+            MODULE,
+            FILE_NAME,
+            LOCAL_NAME,
+            FILE_EXT,
+            URL,
+            VOLUME,
+            CREATE_DT,
+            src
+        )
+        VALUES
+            (
+                #{memberBean.fileBean.fileId},
+                #{memberBean.fileBean.module},
+                #{memberBean.fileBean.fileName},
+                #{memberBean.fileBean.localName},
+                #{memberBean.fileBean.fileExt},
+                #{memberBean.fileBean.url},
+                #{memberBean.fileBean.volume},
+                #{memberBean.fileBean.createDt},
+                #{memberBean.fileBean.src}
+            )
+    </insert>
+
+
+
+    <!-- 프사 <-> 파일빈 매핑 인서트  -->
+    <insert id="insertFileBeanMap" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+        INSERT INTO
+            MEM_FILE_MAPPING (
+            mem_id,
+            FILE_ID
+        )
+        VALUES
+            (
+                #{memberBean.memId},
+                #{memberBean.fileBean.fileId}
+            )
+
+    </insert>
+
+
+
 
 
 

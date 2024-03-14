@@ -1,5 +1,6 @@
 package com.example.movieCore.login.bean;
 
+import com.example.movieCore.cmm.FileBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,10 @@ public class LoginMemberBean implements Serializable {
     
     // 비밀번호 변경 시 구분 값
     private String changePassword;
+
+
+    // 파일 빈
+    private FileBean fileBean;
     
     
 

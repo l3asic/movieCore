@@ -1,5 +1,6 @@
 package com.example.movieCore.login.mapperInterface;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.vo.LoginMemberVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,4 +19,10 @@ public interface LoginMapper {
     public List<LoginMemberVo> getAllInfo();
 
     void updateMemberInfo(LoginMemberVo memberVo);
+
+    FileBean selectProfileImg(LoginMemberVo memVo);
+
+    void insertFileBean(LoginMemberVo memVo);
+
+    void insertFileBeanMap(LoginMemberVo memVo);
 }

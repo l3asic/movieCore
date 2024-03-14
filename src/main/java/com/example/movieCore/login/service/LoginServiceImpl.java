@@ -1,5 +1,6 @@
 package com.example.movieCore.login.service;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.mapperInterface.LoginMapper;
 import com.example.movieCore.login.vo.LoginMemberVo;
@@ -50,5 +51,17 @@ public class LoginServiceImpl {
 
     public void updateMemberInfo(LoginMemberVo memberVo) {
         loginMapper.updateMemberInfo(memberVo);
+    }
+
+    public FileBean selectProfileImg(LoginMemberVo memVo) {
+        return loginMapper.selectProfileImg(memVo);
+    }
+
+    public void insertFileBean(LoginMemberVo memVo) {
+        loginMapper.insertFileBean(memVo);
+    }
+
+    public void insertFileBeanMap(LoginMemberVo memVo) {
+        loginMapper.insertFileBeanMap(memVo);
     }
 }

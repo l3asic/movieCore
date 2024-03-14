@@ -1,16 +1,17 @@
 package com.example.movieCore.login.controller;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.service.LoginServiceImpl;
 import com.example.movieCore.login.vo.LoginMemberVo;
+import com.example.movieCore.utils.MakeFileBean;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import com.example.movieCore.utils.MakeUUID;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -90,6 +91,73 @@ public class LoginController {
         return res;
 
     }
+
+    /** 프로필 사진 조회 */
+    @PostMapping(value = "/selectProfileImg")
+    @ResponseBody
+    public Map<String, Object> selectProfileImg(@RequestBody LoginMemberBean memberInfo) throws Exception {
+
+        boolean successResult = false;
+        String successMsg = "";
+
+        LoginMemberVo memVo = new LoginMemberVo();
+        memVo.setMemberBean(memberInfo);
+
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+            memVo.getMemberBean().setFileBean(loginService.selectProfileImg(memVo));
+            resMap.put("memVo", memVo);
+            successResult = true;
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
+    /** 프로필 사진 등록/변경 */
+    @PostMapping("/profileImgUpload")
+    public Map<String, Object> profileImgUpload(@RequestParam("file") MultipartFile file, @RequestParam("memberInfo") String memberInfoString) {
+        LoginMemberBean memberInfo = new Gson().fromJson(memberInfoString, LoginMemberBean.class);
+
+        Map resMap = new HashMap<>();
+        boolean succesResult = false;
+
+        LoginMemberVo memVo = new LoginMemberVo();
+        memVo.setMemberBean(memberInfo);
+
+        try {
+
+            MakeFileBean makeFileBean = new MakeFileBean();
+
+            // 파일 업로드 및 파일 빈 값 할당
+            FileBean fileBean = makeFileBean.makingFileBean("MEM",file);
+            memVo.getMemberBean().setFileBean(fileBean);
+
+            // 프로필 사진 파일빈 디비 인서트
+            loginService.insertFileBean(memVo);
+
+            // 멤버  <-> 프로필 사진 파일 매핑 인서트
+            loginService.insertFileBeanMap(memVo);
+
+            succesResult =true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        resMap.put("succesResult", succesResult);
+
+        return resMap;
+    }
+
+
 
     /* test controller */
     /*@GetMapping("/user")

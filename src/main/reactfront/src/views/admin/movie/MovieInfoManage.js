@@ -52,6 +52,9 @@ export default function MovieInfoManage() {
       };
       // 파일을 읽어옴
       reader.readAsDataURL(selectedFile);
+
+      // 파일 상태 업데이트
+      setFile(selectedFile);
     }
   };
 
