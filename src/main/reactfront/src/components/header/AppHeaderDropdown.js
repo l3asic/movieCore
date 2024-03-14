@@ -38,22 +38,21 @@ const AppHeaderDropdown = ({ onLogout }) => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
-        {/*<CDropdownItem href="#/login">
-          <CIcon icon={cilBell} className="me-2" />
-          로그인
-        </CDropdownItem>*/}
-
-
-
-        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
         <CDropdownItem
           onClick={MoveToProfile} >
           <CIcon
             icon={cilUser}
             className="me-2"
           />
-          Profile
+          내 정보 관리
         </CDropdownItem>
+        {/*<CDropdownItem href="#/login">
+          <CIcon icon={cilBell} className="me-2" />
+          로그인
+        </CDropdownItem>*/}
+
+        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
+
         <CDropdownDivider />
         {/*<CDropdownItem href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
