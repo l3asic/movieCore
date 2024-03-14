@@ -29,5 +29,10 @@ public class LoginMemberBean implements Serializable {
     private Date memCreateDate;
 
     private String memRole;
+    
+    // 비밀번호 변경 시 구분 값
+    private String changePassword;
+    
+    
 
 }

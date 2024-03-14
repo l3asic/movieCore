@@ -16,4 +16,6 @@ public interface LoginMapper {
     public LoginMemberBean findByUsername(String username);
 
     public List<LoginMemberVo> getAllInfo();
+
+    void updateMemberInfo(LoginMemberVo memberVo);
 }

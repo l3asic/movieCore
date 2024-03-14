@@ -80,6 +80,22 @@
     </select>
 
 
+    <update id="updateMemberInfo" parameterType="com.example.movieCore.login.vo.LoginMemberVo">
+        UPDATE MEM_MEMBER_INFO
+        SET
+            MEM_NAME = #{memberBean.memName},
+            GENDER = #{memberBean.gender},
+            ADDRESS = #{memberBean.address},
+            EMAIL = #{memberBean.email},
+            ADDRESS_INFO = #{memberBean.addressInfo}
+            <if test="memberBean.changePassword == 'true'">
+                , LOGIN_PASSWORD = #{memberBean.loginPassword}
+            </if>
+        WHERE MEM_ID = #{memberBean.memId}
+
+    </update>
+
+
 
 
 </mapper>

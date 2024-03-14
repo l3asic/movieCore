@@ -8,6 +8,7 @@ import com.example.movieCore.utils.MakeUUID;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 //import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,8 @@ public class LoginController {
 
 
     private final LoginServiceImpl loginService;
+
+    private final PasswordEncoder passwordEncoder;
 
     /** 회원 가입시 */
     @PostMapping(value = "/signUp")
@@ -51,6 +54,40 @@ public class LoginController {
 
 
 
+
+    }
+
+
+    /** 회원 정보 업데이트 시 */
+    @PostMapping(value = "/updateMemberInfo")
+    @ResponseBody
+    public Map<String, Object> updateMemberInfo( LoginMemberBean memberBean) throws Exception{
+
+        Map<String, Object> res = new HashMap<>();
+        boolean successResult = false;
+
+
+         try {
+
+             // 비밀번호도 변경 시
+             if(memberBean.getChangePassword().equals("true")){
+                 /* password 인코딩*/
+                 memberBean.setLoginPassword(passwordEncoder.encode(memberBean.getLoginPassword()));
+             }
+
+             /** 디비 업데이트 */
+             LoginMemberVo memberVo = new LoginMemberVo();
+             memberVo.setMemberBean(memberBean);
+             loginService.updateMemberInfo(memberVo);
+             successResult = true;
+
+         }catch (Exception e){
+             e.printStackTrace();
+
+         }
+
+        res.put("successResult", successResult);
+        return res;
 
     }
 

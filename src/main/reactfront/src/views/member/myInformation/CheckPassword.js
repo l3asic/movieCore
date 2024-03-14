@@ -28,17 +28,6 @@ const CheckPassword = () => {
     setPassword(e.target.value);
   };
 
-  // 비밀번호 확인 핸들러
-  const handleCheckPassword = () => {
-    // 비밀번호 확인 로직 구현
-    if (password === 'qq1212') { // 사용자의 비밀번호로 변경
-      // 비밀번호가 일치하는 경우, 내정보 수정 페이지로 이동
-      navigate('/member/myInformation/Profile');
-    } else {
-      // 비밀번호가 일치하지 않는 경우, 알림 등 처리
-      alert('비밀번호가 일치하지 않습니다.');
-    }
-  };
 
   return (
     <div className="c-app c-default-layout flex-row align-items-center" style={{ marginTop: '200px' }}>
@@ -62,12 +51,23 @@ const CheckPassword = () => {
                           autoComplete="current-password"
                           value={password}
                           onChange={handlePasswordChange}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              handleCheckPassword();
+                            }
+                          }}
                           style={{ width: '150px' }} // 가로길이를 150px로 설정
                         />
                       </CInputGroup>
                       <CRow>
                         <CCol xs="6">
-                          <CButton color="primary" className="px-4" onClick={handleCheckPassword}>확인</CButton>
+                          <CButton
+                            color="primary"
+                            className="px-4"
+                            onClick={handleCheckPassword}
+                          >
+                            확인
+                          </CButton>
                         </CCol>
                       </CRow>
                     </div>
@@ -97,6 +97,64 @@ const CheckPassword = () => {
       </CContainer>
     </div>
   );
+
+
+
+  // 비밀번호 확인 함수
+  function handleCheckPassword() {
+    var memberBean = JSON.parse(localStorage.getItem('memberBean'));
+
+
+    axios({
+      url: '/authenticate',
+      method: 'post',
+      params: {
+        loginId: memberBean.loginId,
+        loginPassword: password
+      }
+    })
+      .then(function (res) {
+        // 비밀번호 확인 성공
+        if(res.data.loginStatus == 'success'){
+
+          // 로컬 스토리지 비우기
+          localStorage.removeItem('memberBean');
+          localStorage.removeItem('loginId');
+          localStorage.removeItem('memRole');
+          localStorage.removeItem('token');
+
+          // 로컬 스토리지에 데이터 담기
+          localStorage.setItem('token', res.data.jwt.token);
+          localStorage.setItem('loginId', res.data.userId);
+          localStorage.setItem('memRole', res.data.memRole);
+          localStorage.setItem('memberBean', JSON.stringify(res.data.memberBean));
+
+          // 스토리지에서 객체 추출 예시)
+          // JSON.parse(localStorage.getItem('memberBean'));
+
+          // 비밀번호 확인 후 내 정보 관리로 이동
+          navigate('/member/myInformation/Profile');
+
+        }else{
+          alert('로그인 오류');
+        }
+
+      })
+      .catch(function (res) {
+        // 비밀번호 확인 실패
+        if(res.response.data.loginStatus == 'fail'){
+          alert('비밀번호 오류');
+        }else{
+          alert('로그인 오류');
+        }
+
+      });
+
+
+  };
+
+
+
 };
 
 export default CheckPassword;

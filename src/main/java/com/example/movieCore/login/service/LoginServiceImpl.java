@@ -47,4 +47,8 @@ public class LoginServiceImpl {
     public LoginMemberBean getMemInfo(LoginMemberBean loginMemberBean){
         return loginMapper.getMemInfo(loginMemberBean);
     }
+
+    public void updateMemberInfo(LoginMemberVo memberVo) {
+        loginMapper.updateMemberInfo(memberVo);
+    }
 }
