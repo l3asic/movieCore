@@ -5,6 +5,7 @@ import com.example.movieCore.config.jwt.TokenProvider;
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.bean.TokenBean;
 import com.example.movieCore.login.service.LoginServiceImpl;
+import com.example.movieCore.login.vo.LoginMemberVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -54,17 +55,21 @@ public class AuthController {
             tokenBean.setToken(jwt);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-            
+
+            LoginMemberVo memVo = new LoginMemberVo();
             
             // 사용자 정보 조회
             LoginMemberBean returnMemberBean = loginService.getMemInfo(memberBean);
-            
+            memVo.setMemberBean(returnMemberBean);
+
+            // 프로필 사진 추가 조회
+            returnMemberBean.setFileBean(loginService.selectProfileImg(memVo));
 
             result.put("jwt", tokenBean);
             result.put("httpHeaders", httpHeaders);
             result.put("userId", memberBean.getLoginId());
             result.put("memRole", returnMemberBean.getMemRole());
-            result.put("memberBean", returnMemberBean);
+            result.put("memberBean", memVo.getMemberBean());
             result.put("loginStatus", "success");
             
                         return ResponseEntity.ok(result);
