@@ -149,11 +149,11 @@ const Profile = () => {
                       <CInputGroupText>
                         <CIcon icon={cilRoom} />
                       </CInputGroupText>
-                      <CFormInput name="addressInfo" placeholder="상세주소" onChange={changeMemberInfo} />
+                      <CFormInput name="addressInfo" placeholder="상세주소" onChange={changeMemberInfo} value={memberInfo.addressInfo}/>
                     </CInputGroup>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>@</CInputGroupText>
-                      <CFormInput name="email" placeholder="이메일" onChange={changeMemberInfo} />
+                      <CFormInput name="email" placeholder="이메일" onChange={changeMemberInfo} value={memberInfo.email}/>
                     </CInputGroup>
                     <div className="d-grid">
                       <CButton color="success" onClick={updateMemberInfo}>
