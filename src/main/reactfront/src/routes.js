@@ -42,8 +42,10 @@ const ArticleUpdate = React.lazy(() => import('./views/brd/article/ArticleUpdate
 // 마이페이지
 // - 비밀번호 확인
 const CheckPassword = React.lazy(() => import('./views/member/myInformation/CheckPassword'))
-// - 내 정보
+// - 내 정보 관리
 const Profile = React.lazy(() => import('./views/member/myInformation/Profile'))
+// - 내가 찜한 영화
+const MyFavMovie = React.lazy(() => import('./views/member/favMov/MyFavMovie'))
 
 
 
@@ -157,8 +159,10 @@ const routes = [
   // 마이페이지
   // - 비밀번호 확인
   { path: '/member/myInformation/CheckPassword', name: 'CheckPassword', element: CheckPassword },
-  // - 내 정보
+  // - 내 정보 관리
   { path: '/member/myInformation/Profile', name: 'Profile', element: Profile },
+  // - 내가 찜한 영화
+  { path: '/member/favMov/MyFavMovie', name: 'MyFavMovie', element: MyFavMovie },
 
 
   // QnA

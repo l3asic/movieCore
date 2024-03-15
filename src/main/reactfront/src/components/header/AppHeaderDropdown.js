@@ -19,7 +19,7 @@ import {
   cilSettings,
   cilTask,
   cilUser,
-  cilAccountLogout
+  cilAccountLogout, cilHeart
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 
@@ -44,13 +44,22 @@ const AppHeaderDropdown = ({ onLogout }) => {
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Account</CDropdownHeader>
         <CDropdownItem
-          onClick={MoveToProfile} >
+          onClick={MoveToProfile}
+        >
           <CIcon
             icon={cilUser}
             className="me-2"
           />
           내 정보 관리
         </CDropdownItem>
+
+        <CDropdownItem
+          onClick={MoveToMyFavMovie}
+        >
+          <CIcon icon={cilHeart} className="me-2" />
+          내가 찜한 영화
+        </CDropdownItem>
+
         {/*<CDropdownItem href="#/login">
           <CIcon icon={cilBell} className="me-2" />
           로그인
@@ -81,6 +90,11 @@ const AppHeaderDropdown = ({ onLogout }) => {
   /** 내 정보 페이지로 이동 */
   function MoveToProfile(){
     navigate('/member/myInformation/CheckPassword');
+  }
+
+  /** 내가 찜한 영화 페이지로 이동 */
+  function MoveToMyFavMovie(){
+    navigate('/member/favMov/MyFavMovie');
   }
 
 }
