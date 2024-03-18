@@ -121,28 +121,28 @@
     <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
         SELECT
-        count(MM.movie_cd) totalCnt
+        count(mm.movie_cd) totalCnt
         FROM
-        MOV_MOVIE MM
+        MOV_MOVIE mm
 
         WHERE
         1=1
         /* 제목 검색 */
         <choose>
             <when test="searchFilter == 'movieCd'">
-                AND MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <when test="searchFilter == 'movieNm'">
-                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <when test="searchFilter == 'repGenreNm'">
-                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <otherwise>
                 AND (
-                MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
-                OR MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
-                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                mm.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                OR mm.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR mm.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
                 )
             </otherwise>
         </choose>
@@ -152,34 +152,34 @@
     <!-- 관리자 - 영화 리스트 조회 -->
     <select id="selectMovieListAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
         SELECT
-        MM.movie_cd,
-        MM.movie_nm,
-        MM.movie_nm_en,
-        MM.prdt_year,
-        MM.open_dt,
-        MM.type_nm,
-        MM.prdt_stat_nm,
-        MM.genre_alt,
-        MM.rep_genre_nm,
-        MM.STATE
-        FROM MOV_MOVIE MM
+        mm.movie_cd,
+        mm.movie_nm,
+        mm.movie_nm_en,
+        mm.prdt_year,
+        mm.open_dt,
+        mm.type_nm,
+        mm.prdt_stat_nm,
+        mm.genre_alt,
+        mm.rep_genre_nm,
+        mm.STATE
+        FROM MOV_MOVIE mm
         WHERE 1=1
         /* 제목 검색 */
         <choose>
             <when test="searchFilter == 'movieCd'">
-                AND MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <when test="searchFilter == 'movieNm'">
-                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <when test="searchFilter == 'repGenreNm'">
-                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <otherwise>
                 AND (
-                MM.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
-                OR MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
-                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                mm.MOVIE_CD LIKE CONCAT('%', #{searchText}, '%')
+                OR mm.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR mm.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
                 )
             </otherwise>
         </choose>
@@ -189,22 +189,22 @@
             ORDER BY
             <choose>
                 <when test="sortKey == 'movieCd'">
-                    MM.movie_cd
+                    mm.movie_cd
                 </when>
                 <when test="sortKey == 'movieNm'">
-                    MM.movie_nm
+                    mm.movie_nm
                 </when>
                 <when test="sortKey == 'prdtYear'">
-                    MM.prdt_year
+                    mm.prdt_year
                 </when>
                 <when test="sortKey == 'repGenreNm'">
-                    MM.rep_genre_nm
+                    mm.rep_genre_nm
                 </when>
                 <when test="sortKey == 'state'">
-                    MM.state
+                    mm.state
                 </when>
                 <otherwise>
-                    MM.movie_cd
+                    mm.movie_cd
                 </otherwise>
             </choose>
             <if test="sortOdr == 'asc'">
@@ -235,38 +235,38 @@
     <!-- 영화 모듈 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCnt" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
         SELECT
-        count(MM.movie_cd) totalCnt
+        count(mm.movie_cd) totalCnt
         FROM
-        MOV_MOVIE MM, MOV_MOVIE_INFO MMI
+        MOV_MOVIE mm, MOV_MOVIE_INFO mmi
 
         WHERE
-            MM.MOVIE_CD = MMI.MOVIE_CD
+            mm.MOVIE_CD = mmi.MOVIE_CD
 
-            AND MM.STATE = 'B'
+            AND mm.STATE = 'B'
 
           /* 검색) 제목, 대표장르, 개봉년도, 배우명, 관람등급, 전체 */
         <choose>
             <when test="searchFilter == 'movieNm'">
-                AND MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
             <when test="searchFilter == 'repGenreNm'">
-                AND MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
 
             <when test="searchFilter == 'openDt'">
-                AND MM.open_dt LIKE CONCAT('%', #{searchText}, '%')
+                AND mm.open_dt LIKE CONCAT('%', #{searchText}, '%')
             </when>
 
             <when test="searchFilter == 'cast'">
-                AND MMI.cast LIKE CONCAT('%', #{searchText}, '%')
+                AND mmi.cast LIKE CONCAT('%', #{searchText}, '%')
             </when>
 
             <when test="searchFilter == 'watchGradeNm'">
-                AND MMI.watch_grade_nm LIKE CONCAT('%', #{searchText}, '%')
+                AND mmi.watch_grade_nm LIKE CONCAT('%', #{searchText}, '%')
             </when>
 
             <when test="searchFilter == 'nationNm'">
-                AND MMI.NATION_NM LIKE CONCAT('%', #{searchText}, '%')
+                AND mmi.NATION_NM LIKE CONCAT('%', #{searchText}, '%')
             </when>
 
 
@@ -275,12 +275,12 @@
 
             <otherwise>
                 AND (
-                MM.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
-                OR MM.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
+                mm.MOVIE_NM LIKE CONCAT('%', #{searchText}, '%')
+                OR mm.REP_GENRE_NM LIKE CONCAT('%', #{searchText}, '%')
 
-                OR MM.open_dt LIKE CONCAT('%', #{searchText}, '%')
-                OR MMI.cast LIKE CONCAT('%', #{searchText}, '%')
-                OR MMI.watch_grade_nm LIKE CONCAT('%', #{searchText}, '%')
+                OR mm.open_dt LIKE CONCAT('%', #{searchText}, '%')
+                OR mmi.cast LIKE CONCAT('%', #{searchText}, '%')
+                OR mmi.watch_grade_nm LIKE CONCAT('%', #{searchText}, '%')
                 )
             </otherwise>
         </choose>
@@ -316,11 +316,11 @@
         cf.SRC
         FROM MOV_MOVIE mm
         JOIN
-        MOV_MOVIE_INFO AS mmi ON MM.MOVIE_CD = mmi.MOVIE_CD
+        MOV_MOVIE_INFO AS mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
         LEFT JOIN
-        MOV_FILE_MAPPING AS mfm ON MM.MOVIE_CD = mfm.MOVIE_CD
+        MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD and mfm.state = 'B' /* 파일매핑 1개로 제한 */
         LEFT JOIN
-        CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID and mfm.state = 'B' /* 파일매핑 1개로 제한 */
+        CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE
             mm.STATE = 'B'
 
@@ -434,9 +434,9 @@
                 JOIN
             MOV_MOVIE_INFO AS mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
                 LEFT JOIN
-            MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD
+            MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD and mfm.state = 'B'
                 LEFT JOIN
-            CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID and mfm.state = 'B' /* 파일매핑 1개로 제한 */
+            CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE mm.movie_cd = #{movieBean.movieCd}
 
     </select>
@@ -447,10 +447,10 @@
         SELECT
             MG.GENRE_CD,
             MG.GENRE_NM
-        FROM MOV_MOVIE MM
-            LEFT JOIN MOV_GENRE_MAP MGM ON MM.MOVIE_CD = MGM.MOVIE_CD
+        FROM MOV_MOVIE mm
+            LEFT JOIN MOV_GENRE_MAP MGM ON mm.MOVIE_CD = MGM.MOVIE_CD
             LEFT JOIN MOV_GENRE MG ON MGM.GENRE_CD = MG.GENRE_CD
-        WHERE MM.movie_cd = #{movieBean.movieCd}
+        WHERE mm.movie_cd = #{movieBean.movieCd}
     </select>
 
 
@@ -463,10 +463,10 @@
             MC.company_part_names,
             MC.ceo_nm,
             MC.filmo_names
-        FROM MOV_MOVIE MM
-             LEFT JOIN MOV_COMPANY_MAP MCM ON MM.MOVIE_CD = MCM.MOVIE_CD
+        FROM MOV_MOVIE mm
+             LEFT JOIN MOV_COMPANY_MAP MCM ON mm.MOVIE_CD = MCM.MOVIE_CD
              LEFT JOIN MOV_COMPANY MC ON MCM.COMPANY_CD = MC.COMPANY_CD
-        WHERE MM.movie_cd = #{movieBean.movieCd}
+        WHERE mm.movie_cd = #{movieBean.movieCd}
     </select>
 
 
@@ -476,10 +476,10 @@
             MN.nation_cd,
             MN.kor_nm,
             MN.eng_nm
-        FROM MOV_MOVIE MM
-             LEFT JOIN MOV_NATION_MAP MNM ON MM.MOVIE_CD = MNM.MOVIE_CD
+        FROM MOV_MOVIE mm
+             LEFT JOIN MOV_NATION_MAP MNM ON mm.MOVIE_CD = MNM.MOVIE_CD
              LEFT JOIN MOV_NATION MN ON MNM.NATION_CD = MN.NATION_CD
-        WHERE MM.movie_cd = #{movieBean.movieCd}
+        WHERE mm.movie_cd = #{movieBean.movieCd}
     </select>
 
 
@@ -491,10 +491,10 @@
             MP.PEOPLE_NM_EN,
             MP.REP_ROLE_NM,
             MP.FILMO_NAMES
-        FROM MOV_MOVIE MM
-             LEFT JOIN MOV_PEOPLE_MAP MPM ON MM.MOVIE_CD = MPM.MOVIE_CD
+        FROM MOV_MOVIE mm
+             LEFT JOIN MOV_PEOPLE_MAP MPM ON mm.MOVIE_CD = MPM.MOVIE_CD
              LEFT JOIN MOV_PEOPLE MP ON MPM.PEOPLE_CD = MP.PEOPLE_CD
-        WHERE MM.movie_cd = #{movieBean.movieCd}
+        WHERE mm.movie_cd = #{movieBean.movieCd}
     </select>
 
 
@@ -601,12 +601,12 @@
         SELECT
             MPMP.movie_cd,
             MPMP.mem_id,
-            MMI.MEM_NAME,
+            mmi.MEM_NAME,
             MPMP.point,
             MPMP.repl,
             MPMP.state
         FROM MOV_PERSONAL_MOVIE_POINT MPMP
-                 JOIN MEM_MEMBER_INFO MMI ON MPMP.MEM_ID = MMI.MEM_ID
+                 JOIN MEM_MEMBER_INFO mmi ON MPMP.MEM_ID = mmi.MEM_ID
         WHERE MPMP.MOVIE_CD = #{movieBean.movieCd} AND MPMP.MEM_ID != #{memberBean.memId}
     </select>
 
@@ -758,9 +758,9 @@
                 JOIN
             MOV_FAVORITE AS mf ON mm.MOVIE_CD = mf.MOVIE_CD
                 LEFT JOIN
-            MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD
+            MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD and mfm.state = 'B'
                 LEFT JOIN
-            CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID and mfm.state = 'B' /* 파일매핑 1개로 제한 */
+            CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE
             mf.mem_id = #{memberBean.memId}
 
