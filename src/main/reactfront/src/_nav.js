@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilBell,
@@ -14,9 +14,13 @@ import {
   cilStar, cilUser,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import axios from "axios";
+
+let brdVo = {};
+
 
 const _nav = [
-  {
+  /*{
     component: CNavItem,
     name: 'Dashboard',
     to: '/dashboard',
@@ -25,7 +29,7 @@ const _nav = [
       color: 'info',
       text: 'NEW',
     },
-  },
+  },*/
 
   /** 커스텀 관리자 모듈  */
   {
@@ -177,57 +181,8 @@ const _nav = [
 
 
 
-  /** 폴더/게시판리스트 렌더링 테스트 - 준호 */
-  /** 폴더/게시판리스트 렌더링 테스트 - 준호 */
-  /** 폴더/게시판리스트 렌더링 테스트 - 준호 */
+  /** 폴더/게시판리스트 렌더링 영역 */
 
-  {
-    component: CNavGroup,
-    name: '폴더 더미 1',
-    to: '/base',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Accordion',
-        to: '/base/accordion',
-      },
-      {
-        component: CNavItem,
-        name: 'Breadcrumb',
-        to: '/base/breadcrumbs',
-      },
-      {
-        component: CNavItem,
-        name: 'Cards',
-        to: '/base/cards',
-      },
-    ],
-  },
-
-  {
-    component: CNavGroup,
-    name: '폴더 더미 2',
-    to: '/base',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Accordion',
-        to: '/base/accordion',
-      },
-      {
-        component: CNavItem,
-        name: 'Breadcrumb',
-        to: '/base/breadcrumbs',
-      },
-      {
-        component: CNavItem,
-        name: 'Cards',
-        to: '/base/cards',
-      },
-    ],
-  },
 
 
 
@@ -552,5 +507,76 @@ const _nav = [
     icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
   },
 ]
+
+
+
+/** 사이드 네비 폴더 추가 */
+selectAllFolderBoardList();
+
+
+
+/** 사이드 네비 폴더 추가 */
+function selectAllFolderBoardList(){
+
+  // 1. 폴더/ 게시판 리스트 조회
+  axios({
+    url: '/selectAllFolderBoardList',
+    method: 'post',
+    params:{
+    }
+
+  }).then(function (res){
+    brdVo =  res.data.brdVo;
+
+    let folderList = brdVo.folderBeanList;
+    debugger; // 2번
+
+    // 폴더 리스트 루프
+    for (let i = 0; i < folderList.length ; i++) {
+      let folderBean = folderList[i];
+      let boardList = folderList[i].boardBeanList;
+
+      // 게시판 아이템 리스트 초기화
+      let boardItemList = [];
+
+      // 게시판 리스트 루프
+      for (let j = 0; j < boardList.length; j++) {
+        let boardBean = boardList[j];
+
+        // 게시판 객체 세팅
+        let boardItem = {
+          component: CNavItem,
+          name: boardBean.brdName,  /* 게시판 이름 */
+          to: '/base/accordion',  /* 게시판 화면 주소 추후 수정 필요@@@ */
+        }
+
+        // 게시판 아이템 리스트에 게시판 객체 추가
+        boardItemList.push(boardItem);
+
+
+      } // for j
+
+      // 폴더 아이템
+      let folderItem = {
+        component: CNavGroup,
+        name: folderBean.folName,
+        to: '/base',
+        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        items: boardItemList,
+      }
+
+      _nav.splice(6 + i, 0, folderItem); // 인덱스 2에 새로운 요소 추가
+
+
+    } // for i
+
+
+  }).catch(function (err){
+    alert("등록 실패 (오류)");
+  });
+
+}
+
+
 
 export default _nav
