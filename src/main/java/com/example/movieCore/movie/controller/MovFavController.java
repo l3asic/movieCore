@@ -40,8 +40,22 @@ public class MovFavController {
 
         try {
 
-
+            // 찜한 영화 리스트 조회
             movVo.setMovieBeanList(movieService.selectMyFavMovList(movVo));
+
+            if(movVo.getMovieBeanList() != null){
+                for (int i = 0; i < movVo.getMovieBeanList().size(); i++) {
+                    // 영화 제작국가 조회 세팅
+                    movVo.setMovieBean(movVo.getMovieBeanList().get(i));
+                    movVo.getMovieBeanList().get(i).setMovieNationBeanList(movieService.selectMovieNationList(movVo));
+
+                    // 영화 내 평가 정보 조회
+                    movVo.getMovieBean().setMoviePersonalMoviePoint(movieService.selectMoviePersonalMoviePoint(movVo));
+
+                }
+
+            }
+
 
             resMap.put("movVo", movVo);
             successResult = true;

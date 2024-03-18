@@ -157,7 +157,7 @@ export default function MovieInfo() {
                 <img src={isHeartFilled ? fillHeartIcon : heartIcon} // 상태에 따라 아이콘 변경
                      alt="Heart Icon"
                      style={{ width: '40px', height: '40px' }}
-                     onClick={handleHeartClick} //
+                     onClick={handleHeartClick}
                 />
 
               </div>

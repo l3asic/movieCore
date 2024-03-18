@@ -126,4 +126,8 @@ public class MovMovieServiceImpl {
     public void updateMovieFileState(MovVo movVo) {
         movMovieMapper.updateMovieFileState(movVo);
     }
+
+    public MoviePersonalMoviePoint selectMoviePersonalMoviePoint(MovVo movVo) {
+        return movMovieMapper.selectMoviePersonalMoviePoint(movVo);
+    }
 }

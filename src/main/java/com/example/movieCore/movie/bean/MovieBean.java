@@ -82,6 +82,9 @@ public class MovieBean {
     /** 영화 평가 리스트 */
     private ArrayList<MoviePersonalMoviePoint> moviePersonalMoviePointBeanList;
 
+    /** 영화 내 평가 정보  */
+    private MoviePersonalMoviePoint moviePersonalMoviePoint;
+
 
     /** 영화 포스터 파일 정보 */
     private FileBean fileBean;

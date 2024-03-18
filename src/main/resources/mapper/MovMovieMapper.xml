@@ -678,6 +678,9 @@
     <!-- 내가 찜한 영화 리스트 조회-->
     <select id="selectMyFavMovList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
         SELECT
+
+            mm.rep_genre_nm,
+
             mmi.MOVIE_CD,
             mmi.MOVIE_NM,
             mmi.MOVIE_NM_EN,
@@ -705,7 +708,7 @@
 
 
             mfm.role,
-            mfm.map_dt
+            mfm.map_dt,
             cf.FILE_ID,
             cf.MODULE,
             cf.FILE_NAME,
@@ -731,6 +734,24 @@
         and mfm.state = 'B' /* 파일매핑 1개로 제한 */
 
     </select>
+
+
+    <!-- 해당 영화의 내 한줄평 조회-->
+    <select id="selectMoviePersonalMoviePoint" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="moviePersonalMoviePointBean" >
+        SELECT
+            mpmp.MOVIE_CD,
+            mpmp.MEM_ID,
+            mpmp.POINT,
+            mpmp.REPL,
+            mpmp.STATE
+        FROM MOV_PERSONAL_MOVIE_POINT AS mpmp
+        WHERE mpmp.MOVIE_CD = #{movieBean.movieCd}
+          AND mpmp.MEM_ID = #{memberBean.memId}
+
+    </select>
+
+
+
 
 
 

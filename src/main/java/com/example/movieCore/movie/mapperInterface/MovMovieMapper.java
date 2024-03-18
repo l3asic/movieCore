@@ -63,4 +63,6 @@ public interface MovMovieMapper {
     ArrayList<MovieBean> selectMyFavMovList(MovVo movVo);
 
     void updateMovieFileState(MovVo movVo);
+
+    MoviePersonalMoviePoint selectMoviePersonalMoviePoint(MovVo movVo);
 }
