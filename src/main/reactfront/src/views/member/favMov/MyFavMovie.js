@@ -95,6 +95,14 @@ const MyFavMovie = () => {
                   <CCardText style={{marginTop: "70px"}}>
                     <CBadge style={{marginRight: "10px"}} color="warning">★ ({movie.moviePersonalMoviePoint.point})</CBadge>
                     {movie.moviePersonalMoviePoint.repl}
+                    <CButton
+                      color="secondary"
+                      variant="ghost"
+                      style={{marginLeft: "2px"}}
+                      onClick={() => movToMovieInfo(movie.movieCd)}
+                    >
+                      수정
+                    </CButton>
                   </CCardText>
                 )}
               </CCol>
