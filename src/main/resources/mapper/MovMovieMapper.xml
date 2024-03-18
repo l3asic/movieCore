@@ -35,6 +35,23 @@
         <result column="total_view_cnt" property="totalViewCnt" jdbcType="VARCHAR"/>
         <result column="preview_url" property="previewUrl" jdbcType="VARCHAR"/>
         <result column="plot" property="plot" jdbcType="VARCHAR"/>
+
+
+        <!-- 포스터 파일 빈 -->
+        <association property="fileBean" javaType="com.example.movieCore.cmm.FileBean">
+            <result column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+            <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+            <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+            <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+            <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+            <result column="URL" property="url" jdbcType="VARCHAR"/>
+            <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+            <result column="CREATE_DT" property="createDt" jdbcType="VARCHAR"/>
+            <result column="src" property="src" jdbcType="VARCHAR"/>
+            <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+            <result column="MAP_DT" property="mapDt" jdbcType="VARCHAR"/>
+        </association>
+
     </resultMap>
 
 
@@ -524,7 +541,7 @@
     <!-- 영화 평가 정보 삭제 -->
     <delete id="deleteMovPersonalMoviePoint" parameterType="com.example.movieCore.movie.vo.MovVo"  >
         DELETE FROM MOV_PERSONAL_MOVIE_POINT
-        WHERE MOVIE_CD = #{moviePersonalMoviePointBean.movieCd} AND MEM_ID = #{moviePersonalMoviePointBean.memId};
+        WHERE MOVIE_CD = #{moviePersonalMoviePointBean.movieCd} AND MEM_ID = #{moviePersonalMoviePointBean.memId}
     </delete>
 
 
@@ -598,6 +615,15 @@
             )
     </insert>
 
+
+    <!-- 영화 나머지 포스터 상태값 'D' 로 변경 -->
+    <update id="updateMovieFileState" parameterType="com.example.movieCore.movie.vo.MovVo">
+        UPDATE MOV_FILE_MAPPING
+        SET STATE = 'D'
+        WHERE MOVIE_CD = #{movieBean.movieCd}
+    </update>
+
+
     <!-- 영화 포스터 파일 매핑 인서트 -->
     <insert id="insertMovieFileMap" parameterType="com.example.movieCore.movie.vo.MovVo" >
         INSERT INTO
@@ -605,16 +631,19 @@
                               MOVIE_CD,
                               FILE_ID,
                               ROLE,
-                              MAP_DT
+                              MAP_DT,
+                              STATE
         )
         VALUES
             (
              #{movieBean.movieCd},
              #{movieBean.fileBean.fileId},
              'POSTER',
-             NOW()
+             NOW(),
+             'B'
             )
     </insert>
+
 
     <!-- 영화 포스터 파일 조회 -->
     <select id="selectMoviePosterBean" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="movieFileMap">
@@ -642,7 +671,65 @@
           AND mfm.ROLE = 'POSTER'
         ORDER BY
             mfm.MAP_DT DESC
-            LIMIT 1;
+            LIMIT 1
+    </select>
+
+
+    <!-- 내가 찜한 영화 리스트 조회-->
+    <select id="selectMyFavMovList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+        SELECT
+            mmi.MOVIE_CD,
+            mmi.MOVIE_NM,
+            mmi.MOVIE_NM_EN,
+            mmi.MOVIE_NM_OG,
+            mmi.PRDT_YEAR,
+            mmi.SHOW_TM,
+            mmi.OPEN_DT,
+            mmi.PRDT_STAT_NM,
+            mmi.TYPE_NM,
+            mmi.NATION_NM,
+            mmi.GENRE_NM,
+            mmi.CAST,
+            mmi.CAST_EN,
+            mmi.SHOW_TYPES,
+            mmi.SHOW_TYPE_GROUP_NM,
+            mmi.SHOW_TYPE_NM,
+            mmi.AUDIT_NO,
+            mmi.WATCH_GRADE_NM,
+            mmi.POINT_YN,
+            mmi.POINT_AVG,
+            mmi.POINT_TOTAL_CNT,
+            mmi.TOTAL_VIEW_CNT,
+            mmi.PREVIEW_URL,
+            mmi.plot,
+
+
+            mfm.role,
+            mfm.map_dt
+            cf.FILE_ID,
+            cf.MODULE,
+            cf.FILE_NAME,
+            cf.LOCAL_NAME,
+            cf.FILE_EXT,
+            cf.URL,
+            cf.VOLUME,
+            cf.CREATE_DT,
+            cf.SRC
+
+        FROM
+            MOV_MOVIE AS mm
+                JOIN
+            MOV_MOVIE_INFO AS mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
+                JOIN
+            MOV_FAVORITE AS mf ON mm.MOVIE_CD = mf.MOVIE_CD
+                LEFT JOIN
+            MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD
+                LEFT JOIN
+            CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
+        WHERE
+            mf.mem_id = #{memberBean.memId}
+        and mfm.state = 'B' /* 파일매핑 1개로 제한 */
+
     </select>
 
 

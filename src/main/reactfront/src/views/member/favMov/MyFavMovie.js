@@ -31,6 +31,12 @@ const MyFavMovie = () => {
 
   const [memberInfo, setMemberInfo] = useState(JSON.parse(localStorage.getItem('memberBean')));
 
+  useEffect(() => {
+    /** 프로필 사진 조회 */
+    selectMyFavMovList();
+
+  }, []);
+
 
   return (
 
@@ -40,6 +46,29 @@ const MyFavMovie = () => {
 
     </>
   )
+
+
+
+  /** 내가 찜한 영화 리스트 조회 */
+  function selectMyFavMovList(){
+    axios({
+      url: '/selectMyFavMovList',
+      method: 'post',
+      data: {
+        memberBean : {
+          memId : memberInfo.memId
+        }
+
+      }
+    })
+      .then(function (res) {
+        debugger;
+
+      })
+      .catch(function (err) {
+
+      });
+  }
 
 
 

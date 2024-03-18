@@ -422,6 +422,9 @@ public class MovMovieController {
             // 포스터 파일빈 디비 인서트
             movieService.insertFileBean(movVo);
 
+            // 나머지 포스터 상태값 D로 변경
+            movieService.updateMovieFileState(movVo);
+
             // 영화 <-> 포스터 파일 매핑 인서트
             movieService.insertMovieFileMap(movVo);
 

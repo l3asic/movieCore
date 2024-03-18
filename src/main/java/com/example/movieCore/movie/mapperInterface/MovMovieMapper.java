@@ -59,4 +59,8 @@ public interface MovMovieMapper {
     void insertMovieFileMap(MovVo movVo);
 
     FileBean selectMoviePosterBean(MovVo movVo);
+
+    ArrayList<MovieBean> selectMyFavMovList(MovVo movVo);
+
+    void updateMovieFileState(MovVo movVo);
 }

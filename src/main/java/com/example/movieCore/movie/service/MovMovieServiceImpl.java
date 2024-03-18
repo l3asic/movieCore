@@ -118,4 +118,12 @@ public class MovMovieServiceImpl {
     public FileBean selectMoviePosterBean(MovVo movVo) {
         return movMovieMapper.selectMoviePosterBean(movVo);
     }
+
+    public ArrayList<MovieBean> selectMyFavMovList(MovVo movVo) {
+        return movMovieMapper.selectMyFavMovList(movVo);
+    }
+
+    public void updateMovieFileState(MovVo movVo) {
+        movMovieMapper.updateMovieFileState(movVo);
+    }
 }
