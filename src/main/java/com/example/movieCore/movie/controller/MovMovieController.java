@@ -141,7 +141,7 @@ public class MovMovieController {
                     movVo.getMovieBeanList().get(i).setMovieNationBeanList(movieService.selectMovieNationList(movVo));
 
                     // 영화 포스터 세팅
-                    movVo.getMovieBeanList().get(i).setFileBean(movieService.selectMoviePosterBean(movVo));
+//                    movVo.getMovieBeanList().get(i).setFileBean(movieService.selectMoviePosterBean(movVo));
 
                 }
 
@@ -239,7 +239,7 @@ public class MovMovieController {
                 movVo.getMovieBean().setMoviePersonalMoviePointBeanList(movieService.selectMoviePersonalMoviePointBeanList(movVo));
 
                 // 영화 포스터 정보 조회
-                movVo.getMovieBean().setFileBean(movieService.selectMoviePosterBean(movVo));
+                //movVo.getMovieBean().setFileBean(movieService.selectMoviePosterBean(movVo));
 
 
                 resMap.put("movieBean", movVo.getMovieBean());
