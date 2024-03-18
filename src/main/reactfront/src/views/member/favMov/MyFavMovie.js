@@ -167,8 +167,7 @@ const MyFavMovie = () => {
 
   /** 영화 상세보기 페이지로 이동  */
   function movToMovieInfo(movieCd){
-    alert('페이지 이동');
-
+    navigate('/movie/MovieInfo', { state: { movieCd } });
   }
 
 
