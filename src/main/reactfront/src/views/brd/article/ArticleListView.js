@@ -13,7 +13,7 @@ import {
   CCardImage
 } from '@coreui/react'
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation  } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
 import CIcon from "@coreui/icons-react";
 import {cilJustifyCenter, cilLoopCircular, cilSwapVertical} from "@coreui/icons";
@@ -21,12 +21,10 @@ import ReactImg from '../../../assets/images/react.jpg';
 
 const ArticleListView = () => {
 
+  const location = useLocation();
   const navigate  = useNavigate();
   const [brdVo, setBrdVo] = useState({
-    brdBoardBean: {
-      brdId : 'BB4265418620',
-      folId : 'BF2311713518'//임의의 값 하드코딩_ 추후 수정
-    },
+    brdBoardBean: {},
     articleBeanList: [],
     boardBeanList: [],
     paging: {
@@ -36,11 +34,26 @@ const ArticleListView = () => {
   });
 
 
+  useEffect(() => {
+    // URL에서 brdid 값을 추출 (ex : http://localhost:3000/#/brd/ArticleListView?brdId=BB2115517422 )
+    const searchParams = new URLSearchParams(location.search);
+    const brdIdFromQuery = searchParams.get('brdId');
 
-  useEffect(() =>{
+    setBrdVo(prevBrdVo => ({
+      ...prevBrdVo,
+      brdBoardBean: {
+        ...prevBrdVo.brdBoardBean,
+        brdId : brdIdFromQuery
+      }
+    }));
+    // 최초 접근시 brdId 동기화 문제로 강제 할당
+    brdVo.brdBoardBean.brdId = brdIdFromQuery;
+
     selectArticleList();
-    }, []
-  );
+
+  }, [location]);
+
+
 
   let [schSelect, setSchSelect] = useState('');
   let [schText, setSchText] = useState('');
@@ -69,7 +82,7 @@ const ArticleListView = () => {
   };
 
   /** 게시글 리스트 조회 */
-  function selectArticleList(newPage){ debugger;
+  function selectArticleList(newPage){
     if (newPage != null) { // 페이지 이동시
         brdVo.paging.currentPage = newPage;
     } else {

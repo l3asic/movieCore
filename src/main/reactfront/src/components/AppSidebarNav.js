@@ -47,7 +47,8 @@ export const AppSidebarNav = ({ items }) => {
             const boardItem = {
               component: CNavItem,
               name: boardBean.brdName,
-              to: '/base/accordion',
+              to: '/brd/ArticleListView?brdId=' + boardBean.brdId,
+              icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
             };
 
             boardItemList.push(boardItem);
