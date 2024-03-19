@@ -140,6 +140,35 @@
             STATE = 'B'
     </select>
 
+    <!-- 관리자모듈- 게시판 리스트 조회 -->
+    <select id="selectBoardListAdminTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
+        SELECT
+            COUNT(BB.BRD_ID) totalCnt
+        FROM
+            BRD_BOARD BB
+
+    </select>
+
+    <select id="selectBoardListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean" >
+        SELECT
+            BB.BRD_ID,
+            BB.BRD_NAME,
+            BB.BRD_COMMENT,
+            BB.MEM_ID,
+            CASE WHEN BB.STATE = 'D' THEN '삭제'
+                 ELSE '사용' END STATE,
+            BB.ODR,
+            BB.CREATE_DT,
+            CASE WHEN BB.NOTICE_YN = 'Y' THEN '예'
+                 ELSE '아니오' END NOTICE_YN,
+            CASE WHEN BB.IMG_UPLOAD_YN = 'Y' THEN '예'
+                 ELSE '아니오' END IMG_UPLOAD_YN
+        FROM
+            BRD_BOARD BB
+
+            LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+
+    </select>
 
 
 

@@ -138,13 +138,13 @@ function FolderListTab(){
               <CTableHeaderCell scope="col" className="cursorDefault">{folder.folId}</CTableHeaderCell>
               <CTableHeaderCell scope="col" className="cursorDefault">{folder.folName}</CTableHeaderCell>
               <CTableHeaderCell scope="col" className="cursorDefault">{folder.memId}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">임시값</CTableHeaderCell>
-              <CTableHeaderCell scope="col">임시값</CTableHeaderCell>
-              <CTableHeaderCell scope="col">임시값</CTableHeaderCell>
-              <CTableHeaderCell scope="col">{folder.state}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">임시값</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">임시값</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">임시값</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">임시값</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">{folder.state}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">임시값</CTableHeaderCell>
               <CTableHeaderCell scope="col" className="cursorDefault">{folder.createDt}</CTableHeaderCell>
-              <CTableHeaderCell scope="col">수정/삭제</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault">수정/삭제</CTableHeaderCell>
             </CTableRow>
           ))}
 
