@@ -51,7 +51,6 @@
             bf.STATE,
             bf.ODR,
             bf.CREATE_DT,
-
             bb.BRD_ID,
             bb.FOL_ID,
             bb.BRD_NAME,
@@ -65,12 +64,11 @@
             bb.FILE_LIMIT,
             bb.FILE_CNT_LIMIT,
             bb.REPL_YN
-
         FROM
-            BRD_FOLDER bf,
-            BRD_BOARD bb
-        WHERE
-            bf.FOL_ID = bb.FOL_ID
+            BRD_FOLDER bf
+                LEFT JOIN
+            BRD_BOARD bb ON bf.FOL_ID = bb.FOL_ID
+
     </select>
 
 

@@ -41,17 +41,21 @@ export const AppSidebarNav = ({ items }) => {
 
           const boardItemList = [];
 
-          for (let j = 0; j < boardList.length; j++) {
-            const boardBean = boardList[j];
+          // 예외처리 => 폴더에 게시판이 없어도 boardBeanList의 size가 있음 (매퍼 리절트맵 문제)
+          if(boardList && boardList.length > 0 && boardList[0].brdId != null){
+            debugger;
+            for (let j = 0; j < boardList.length; j++) {
+              const boardBean = boardList[j];
 
-            const boardItem = {
-              component: CNavItem,
-              name: boardBean.brdName,
-              to: '/brd/ArticleListView?brdId=' + boardBean.brdId,
-              icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
-            };
+              const boardItem = {
+                component: CNavItem,
+                name: boardBean.brdName,
+                to: '/brd/ArticleListView?brdId=' + boardBean.brdId,
+                icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
+              };
 
-            boardItemList.push(boardItem);
+              boardItemList.push(boardItem);
+            }
           }
 
           const folderItem = {
