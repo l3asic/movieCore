@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { CBadge, CNavGroup, CNavItem } from '@coreui/react';
 import axios from 'axios';
 import CIcon from '@coreui/icons-react';
-import { cilNotes } from '@coreui/icons';
+import { cilClipboard, cilFolder, cilNotes } from '@coreui/icons';
 
 export const AppSidebarNav = ({ items }) => {
   const location = useLocation();
@@ -57,7 +57,7 @@ export const AppSidebarNav = ({ items }) => {
             component: CNavGroup,
             name: folderBean.folName,
             to: '/base',
-            icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+            icon: <CIcon icon={cilFolder} customClassName="nav-icon" />,
             items: boardItemList,
           };
 
@@ -76,7 +76,7 @@ export const AppSidebarNav = ({ items }) => {
   const navItem = (item, index) => {
 
     // 관리자 모듈 예외 처리
-    if(item.name == "관리자" && localStorage.getItem('memRole') != "ADMIN"){
+    if (item.name === '관리자' && localStorage.getItem('memRole') !== 'ADMIN') {
       return null;
     }
 
