@@ -37,6 +37,9 @@ const AppSidebar = () => {
         className="d-none d-md-flex"
         to="/"
         onClick={() => navigate('/#')}
+        style={{
+          height: "30px"
+        }}
       >
 
         {/*<CIcon className="sidebar-brand-full" icon={logoNegative} height={35} />*/}
