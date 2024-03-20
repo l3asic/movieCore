@@ -43,7 +43,6 @@ export const AppSidebarNav = ({ items }) => {
 
           // 예외처리 => 폴더에 게시판이 없어도 boardBeanList의 size가 있음 (매퍼 리절트맵 문제)
           if(boardList && boardList.length > 0 && boardList[0].brdId != null){
-            debugger;
             for (let j = 0; j < boardList.length; j++) {
               const boardBean = boardList[j];
 
