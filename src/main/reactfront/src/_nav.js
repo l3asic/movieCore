@@ -59,7 +59,7 @@ const _nav = [
         items: [
           {
             component: CNavItem,
-            name: ' - 영화 이관 관리',
+            name: ' - 이관 및 API 관리',
             to: '/admin/MovieMigManage',
           },
           {
@@ -115,9 +115,16 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: '영화 목록',
+        name: '영화 전체 목록',
         to: '/movie/MovieList',
       },
+
+      {
+        component: CNavItem,
+        name: '박스 오피스',
+        to: '/movie/BoxOffice',
+      },
+
       {
         component: CNavGroup,
         name: '더미 폴더1',

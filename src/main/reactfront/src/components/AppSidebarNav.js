@@ -35,6 +35,15 @@ export const AppSidebarNav = ({ items }) => {
 
         const updatedItems = [...items];
 
+        // 폴더 렌더링 위치 (게시글 작성 다음칸)
+        let startFolderIndex = 0;
+        for (let i = 0; i < updatedItems.length; i++) {
+          if(updatedItems[i].name == "게시글 작성"){
+            startFolderIndex = i+1;
+            break;
+          }
+        }
+
         for (let i = 0; i < folderList.length; i++) {
           const folderBean = folderList[i];
           const boardList = folderList[i].boardBeanList;
@@ -65,7 +74,7 @@ export const AppSidebarNav = ({ items }) => {
             items: boardItemList,
           };
 
-          updatedItems.splice(6 + i, 0, folderItem);
+          updatedItems.splice(startFolderIndex + i, 0, folderItem);
         }
 
         setNavItems(updatedItems);

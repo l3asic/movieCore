@@ -180,7 +180,12 @@ const Dashboard = () => {
 
   return (
     <>
+
+      {/** 템플릿) 집계 카드 4칸 영역 */}
       <WidgetsDropdown />
+
+
+      {/** 템플릿) 트래픽 그래프 영역 */}
       <CCard className="mb-4">
         <CCardBody>
           <CRow>
@@ -308,8 +313,12 @@ const Dashboard = () => {
         </CCardFooter>
       </CCard>
 
+
+      {/** 템플릿) 페북 트위터 등 브랜드 카드 4칸 영역 */}
       <WidgetsBrand withCharts />
 
+
+      {/** 템플릿) 트레픽 앤 세일즈 통계 표 영역 */}
       <CRow>
         <CCol xs>
           <CCard className="mb-4">

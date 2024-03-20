@@ -12,8 +12,14 @@ function MovieMigManage() {
 
   return (
     <>
-      <h3 className="mb-4">영화 이관 관리 페이지 입니다</h3>
-      <h4> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!!  </h4>
+      <h4 className="mb-4">영화 이관 및 API 관리</h4>
+      <h5> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!!  </h5>
+
+      {/* 회색 가로줄 하나 */}
+      <div className="header-divider"
+           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}>
+      </div>
+
       <CContainer>
         <CRow className="mt-4">
           <CCol>
@@ -40,11 +46,29 @@ function MovieMigManage() {
 
         </CRow>
 
+        {/* 회색 가로줄 하나 */}
+        <div className="header-divider"
+             style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}></div>
+
         <CRow className="mt-4">
           <CCol>
             < CButton color="secondary" size="lg" onClick={callKMDBApi}> 6. KMDB API 호출 (영화 포스터, 줄거리, 예고편 이관) </ CButton>
           </CCol>
         </CRow>
+
+        {/* 회색 가로줄 하나 */}
+        <div className="header-divider"
+             style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}></div>
+
+        <CRow className="mt-4">
+          <CCol>
+            < CButton color="secondary" size="lg" onClick={callKMDBApi}> 7. 박스 오피스 API 호출 </ CButton>
+          </CCol>
+        </CRow>
+
+        {/* 회색 가로줄 하나 */}
+        <div className="header-divider"
+             style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}></div>
 
         <CRow className="mt-4">
 
