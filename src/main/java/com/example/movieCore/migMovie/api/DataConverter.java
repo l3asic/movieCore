@@ -1,13 +1,15 @@
 package com.example.movieCore.migMovie.api;
 
 import com.example.movieCore.migMovie.bean.*;
+import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class DataConverter {
     public ArrayList<MigMovieBean> convertToMovieBeanList(List<LinkedHashMap<String, Object>> linkedHashMapList) {
@@ -362,6 +364,71 @@ public class DataConverter {
 
         return migKMDBApiBeans;
     }
+
+
+
+    public ArrayList<MovieBoxOfficeBean> convertToMovieBoxOfficeBeanList(Object jsonMap) {
+        ArrayList<MovieBoxOfficeBean> movieBoxOfficeBeanList = new ArrayList<>();
+
+        if (jsonMap instanceof LinkedHashMap) {
+            LinkedHashMap<String, Object> topLevelMap = (LinkedHashMap<String, Object>) jsonMap;
+
+            if (topLevelMap.containsKey("boxOfficeResult")) {
+                LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>) topLevelMap.get("boxOfficeResult");
+
+                if (boxOfficeResult.containsKey("dailyBoxOfficeList")) {
+                    ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>) boxOfficeResult.get("dailyBoxOfficeList");
+
+                    for (LinkedHashMap<String, Object> dailyBoxOffice : dailyBoxOfficeList) {
+                        movieBoxOfficeBeanList.add(convertToMovieBoxOfficeBean(dailyBoxOffice));
+                    }
+                }
+            }
+        }
+
+        return movieBoxOfficeBeanList;
+    }
+
+    private MovieBoxOfficeBean convertToMovieBoxOfficeBean(LinkedHashMap<String, Object> linkedHashMap) {
+        MovieBoxOfficeBean movieBoxOfficeBean = new MovieBoxOfficeBean();
+
+        String targetDt = getYesterdayDateString();
+        movieBoxOfficeBean.setShowRange(targetDt);
+
+        movieBoxOfficeBean.setMovieCd((String) linkedHashMap.get("movieCd"));
+        movieBoxOfficeBean.setMovieNm((String) linkedHashMap.get("movieNm"));
+        movieBoxOfficeBean.setRank((String) linkedHashMap.get("rank"));
+        movieBoxOfficeBean.setRankOldAndNew((String) linkedHashMap.get("rankOldAndNew"));
+        movieBoxOfficeBean.setAudiCnt((String) linkedHashMap.get("audiCnt"));
+        movieBoxOfficeBean.setAudiInten((String) linkedHashMap.get("audiInten"));
+        movieBoxOfficeBean.setAudiChange((String) linkedHashMap.get("audiChange"));
+        movieBoxOfficeBean.setAudiAcc((String) linkedHashMap.get("audiAcc"));
+
+        // Parse and set openDt as LocalDate
+        String openDtStr = (String) linkedHashMap.get("openDt");
+        Date openDt = parseDateString(openDtStr);
+        movieBoxOfficeBean.setOpenDt(openDt);
+
+        return movieBoxOfficeBean;
+    }
+
+
+    private String getYesterdayDateString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        long yesterdayTimestamp = System.currentTimeMillis() - (1000 * 60 * 60 * 24);
+        return dateFormat.format(new Date(yesterdayTimestamp));
+    }
+
+    private Date parseDateString(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.movieCore.migMovie.api;
 
 import com.example.movieCore.migMovie.bean.*;
 import com.example.movieCore.migMovie.vo.MigMovVo;
+import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -378,6 +381,64 @@ public class MigMovieApiClientImpl {
 
     }
 
+
+
+
+    /**
+     *  박스 오피스 api 호출
+     */
+    public MigMovVo callMovieBoxOfficeApi(){
+
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
+
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+        // 어제 날짜 yyyyMMdd 형식
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate yesterday = currentDate.minusDays(1);
+        String targetDt = yesterday.format(formatter);
+
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s&targetDt=%s", apiUrl, key2, targetDt);
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        MigMovVo movVo = new MigMovVo();
+
+
+        ArrayList<MovieBoxOfficeBean> boxOfficeBeanList = new ArrayList<>();
+        boxOfficeBeanList = dataConverter.convertToMovieBoxOfficeBeanList(jsonMap);
+        movVo.setBoxOfficeBeanList(boxOfficeBeanList);
+
+
+        return movVo;
+
+
+
+
+
+
+    }
 
 
 

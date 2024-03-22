@@ -5,6 +5,7 @@ import com.example.movieCore.migMovie.api.MigMovieApiClientImpl;
 import com.example.movieCore.migMovie.bean.*;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
 import com.example.movieCore.migMovie.vo.MigMovVo;
+import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import com.example.movieCore.utils.MakeUUID;
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -659,7 +660,7 @@ public class MigMovManageController {
     @ResponseBody
     public Map<String, Object> callMovieNationsApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        MigMovVo movVo;
+        MigMovVo movVo = null;
         MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
 
         movVo = movieApiClient.callMovieNationApi();
@@ -673,6 +674,59 @@ public class MigMovManageController {
         }
         
 
+
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("successCnt", "successCnt");
+        return resMap;
+
+    }
+
+
+
+    /** 영화 박스오피스 api 호출 및 이관 */
+    @PostMapping(value = "/callMovieBoxOfficeApiSyncDB")
+    @ResponseBody
+    public Map<String, Object> callMovieBoxOfficeApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        MigMovVo movVo = null ;
+        MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
+
+        // 박스오피스 api 호출
+        movVo = movieApiClient.callMovieBoxOfficeApi();
+
+        ArrayList<MovieBoxOfficeBean> boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
+
+        try {
+            for (int i = 0; i < boxOfficeBeanList.size(); i++) {
+                movVo.setBoxOfficeBean(boxOfficeBeanList.get(i));
+                String movieCd = movVo.getBoxOfficeBean().getMovieCd();
+
+                int checkCnt = 0;
+
+                // 기존 디비에서 영화 확인
+                checkCnt = movManageService.checkMovieCntByMovieCd(movieCd);
+
+                // 기존 디비에 없을시 추후 처리 예정 @@@@
+                if(checkCnt==0){
+
+                }
+
+                // 개봉일 openDt 정보 업데이트
+                movManageService.updateOpenDt(movVo);
+
+
+            }
+
+            // 박스오피스 테이블 인서트
+            movManageService.insertBoxOffice(movVo);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
 
 
 

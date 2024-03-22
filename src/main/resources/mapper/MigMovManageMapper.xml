@@ -434,6 +434,46 @@
     </insert>
 
 
+    <!-- movieCd로 영화 갯수 파악 -->
+    <select id="checkMovieCntByMovieCd" parameterType="String" resultType="integer">
+        select
+            count(MOVIE_CD) checkCnt
+        from
+            MOV_MOVIE
+        where
+            MOVIE_CD = #{movieCd}
+    </select>
+
+
+    <!-- 박스오피스 테이블 인서트 -->
+    <insert id="insertBoxOffice" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
+        INSERT INTO MOV_BOX_OFFICE (show_range, movie_cd, box_rank, box_rank_old_and_new, audi_cnt, audi_inten, audi_change, audi_acc,movie_nm)
+        VALUES
+        <foreach collection="boxOfficeBeanList" item="item" separator=",">
+            (
+            #{item.showRange},
+            #{item.movieCd},
+            #{item.rank},
+            #{item.rankOldAndNew},
+            #{item.audiCnt},
+            #{item.audiInten},
+            #{item.audiChange},
+            #{item.audiAcc},
+            #{item.movieNm}
+            )
+        </foreach>
+    </insert>
+
+
+
+    <!-- 개봉일 업데이트 -->
+    <update id="updateOpenDt" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
+        UPDATE MOV_MOVIE
+        SET open_dt = #{boxOfficeBean.openDt}
+        WHERE movie_cd = #{boxOfficeBean.movieCd}
+    </update>
+
+
 
 
     <!-- 디비 테스트 -->

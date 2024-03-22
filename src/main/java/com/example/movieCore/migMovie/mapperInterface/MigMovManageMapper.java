@@ -58,4 +58,10 @@ public interface MigMovManageMapper {
     void insertMovieFileMap(MigMovVo movVo);
 
     void insertFileBean(MigMovVo movVo);
+
+    int checkMovieCntByMovieCd(String movieCd);
+
+    void insertBoxOffice(MigMovVo movVo);
+
+    void updateOpenDt(MigMovVo movVo);
 }

@@ -110,4 +110,16 @@ public class MigMovManageServiceImpl {
     public void insertFileBean(MigMovVo movVo) {
         migMovManageMapper.insertFileBean(movVo);
     }
+
+    public int checkMovieCntByMovieCd(String movieCd) {
+        return migMovManageMapper.checkMovieCntByMovieCd(movieCd);
+    }
+
+    public void insertBoxOffice(MigMovVo movVo) {
+        migMovManageMapper.insertBoxOffice(movVo);
+    }
+
+    public void updateOpenDt(MigMovVo movVo) {
+        migMovManageMapper.updateOpenDt(movVo);
+    }
 }

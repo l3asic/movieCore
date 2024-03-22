@@ -1,6 +1,7 @@
 package com.example.movieCore.migMovie.vo;
 
 import com.example.movieCore.migMovie.bean.*;
+import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,6 +52,12 @@ public class MigMovVo {
 
 
 
+
+    /** 영화 일별 박스오피스 리스트 */
+    private ArrayList<MovieBoxOfficeBean> boxOfficeBeanList;
+
+
+    private MovieBoxOfficeBean boxOfficeBean;
 
 
 

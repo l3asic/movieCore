@@ -62,7 +62,7 @@ function MovieMigManage() {
 
         <CRow className="mt-4">
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callKMDBApi}> 7. 박스 오피스 API 호출 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMovieBoxOfficeApiSyncDB}> 7. 박스 오피스 API 호출 </ CButton>
           </CCol>
         </CRow>
 
@@ -162,6 +162,21 @@ function callMoviePeopleInfoApiSyncDB() {
 function callMovieNationsApiSyncDB() {
   axios({
     url: '/callMovieNationsApiSyncDB',
+    method: 'post',
+    params: {}
+
+  }).then(function (res) {
+  }).catch(function (err) {
+    alert("실패 (오류)");
+  });
+
+}
+
+
+/** 영화 박스오피스 api 호출 */
+function callMovieBoxOfficeApiSyncDB() {
+  axios({
+    url: '/callMovieBoxOfficeApiSyncDB',
     method: 'post',
     params: {}
 
