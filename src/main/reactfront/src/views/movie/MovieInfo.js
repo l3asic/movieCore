@@ -16,6 +16,7 @@ import CIcon from "@coreui/icons-react";
 
 import heartIcon from '../../assets/brand/heartIcon.png';
 import fillHeartIcon from '../../assets/brand/fillHeartIcon.png';
+import GrayLine from "../uitils/GrayLine";
 
 
 
@@ -229,8 +230,7 @@ export default function MovieInfo() {
 
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
 
       {/** 영화 추가 정보 섹션 */}
@@ -375,8 +375,7 @@ export default function MovieInfo() {
 
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
 
       {/** 예고편 영역 */}
@@ -415,8 +414,7 @@ export default function MovieInfo() {
 
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
 
 
@@ -583,8 +581,7 @@ export default function MovieInfo() {
       </section>
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
       {/** 추후 예매 기능 추가 */}
 

@@ -6,6 +6,7 @@ import {
   CCol
 } from "@coreui/react";
 import axios from "axios";
+import GrayLine from "../../uitils/GrayLine";
 
 function MovieMigManage() {
 
@@ -16,9 +17,7 @@ function MovieMigManage() {
       <h5> 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!! 클릭 주의 !!!  </h5>
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}>
-      </div>
+      <GrayLine marginTop="20px" marginBottom="20px" />
 
       <CContainer>
         <CRow className="mt-4">
@@ -47,8 +46,7 @@ function MovieMigManage() {
         </CRow>
 
         {/* 회색 가로줄 하나 */}
-        <div className="header-divider"
-             style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}></div>
+        <GrayLine marginTop="20px" marginBottom="20px" />
 
         <CRow className="mt-4">
           <CCol>
@@ -57,8 +55,7 @@ function MovieMigManage() {
         </CRow>
 
         {/* 회색 가로줄 하나 */}
-        <div className="header-divider"
-             style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}></div>
+        <GrayLine marginTop="20px" marginBottom="20px" />
 
         <CRow className="mt-4">
           <CCol>
@@ -67,8 +64,7 @@ function MovieMigManage() {
         </CRow>
 
         {/* 회색 가로줄 하나 */}
-        <div className="header-divider"
-             style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '20px'}}></div>
+        <GrayLine marginTop="20px" marginBottom="20px" />
 
         <CRow className="mt-4">
 

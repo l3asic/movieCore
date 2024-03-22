@@ -27,6 +27,7 @@ import axios from "axios";
 import ReactImg from "../../../assets/images/react.jpg";
 import heartIcon from '../../../assets/brand/heartIcon.png';
 import fillHeartIcon from '../../../assets/brand/fillHeartIcon.png';
+import GrayLine from "../../uitils/GrayLine";
 
 const MyFavMovie = () => {
 
@@ -51,8 +52,7 @@ const MyFavMovie = () => {
       <h5 style={{marginBottom : "20px"}}>내가 찜한 영화 페이지</h5>
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '50px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="50px" marginBottom="50px" />
 
       <div>
         {movVo.movieBeanList && movVo.movieBeanList.map((movie, index) => (

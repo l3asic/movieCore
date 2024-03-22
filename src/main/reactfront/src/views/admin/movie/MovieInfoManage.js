@@ -17,6 +17,7 @@ import CIcon from "@coreui/icons-react";
 import heartIcon from '../../../assets/brand/heartIcon.png';
 import fillHeartIcon from '../../../assets/brand/fillHeartIcon.png';
 import {cilRecycle, cilTrash} from "@coreui/icons";
+import GrayLine from "../../uitils/GrayLine";
 
 
 
@@ -285,8 +286,7 @@ export default function MovieInfoManage() {
 
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
 
       {/** 영화 추가 정보 섹션 */}
@@ -426,8 +426,7 @@ export default function MovieInfoManage() {
 
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
 
       {/** 예고편 영역 */}
@@ -466,8 +465,7 @@ export default function MovieInfoManage() {
 
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
 
       {/** 한줄 평 섹션 */}
@@ -666,8 +664,7 @@ export default function MovieInfoManage() {
       </section>
 
       {/* 회색 가로줄 하나 */}
-      <div className="header-divider"
-           style={{borderTop: '1px solid #ccc', marginTop: '20px', marginBottom: '50px'}}></div>
+      <GrayLine marginTop="20px" marginBottom="50px" />
 
       {/** 추후 예매 기능 추가 */}
 
