@@ -711,6 +711,8 @@ public class MigMovManageController {
                 // 기존 디비에 없을시 추후 처리 예정 @@@@
                 if(checkCnt==0){
 
+//                    migOneMovie();
+
                 }
 
                 // 개봉일 openDt 정보 업데이트
@@ -854,6 +856,335 @@ public class MigMovManageController {
 
     }
 
+
+
+
+
+
+    /* 영화 한개 이관 메소드 */
+    public void migOneMovie() throws Exception {
+
+
+        MigMovVo movVo = migMovieApiClientImpl.callOneMovieApi();
+
+        int maxPage = movVo.getTotCnt()/100 + 1;
+
+        for (int curPage = 1; curPage < maxPage+1; curPage++) {
+            // 영화 목록 api 호출 (1페이지당 100개)
+            movVo = migMovieApiClientImpl.callMovieApi(curPage);
+
+            // LinkedHashMap 데이터 BeanList 구조로 변환
+            movVo.setMigMovieBeanList(dataConverter.convertToMovieBeanList((List) movVo.getMigMovieBeanList()));
+
+            // 영화 100개 인서트
+            for (int j = 0; j < movVo.getMigMovieBeanList().size(); j++) {
+
+                try {
+
+                    // 영화 한 개 정보 세팅
+                    movVo.setMigMovieBean(movVo.getMigMovieBeanList().get(j));
+
+
+
+                    // 제작사 코드들 추출 및 매핑 테이블 인서트
+                    if(movVo.getMigMovieBean().getCompanys() != null && movVo.getMigMovieBean().getCompanys().size() >0){
+
+                        for (int i = 0; i < movVo.getMigMovieBean().getCompanys().size(); i++) {
+
+                            // 영화에서 회사 코드 추출
+                            LinkedHashMap<String, Object> companyMap = movVo.getMigMovieBean().getCompanys().get(i);
+                            String companyCd = (String) companyMap.get("companyCd");
+                            movVo.getMigMovieBean().setCompanyCd(companyCd);
+
+                            // 회사 코드 실재 확인
+                            int companyCnt = 0;
+                            companyCnt = movManageService.checkTheCompany(movVo);
+
+                            if(companyCnt>0){
+                                movManageService.insertMovieCompanyMap(movVo);
+                            }else {
+                                System.out.println("영화에 맞는 회사가 디비에 없음?");
+                            }
+
+
+
+                        }
+
+
+
+                    }
+
+
+
+                    // 개봉일 없을시 예외 처리
+                    if (movVo.getMigMovieBean().getOpenDt() == null || movVo.getMigMovieBean().getOpenDt().isEmpty() || movVo.getMigMovieBean().getOpenDt().equals(""))  {
+                        movVo.getMigMovieBean().setOpenDt(null);
+                    }
+
+
+                    /** 영화 상세 정보 api 호출 */
+                    movVo.setMigMovieInfoBean(migMovieApiClientImpl.callMovieInfoApi(movVo.getMigMovieBean().getMovieCd()));
+
+                    // 영화 상세정보가 없을경우
+                    if(movVo.getMigMovieInfoBean() == null || StringUtil.isNullOrEmpty(movVo.getMigMovieInfoBean().getMovieCd())){
+                        movVo.setMigMovieInfoBean(new MigMovieInfoBean());
+                        movVo.getMigMovieInfoBean().setMovieCd(movVo.getMigMovieBean().getMovieCd());
+                    }
+
+
+                    // 영화 상세정보 개봉일 없을시 예외 처리
+                    if (movVo.getMigMovieInfoBean().getOpenDt() == null || movVo.getMigMovieInfoBean().getOpenDt().isEmpty() || movVo.getMigMovieInfoBean().getOpenDt().equals(""))  {
+                        movVo.getMigMovieInfoBean().setOpenDt(null);
+                    }
+
+                    /** 리스트 데이터 가공 */
+
+                    // 제작 국가 (리스트) 매핑 이관
+                    //                if(!movVo.getMigMovieInfoBean().getNations().isEmpty()){
+                    List<MigMovieNationBean> nationsList = movVo.getMigMovieInfoBean().getNations();
+                    if(nationsList == null || nationsList.isEmpty()) {
+                        System.out.println("제작 국가가 비었음?");
+                    }else{
+                        MigMovieNationBean migMovieNationBean = new MigMovieNationBean();
+
+                        for (int k = 0; k < movVo.getMigMovieInfoBean().getNations().size(); k++) {
+                            LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMigMovieInfoBean().getNations().get(k);
+
+                            // 제작 국가명 추출
+                            migMovieNationBean.setKorNm((String)dataMap.get("nationNm"));
+
+                            // 제작 국가 코드 조회
+                            migMovieNationBean.setNationCd(movManageService.selectMovieNation(migMovieNationBean));
+
+                            if(!StringUtil.isNullOrEmpty(migMovieNationBean.getNationCd())){
+                                migMovieNationBean.setMovieCd(movVo.getMigMovieBean().getMovieCd());
+                                movVo.setMigMovieNationBean(migMovieNationBean);
+
+                                // 영화 <=> 제작국가 매핑 인서트
+                                movManageService.insertMovieNationMap(movVo);
+                            }else {
+                                System.out.println("검색된 제작국가 없음 ");
+                            }
+
+
+
+                        }
+                    }
+
+
+
+
+                    if(movVo.getMigMovieInfoBean().getShowTypes() != null && movVo.getMigMovieInfoBean().getShowTypes().size() > 0){
+                        String showTypeGroupNm = "";
+                        String showTypeNm = "";
+
+                        for (int k = 0; k < movVo.getMigMovieInfoBean().getShowTypes().size(); k++) {
+                            LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMigMovieInfoBean().getShowTypes().get(k);
+                            if(k>0){
+                                if(!StringUtil.isNullOrEmpty(showTypeGroupNm) && !showTypeGroupNm.equals(""))showTypeGroupNm += ",";
+                                if(!StringUtil.isNullOrEmpty(showTypeNm) && !showTypeNm.equals(""))showTypeNm += ",";
+                            }
+
+                            showTypeGroupNm += (String) dataMap.get("showTypeGroupNm");
+                            showTypeNm += (String) dataMap.get("showTypeNm");
+
+                        }
+                        movVo.getMigMovieInfoBean().setShowTypeGroupNm(showTypeGroupNm);
+                        movVo.getMigMovieInfoBean().setShowTypeNm(showTypeNm);
+
+                    }
+
+                    if(movVo.getMigMovieInfoBean().getAudits() != null && movVo.getMigMovieInfoBean().getAudits().size() > 0){
+                        String auditNo = "";
+                        String watchGradeNm = "";
+
+                        for (int k = 0; k < movVo.getMigMovieInfoBean().getAudits().size(); k++) {
+                            LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMigMovieInfoBean().getAudits().get(k);
+                            if(k>0){
+                                if(!StringUtil.isNullOrEmpty(auditNo) && !auditNo.equals(""))auditNo += ",";
+                                if(!StringUtil.isNullOrEmpty(watchGradeNm) && !watchGradeNm.equals(""))watchGradeNm += ",";
+                            }
+
+                            auditNo += (String) dataMap.get("auditNo");
+                            watchGradeNm += (String) dataMap.get("watchGradeNm");
+
+                        }
+                        movVo.getMigMovieInfoBean().setAuditNo(auditNo);
+                        movVo.getMigMovieInfoBean().setWatchGradeNm(watchGradeNm);
+
+                    }
+
+
+
+                    if(movVo.getMigMovieInfoBean().getGenres() != null && movVo.getMigMovieInfoBean().getGenres().size() > 0){
+
+                        for (int k = 0; k < movVo.getMigMovieInfoBean().getGenres().size(); k++) {
+                            LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>) movVo.getMigMovieInfoBean().getGenres().get(k);
+                            String genreNm = (String) dataMap.get("genreNm");
+
+
+                            // 장르 검색
+                            MigMovieGenreBean migMovieGenreBean = movManageService.selectMovieGenre(genreNm);
+
+                            // 장르 없는 경우 장르 인서트
+                            if(migMovieGenreBean == null){
+                                migMovieGenreBean = new MigMovieGenreBean();
+                                // 장르 코드 새로 생성
+                                String genreCd = makeUUID.makeShortUUID("GR");
+                                migMovieGenreBean.setGenreCd(genreCd);
+
+                                migMovieGenreBean.setGenreNm(genreNm);
+                                migMovieGenreBean.setMovieCd(movVo.getMigMovieBean().getMovieCd());
+                                movVo.setMigMovieGenreBean(migMovieGenreBean);
+
+                                movManageService.insertMovieGenre(movVo);
+
+                            }
+
+                            // 영화 <=> 장르 매핑 인서트
+                            migMovieGenreBean.setMovieCd(movVo.getMigMovieBean().getMovieCd());
+                            movVo.setMigMovieGenreBean(migMovieGenreBean);
+
+                            movManageService.insertMovieGenreMap(movVo);
+
+
+                        } // 장르 for
+
+                    }
+
+
+
+
+                    /** 영화인 매핑 이관코드 */
+
+                    /** 감독 매핑 인서트 */
+                    for (int l = 0; movVo.getMigMovieInfoBean().getDirectors() != null && l < movVo.getMigMovieInfoBean().getDirectors().size(); l++) {
+
+                        String peopleNm = (String) ((LinkedHashMap) movVo.getMigMovieInfoBean().getDirectors().get(l)).get("peopleNm");
+
+                        // 감독이름으로 영화인 테이블에서 peopleCd 조회
+                        ArrayList<MigMoviePeopleBean> directorBeanList = movManageService.selectPeopleCdByNm(peopleNm);
+
+                        if(directorBeanList != null && directorBeanList.size()>0){
+                            for (int i = 0; i < directorBeanList.size(); i++) {
+
+                                // 검색된 사람이 한명이면 바로 할당
+                                if(directorBeanList.size() == 1) {
+                                    movVo.setMigMoviePeopleBean(directorBeanList.get(i));
+
+                                    break;
+
+                                    // 필모에 영화명이 있다면 할당
+                                } else if (directorBeanList.get(i).getFilmoNames() != null
+                                        && directorBeanList.get(i).getFilmoNames().indexOf(movVo.getMigMovieBean().getMovieNm()) > -1
+                                ) {
+                                    movVo.setMigMoviePeopleBean(directorBeanList.get(i));
+
+                                    break;
+
+                                    // 감독이면 할당 (동명이인 감독 두명일수도)
+                                }else if(directorBeanList.get(i).getRepRoleNm().equals("감독")){
+                                    movVo.setMigMoviePeopleBean(directorBeanList.get(i));
+
+                                    break;
+
+                                }
+
+                            } // for i
+
+                            // 영화 감독 매핑 인서트
+                            try {
+                                if(movVo.getMigMoviePeopleBean() != null){
+                                    movManageService.insertMoviePeopleMap(movVo);
+                                    movVo.setMigMoviePeopleBean(null);
+                                }
+
+                            }catch (DuplicateKeyException e){
+
+                            }
+                        }else {
+                            System.out.println("검색된 감독이 없음?");
+                        }
+
+
+
+
+                    }
+
+
+                    /** 배우 매핑 인서트 */
+                    for (int l = 0; l < movVo.getMigMovieInfoBean().getActors().size(); l++) {
+
+                        String peopleNm = (String) ((LinkedHashMap) movVo.getMigMovieInfoBean().getActors().get(l)).get("peopleNm");
+
+                        // 배우 이름으로 영화인 테이블에서 peopleCd 조회
+                        ArrayList<MigMoviePeopleBean> actorBeanList = movManageService.selectPeopleCdByNm(peopleNm);
+
+                        if(actorBeanList != null && actorBeanList.size()>0){
+                            for (int i = 0; i < actorBeanList.size(); i++) {
+
+                                // 검색된 사람이 한명이면 바로 할당
+                                if(actorBeanList.size() == 1) {
+                                    movVo.setMigMoviePeopleBean(actorBeanList.get(i));
+
+                                    break;
+
+                                    // 필모에 영화명이 있다면 할당
+                                } else if (actorBeanList.get(i).getFilmoNames() != null
+                                        && actorBeanList.get(i).getFilmoNames().indexOf(movVo.getMigMovieBean().getMovieNm()) > -1
+                                ) {
+                                    movVo.setMigMoviePeopleBean(actorBeanList.get(i));
+
+                                    break;
+
+                                    // 배우면 할당 (동명이인 배우 두명일수도)
+                                }else if(actorBeanList.get(i).getRepRoleNm().equals("배우")){
+                                    movVo.setMigMoviePeopleBean(actorBeanList.get(i));
+
+                                    break;
+
+                                }
+
+                            } // for i
+
+                            // 영화 배우 매핑 인서트
+                            try {
+                                if(movVo.getMigMoviePeopleBean() != null){
+                                    movManageService.insertMoviePeopleMap(movVo);
+                                    movVo.setMigMoviePeopleBean(null);
+                                }
+                            }catch (DuplicateKeyException e){
+
+                            }
+                        }else {
+                            System.out.println("검색된 배우가 없음?");
+                        }
+
+
+
+
+                    }
+
+
+
+
+
+                    // 영화 목록(정보1개) 디비 인서트
+                    movManageService.insertMovieBean(movVo);
+
+
+                    // 영화 상세정보 디비 인서트
+                    movManageService.insertMovieInfoBean(movVo);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } // for j
+
+        } // for curPage
+
+    }
 
 
 

@@ -444,6 +444,64 @@ public class MigMovieApiClientImpl {
 
 
 
+    /** 영화 한개 호출 */ //String curPage 페이지 숫자
+    public MigMovVo callOneMovieApi(){
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
+
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s", apiUrl, key);   // 1페이지당 100개씩
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        MigMovVo movVo = new MigMovVo();
+
+        // 토탈 갯수
+        if (jsonMap.containsKey("movieListResult")) {
+            LinkedHashMap<String, Object> movieListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
+            if (movieListResult.containsKey("totCnt")) {
+                movVo.setTotCnt((Integer) movieListResult.get("totCnt"));
+            }
+        }
+
+        // movieListResult 에서 movieList 추출
+        LinkedHashMap<String, Object> movieListResult = (LinkedHashMap<String, Object>) jsonMap.get("movieListResult");
+
+        // movieList 를 BeanList로 받기
+        ArrayList<MigMovieBean> migMovieBeanList = (ArrayList<MigMovieBean>) movieListResult.get("movieList");
+
+        // vo에 세팅
+        movVo.setMigMovieBeanList(migMovieBeanList);
+
+        return movVo;
+
+
+    }
+
+
+
+
+
 
 
 }
