@@ -444,8 +444,8 @@ public class MigMovieApiClientImpl {
 
 
 
-    /** 영화 한개 호출 */ //String curPage 페이지 숫자
-    public MigMovVo callOneMovieApi(){
+    /** 영화 한개 호출 */
+    public MigMovVo callOneMovieApi(MovieBoxOfficeBean boxOfficeBean){
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json";
 
@@ -453,9 +453,14 @@ public class MigMovieApiClientImpl {
         // WebClient 인스턴스 생성
         WebClient webClient = WebClient.create();
 
+        // 개봉년도 파싱
+        LocalDate localDate = boxOfficeBean.getOpenDt().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        // 년도를 추출하여 문자열로 반환합니다.
+        String openDt = String.valueOf(localDate.getYear());
 
-        // API 호출 URL 및 파라미터 조합
-        String fullUrl = String.format("%s?key=%s", apiUrl, key);   // 1페이지당 100개씩
+
+        // API 호출 URL 및 파라미터 조합   ( 영화 제목 , 개봉일 기준으로 호출 )
+        String fullUrl = String.format("%s?key=%s&movieNm=%s&openStartDt=%s&openEndDt=%s", apiUrl, key,boxOfficeBean.getMovieNm(),openDt,openDt);
 
         // API 호출 및 응답 받기
         String responseBody = webClient.get()
