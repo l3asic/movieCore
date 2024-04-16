@@ -476,6 +476,17 @@
 
 
 
+    <!-- 일일 박스오피스 배치 동작 확인 -->
+    <select id="dailyBoxOfficeRunCheck" parameterType="String" resultType="boolean">
+        select
+            BATCH_RUN as batchRun
+        from
+            BATCH_CONFIG
+        where
+            BATCH_NAME = #{batchName}
+    </select>
+
+
     <!-- 디비 테스트 -->
     <select id="callDBTest" parameterType="String" resultType="integer">
         select 4 from dual

@@ -122,4 +122,10 @@ public class MigMovManageServiceImpl {
     public void updateOpenDt(MigMovVo movVo) {
         migMovManageMapper.updateOpenDt(movVo);
     }
+
+
+    public boolean dailyBoxOfficeRunCheck(String batchName) {
+        return migMovManageMapper.dailyBoxOfficeRunCheck(batchName);
+    }
+
 }
