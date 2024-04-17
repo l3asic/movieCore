@@ -442,5 +442,37 @@ public class MovMovieController {
 
 
 
+    /** 영화 모듈 - 일일 박스 오피스 영화 조회 */
+    @PostMapping(value = "/selectDailyBoxOfficeList")
+    @ResponseBody
+    public Map<String, Object> selectDailyBoxOfficeList() throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        MovVo movVo = new MovVo();
+
+
+        try {
+
+            // 박스오피스 영화 10개 조회 (현재 일반 영화 10개 임시값 조회 , 추후 수정필요@@@@)
+            movVo.setMovieBeanList(movieService.selectDailyBoxOfficeList(movVo));
+
+            resMap.put("movVo", movVo);
+            successResult = true;
+
+        }catch (Exception e){
+
+        }
+
+
+        resMap.put("successResult", successResult);
+        return resMap;
+
+    }
+
+
+
+
 
 }

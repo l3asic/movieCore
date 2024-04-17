@@ -130,4 +130,11 @@ public class MovMovieServiceImpl {
     public MoviePersonalMoviePoint selectMoviePersonalMoviePoint(MovVo movVo) {
         return movMovieMapper.selectMoviePersonalMoviePoint(movVo);
     }
+
+
+
+    public ArrayList<MovieBean> selectDailyBoxOfficeList(MovVo movVo) {
+        return movMovieMapper.selectDailyBoxOfficeList(movVo);
+    }
+
 }

@@ -783,6 +783,49 @@
 
 
 
+    <!-- 영화 모듈 - 영화 리스트 조회 -->
+    <select id="selectDailyBoxOfficeList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+        SELECT
+        mm.movie_cd,
+        mm.movie_nm,
+        mm.movie_nm_en,
+        mm.prdt_year,
+        mm.open_dt,
+        mm.type_nm,
+        mm.prdt_stat_nm,
+        mm.genre_alt,
+        mm.rep_genre_nm,
+        mm.STATE,
+        mmi.POINT_AVG,
+        mmi.POINT_TOTAL_CNT,
+
+        mfm.role,
+        mfm.map_dt,
+        cf.FILE_ID,
+        cf.MODULE,
+        cf.FILE_NAME,
+        cf.LOCAL_NAME,
+        cf.FILE_EXT,
+        cf.URL,
+        cf.VOLUME,
+        cf.CREATE_DT,
+        cf.SRC
+        FROM MOV_MOVIE mm
+        JOIN
+        MOV_MOVIE_INFO AS mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
+        LEFT JOIN
+        MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD and mfm.state = 'B' /* 파일매핑 1개로 제한 */
+        LEFT JOIN
+        CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
+        WHERE
+        mm.STATE = 'B'
+            LIMIT 10
+
+    </select>
+
+
+
+
 
 
 

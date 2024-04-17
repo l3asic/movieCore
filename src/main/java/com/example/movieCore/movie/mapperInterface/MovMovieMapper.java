@@ -65,4 +65,8 @@ public interface MovMovieMapper {
     void updateMovieFileState(MovVo movVo);
 
     MoviePersonalMoviePoint selectMoviePersonalMoviePoint(MovVo movVo);
+
+
+    ArrayList<MovieBean> selectDailyBoxOfficeList(MovVo movVo);
+
 }
