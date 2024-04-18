@@ -67,6 +67,6 @@ public interface MovMovieMapper {
     MoviePersonalMoviePoint selectMoviePersonalMoviePoint(MovVo movVo);
 
 
-    ArrayList<MovieBean> selectDailyBoxOfficeList(MovVo movVo);
+    ArrayList<MovieBoxOfficeBean> selectDailyBoxOfficeList(MovVo movVo);
 
 }

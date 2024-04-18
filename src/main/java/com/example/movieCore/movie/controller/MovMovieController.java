@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
@@ -454,9 +455,15 @@ public class MovMovieController {
 
 
         try {
+            // 기본값 어제 날짜 세팅
+            // 임시값@@ 추후 수정 예정@@@
+            movVo.setMovieBoxOfficeBean(new MovieBoxOfficeBean());
+            movVo.getMovieBoxOfficeBean().setShowRange("20240415");
 
-            // 박스오피스 영화 10개 조회 (현재 일반 영화 10개 임시값 조회 , 추후 수정필요@@@@)
-            movVo.setMovieBeanList(movieService.selectDailyBoxOfficeList(movVo));
+
+            
+            // 날짜 기준 일일 박스 오피스 조회
+            movVo.setMovieBoxOfficeBeanList(movieService.selectDailyBoxOfficeList(movVo));
 
             resMap.put("movVo", movVo);
             successResult = true;

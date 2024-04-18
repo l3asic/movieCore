@@ -1,5 +1,6 @@
 package com.example.movieCore.movie.bean;
 
+import com.example.movieCore.cmm.FileBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,6 +41,15 @@ public class MovieBoxOfficeBean {
 
     /** 개봉일 */
     private Date openDt;
+
+
+    /** 영화 정보 */
+    private MovieBean movieBean;
+
+
+    /** 영화 포스터 파일 정보 */
+    private FileBean fileBean;
+
 
 
 }

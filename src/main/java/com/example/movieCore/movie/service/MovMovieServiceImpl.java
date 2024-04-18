@@ -133,7 +133,7 @@ public class MovMovieServiceImpl {
 
 
 
-    public ArrayList<MovieBean> selectDailyBoxOfficeList(MovVo movVo) {
+    public ArrayList<MovieBoxOfficeBean> selectDailyBoxOfficeList(MovVo movVo) {
         return movMovieMapper.selectDailyBoxOfficeList(movVo);
     }
 

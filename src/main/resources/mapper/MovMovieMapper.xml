@@ -117,6 +117,51 @@
     </resultMap>
 
 
+    <!-- 영화 모듈 - 일일 박스오피스 리스트 조회 -->
+    <resultMap type="com.example.movieCore.movie.bean.MovieBoxOfficeBean" id="BoxOfficeResultMap">
+        <result column="SHOW_RANGE" property="showRange" jdbcType="VARCHAR"/>
+        <result column="MOVIE_CD" property="movieCd" jdbcType="VARCHAR"/>
+        <result column="BOX_RANK" property="rank" jdbcType="VARCHAR"/>
+        <result column="BOX_RANK_OLD_AND_NEW" property="rankOldAndNew" jdbcType="VARCHAR"/>
+        <result column="AUDI_CNT" property="audiCnt" jdbcType="VARCHAR"/>
+        <result column="AUDI_INTEN" property="audiInten" jdbcType="VARCHAR"/>
+        <result column="AUDI_CHANGE" property="audiChange" jdbcType="VARCHAR"/>
+        <result column="AUDI_ACC" property="audiAcc" jdbcType="VARCHAR"/>
+        <result column="MOVIE_NM" property="movieNm" jdbcType="VARCHAR"/>
+        <!-- 무비 빈 -->
+        <association property="movieBean" javaType="com.example.movieCore.movie.bean.MovieBean">
+            <result column="MOVIE_CD" property="movieCd" jdbcType="VARCHAR"/>
+            <result column="MOVIE_NM" property="movieNm" jdbcType="VARCHAR"/>
+            <result column="MOVIE_NM_EN" property="movieNmEn" jdbcType="VARCHAR"/>
+            <result column="PRDT_YEAR" property="prdtYear" jdbcType="VARCHAR"/>
+            <result column="OPEN_DT" property="openDt" jdbcType="DATE"/>
+            <result column="TYPE_NM" property="typeNm" jdbcType="VARCHAR"/>
+            <result column="PRDT_STAT_NM" property="prdtStatNm" jdbcType="VARCHAR"/>
+            <result column="GENRE_ALT" property="genreAlt" jdbcType="VARCHAR"/>
+            <result column="REP_GENRE_NM" property="repGenreNm" jdbcType="VARCHAR"/>
+            <result column="STATE" property="state" jdbcType="VARCHAR"/>
+
+        </association>
+        <!-- 파일빈  -->
+        <association property="fileBean" javaType="com.example.movieCore.cmm.FileBean">
+            <result column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+            <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+            <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+            <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+            <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+            <result column="URL" property="url" jdbcType="VARCHAR"/>
+            <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+            <result column="CREATE_DT" property="createDt" jdbcType="VARCHAR"/>
+            <result column="SRC" property="src" jdbcType="VARCHAR"/>
+            <result column="ROLE" property="role" jdbcType="VARCHAR"/>
+            <result column="MAP_DT" property="mapDt" jdbcType="VARCHAR"/>
+        </association>
+
+    </resultMap>
+
+
+
+
 
     <!-- 관리자 - 영화 리스트 토탈 갯수 조회 -->
     <select id="selectMovieListTotalCntAdmin" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer">
@@ -783,44 +828,51 @@
 
 
 
-    <!-- 영화 모듈 - 영화 리스트 조회 -->
-    <select id="selectDailyBoxOfficeList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+    <!-- 영화 모듈 - 일일 박스오피스 리스트 조회 -->
+    <select id="selectDailyBoxOfficeList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="BoxOfficeResultMap">
         SELECT
-        mm.movie_cd,
-        mm.movie_nm,
-        mm.movie_nm_en,
-        mm.prdt_year,
-        mm.open_dt,
-        mm.type_nm,
-        mm.prdt_stat_nm,
-        mm.genre_alt,
-        mm.rep_genre_nm,
-        mm.STATE,
-        mmi.POINT_AVG,
-        mmi.POINT_TOTAL_CNT,
-
-        mfm.role,
-        mfm.map_dt,
-        cf.FILE_ID,
-        cf.MODULE,
-        cf.FILE_NAME,
-        cf.LOCAL_NAME,
-        cf.FILE_EXT,
-        cf.URL,
-        cf.VOLUME,
-        cf.CREATE_DT,
-        cf.SRC
-        FROM MOV_MOVIE mm
-        JOIN
-        MOV_MOVIE_INFO AS mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
-        LEFT JOIN
-        MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD and mfm.state = 'B' /* 파일매핑 1개로 제한 */
-        LEFT JOIN
-        CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
+            mbo.SHOW_RANGE,
+            mbo.MOVIE_CD,
+            mbo.BOX_RANK,
+            mbo.BOX_RANK_OLD_AND_NEW,
+            mbo.AUDI_CNT,
+            mbo.AUDI_INTEN,
+            mbo.AUDI_CHANGE,
+            mbo.AUDI_ACC,
+            mm.MOVIE_NM,
+            mm.MOVIE_NM_EN,
+            mm.PRDT_YEAR,
+            mm.OPEN_DT,
+            mm.TYPE_NM,
+            mm.PRDT_STAT_NM,
+            mm.GENRE_ALT,
+            mm.REP_GENRE_NM,
+            mm.STATE,
+            mmi.POINT_AVG,
+            mmi.POINT_TOTAL_CNT,
+            mfm.role,
+            mfm.map_dt,
+            cf.FILE_ID,
+            cf.MODULE,
+            cf.FILE_NAME,
+            cf.LOCAL_NAME,
+            cf.FILE_EXT,
+            cf.URL,
+            cf.VOLUME,
+            cf.CREATE_DT,
+            cf.SRC
+        FROM
+            MOV_BOX_OFFICE mbo
+                JOIN
+            MOV_MOVIE mm ON mbo.MOVIE_CD = mm.MOVIE_CD
+                JOIN
+            MOV_MOVIE_INFO AS mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
+                LEFT JOIN
+            MOV_FILE_MAPPING AS mfm ON mm.MOVIE_CD = mfm.MOVIE_CD AND mfm.state = 'B' /* 파일매핑 1개로 제한 */
+                LEFT JOIN
+            CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE
-        mm.STATE = 'B'
-            LIMIT 10
-
+            mbo.SHOW_RANGE = #{movieBoxOfficeBean.showRange}
     </select>
 
 

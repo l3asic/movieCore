@@ -2,10 +2,7 @@ package com.example.movieCore.movie.vo;
 
 import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.login.bean.LoginMemberBean;
-import com.example.movieCore.movie.bean.MovieBean;
-import com.example.movieCore.movie.bean.MoviePersonalMoviePoint;
-import com.example.movieCore.movie.bean.MoviePersonnalViewLogBean;
-import com.example.movieCore.movie.bean.SearchBean;
+import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.utils.Paging;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +27,15 @@ public class MovVo {
 
     /** 나의 영화 평가 (별점, 한줄평) */
     private MoviePersonalMoviePoint moviePersonalMoviePointBean;
+
+
+    /** 일일 박스 오피스 */
+    private MovieBoxOfficeBean movieBoxOfficeBean;
+
+
+    /** 일일 박스 오피스 리스트 */
+    private ArrayList<MovieBoxOfficeBean> movieBoxOfficeBeanList;
+
     
 
     /** 검색 조건 */
