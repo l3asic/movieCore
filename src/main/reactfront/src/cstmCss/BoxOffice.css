@@ -1,0 +1,67 @@
+/* 커스텀 CSS 파일에서 */
+.date-selector {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.date-picker {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.arrow-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 1.5rem;
+}
+
+.arrow-button:hover {
+  color: #007bff;
+}
+
+.movie-card {
+  /* 영화 카드의 스타일 */
+}
+
+.movie-image {
+  /* 영화 이미지의 스타일 */
+}
+
+.movie-info {
+  /* 영화 정보의 스타일 */
+}
+
+/* 화살표 배경 및 색상을 원하는대로 설정할 수 있습니다. */
+.slick-prev:before,
+.slick-next:before {
+  color: black; /* 화살표 색상 변경 */
+}
+
+/* 추가적으로, 화살표 위치를 조정하고 싶다면 */
+.slick-prev {
+  left: -35px; /* 이전 화살표 위치 조정 */
+}
+
+.slick-next {
+  right: -35px; /* 다음 화살표 위치 조정 */
+}
+
+/* 반응형 디자인을 고려하여 더 작은 화면에서 화살표 크기를 조정 */
+@media (max-width: 768px) {
+  .slick-prev,
+  .slick-next {
+    font-size: 20px; /* 모바일 화면에서 화살표 크기를 줄임 */
+  }
+  .slick-prev {
+    left: -25px; /* 모바일 화면에서 이전 화살표 위치 조정 */
+  }
+  .slick-next {
+    right: -25px; /* 모바일 화면에서 다음 화살표 위치 조정 */
+  }
+}

@@ -446,7 +446,9 @@ public class MovMovieController {
     /** 영화 모듈 - 일일 박스 오피스 영화 조회 */
     @PostMapping(value = "/selectDailyBoxOfficeList")
     @ResponseBody
-    public Map<String, Object> selectDailyBoxOfficeList() throws Exception {
+    public Map<String, Object> selectDailyBoxOfficeList(@RequestBody Map<String, String> requestBody) throws Exception {
+
+        String showRange = requestBody.get("showRange");
 
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
@@ -455,10 +457,9 @@ public class MovMovieController {
 
 
         try {
-            // 기본값 어제 날짜 세팅
-            // 임시값@@ 추후 수정 예정@@@
+
             movVo.setMovieBoxOfficeBean(new MovieBoxOfficeBean());
-            movVo.getMovieBoxOfficeBean().setShowRange("20240415");
+            movVo.getMovieBoxOfficeBean().setShowRange(showRange);
 
 
             
