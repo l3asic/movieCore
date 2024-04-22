@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../../cstmCss/BoxOffice.css';
 import { cilChevronLeft, cilChevronRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
-// 통신용 날짜 형식 (YYYYMMDD)
 const formatDate = (date) => {
   let d = new Date(date),
     month = '' + (d.getMonth() + 1),
@@ -18,7 +19,7 @@ const formatDate = (date) => {
   if (month.length < 2) month = '0' + month;
   if (day.length < 2) day = '0' + day;
 
-  return [year, month, day].join(''); // 구분자 없음
+  return [year, month, day].join('');
 };
 
 const BoxOffice = () => {
@@ -27,18 +28,17 @@ const BoxOffice = () => {
     currentPage: 1
   });
 
-  // 날짜 상태를 '어제'로 초기화
-  const [showRange, setShowRange] = useState(formatDate(new Date().setDate(new Date().getDate() - 1)));
-
+  const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
   const navigate = useNavigate();
 
   useEffect(() => {
     selectDailyBoxOfficeList();
-  }, [showRange]);
+  }, [startDate]);
 
   const selectDailyBoxOfficeList = async () => {
+    const formattedDate = formatDate(startDate);
     try {
-      const response = await axios.post('/selectDailyBoxOfficeList', { showRange }, {
+      const response = await axios.post('/selectDailyBoxOfficeList', { showRange: formattedDate }, {
         headers: {
           'Content-Type': 'application/json',
         }
@@ -54,22 +54,21 @@ const BoxOffice = () => {
     }
   };
 
-  const moveToMovieInfo = (movieCd) => {
-    navigate('/movie/MovieInfo', { state: { movieCd } });
-  };
-
   const handlePrevDay = () => {
-    const current = new Date(showRange.slice(0, 4), showRange.slice(4, 6) - 1, showRange.slice(6));
+    const current = new Date(startDate);
     current.setDate(current.getDate() - 1);
-    setShowRange(formatDate(current));
+    setStartDate(current);
   };
 
   const handleNextDay = () => {
-    const current = new Date(showRange.slice(0, 4), showRange.slice(4, 6) - 1, showRange.slice(6));
+    const current = new Date(startDate);
     current.setDate(current.getDate() + 1);
-    setShowRange(formatDate(current));
+    setStartDate(current);
   };
 
+  const moveToMovieInfo = (movieCd) => {
+    navigate(`/movie/MovieInfo`, { state: { movieCd } });
+  };
 
   const settings = {
     dots: false,
@@ -108,11 +107,16 @@ const BoxOffice = () => {
     <>
       <h4 className="box-office-header">일일 박스 오피스</h4>
 
-      <div className="date-selector">
+      <div className="date-selector" style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
         <button onClick={handlePrevDay} className="arrow-button">
           <CIcon icon={cilChevronLeft}/>
         </button>
-        <span>{showRange}</span>
+        <DatePicker
+          selected={startDate}
+          onChange={setStartDate}
+          dateFormat="yyyy-MM-dd" // 날짜 형식을 yyyy-MM-dd로 설정
+        />
+
         <button onClick={handleNextDay} className="arrow-button">
           <CIcon icon={cilChevronRight}/>
         </button>
