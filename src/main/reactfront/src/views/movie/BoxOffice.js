@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import '../../cstmCss/BoxOffice.css';
 import { cilChevronLeft, cilChevronRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import GrayLine from "../uitils/GrayLine";
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -107,7 +108,16 @@ const BoxOffice = () => {
     <>
       <h4 className="box-office-header">일일 박스 오피스</h4>
 
-      <div className="date-selector" style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
+      {/* 회색 가로줄 하나 */}
+      <GrayLine marginTop="20px" marginBottom="40px" />
+
+      <div className="date-selector"
+           style={{
+             justifyContent: 'center',
+             display: 'flex',
+             alignItems: 'center',
+             marginBottom: '40px'
+      }}>
         <button onClick={handlePrevDay} className="arrow-button">
           <CIcon icon={cilChevronLeft}/>
         </button>

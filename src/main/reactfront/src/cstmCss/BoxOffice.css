@@ -70,7 +70,7 @@
 
 /* DatePicker 입력 필드 스타일 */
 .react-datepicker-wrapper {
-  width: 10%; /* 입력 필드의 전체 너비 */
+  width: 15%; /* 입력 필드의 전체 너비 */
 }
 
 .react-datepicker__input-container {
