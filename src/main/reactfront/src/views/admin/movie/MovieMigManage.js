@@ -59,7 +59,7 @@ function MovieMigManage() {
 
         <CRow className="mt-4">
           <CCol>
-            < CButton color="secondary" size="lg" onClick={callMovieBoxOfficeApiSyncDB}> 7. 박스 오피스 API 호출 </ CButton>
+            < CButton color="secondary" size="lg" onClick={callMovieBoxOfficeApiSyncDB}> 7. 일일 박스 오피스 API 수동 호출 </ CButton>
           </CCol>
         </CRow>
 

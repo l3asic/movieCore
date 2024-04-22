@@ -64,6 +64,11 @@ const _nav = [
           },
           {
             component: CNavItem,
+            name: ' - 박스오피스 배치 관리',
+            to: '/admin/BoxOfficeBatchManage',
+          },
+          {
+            component: CNavItem,
             name: ' - 영화 목록 관리',
             to: '/admin/MovieListManage',
           },
