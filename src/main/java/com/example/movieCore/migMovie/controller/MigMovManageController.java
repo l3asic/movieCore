@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
@@ -700,6 +701,57 @@ public class MigMovManageController {
         return resMap;
 
     }
+
+
+
+
+    /** 일일 박스오피스 동작 상태 체크 */
+    @PostMapping(value = "/dailyBoxOfficeBatchActiveCheck")
+    @ResponseBody
+    public Map<String, Object> dailyBoxOfficeBatchActiveCheck(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        boolean batchDailyBoxOfficeRun = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+            // 일일 박스오피스 배치 동작 상태 확인
+            batchDailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
+
+            resMap.put("batchDailyBoxOfficeRun", batchDailyBoxOfficeRun);
+
+            resMap.put("success", "success");
+        }catch (Exception e){
+
+        }
+
+
+        return resMap;
+
+    }
+
+
+    /** 일일 박스오피스 동작/정지 업데이트 */
+    @PostMapping(value = "/dailyBoxOfficeBatchActiveUpdate")
+    @ResponseBody
+    public Map<String, Object> dailyBoxOfficeBatchActiveUpdate(@RequestBody MigMovVo movVo) throws Exception{
+
+
+
+        boolean batchDailyBoxOfficeRun = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+            // 업데이트 로직
+            batchDailyBoxOfficeRun = movManageService.BoxOfficeBatchActiveUpdate(movVo);
+            resMap.put("batchDailyBoxOfficeRun", batchDailyBoxOfficeRun);
+            resMap.put("success", "success");
+        } catch (Exception e) {
+            // 오류 처리
+        }
+
+        return resMap;
+    }
+
 
 
 

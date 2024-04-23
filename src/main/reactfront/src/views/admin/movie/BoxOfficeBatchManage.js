@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   CButton,
   CContainer,
@@ -10,13 +10,21 @@ import {
 } from "@coreui/react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from "axios";
 
 function BoxOfficeBatchManage() {
-  const [batchActive, setBatchActive] = useState(false);
+  const [batchDailyBoxOfficeRun, setBatchDailyBoxOfficeRun] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+
+  useEffect(() => {
+    dailyBoxOfficeBatchActiveCheck(setBatchDailyBoxOfficeRun);
+  }, []);
+
+
   const toggleBatch = () => {
-    setBatchActive(!batchActive);
+    setBatchDailyBoxOfficeRun(!batchDailyBoxOfficeRun);
+    dailyBoxOfficeBatchActiveUpdate(!batchDailyBoxOfficeRun);
   };
 
   const runBatchForDate = () => {
@@ -38,11 +46,11 @@ function BoxOfficeBatchManage() {
         <CCardBody>
           <CRow className="mb-3 align-items-center">
             <CCol sm="8">
-              <h5>현재 상태 : {batchActive ? '활성화' : '비활성화'}</h5>
+              <h5>현재 상태 : {batchDailyBoxOfficeRun ? '활성화' : '비활성화'}</h5>
             </CCol>
             <CCol sm="4">
-              <CButton block color={batchActive ? 'danger' : 'dark'} onClick={toggleBatch}>
-                {batchActive ? '배치 중지' : '배치 시작'}
+              <CButton block color={batchDailyBoxOfficeRun ? 'danger' : 'dark'} onClick={toggleBatch}>
+                {batchDailyBoxOfficeRun ? '배치 중지' : '배치 시작'}
               </CButton>
             </CCol>
           </CRow>
@@ -64,6 +72,7 @@ function BoxOfficeBatchManage() {
                 onChange={setSelectedDate}
                 dateFormat="yyyy-MM-dd"
                 className="form-control"
+                style={{ width: '50%' }}
               />
             </CCol>
             <CCol sm="4">
@@ -87,6 +96,51 @@ function BoxOfficeBatchManage() {
       </CCard>
     </CContainer>
   );
+}
+
+
+
+/** 일일 박스 오피스 배치 상태 확인 */
+function dailyBoxOfficeBatchActiveCheck(setBatchRun) {
+  axios({
+    url: '/dailyBoxOfficeBatchActiveCheck',
+    method: 'post',
+    data: {}
+  })
+    .then(function (res) {
+      setBatchRun(res.data.batchDailyBoxOfficeRun);
+    })
+    .catch(function (err) {
+      alert("실패 (오류)");
+    });
+}
+
+
+/** 일일 박스 오피스 배치 동작/정지 업데이트 */
+function dailyBoxOfficeBatchActiveUpdate(batchDailyBoxOfficeRun) {
+
+  axios({
+    url: '/dailyBoxOfficeBatchActiveUpdate',
+    method: 'post',
+    data: {
+      batchConfig: {
+        batchName: "batchDailyBoxOffice",
+        batchRun: batchDailyBoxOfficeRun
+      }
+    }
+
+  })
+
+    .then(function (res) {
+      if(res.data.success == 'success'){
+        alert('배치 상태 업데이트 완료')
+      }else{
+        alert('배치 상태 업데이트 실패')
+      }
+    })
+    .catch(function (err) {
+      alert("실패 (오류)");
+    });
 }
 
 export default BoxOfficeBatchManage;

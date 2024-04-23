@@ -66,4 +66,6 @@ public interface MigMovManageMapper {
     void updateOpenDt(MigMovVo movVo);
 
     boolean dailyBoxOfficeRunCheck(String batchName);
+
+    boolean BoxOfficeBatchActiveUpdate(MigMovVo movVo);
 }

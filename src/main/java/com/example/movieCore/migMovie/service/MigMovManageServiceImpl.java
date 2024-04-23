@@ -458,5 +458,7 @@ public class MigMovManageServiceImpl {
     }
 
 
-
+    public boolean BoxOfficeBatchActiveUpdate(MigMovVo movVo) {
+        return migMovManageMapper.BoxOfficeBatchActiveUpdate(movVo);
+    }
 }

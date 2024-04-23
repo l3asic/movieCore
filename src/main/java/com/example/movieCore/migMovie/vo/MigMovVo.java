@@ -60,6 +60,10 @@ public class MigMovVo {
     private MovieBoxOfficeBean boxOfficeBean;
 
 
+    /** 배치 설정 */
+    private BatchConfig batchConfig;
+
+
 
 
 }

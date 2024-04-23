@@ -475,7 +475,6 @@
 
 
 
-
     <!-- 일일 박스오피스 배치 동작 확인 -->
     <select id="dailyBoxOfficeRunCheck" parameterType="String" resultType="boolean">
         select
@@ -485,6 +484,16 @@
         where
             BATCH_NAME = #{batchName}
     </select>
+
+
+    <!-- 박스오피스 배치 동작 상태 업데이트 -->
+    <update id="BoxOfficeBatchActiveUpdate" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
+        UPDATE BATCH_CONFIG
+        SET BATCH_RUN = #{batchConfig.batchRun}
+        WHERE BATCH_NAME = #{batchConfig.batchName}
+    </update>
+
+
 
 
     <!-- 디비 테스트 -->

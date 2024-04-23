@@ -10,7 +10,7 @@ public class SchMovBoxOffice {
     private final MigMovManageServiceImpl movManageService;
 
 
-    private boolean dailyBoxOfficeRun = false;
+    private boolean batchDailyBoxOfficeRun = false;
 
     public SchMovBoxOffice(MigMovManageServiceImpl movManageService) {
         this.movManageService = movManageService;
@@ -22,11 +22,10 @@ public class SchMovBoxOffice {
     @Scheduled(cron = "0 0 23 * * *")
     public void batchDailyBoxOffice() {
 
-        System.out.println("배치 동작 상태 확인");
         // 배치 동작 상태 확인
-        dailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
+        batchDailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
 
-        if(dailyBoxOfficeRun){ // 배치 정상 동작 상태
+        if(batchDailyBoxOfficeRun){ // 배치 정상 동작 상태
             // 일일 박스오피스 이관 동작
             movManageService.syncDailyBoxOffice();
             System.out.println("배치 정상 동작");
