@@ -44,16 +44,21 @@ const BoxOffice = () => {
           'Content-Type': 'application/json',
         }
       });
-
+      const movies = response.data.movVo.movieBoxOfficeBeanList || [];
       setMovVo(prevState => ({
         ...prevState,
-        movieBoxOfficeBeanList: response.data.movVo.movieBoxOfficeBeanList,
+        movieBoxOfficeBeanList: movies,
       }));
     } catch (err) {
       console.error('Box office list fetch failed:', err);
       alert('영화 목록 조회에 실패했습니다.');
+      setMovVo(prevState => ({
+        ...prevState,
+        movieBoxOfficeBeanList: [],
+      }));
     }
   };
+
 
   const handlePrevDay = () => {
     const current = new Date(startDate);
