@@ -686,14 +686,14 @@ public class MigMovManageController {
 
 
 
-    /** 영화 박스오피스 api 호출 및 이관 */
-    @PostMapping(value = "/callMovieBoxOfficeApiSyncDB")
+    /**  일일 박스오피스 수동 배치 api 호출 및 이관 */
+    @PostMapping(value = "/specificDateBatch")
     @ResponseBody
-    public Map<String, Object> callMovieBoxOfficeApiSyncDB(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Map<String, Object> specificDateBatch(@RequestBody MigMovVo movVo) throws Exception {
 
 
         // 일일 박스오피스 이관 동작
-        movManageService.syncDailyBoxOffice();
+        movManageService.syncDailyBoxOffice(movVo);
 
 
         Map<String, Object> resMap = new HashMap<>();
@@ -734,7 +734,6 @@ public class MigMovManageController {
     @PostMapping(value = "/dailyBoxOfficeBatchActiveUpdate")
     @ResponseBody
     public Map<String, Object> dailyBoxOfficeBatchActiveUpdate(@RequestBody MigMovVo movVo) throws Exception{
-
 
 
         boolean batchDailyBoxOfficeRun = false;

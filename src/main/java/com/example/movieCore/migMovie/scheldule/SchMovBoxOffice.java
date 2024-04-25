@@ -1,6 +1,7 @@
 package com.example.movieCore.migMovie.scheldule;
 
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
+import com.example.movieCore.migMovie.vo.MigMovVo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,15 @@ public class SchMovBoxOffice {
     @Scheduled(cron = "0 0 23 * * *")
     public void batchDailyBoxOffice() {
 
+        MigMovVo movVo = new MigMovVo();
+
+
         // 배치 동작 상태 확인
         batchDailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
 
         if(batchDailyBoxOfficeRun){ // 배치 정상 동작 상태
             // 일일 박스오피스 이관 동작
-            movManageService.syncDailyBoxOffice();
+            movManageService.syncDailyBoxOffice(movVo);
             System.out.println("배치 정상 동작");
 
         }else{

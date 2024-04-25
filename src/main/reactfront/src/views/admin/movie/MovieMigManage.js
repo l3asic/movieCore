@@ -72,11 +72,6 @@ function MovieMigManage() {
                 6. KMDB API 호출 (영화 포스터, 줄거리, 예고편 이관)
               </CButton>
             </CCol>
-            <CCol>
-              <CButton color="secondary" size="lg" onClick={() => handleApiCall('/callMovieBoxOfficeApiSyncDB', "박스오피스 데이터 이관 성공", "이관 실패")}>
-                5. 일일 박스 오피스 API 수동 호출
-              </CButton>
-            </CCol>
           </CRow>
           <CRow className="mb-3">
             <CCol>

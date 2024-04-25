@@ -27,8 +27,23 @@ function BoxOfficeBatchManage() {
     dailyBoxOfficeBatchActiveUpdate(!batchDailyBoxOfficeRun);
   };
 
+  /** 특정 날짜 수동 배치 */
   const runBatchForDate = () => {
-    alert(`배치가 ${selectedDate.toISOString().slice(0, 10)}에 실행됩니다.`);
+    // Date 객체에서 연, 월, 일을 추출
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 추가
+    const day = selectedDate.getDate();
+
+    // 월과 일이 한 자리 수일 경우 앞에 '0'을 붙여 두 자리로 만듦
+    const formattedMonth = month < 10 ? '0' + month : month;
+    const formattedDay = day < 10 ? '0' + day : day;
+
+    // YYYYMMDD 형식으로 문자열 결합
+    const targetDt = `${year}${formattedMonth}${formattedDay}`;
+
+    specificDateBatch(targetDt);
+
+
   };
 
   const navigateToBatchLogs = () => {
@@ -142,5 +157,36 @@ function dailyBoxOfficeBatchActiveUpdate(batchDailyBoxOfficeRun) {
       alert("실패 (오류)");
     });
 }
+
+/** 특정 일자 일일 박스 오피스 수동 배치 */
+function specificDateBatch(targetDt) {
+
+  axios({
+    url: '/specificDateBatch',
+    method: 'post',
+    data: {
+      batchConfig: {
+        batchName : "batchDailyBoxOffice",
+        targetDt : targetDt
+      }
+    }
+
+  })
+
+    .then(function (res) {
+      if(res.data.success == 'success'){
+      }else{
+      }
+    })
+    .catch(function (err) {
+      alert("실패 (오류)");
+    });
+}
+
+
+
+
+
+
 
 export default BoxOfficeBatchManage;

@@ -387,7 +387,7 @@ public class MigMovieApiClientImpl {
     /**
      *  박스 오피스 api 호출
      */
-    public MigMovVo callMovieBoxOfficeApi(){
+    public MigMovVo callMovieBoxOfficeApi(MigMovVo movVo){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
@@ -396,11 +396,17 @@ public class MigMovieApiClientImpl {
         // WebClient 인스턴스 생성
         WebClient webClient = WebClient.create();
 
-        // 어제 날짜 yyyyMMdd 형식
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-        LocalDate yesterday = currentDate.minusDays(1);
-        String targetDt = yesterday.format(formatter);
+        String targetDt;
+
+        if(movVo.getBatchConfig() == null){ // 기본 값 : 어제
+            // 어제 날짜 yyyyMMdd 형식
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate yesterday = currentDate.minusDays(1);
+            targetDt = yesterday.format(formatter);
+        }else{  // 특정 날짜 이관
+            targetDt = movVo.getBatchConfig().getTargetDt();
+        }
 
 
         // API 호출 URL 및 파라미터 조합
@@ -423,7 +429,6 @@ public class MigMovieApiClientImpl {
             e.printStackTrace();
         }
 
-        MigMovVo movVo = new MigMovVo();
 
 
         ArrayList<MovieBoxOfficeBean> boxOfficeBeanList = new ArrayList<>();

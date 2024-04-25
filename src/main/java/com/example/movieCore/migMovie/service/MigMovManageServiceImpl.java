@@ -144,13 +144,12 @@ public class MigMovManageServiceImpl {
     /**
      * 일일 박스오피스 이관
      * */
-    public void syncDailyBoxOffice(){
+    public void syncDailyBoxOffice(MigMovVo movVo){
 
-        MigMovVo movVo = null ;
         MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
 
         // 박스오피스 api 호출
-        movVo = movieApiClient.callMovieBoxOfficeApi();
+        movVo = movieApiClient.callMovieBoxOfficeApi(movVo);
 
         ArrayList<MovieBoxOfficeBean> boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
 

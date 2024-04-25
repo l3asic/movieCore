@@ -9,6 +9,8 @@ public class BatchConfig {
 
     private String batchName;
 
+    private String targetDt;
+
     private boolean batchRun;
 
 }
