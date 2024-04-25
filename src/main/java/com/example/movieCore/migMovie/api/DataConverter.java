@@ -367,7 +367,7 @@ public class DataConverter {
 
 
 
-    public ArrayList<MovieBoxOfficeBean> convertToMovieBoxOfficeBeanList(Object jsonMap) {
+    public ArrayList<MovieBoxOfficeBean> convertToMovieBoxOfficeBeanList(Object jsonMap, String targetDt) {
         ArrayList<MovieBoxOfficeBean> movieBoxOfficeBeanList = new ArrayList<>();
 
         if (jsonMap instanceof LinkedHashMap) {
@@ -380,7 +380,7 @@ public class DataConverter {
                     ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>) boxOfficeResult.get("dailyBoxOfficeList");
 
                     for (LinkedHashMap<String, Object> dailyBoxOffice : dailyBoxOfficeList) {
-                        movieBoxOfficeBeanList.add(convertToMovieBoxOfficeBean(dailyBoxOffice));
+                        movieBoxOfficeBeanList.add(convertToMovieBoxOfficeBean(dailyBoxOffice, targetDt));
                     }
                 }
             }
@@ -389,10 +389,10 @@ public class DataConverter {
         return movieBoxOfficeBeanList;
     }
 
-    private MovieBoxOfficeBean convertToMovieBoxOfficeBean(LinkedHashMap<String, Object> linkedHashMap) {
+    private MovieBoxOfficeBean convertToMovieBoxOfficeBean(LinkedHashMap<String, Object> linkedHashMap, String targetDt) {
         MovieBoxOfficeBean movieBoxOfficeBean = new MovieBoxOfficeBean();
 
-        String targetDt = getYesterdayDateString();
+//        String targetDt = getYesterdayDateString();
         movieBoxOfficeBean.setShowRange(targetDt);
 
         movieBoxOfficeBean.setMovieCd((String) linkedHashMap.get("movieCd"));

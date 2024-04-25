@@ -432,7 +432,7 @@ public class MigMovieApiClientImpl {
 
 
         ArrayList<MovieBoxOfficeBean> boxOfficeBeanList = new ArrayList<>();
-        boxOfficeBeanList = dataConverter.convertToMovieBoxOfficeBeanList(jsonMap);
+        boxOfficeBeanList = dataConverter.convertToMovieBoxOfficeBeanList(jsonMap, targetDt);
         movVo.setBoxOfficeBeanList(boxOfficeBeanList);
 
 

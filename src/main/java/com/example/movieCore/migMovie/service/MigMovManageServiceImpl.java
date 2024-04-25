@@ -454,6 +454,82 @@ public class MigMovManageServiceImpl {
         // 영화 상세정보 디비 인서트
         insertMovieInfoBean(movVo);
 
+
+
+
+
+        /** 영화 포스터, 줄거리, 예고편 추가 이관 */
+            // 1.5 감독 명 추가조회
+//            movVo.setMigMovieBean(movVo.getMigMovieBeanList().get(i));
+//            String directorNm = selectDirector(movVo);
+
+//            movVo.getMigMovieBeanList().get(i).setPeopleNm(directorNm);
+
+            // 2. 영화명과 감독명 api로 전달 및 포스터, 줄거리, 예고편 데이터 리턴
+            MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
+            List<MigKMDBApiBean> migKMDBApiBeans = movieApiClient.callKMDBApi(movVo);
+
+
+            // 3. 디비에 포스터, 줄거리, 예고편 데이터 업데이트
+            if(migKMDBApiBeans != null && migKMDBApiBeans.size()>0){
+                MigKMDBApiBean migKMDBApiBean = migKMDBApiBeans.get(0);
+
+                // migKMDBApiBean  movieCd 세팅
+                migKMDBApiBean.setMovieCd(movVo.getMigMovieBean().getMovieCd());
+
+                // 줄거리
+                MigMovieInfoBean movieInfoBean = new MigMovieInfoBean();
+
+                // 줄거리 바이트 제한
+                String plot = migKMDBApiBean.getPlot();
+                if (plot != null && plot.length() > 800) {
+                    // 문자열이 800바이트를 넘으면 800바이트까지 자르기
+                    plot = plot.substring(0, plot.offsetByCodePoints(0, 800));
+                }
+                movieInfoBean.setPlot(plot);
+
+                // movieInfoBean  movieCd 세팅
+                movieInfoBean.setMovieCd(movVo.getMigMovieBean().getMovieCd());
+
+                // 예고편 url
+                if(migKMDBApiBean.getVodUrl() != null && !migKMDBApiBean.getVodUrl().equals("")){
+                    movieInfoBean.setPreviewUrl(migKMDBApiBean.getVodUrl());
+                }
+
+                movVo.setMigMovieInfoBean(movieInfoBean);
+
+                // 줄거리, 영화 예고편 갱신
+                if (movieInfoBean.getPlot() != null || movieInfoBean.getPreviewUrl() != null){
+                    updateURL(movVo);
+                }
+
+                // 영화 포스터 갱신
+                if(migKMDBApiBean.getPosterUrl() != null && !migKMDBApiBean.getPosterUrl().equals("") ){
+                    // 데이터 가공
+                    movieInfoBean.setPosterUrl(migKMDBApiBean.getPosterUrl());
+                    movieInfoBean.setFileId(makeUUID.makeLongUUID("CF"));
+
+                    // 매핑인서트
+                    insertMovieFileMap(movVo);
+
+                    // 파일 테이블 인서트
+                    insertFileBean(movVo);
+
+
+
+                }
+
+
+            }
+
+
+
+
+
+
+
+
+
     }
 
 

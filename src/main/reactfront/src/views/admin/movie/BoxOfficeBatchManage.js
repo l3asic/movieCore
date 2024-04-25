@@ -175,6 +175,7 @@ function specificDateBatch(targetDt) {
 
     .then(function (res) {
       if(res.data.success == 'success'){
+        alert('수동 배치 성공');
       }else{
       }
     })
