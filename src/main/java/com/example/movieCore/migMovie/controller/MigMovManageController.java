@@ -691,13 +691,18 @@ public class MigMovManageController {
     @ResponseBody
     public Map<String, Object> specificDateBatch(@RequestBody MigMovVo movVo) throws Exception {
 
-
-        // 일일 박스오피스 이관 동작
-        movManageService.syncDailyBoxOffice(movVo);
-
-
         Map<String, Object> resMap = new HashMap<>();
-        resMap.put("successCnt", "successCnt");
+
+        try {
+            // 일일 박스오피스 이관 동작
+            movManageService.syncDailyBoxOffice(movVo);
+
+            resMap.put("success", "success");
+        }catch (Exception e){
+            resMap.put("success", "fail");
+        }
+
+
         return resMap;
 
     }

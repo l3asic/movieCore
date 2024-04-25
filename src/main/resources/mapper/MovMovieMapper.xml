@@ -873,6 +873,8 @@
             CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE
             mbo.SHOW_RANGE = #{movieBoxOfficeBean.showRange}
+        ORDER BY
+            CAST(mbo.BOX_RANK AS UNSIGNED) ASC
     </select>
 
 

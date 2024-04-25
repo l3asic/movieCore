@@ -64,7 +64,10 @@ function BoxOfficeBatchManage() {
               <h5>현재 상태 : {batchDailyBoxOfficeRun ? '활성화' : '비활성화'}</h5>
             </CCol>
             <CCol sm="4">
-              <CButton block color={batchDailyBoxOfficeRun ? 'danger' : 'dark'} onClick={toggleBatch}>
+              <CButton
+                color={batchDailyBoxOfficeRun ? 'danger' : 'dark'}
+                onClick={toggleBatch}
+              >
                 {batchDailyBoxOfficeRun ? '배치 중지' : '배치 시작'}
               </CButton>
             </CCol>
@@ -91,7 +94,7 @@ function BoxOfficeBatchManage() {
               />
             </CCol>
             <CCol sm="4">
-              <CButton block color="dark" onClick={runBatchForDate}>
+              <CButton color="dark" onClick={runBatchForDate}>
                 배치 실행
               </CButton>
             </CCol>
@@ -104,7 +107,7 @@ function BoxOfficeBatchManage() {
           <strong>배치 로그</strong>
         </CCardHeader>
         <CCardBody>
-          <CButton block color="secondary" onClick={navigateToBatchLogs}>
+          <CButton color="secondary" onClick={navigateToBatchLogs}>
             배치 로그 보기
           </CButton>
         </CCardBody>
@@ -176,7 +179,8 @@ function specificDateBatch(targetDt) {
     .then(function (res) {
       if(res.data.success == 'success'){
         alert('수동 배치 성공');
-      }else{
+      }else if(res.data.success == 'fail'){
+        alert('수동 배치 실패');
       }
     })
     .catch(function (err) {
