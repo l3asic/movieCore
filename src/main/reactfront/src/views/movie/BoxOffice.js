@@ -10,6 +10,7 @@ import '../../cstmCss/BoxOffice.css';
 import { cilChevronLeft, cilChevronRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import GrayLine from "../uitils/GrayLine";
+import {CCardText} from "@coreui/react";
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -148,7 +149,11 @@ const BoxOffice = () => {
             <div className="movie-info">
               <h5 className="movie-title">{movie.movieNm}</h5>
               {movie.openDtYearStr && <span>({movie.openDtYearStr})</span>}
-              <p className="movie-rating">평점: {movie.pointAvg}</p>
+              <CCardText>
+                <small className="text-medium-emphasis">★ {movie.movieBean.pointAvg} ({movie.movieBean.pointTotalCnt}) </small>
+              </CCardText>
+
+
             </div>
           </div>
         ))}
