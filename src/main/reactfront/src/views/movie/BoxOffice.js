@@ -142,11 +142,13 @@ const BoxOffice = () => {
         {movVo.movieBoxOfficeBeanList.map((movie, index) => (
           <div key={index} className="movie-card " onClick={() => moveToMovieInfo(movie.movieCd)}>
 
-            <div className="position-relative">
-              <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
-                New <span className="visually-hidden">unread messages</span>
-              </CBadge>
-            </div>
+            {movie.rankOldAndNew !== "OLD" && (
+              <div className="position-relative">
+                <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
+                  {movie.rankOldAndNew} <span className="visually-hidden">unread messages</span>
+                </CBadge>
+              </div>
+            )}
             <img
               src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
               alt={movie.movieNm}
