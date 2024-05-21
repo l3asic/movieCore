@@ -10,7 +10,7 @@ import '../../cstmCss/BoxOffice.css';
 import { cilChevronLeft, cilChevronRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import GrayLine from "../uitils/GrayLine";
-import {CCardText} from "@coreui/react";
+import {CBadge, CCardText} from "@coreui/react";
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -140,12 +140,20 @@ const BoxOffice = () => {
 
       <Slider {...settings}>
         {movVo.movieBoxOfficeBeanList.map((movie, index) => (
-          <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
+          <div key={index} className="movie-card " onClick={() => moveToMovieInfo(movie.movieCd)}>
+
+            <div className="position-relative">
+              <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
+                New <span className="visually-hidden">unread messages</span>
+              </CBadge>
+            </div>
             <img
               src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
               alt={movie.movieNm}
               className="movie-image"
-            />
+            >
+            </img>
+
             <div className="movie-info">
               <h5 className="movie-title">{movie.movieNm}</h5>
               {movie.openDtYearStr && <span>({movie.openDtYearStr})</span>}
