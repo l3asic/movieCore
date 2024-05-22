@@ -5,28 +5,32 @@ import {
   CCol, CButton, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CTable
 } from '@coreui/react'
 import axios from "axios";
+import GrayLine from "../../uitils/GrayLine";
 
 
 
 const MemberManage = () => {
 
-  const [userData, setUserData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/allInfo');
-        setUserData(response.data.memData);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  // 영화 객체 관리
+  const [memVo, setMemVo] = useState({
+    memberBeanList : {}
+  });
 
-    fetchData();
-  }, []);
+
+
+  useEffect(() =>{
+    selectMemberList();
+    }, []
+  );
 
   return (
     <>
+
+      <h4> 회원 관리 </h4>
+
+      {/* 회색 가로줄 하나 */}
+      <GrayLine marginTop="30px" marginBottom="30px" />
 
       <CTable hover striped>
 
@@ -40,13 +44,10 @@ const MemberManage = () => {
             <CTableHeaderCell scope="col">주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">상세주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">이메일</CTableHeaderCell>
-
-
-
-            <CTableHeaderCell scope="col">수정/삭제</CTableHeaderCell>
+            <CTableHeaderCell scope="col">회원 등급</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
-        <CTableBody>
+        {/*<CTableBody>
           {userData.map((user) => (
             <CTableRow key={user.id}>
               <CTableHeaderCell scope="row">{user.id}</CTableHeaderCell>
@@ -57,11 +58,11 @@ const MemberManage = () => {
               <CTableDataCell>{user.address}</CTableDataCell>
               <CTableDataCell>{user.detailAddress}</CTableDataCell>
               <CTableDataCell>{user.email}</CTableDataCell>
-              <CTableDataCell>수정/삭제 버튼</CTableDataCell>
+              <CTableDataCell>dd</CTableDataCell>
             </CTableRow>
           ))}
 
-        </CTableBody>
+        </CTableBody>*/}
 
       </CTable>
 
@@ -69,6 +70,34 @@ const MemberManage = () => {
   ) //return
 
 
+  /** 멤버 리스트 조회 */
+  function selectMemberList() {
+
+    axios({
+      url: '/selectMemberList',
+      method: 'post',
+      data: {
+        /*memberBean : {
+          memId : "testid"
+        }*/
+      }
+    })
+      .then(function (res) {
+
+        debugger;
+
+        setMemVo((prevMemVo) => ({
+          ...prevMemVo,
+          memberBeanList: res.data.memVo.memberBeanList
+        }));
+
+
+
+      })
+      .catch(function (err) {
+        alert('(오류)');
+      });
+  }
 
 
 

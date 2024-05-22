@@ -23,6 +23,7 @@ import {
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import {useNavigate} from "react-router-dom";
+import GrayLine from "../../uitils/GrayLine";
 
 function MovieListManage() {
   const navigate = useNavigate();
@@ -80,7 +81,10 @@ function MovieListManage() {
 
   return (
     <>
-      <h3>영화 리스트 관리 페이지입니다</h3>
+      <h4>영화 리스트 관리 </h4>
+
+      {/* 회색 가로줄 하나 */}
+      <GrayLine marginTop="30px" marginBottom="30px" />
 
       {/** 상단 네비 */}
       <CNavbar colorScheme="light" className="bg-light">

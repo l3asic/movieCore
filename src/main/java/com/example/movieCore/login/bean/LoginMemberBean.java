@@ -21,6 +21,15 @@ public class LoginMemberBean implements Serializable {
 
     private String gender;
 
+    private String state;
+
+    private String auth;
+
+    private String kakaoId;
+
+    private String naverId;
+
+
     private String address;
 
     private String addressInfo;

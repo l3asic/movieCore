@@ -171,4 +171,29 @@ public class LoginController {
     }*/
 
 
+
+    /**  유저 정보 리스트 조회 */
+    @PostMapping(value = "/selectMemberList")
+    @ResponseBody
+    public Map<String, Object> selectMemberList(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        Map<String, Object> resMap = new HashMap<>();
+
+
+
+        try {
+            memVo.setMemberBeanList(loginService.selectMemberList(memVo));
+
+            resMap.put("memVo", memVo);
+            resMap.put("success", "success");
+        }catch (Exception e){
+            resMap.put("success", "fail");
+        }
+
+
+        return resMap;
+
+    }
+
+
 }

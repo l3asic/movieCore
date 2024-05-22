@@ -5,6 +5,7 @@ import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.vo.LoginMemberVo;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -25,4 +26,6 @@ public interface LoginMapper {
     void insertFileBean(LoginMemberVo memVo);
 
     void insertFileBeanMap(LoginMemberVo memVo);
+
+    ArrayList<LoginMemberBean> selectMemberList(LoginMemberVo memVo);
 }

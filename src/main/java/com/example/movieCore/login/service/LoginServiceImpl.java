@@ -13,6 +13,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,5 +64,9 @@ public class LoginServiceImpl {
 
     public void insertFileBeanMap(LoginMemberVo memVo) {
         loginMapper.insertFileBeanMap(memVo);
+    }
+
+    public ArrayList<LoginMemberBean> selectMemberList(LoginMemberVo memVo) {
+        return loginMapper.selectMemberList(memVo);
     }
 }
