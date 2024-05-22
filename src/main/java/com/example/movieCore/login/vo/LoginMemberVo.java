@@ -2,6 +2,7 @@ package com.example.movieCore.login.vo;
 
 import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.bean.TokenBean;
+import com.example.movieCore.movie.bean.SearchBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,4 +20,8 @@ public class LoginMemberVo implements Serializable {
     TokenBean tokenBean;
 
     String mode;
+
+    /** 검색 조건 */
+    private SearchBean searchBean;
+
 }

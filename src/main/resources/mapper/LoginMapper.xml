@@ -206,22 +206,57 @@
     <!-- 유저 리스트 조회 -->
     <select id="selectMemberList" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultMap="memberBeanResultMap">
         SELECT
-            MEM_ID,
-            LOGIN_ID,
-            LOGIN_PASSWORD,
-            MEM_NAME,
-            GENDER,
-            STATE,
-            AUTH,
-            KAKAO_ID,
-            NAVER_ID,
-            MEM_CREATE_DATE,
-            ADDRESS,
-            EMAIL,
-            ADDRESS_INFO,
-            MEM_ROLE
+        MEM_ID,
+        LOGIN_ID,
+        LOGIN_PASSWORD,
+        MEM_NAME,
+        GENDER,
+        STATE,
+        AUTH,
+        KAKAO_ID,
+        NAVER_ID,
+        MEM_CREATE_DATE,
+        ADDRESS,
+        EMAIL,
+        ADDRESS_INFO,
+        MEM_ROLE
         FROM MEM_MEMBER_INFO
+        <where>
+            <if test="searchBean.searchFilter != null and searchBean.searchFilter != '' and searchBean.searchText != null and searchBean.searchText != ''">
+                <choose>
+                    <when test="searchBean.searchFilter == 'all'">
+                        AND (
+                        MEM_ID LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                        OR LOGIN_ID LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                        OR MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                        OR GENDER LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                        OR STATE LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                        )
+                    </when>
+                    <when test="searchBean.searchFilter == 'memId'">
+                        AND MEM_ID LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    </when>
+                    <when test="searchBean.searchFilter == 'loginId'">
+                        AND LOGIN_ID LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    </when>
+                    <when test="searchBean.searchFilter == 'memName'">
+                        AND MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    </when>
+                    <when test="searchBean.searchFilter == 'gender'">
+                        AND GENDER LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    </when>
+                    <when test="searchBean.searchFilter == 'state'">
+                        AND STATE LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        <if test="searchBean.sortKey != null and searchBean.sortKey != ''">
+            ORDER BY ${searchBean.sortKey} ${searchBean.sortOdr}
+        </if>
     </select>
+
+
 
 
 

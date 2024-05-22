@@ -8,4 +8,7 @@ import lombok.Setter;
 public class SearchBean {
     private String searchFilter;
     private String searchText;
+
+    private String sortKey;
+    private String sortOdr;
 }

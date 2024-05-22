@@ -42,10 +42,10 @@ const MemberManage = () => {
   }, []);
 
   // 검색조건 및 검색어 관리
-  let [schFilter, setSchFilter] = useState('');
+  let [schFilter, setSchFilter] = useState('all'); // (기본값)
   let [schText, setSchText] = useState('');
-  let [sortKey, setSortKey] = useState(); // 정렬 기준 컬럼
-  let [sortOdr, setSortOdr] = useState(); // 정렬 순서
+  let [sortKey, setSortKey] = useState('login_id'); // 정렬 기준 컬럼 (기본값)
+  let [sortOdr, setSortOdr] = useState('asc'); // 정렬 순서 (기본값)
 
   const searchFilter = event => {
     setSchFilter(event.target.value);
@@ -110,6 +110,7 @@ const MemberManage = () => {
               style={{ marginRight: '5px' }}
               options={[
                 { label: '전체', value: 'all' },
+                { label: '사용자 고유번호', value: 'memId' },
                 { label: '사용자 ID', value: 'loginId' },
                 { label: '사용자 명', value: 'memName' },
                 { label: '성별', value: 'gender' },
@@ -166,16 +167,16 @@ const MemberManage = () => {
                 onChange={() => handleSelectAll()}
               />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">고유번호<CIcon icon={cilSwapVertical} onClick={() => sortColumn('memId')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">사용자 ID<CIcon icon={cilSwapVertical} onClick={() => sortColumn('loginId')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">사용자 명<CIcon icon={cilSwapVertical} onClick={() => sortColumn('memName')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">고유번호<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_id')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">사용자 ID<CIcon icon={cilSwapVertical} onClick={() => sortColumn('login_id')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">사용자 명<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_name')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">성별<CIcon icon={cilSwapVertical} onClick={() => sortColumn('gender')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">상태<CIcon icon={cilSwapVertical} onClick={() => sortColumn('state')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">상세주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">이메일</CTableHeaderCell>
-            <CTableHeaderCell scope="col">회원 등급<CIcon icon={cilSwapVertical} onClick={() => sortColumn('memRole')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">가입일<CIcon icon={cilSwapVertical} onClick={() => sortColumn('memCreateDate')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">회원 등급<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_role')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">가입일<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_create_date')} /></CTableHeaderCell>
           </CTableRow>
         </CTableHead>
 
@@ -191,7 +192,9 @@ const MemberManage = () => {
               <CTableDataCell>{memberBean.memId}</CTableDataCell>
               <CTableDataCell>{memberBean.loginId}</CTableDataCell>
               <CTableDataCell>{memberBean.memName}</CTableDataCell>
-              <CTableDataCell>{memberBean.gender === 'M' ? '남성' : '여성'}</CTableDataCell>
+              <CTableDataCell>
+                {memberBean.gender === 'M' ? '남성' : memberBean.gender === 'F' ? '여성' : '미상'}
+              </CTableDataCell>
               <CTableDataCell>{memberBean.state === 'B' ? '정상' : '삭제'}</CTableDataCell>
               <CTableDataCell>{memberBean.address}</CTableDataCell>
               <CTableDataCell>{memberBean.addressInfo}</CTableDataCell>
@@ -214,10 +217,13 @@ const MemberManage = () => {
         /*memberBean : {
           memId : "testid"
         }*/
-        searchFilter: schFilter,
-        searchText: schText,
-        sortKey: sortKey, // 정렬 기준 컬럼
-        sortOdr: sortOdr // 정렬 순서
+        searchBean : {
+          searchFilter: schFilter,
+          searchText: schText,
+          sortKey: sortKey, // 정렬 기준 컬럼
+          sortOdr: sortOdr // 정렬 순서
+        }
+
       }
     })
       .then(function (res) {
@@ -268,13 +274,19 @@ const MemberManage = () => {
 
   /** 검색, 필터 초기화  */
   function refreshFilterSearch() {
-    // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
+    // 검색조건 및 검색어 초기화
     setSchFilter('');
     setSchText('');
 
     // 정렬 초기화
     setSortKey('');
     setSortOdr('');
+
+    // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
+    schFilter = '';
+    schText = '';
+    sortKey = '';
+    sortOdr = '';
 
     // 초기화된 조건으로 리스트 조회
     selectMemberList();
