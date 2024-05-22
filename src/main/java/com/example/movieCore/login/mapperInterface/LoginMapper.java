@@ -28,4 +28,6 @@ public interface LoginMapper {
     void insertFileBeanMap(LoginMemberVo memVo);
 
     ArrayList<LoginMemberBean> selectMemberList(LoginMemberVo memVo);
+
+    int updateMemberState(LoginMemberVo memVo);
 }

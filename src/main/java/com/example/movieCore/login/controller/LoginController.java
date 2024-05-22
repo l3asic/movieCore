@@ -195,5 +195,44 @@ public class LoginController {
 
     }
 
+    /** 관리자 모듈 - 영화 상태값 정상/삭제로 변경 */
+    @PostMapping(value = "/updateMemberState")
+    @ResponseBody
+    public Map<String, Object> updateMemberState(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        String successMsg = "";
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            if(memVo.getMode().equals("restore")){
+                memVo.setMode("B");
+            }else if(memVo.getMode().equals("delete")){
+                memVo.setMode("D");
+            }
+
+            int sucCnt = 0;
+            sucCnt = loginService.updateMemberState(memVo);
+
+            if(memVo.getMemberBeanList().size() == sucCnt){
+                successResult =true;
+                successMsg = sucCnt + " 개의 영화 상태가 변경되었습니다.";
+            }else{
+                successResult =false;
+                int failCnt = memVo.getMemberBeanList().size() - sucCnt;
+                successMsg = failCnt + " 개의 영화 상태 변경이 실패 하였습니다.";
+            }
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+        resMap.put("successMsg", successMsg);
+
+        return resMap;
+    }
+
 
 }

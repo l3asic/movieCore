@@ -17,4 +17,6 @@ public class LoginMemberVo implements Serializable {
     ArrayList<LoginMemberBean> memberBeanList;
 
     TokenBean tokenBean;
+
+    String mode;
 }

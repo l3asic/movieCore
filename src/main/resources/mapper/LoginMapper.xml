@@ -225,6 +225,18 @@
 
 
 
+    <!-- 영화 상태값 변경 -->
+    <update id="updateMemberState" parameterType="com.example.movieCore.login.vo.LoginMemberVo">
+        UPDATE MEM_MEMBER_INFO
+        SET STATE = #{mode}
+        WHERE MEM_ID IN
+        <foreach item="member" collection="memberBeanList" open="(" separator="," close=")">
+            #{member.memId}
+        </foreach>
+    </update>
+
+
+
 
 
 

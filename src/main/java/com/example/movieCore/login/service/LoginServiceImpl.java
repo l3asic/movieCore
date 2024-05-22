@@ -69,4 +69,8 @@ public class LoginServiceImpl {
     public ArrayList<LoginMemberBean> selectMemberList(LoginMemberVo memVo) {
         return loginMapper.selectMemberList(memVo);
     }
+
+    public int updateMemberState(LoginMemberVo memVo) {
+        return loginMapper.updateMemberState(memVo);
+    }
 }
