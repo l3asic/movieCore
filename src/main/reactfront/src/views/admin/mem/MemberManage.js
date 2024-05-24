@@ -10,7 +10,7 @@ import {
   CNavbar,
   CContainer,
   CNavbarBrand,
-  CForm, CButton, CFormInput, CFormSelect
+  CForm, CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle
 } from "@coreui/react";
 import axios from "axios";
 import dayjs from 'dayjs'; // 날짜 형식을 위한 라이브러리 추가
@@ -34,18 +34,19 @@ const MemberManage = () => {
     },
   });
 
-  // 체크박스 관리
   const [selectAll, setSelectAll] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     selectMemberList();
   }, []);
 
-  // 검색조건 및 검색어 관리
-  let [schFilter, setSchFilter] = useState('all'); // (기본값)
+  let [schFilter, setSchFilter] = useState('all');
   let [schText, setSchText] = useState('');
-  let [sortKey, setSortKey] = useState('login_id'); // 정렬 기준 컬럼 (기본값)
-  let [sortOdr, setSortOdr] = useState('asc'); // 정렬 순서 (기본값)
+  let [sortKey, setSortKey] = useState('login_id');
+  let [sortOdr, setSortOdr] = useState('asc');
 
   const searchFilter = event => {
     setSchFilter(event.target.value);
@@ -55,32 +56,174 @@ const MemberManage = () => {
     setSchText(event.target.value);
   };
 
-  // 정렬 함수
   const sortColumn = (key) => {
     if (sortKey === key) {
-      // 동일한 컬럼을 클릭한 경우 정렬 순서를 변경
       setSortOdr(sortOdr === 'asc' ? 'desc' : 'asc');
     } else {
-      // 다른 컬럼을 클릭한 경우 정렬 기준을 변경하고 기본 순서는 오름차순으로 설정
       setSortKey(key);
       setSortOdr('asc');
     }
     selectMemberList();
   };
 
+  const handleEdit = (member) => {
+    setSelectedMember(member);
+    setProfileImage(member.profileImage || null); // Load existing profile image if available
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedMember(null);
+    setProfileImage(null);
+  };
+
+  const handleModalSave = () => {
+    // Save logic here
+    updateMember(selectedMember);
+    handleModalClose();
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedMember(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfileImage(file);
+
+    // Update selected member's profile image
+    setSelectedMember(prev => ({
+      ...prev,
+      profileImage: URL.createObjectURL(file)
+    }));
+  };
+
+  const selectMemberList = () => {
+    axios({
+      url: '/selectMemberList',
+      method: 'post',
+      data: {
+        searchBean : {
+          searchFilter: schFilter,
+          searchText: schText,
+          sortKey: sortKey,
+          sortOdr: sortOdr
+        }
+      }
+    })
+      .then(function (res) {
+        const memberBeanList = res.data.memVo.memberBeanList;
+
+        for (var i = 0; i < memberBeanList.length; i++) {
+          if (memberBeanList[i].state === "B") {
+            memberBeanList[i].stateText = "정상";
+          } else if (memberBeanList[i].state === "D") {
+            memberBeanList[i].stateText = "삭제";
+          }
+
+          memberBeanList[i].selected = false;
+        }
+
+        setMemVo((prevMemVo) => ({
+          ...prevMemVo,
+          memberBeanList: memberBeanList
+        }));
+      })
+      .catch(function (err) {
+        alert('(오류)');
+      });
+  }
+
+  const handleSelectAll = () => {
+    setSelectAll((prev) => !prev);
+    const updatedList = [...memVo.memberBeanList];
+    updatedList.forEach((member) => (member.selected = !selectAll));
+    setMemVo((prevMemVo) => ({ ...prevMemVo, memberBeanList: updatedList }));
+  }
+
+  const handleSelect = (memId) => {
+    const updatedList = [...memVo.memberBeanList];
+    const member = updatedList.find(m => m.memId === memId);
+    if (member) {
+      member.selected = !member.selected;
+    }
+    setMemVo((prevMemVo) => ({ ...prevMemVo, memberBeanList: updatedList }));
+    setSelectAll(updatedList.every((member) => member.selected));
+  }
+
+  const searchMemberList = () => {
+    selectMemberList();
+  }
+
+  const refreshFilterSearch = () => {
+    setSchFilter('');
+    setSchText('');
+    setSortKey('');
+    setSortOdr('');
+    schFilter = '';
+    schText = '';
+    sortKey = '';
+    sortOdr = '';
+    selectMemberList();
+  }
+
+  const updateMemberState = (mode) => {
+    const selectedMembers = memVo.memberBeanList.filter(member => member.selected);
+
+    axios({
+      url: '/updateMemberState',
+      method: 'post',
+      data: {
+        memberBeanList: selectedMembers,
+        mode: mode
+      }
+    })
+      .then(function (res) {
+        alert(res.data.successMsg);
+        selectMemberList();
+      })
+      .catch(function (err) {
+        alert(err.data.successMsg);
+      });
+  }
+
+  const updateMember = (member) => {
+    const formData = new FormData();
+    formData.append('memberBean', JSON.stringify(member));
+    if (profileImage) {
+      formData.append('profileImage', profileImage);
+    }
+
+    axios({
+      url: '/updateMember',
+      method: 'post',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(function (res) {
+        alert('Member updated successfully');
+        selectMemberList();
+      })
+      .catch(function (err) {
+        alert('Update failed');
+      });
+  }
+
   return (
     <>
       <h4> 회원 관리 </h4>
-
-      {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="30px" marginBottom="30px" />
 
-      {/** 상단 네비 */}
       <CNavbar colorScheme="light" className="bg-light">
         <CContainer fluid style={{ padding: 0 }}>
           <div className="d-flex align-items-center">
-
-            {/** 복원 버튼 */}
             <CButton
               color="black" variant="outline"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px' }}
@@ -90,7 +233,6 @@ const MemberManage = () => {
               <CIcon icon={cilRecycle} />
             </CButton>
 
-            {/** 삭제 버튼 */}
             <CButton
               color="black" variant="outline"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px'}}
@@ -100,12 +242,10 @@ const MemberManage = () => {
               <CIcon icon={cilTrash} />
             </CButton>
 
-            {/** 토탈 갯수 */}
             <CNavbarBrand className="ms-3">Total : {memVo.memberBeanList.length}</CNavbarBrand>
           </div>
 
           <CForm className="d-flex">
-            {/* 검색조건 */}
             <CFormSelect
               style={{ marginRight: '5px' }}
               options={[
@@ -119,7 +259,6 @@ const MemberManage = () => {
               onChange={searchFilter} value={schFilter}
             />
 
-            {/* 검색어 */}
             <CFormInput
               type="search"
               className="me-2"
@@ -145,7 +284,6 @@ const MemberManage = () => {
               <CIcon icon={cilMagnifyingGlass} />
             </CButton>
 
-            {/* 초기화 */}
             <CButton
               color="black"
               variant="outline"
@@ -182,7 +320,7 @@ const MemberManage = () => {
 
         <CTableBody>
           {memVo.memberBeanList.map((memberBean) => (
-            <CTableRow key={memberBean.memId}>
+            <CTableRow key={memberBean.memId} onClick={() => handleEdit(memberBean)}>
               <CTableDataCell>
                 <CFormCheck
                   checked={memberBean.selected || selectAll}
@@ -205,117 +343,87 @@ const MemberManage = () => {
           ))}
         </CTableBody>
       </CTable>
+
+      {selectedMember && (
+        <CModal visible={showModal} onClose={handleModalClose}>
+          <CModalHeader onClose={handleModalClose}>
+            <CModalTitle>회원 정보 수정</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CForm>
+              <div className="text-center mb-3">
+                {selectedMember.profileImage ? (
+                  <img
+                    src={selectedMember.profileImage}
+                    alt="프로필 이미지"
+                    className="img-thumbnail"
+                    style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div
+                    className="img-thumbnail"
+                    style={{ width: '150px', height: '150px', lineHeight: '150px', textAlign: 'center', backgroundColor: '#f0f0f0' }}
+                  >
+                    No Image
+                  </div>
+                )}
+                <div className="mt-2">
+                  <CFormInput type="file" accept="image/*" onChange={handleFileChange} />
+                </div>
+              </div>
+              <CFormInput
+                label="사용자 명"
+                value={selectedMember.memName}
+                name="memName"
+                onChange={handleInputChange}
+              />
+              <CFormSelect
+                label="성별"
+                value={selectedMember.gender}
+                name="gender"
+                onChange={handleInputChange}
+              >
+                <option value="M">남성</option>
+                <option value="F">여성</option>
+                <option value="">미상</option>
+              </CFormSelect>
+              <CFormInput
+                label="주소"
+                value={selectedMember.address}
+                name="address"
+                onChange={handleInputChange}
+              />
+              <CFormInput
+                label="상세주소"
+                value={selectedMember.addressInfo}
+                name="addressInfo"
+                onChange={handleInputChange}
+              />
+              <CFormInput
+                label="이메일"
+                value={selectedMember.email}
+                name="email"
+                onChange={handleInputChange}
+              />
+              <CFormSelect
+                label="회원 등급"
+                value={selectedMember.memRole}
+                name="memRole"
+                onChange={handleInputChange}
+              >
+                <option value="ADMIN">관리자</option>
+                <option value="USER">사용자</option>
+              </CFormSelect>
+            </CForm>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={handleModalClose}>취소</CButton>
+            <CButton color="primary" onClick={handleModalSave}>저장</CButton>
+          </CModalFooter>
+        </CModal>
+      )}
     </>
-  ); //return
-
-  /** 멤버 리스트 조회 */
-  function selectMemberList() {
-    axios({
-      url: '/selectMemberList',
-      method: 'post',
-      data: {
-        /*memberBean : {
-          memId : "testid"
-        }*/
-        searchBean : {
-          searchFilter: schFilter,
-          searchText: schText,
-          sortKey: sortKey, // 정렬 기준 컬럼
-          sortOdr: sortOdr // 정렬 순서
-        }
-
-      }
-    })
-      .then(function (res) {
-        const memberBeanList = res.data.memVo.memberBeanList;
-
-        for (var i = 0; i < memberBeanList.length; i++) {
-          if (memberBeanList[i].state === "B") {
-            memberBeanList[i].stateText = "정상";
-          } else if (memberBeanList[i].state === "D") {
-            memberBeanList[i].stateText = "삭제";
-          }
-
-          memberBeanList[i].selected = false; // 선택 속성 초기화
-        }
-
-        setMemVo((prevMemVo) => ({
-          ...prevMemVo,
-          memberBeanList: memberBeanList
-        }));
-      })
-      .catch(function (err) {
-        alert('(오류)');
-      });
-  }
-
-  /** 체크박스 전체 선택*/
-  function handleSelectAll() {
-    setSelectAll((prev) => !prev);
-    const updatedList = [...memVo.memberBeanList];
-    updatedList.forEach((member) => (member.selected = !selectAll));
-    setMemVo((prevMemVo) => ({ ...prevMemVo, memberBeanList: updatedList }));
-  }
-
-  function handleSelect(memId) {
-    const updatedList = [...memVo.memberBeanList];
-    const member = updatedList.find(m => m.memId === memId);
-    if (member) {
-      member.selected = !member.selected;
-    }
-    setMemVo((prevMemVo) => ({ ...prevMemVo, memberBeanList: updatedList }));
-    setSelectAll(updatedList.every((member) => member.selected));
-  }
-
-  /** 검색 버튼 클릭 시 */
-  function searchMemberList() {
-    selectMemberList();
-  }
-
-  /** 검색, 필터 초기화  */
-  function refreshFilterSearch() {
-    // 검색조건 및 검색어 초기화
-    setSchFilter('');
-    setSchText('');
-
-    // 정렬 초기화
-    setSortKey('');
-    setSortOdr('');
-
-    // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
-    schFilter = '';
-    schText = '';
-    sortKey = '';
-    sortOdr = '';
-
-    // 초기화된 조건으로 리스트 조회
-    selectMemberList();
-  }
-
-  /** 회원 상태 정상/삭제 로 변경 */
-  function updateMemberState(mode) {
-    // 체크된 회원 목록 필터링
-    const selectedMembers = memVo.memberBeanList.filter(member => member.selected);
-
-    axios({
-      url: '/updateMemberState',
-      method: 'post',
-      data: {
-        memberBeanList: selectedMembers,
-        mode: mode
-      }
-    })
-      .then(function (res) {
-        // 상태 변경 성공 시 처리
-        alert(res.data.successMsg);
-        // 상태 변경 후 회원 목록 다시 불러오기
-        selectMemberList();
-      })
-      .catch(function (err) {
-        // 상태 변경 실패 시 메세지
-        alert(err.data.successMsg);
-      });
-  }
+  );
 }
 
 export default MemberManage;
