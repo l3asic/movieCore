@@ -235,4 +235,58 @@ public class LoginController {
     }
 
 
+
+
+    /**
+     * 사용자 정보 업데이트
+     */
+    @PostMapping("/updateMember")
+    @ResponseBody
+    public Map<String, Object> updateMember(
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam("memberBean") String memberBeanString) {
+
+        // memberBean 문자열을 객체로 변환
+        LoginMemberBean memberBean = new Gson().fromJson(memberBeanString, LoginMemberBean.class);
+
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+
+        LoginMemberVo memVo = new LoginMemberVo();
+        memVo.setMemberBean(memberBean);
+
+        try {
+            // 비밀번호 변경 로직 추가
+            if (memberBean.getChangePassword() != null && memberBean.getChangePassword().equals("true") && memberBean.getLoginPassword() != null) {
+                memberBean.setLoginPassword(passwordEncoder.encode(memberBean.getLoginPassword()));
+            }
+
+            // 사용자 정보 업데이트
+            loginService.updateMemberInfo(memVo);
+
+            // 프로필 이미지 처리
+            if (profileImage != null && !profileImage.isEmpty()) {
+                MakeFileBean makeFileBean = new MakeFileBean();
+                FileBean fileBean = makeFileBean.makingFileBean("MEM", profileImage);
+                memVo.getMemberBean().setFileBean(fileBean);
+
+                loginService.insertFileBean(memVo);
+                loginService.insertFileBeanMap(memVo);
+            }
+
+            successResult = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        resMap.put("successResult", successResult);
+        return resMap;
+    }
+
+
+
+
+
+
 }

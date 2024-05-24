@@ -82,6 +82,26 @@ const Profile = () => {
     /** 프로필 사진 조회 */
     selectProfileImg();
 
+
+    // Daum 우편번호 서비스 스크립트 로드
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.onload = () => {
+      // Daum 우편번호 서비스 초기화
+      new window.daum.Postcode({
+        oncomplete: function (data) {
+          const fullAddress = data.address;
+          handleAddressSelection(fullAddress);
+        },
+      });
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      // 컴포넌트 언마운트 시 스크립트 제거
+      document.body.removeChild(script);
+    };
+
   }, []);
 
 
@@ -225,8 +245,8 @@ const Profile = () => {
                         </CInputGroup>
                       </CCol>
                       <CCol md={3}>
-                        <CButton color="info" onClick={openDaumPostcode} style={{ width: '100%', height: '100%'}}>
-                          주소검색
+                        <CButton color="secondary" onClick={openDaumPostcode} style={{ width: '100%', height: '100%'}}>
+                          주소 검색
                         </CButton>
                       </CCol>
                     </CRow>

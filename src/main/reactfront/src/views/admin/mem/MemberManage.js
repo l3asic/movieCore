@@ -10,7 +10,17 @@ import {
   CNavbar,
   CContainer,
   CNavbarBrand,
-  CForm, CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle
+  CForm,
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CInputGroup,
+  CInputGroupText
 } from "@coreui/react";
 import axios from "axios";
 import dayjs from 'dayjs'; // 날짜 형식을 위한 라이브러리 추가
@@ -20,7 +30,10 @@ import {
   cilTrash,
   cilSwapVertical,
   cilMagnifyingGlass,
-  cilRecycle
+  cilRecycle,
+  cilRoom,
+  cilUser,
+  cilEnvelopeOpen, cilGroup
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
@@ -36,11 +49,42 @@ const MemberManage = () => {
 
   const [selectAll, setSelectAll] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedMember, setSelectedMember] = useState({
+    memName: '',
+    gender: '',
+    address: '',
+    addressInfo: '',
+    email: '',
+    memRole: '',
+    profileImage: null
+  });
+
   const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     selectMemberList();
+
+    // Daum 우편번호 서비스 스크립트 로드
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.onload = () => {
+      // Daum 우편번호 서비스 초기화
+      new window.daum.Postcode({
+        oncomplete: function (data) {
+          const fullAddress = data.address;
+          setSelectedMember(prev => ({
+            ...prev,
+            address: fullAddress
+          }));
+        },
+      });
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      // 컴포넌트 언마운트 시 스크립트 제거
+      document.body.removeChild(script);
+    };
   }, []);
 
   let [schFilter, setSchFilter] = useState('all');
@@ -68,18 +112,25 @@ const MemberManage = () => {
 
   const handleEdit = (member) => {
     setSelectedMember(member);
-    setProfileImage(member.profileImage || null); // Load existing profile image if available
+    setProfileImage(member.profileImage || null);
     setShowModal(true);
   };
 
   const handleModalClose = () => {
     setShowModal(false);
-    setSelectedMember(null);
+    setSelectedMember({
+      memName: '',
+      gender: '',
+      address: '',
+      addressInfo: '',
+      email: '',
+      memRole: '',
+      profileImage: null
+    });
     setProfileImage(null);
   };
 
   const handleModalSave = () => {
-    // Save logic here
     updateMember(selectedMember);
     handleModalClose();
   };
@@ -95,8 +146,6 @@ const MemberManage = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setProfileImage(file);
-
-    // Update selected member's profile image
     setSelectedMember(prev => ({
       ...prev,
       profileImage: URL.createObjectURL(file)
@@ -108,7 +157,7 @@ const MemberManage = () => {
       url: '/selectMemberList',
       method: 'post',
       data: {
-        searchBean : {
+        searchBean: {
           searchFilter: schFilter,
           searchText: schText,
           sortKey: sortKey,
@@ -216,6 +265,19 @@ const MemberManage = () => {
       });
   }
 
+  // 다음 주소 API 호출
+  const openDaumPostcode = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        const fullAddress = data.address;
+        setSelectedMember(prev => ({
+          ...prev,
+          address: fullAddress
+        }));
+      }
+    }).open();
+  }
+
   return (
     <>
       <h4> 회원 관리 </h4>
@@ -308,7 +370,7 @@ const MemberManage = () => {
             <CTableHeaderCell scope="col">고유번호<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_id')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">사용자 ID<CIcon icon={cilSwapVertical} onClick={() => sortColumn('login_id')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">사용자 명<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_name')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">성별<CIcon icon={cilSwapVertical} onClick={() => sortColumn('gender')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">성별<CIcon icon={cilGroup} onClick={() => sortColumn('gender')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">상태<CIcon icon={cilSwapVertical} onClick={() => sortColumn('state')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">상세주소</CTableHeaderCell>
@@ -371,54 +433,88 @@ const MemberManage = () => {
                   <CFormInput type="file" accept="image/*" onChange={handleFileChange} />
                 </div>
               </div>
-              <CFormInput
-                label="사용자 명"
-                value={selectedMember.memName}
-                name="memName"
-                onChange={handleInputChange}
-              />
-              <CFormSelect
-                label="성별"
-                value={selectedMember.gender}
-                name="gender"
-                onChange={handleInputChange}
-              >
-                <option value="M">남성</option>
-                <option value="F">여성</option>
-                <option value="">미상</option>
-              </CFormSelect>
-              <CFormInput
-                label="주소"
-                value={selectedMember.address}
-                name="address"
-                onChange={handleInputChange}
-              />
-              <CFormInput
-                label="상세주소"
-                value={selectedMember.addressInfo}
-                name="addressInfo"
-                onChange={handleInputChange}
-              />
-              <CFormInput
-                label="이메일"
-                value={selectedMember.email}
-                name="email"
-                onChange={handleInputChange}
-              />
-              <CFormSelect
-                label="회원 등급"
-                value={selectedMember.memRole}
-                name="memRole"
-                onChange={handleInputChange}
-              >
-                <option value="ADMIN">관리자</option>
-                <option value="USER">사용자</option>
-              </CFormSelect>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>
+                  <CIcon icon={cilUser} />
+                </CInputGroupText>
+                <CFormInput
+                  placeholder="사용자 명"
+                  value={selectedMember.memName}
+                  name="memName"
+                  onChange={handleInputChange}
+                />
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>
+                  <CIcon icon={cilGroup} />
+                </CInputGroupText>
+                <CFormSelect
+                  value={selectedMember.gender}
+                  name="gender"
+                  onChange={handleInputChange}
+                >
+                  <option value="M">남성</option>
+                  <option value="F">여성</option>
+                  <option value="">성별을 밝히지 않음</option>
+                </CFormSelect>
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>
+                  <CIcon icon={cilRoom} />
+                </CInputGroupText>
+                <CFormInput
+                  placeholder="주소명"
+                  value={selectedMember.address}
+                  name="address"
+                  onChange={handleInputChange}
+                />
+                <CButton
+                  color="secondary"
+                  onClick={openDaumPostcode}
+                >
+                  주소 검색
+                </CButton>
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>
+                  <CIcon icon={cilRoom} />
+                </CInputGroupText>
+                <CFormInput
+                  placeholder="상세주소"
+                  value={selectedMember.addressInfo}
+                  name="addressInfo"
+                  onChange={handleInputChange}
+                />
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>
+                  <CIcon icon={cilEnvelopeOpen} />
+                </CInputGroupText>
+                <CFormInput
+                  placeholder="이메일"
+                  value={selectedMember.email}
+                  name="email"
+                  onChange={handleInputChange}
+                />
+              </CInputGroup>
+              <CInputGroup className="mb-3">
+                <CInputGroupText>
+                  <CIcon icon={cilUser} />
+                </CInputGroupText>
+                <CFormSelect
+                  value={selectedMember.memRole}
+                  name="memRole"
+                  onChange={handleInputChange}
+                >
+                  <option value="ADMIN">관리자</option>
+                  <option value="ROLE_USER">사용자</option>
+                </CFormSelect>
+              </CInputGroup>
             </CForm>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={handleModalClose}>취소</CButton>
-            <CButton color="primary" onClick={handleModalSave}>저장</CButton>
+            <CButton color="dark" onClick={handleModalSave}>저장</CButton>
           </CModalFooter>
         </CModal>
       )}
