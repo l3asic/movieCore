@@ -50,13 +50,17 @@ const MemberManage = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState({
+    memId : '',
     memName: '',
     gender: '',
     address: '',
     addressInfo: '',
     email: '',
     memRole: '',
-    profileImage: null
+    profileImage: null,
+    fileBean: {
+      src: null
+    }
   });
 
   const [profileImage, setProfileImage] = useState(null);
@@ -112,6 +116,10 @@ const MemberManage = () => {
 
   const handleEdit = (member) => {
     setSelectedMember(member);
+    // 선택된 사용자 프로필 사진 조회
+    selectProfileImg(member.memId);
+
+
     setProfileImage(member.profileImage || null);
     setShowModal(true);
   };
@@ -125,12 +133,18 @@ const MemberManage = () => {
       addressInfo: '',
       email: '',
       memRole: '',
-      profileImage: null
+      profileImage: null,
+      fileBean: {
+        src: null
+      }
     });
     setProfileImage(null);
   };
 
   const handleModalSave = () => {
+    if (!validateMemberInfo()) {
+      return;
+    }
     updateMember(selectedMember);
     handleModalClose();
   };
@@ -145,11 +159,20 @@ const MemberManage = () => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setProfileImage(file);
-    setSelectedMember(prev => ({
-      ...prev,
-      profileImage: URL.createObjectURL(file)
-    }));
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedMember(prev => ({
+          ...prev,
+          fileBean: {
+            ...prev.fileBean,
+            src: e.target.result
+          }
+        }));
+      };
+      reader.readAsDataURL(file);
+      setProfileImage(file);
+    }
   };
 
   const selectMemberList = () => {
@@ -167,17 +190,14 @@ const MemberManage = () => {
     })
       .then(function (res) {
         const memberBeanList = res.data.memVo.memberBeanList;
-
         for (var i = 0; i < memberBeanList.length; i++) {
           if (memberBeanList[i].state === "B") {
             memberBeanList[i].stateText = "정상";
           } else if (memberBeanList[i].state === "D") {
             memberBeanList[i].stateText = "삭제";
           }
-
           memberBeanList[i].selected = false;
         }
-
         setMemVo((prevMemVo) => ({
           ...prevMemVo,
           memberBeanList: memberBeanList
@@ -186,14 +206,38 @@ const MemberManage = () => {
       .catch(function (err) {
         alert('(오류)');
       });
-  }
+  };
+
+
+  /** 선택된 사용자 프사 조회 */
+  const selectProfileImg = (memId) => {
+    axios({
+      url: '/selectProfileImg',
+      method: 'post',
+      data: {
+        memId : memId
+      }
+    })
+      .then(function (res) {
+
+        setProfileImage(res.data.memVo.memberBean.fileBean.src);
+
+        setSelectedMember(prevSelectedMember => ({
+          ...prevSelectedMember, // 이전 상태의 모든 속성 복사
+          fileBean: res.data.memVo.memberBean.fileBean // fileBean만 새로운 값으로 업데이트
+        }));
+
+      })
+      .catch(function (err) {
+      });
+  };
 
   const handleSelectAll = () => {
     setSelectAll((prev) => !prev);
     const updatedList = [...memVo.memberBeanList];
     updatedList.forEach((member) => (member.selected = !selectAll));
     setMemVo((prevMemVo) => ({ ...prevMemVo, memberBeanList: updatedList }));
-  }
+  };
 
   const handleSelect = (memId) => {
     const updatedList = [...memVo.memberBeanList];
@@ -203,11 +247,11 @@ const MemberManage = () => {
     }
     setMemVo((prevMemVo) => ({ ...prevMemVo, memberBeanList: updatedList }));
     setSelectAll(updatedList.every((member) => member.selected));
-  }
+  };
 
   const searchMemberList = () => {
     selectMemberList();
-  }
+  };
 
   const refreshFilterSearch = () => {
     setSchFilter('');
@@ -219,7 +263,7 @@ const MemberManage = () => {
     sortKey = '';
     sortOdr = '';
     selectMemberList();
-  }
+  };
 
   const updateMemberState = (mode) => {
     const selectedMembers = memVo.memberBeanList.filter(member => member.selected);
@@ -239,7 +283,7 @@ const MemberManage = () => {
       .catch(function (err) {
         alert(err.data.successMsg);
       });
-  }
+  };
 
   const updateMember = (member) => {
     const formData = new FormData();
@@ -263,9 +307,22 @@ const MemberManage = () => {
       .catch(function (err) {
         alert('Update failed');
       });
-  }
+  };
 
-  // 다음 주소 API 호출
+  const validateMemberInfo = () => {
+    const { memName, gender, address, email } = selectedMember;
+    if (!memName || !gender || !address) {
+      alert('필수 항목을 입력하세요.');
+      return false;
+    }
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (email && !emailRegex.test(email)) {
+      alert('유효한 이메일 주소를 입력하세요.');
+      return false;
+    }
+    return true;
+  };
+
   const openDaumPostcode = () => {
     new window.daum.Postcode({
       oncomplete: function (data) {
@@ -276,7 +333,7 @@ const MemberManage = () => {
         }));
       }
     }).open();
-  }
+  };
 
   return (
     <>
@@ -285,7 +342,7 @@ const MemberManage = () => {
 
       <CNavbar colorScheme="light" className="bg-light">
         <CContainer fluid style={{ padding: 0 }}>
-          <div className="d-flex align-items-center">
+          <div className="d-flex align-items-center mb-3">
             <CButton
               color="black" variant="outline"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px' }}
@@ -414,9 +471,9 @@ const MemberManage = () => {
           <CModalBody>
             <CForm>
               <div className="text-center mb-3">
-                {selectedMember.profileImage ? (
+                {selectedMember.fileBean && selectedMember.fileBean.src ? (
                   <img
-                    src={selectedMember.profileImage}
+                    src={selectedMember.fileBean.src}
                     alt="프로필 이미지"
                     className="img-thumbnail"
                     style={{ width: '150px', height: '150px', objectFit: 'cover' }}
@@ -429,6 +486,7 @@ const MemberManage = () => {
                     No Image
                   </div>
                 )}
+
                 <div className="mt-2">
                   <CFormInput type="file" accept="image/*" onChange={handleFileChange} />
                 </div>

@@ -30,4 +30,6 @@ public interface LoginMapper {
     ArrayList<LoginMemberBean> selectMemberList(LoginMemberVo memVo);
 
     int updateMemberState(LoginMemberVo memVo);
+
+    String selectProfileImgCnt(LoginMemberVo memVo);
 }

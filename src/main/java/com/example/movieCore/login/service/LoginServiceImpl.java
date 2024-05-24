@@ -73,4 +73,8 @@ public class LoginServiceImpl {
     public int updateMemberState(LoginMemberVo memVo) {
         return loginMapper.updateMemberState(memVo);
     }
+
+    public String selectProfileImgCnt(LoginMemberVo memVo) {
+        return loginMapper.selectProfileImgCnt(memVo);
+    }
 }

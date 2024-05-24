@@ -26,5 +26,9 @@ public class FileBean {
     private Date mapDt;
 
 
+    /** 멤버 모듈용 컬럼 */
+    private String profileIdx;
+
+
 
 }

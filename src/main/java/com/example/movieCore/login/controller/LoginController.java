@@ -143,6 +143,9 @@ public class LoginController {
             // 프로필 사진 파일빈 디비 인서트
             loginService.insertFileBean(memVo);
 
+            // 프로필 이미지 갯수 계산
+            memVo.getMemberBean().getFileBean().setProfileIdx(loginService.selectProfileImgCnt(memVo));
+
             // 멤버  <-> 프로필 사진 파일 매핑 인서트
             loginService.insertFileBeanMap(memVo);
 
@@ -271,6 +274,8 @@ public class LoginController {
                 memVo.getMemberBean().setFileBean(fileBean);
 
                 loginService.insertFileBean(memVo);
+                // 프로필 이미지 갯수 계산
+                memVo.getMemberBean().getFileBean().setProfileIdx(loginService.selectProfileImgCnt(memVo));
                 loginService.insertFileBeanMap(memVo);
             }
 
