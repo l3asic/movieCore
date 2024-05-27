@@ -33,7 +33,10 @@ import {
   cilRecycle,
   cilRoom,
   cilUser,
-  cilEnvelopeOpen, cilGroup
+  cilEnvelopeOpen,
+  cilGroup,
+  cilLockLocked,
+  cilArrowCircleLeft
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 
@@ -50,7 +53,7 @@ const MemberManage = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState({
-    memId : '',
+    memId: '',
     memName: '',
     gender: '',
     address: '',
@@ -60,7 +63,10 @@ const MemberManage = () => {
     profileImage: null,
     fileBean: {
       src: null
-    }
+    },
+    changePassword: false,
+    loginPassword: '',
+    loginPasswordConfirm: ''
   });
 
   const [profileImage, setProfileImage] = useState(null);
@@ -118,8 +124,6 @@ const MemberManage = () => {
     setSelectedMember(member);
     // 선택된 사용자 프로필 사진 조회
     selectProfileImg(member.memId);
-
-
     setProfileImage(member.profileImage || null);
     setShowModal(true);
   };
@@ -136,7 +140,10 @@ const MemberManage = () => {
       profileImage: null,
       fileBean: {
         src: null
-      }
+      },
+      changePassword: false,
+      loginPassword: '',
+      loginPasswordConfirm: ''
     });
     setProfileImage(null);
   };
@@ -208,18 +215,16 @@ const MemberManage = () => {
       });
   };
 
-
   /** 선택된 사용자 프사 조회 */
   const selectProfileImg = (memId) => {
     axios({
       url: '/selectProfileImg',
       method: 'post',
       data: {
-        memId : memId
+        memId: memId
       }
     })
       .then(function (res) {
-
         setProfileImage(res.data.memVo.memberBean.fileBean.src);
 
         setSelectedMember(prevSelectedMember => ({
@@ -335,6 +340,15 @@ const MemberManage = () => {
     }).open();
   };
 
+  const toggleChangePassword = () => {
+    setSelectedMember(prev => ({
+      ...prev,
+      changePassword: !prev.changePassword,
+      loginPassword: '',
+      loginPasswordConfirm: ''
+    }));
+  };
+
   return (
     <>
       <h4> 회원 관리 </h4>
@@ -354,7 +368,7 @@ const MemberManage = () => {
 
             <CButton
               color="black" variant="outline"
-              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px'}}
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px' }}
               title="회원 상태 삭제로 변경"
               onClick={() => updateMemberState('delete')}
             >
@@ -502,6 +516,57 @@ const MemberManage = () => {
                   onChange={handleInputChange}
                 />
               </CInputGroup>
+
+              {selectedMember.changePassword ? (
+                <>
+
+                  <CButton
+                    color="dark"
+                    style={{ width: '50%', height: '35px', marginBottom: '20px' }}
+                    onClick={toggleChangePassword}
+                  >
+                    <CIcon icon={cilLockLocked} /> 비밀번호 변경
+                  </CButton>
+
+
+
+                  <CInputGroup className="mb-3">
+                    <CInputGroupText>
+                      <CIcon icon={cilLockLocked} />
+                    </CInputGroupText>
+                    <CFormInput
+                      placeholder="비밀번호"
+                      type="password"
+                      value={selectedMember.loginPassword}
+                      name="loginPassword"
+                      onChange={handleInputChange}
+                    />
+                  </CInputGroup>
+                  <CInputGroup className="mb-4">
+                    <CInputGroupText>
+                      <CIcon icon={cilLockLocked} />
+                    </CInputGroupText>
+                    <CFormInput
+                      placeholder="비밀번호 확인"
+                      type="password"
+                      value={selectedMember.loginPasswordConfirm}
+                      name="loginPasswordConfirm"
+                      onChange={handleInputChange}
+                    />
+                  </CInputGroup>
+                </>
+              ) : (
+                <CButton
+                  color="dark"
+                  style={{ width: '50%', height: '35px', marginTop: '30px' , marginBottom : '30px'}}
+                  onClick={toggleChangePassword}
+                >
+                  <CIcon icon={cilLockLocked} /> 비밀번호 변경
+                </CButton>
+              )}
+
+
+
               <CInputGroup className="mb-3">
                 <CInputGroupText>
                   <CIcon icon={cilGroup} />
