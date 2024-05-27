@@ -766,16 +766,21 @@ public class MigMovManageController {
     @ResponseBody
     public Map<String, Object> callDBTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        Map<String, Object> resMap = new HashMap<>();
 
         int rtnNum = 0;
-        rtnNum = movManageService.callDBTest();
+        try {
+            rtnNum = movManageService.callDBTest();
 
-        System.out.println(rtnNum);
+            System.out.println(rtnNum);
+            resMap.put("rtnNum", rtnNum);
+            resMap.put("succesResult", true);
+
+        }catch (Exception e){
+            resMap.put("succesResult", false);
+        }
 
 
-
-        Map<String, Object> resMap = new HashMap<>();
-        resMap.put("rtnNum", rtnNum);
         return resMap;
 
     }
