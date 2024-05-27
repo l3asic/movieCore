@@ -132,8 +132,8 @@ const Register = () => {
                       </CInputGroup>
                     </CCol>
                     <CCol md={3}>
-                      <CButton color="info" onClick={openDaumPostcode} style={{ width: '100%', height: '100%'}}>
-                        주소검색
+                      <CButton color="secondary" onClick={openDaumPostcode} style={{ width: '100%', height: '100%'}}>
+                        주소 검색
                       </CButton>
                     </CCol>
                   </CRow>
@@ -148,7 +148,7 @@ const Register = () => {
                     <CFormInput name="email" placeholder="이메일" onChange={changeMemberInfo} />
                   </CInputGroup>
                   <div className="d-grid">
-                    <CButton color="success" onClick={signUp}>
+                    <CButton color="dark" onClick={signUp}>
                       Create Account
                     </CButton>
                   </div>

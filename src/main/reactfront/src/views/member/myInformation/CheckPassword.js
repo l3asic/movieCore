@@ -62,7 +62,7 @@ const CheckPassword = () => {
                       <CRow>
                         <CCol xs="6">
                           <CButton
-                            color="primary"
+                            color="dark"
                             className="px-4"
                             onClick={handleCheckPassword}
                           >
@@ -72,16 +72,16 @@ const CheckPassword = () => {
                       </CRow>
                     </div>
 
-                    <CCard className="text-white bg-primary py-5" style={{ width: '70%', marginLeft : "100px" }}>
+                    <CCard className="text-white text-bg-dark py-5" style={{ width: '70%', marginLeft : "100px" }}>
                       <CCardBody className="text-center">
                         <div>
-                          <h2>임시 제목</h2>
-                          <p>
-                            임시 텍스트
-                          </p>
+                          <h2>비밀번호를 잊으셨나요?</h2>
+                          {/*<p>
+                            비밀번호
+                          </p>*/}
                           <Link to="/register">
-                            <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                              비밀번호 찾기?
+                            <CButton  className="mt-3 btn-dark" active tabIndex={-1}>
+                              비밀번호 찾기
                             </CButton>
                           </Link>
                         </div>

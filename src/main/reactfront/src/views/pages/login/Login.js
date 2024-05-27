@@ -76,7 +76,7 @@ const Login = () => {
                     </CInputGroup>
                     <CRow>
                       <CCol xs={4}>
-                        <CButton color="primary" className="px-4"
+                        <CButton color="dark" className="px-4"
                         onClick={LoginButtonClick}>
                           Login
                         </CButton>
@@ -90,15 +90,12 @@ const Login = () => {
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
+              <CCard className="text-white bg-dark py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>임시 제목</h2>
-                    <p>
-                      임시 텍스트
-                    </p>
+                    <h5 className="mt-3 mb-xl-4">아직 회원이 아니신가요?</h5>
                     <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
+                      <CButton color="dark" className="mt-3" active tabIndex={-1}>
                         회원 가입
                       </CButton>
                     </Link>
