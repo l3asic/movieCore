@@ -284,7 +284,12 @@
     </select>
 
 
-
+    <!-- 사용자 이메일 인증후 이메일 정보 업데이트 -->
+    <update id="updateMemberEmail" parameterType="com.example.movieCore.login.vo.LoginMemberVo">
+        UPDATE MEM_MEMBER_INFO
+        SET email = #{memberBean.email}
+        WHERE LOGIN_ID = #{memberBean.loginId}
+    </update>
 
 
 

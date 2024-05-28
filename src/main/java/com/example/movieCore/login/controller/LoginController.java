@@ -293,7 +293,7 @@ public class LoginController {
 
 
 
-    /** 관리자 모듈 - 영화 상태값 정상/삭제로 변경 */
+    /** 이메일 인증 코드 전송 */
     @PostMapping(value = "/sendVerificationEmail")
     @ResponseBody
     public Map<String, Object> sendVerificationEmail(@RequestBody LoginMemberVo memVo) throws Exception {
@@ -313,6 +313,33 @@ public class LoginController {
             loginService.sendEmail(memVo.getMemberBean().getEmail(), "MovieCore 계정 이메일 인증 코드", codeText);
 
             resMap.put("verificationCode", verificationCode);
+            successResult =true;
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
+    /** 이메일 인증 정보 업데이트 */
+    @PostMapping(value = "/updateMemberEmail")
+    @ResponseBody
+    public Map<String, Object> updateMemberEmail(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            loginService.updateMemberEmail(memVo);
+
+//            loginService.sendEmail(memVo.getMemberBean().getEmail(), "MovieCore 계정 이메일 인증 코드", codeText);
+
             successResult =true;
 
         }catch (Exception e){

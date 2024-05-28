@@ -93,4 +93,7 @@ public class LoginServiceImpl {
         mailSender.send(message);
     }
 
+    public void updateMemberEmail(LoginMemberVo memVo){
+        loginMapper.updateMemberEmail(memVo);
+    }
 }

@@ -81,7 +81,7 @@ const EmailCert = () => {
   };
 
 
-  const verifyCode = () => {
+  const updateMemberEmail = () => {
 
     // 인증 코드 검증
     if(verificationCode != code){
@@ -89,11 +89,12 @@ const EmailCert = () => {
       return;
     }
 
-    const email = `${emailId}@${emailDomain}`;
-    axios.post('/verifyCode', { email, code })
+    axios.post('/updateMemberEmail', { memberBean })
       .then(response => {
-        if (response.data.success) {
+        if (response.data.successResult) {
+          alert('이메일 인증이 완료되었습니다.');
           setMessage('이메일 인증이 완료되었습니다.');
+          navigate('/login/Login');
         } else {
           setMessage('인증 코드가 유효하지 않습니다. 다시 시도해주세요.');
         }
@@ -159,7 +160,7 @@ const EmailCert = () => {
                         value={code}
                         onChange={handleCodeChange}
                       />
-                      <CButton color="dark" onClick={verifyCode} className="ms-2 rounded">
+                      <CButton color="dark" onClick={updateMemberEmail} className="ms-2 rounded">
                         확인
                       </CButton>
                     </CInputGroup>
