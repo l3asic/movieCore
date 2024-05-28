@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class LoginServiceImpl {
     private final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
     private final PasswordEncoder passwordEncoder;
     private final LoginMapper loginMapper;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     public Map<String, Object> signUp(LoginMemberVo vo) {
         Map<String, Object> result = new HashMap<>();
@@ -77,4 +82,15 @@ public class LoginServiceImpl {
     public String selectProfileImgCnt(LoginMemberVo memVo) {
         return loginMapper.selectProfileImgCnt(memVo);
     }
+
+
+    // 이메일 인증 코드 전송
+    public void sendEmail(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        mailSender.send(message);
+    }
+
 }

@@ -24,6 +24,7 @@ const EmailCert = () => {
   const [emailId, setEmailId] = useState('');
   const [emailDomain, setEmailDomain] = useState('gmail.com');
   const [code, setCode] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
   const [message, setMessage] = useState('');
 
   const [memberInfo, setMemberInfo] = useState({
@@ -42,29 +43,34 @@ const EmailCert = () => {
     setCode(e.target.value);
   };
 
+
+  /** 이메일 인증 코드 전송 */
   const sendVerificationEmail = () => {
     const email = `${emailId}@${emailDomain}`;
 
-    // 유효성 검사 임시 주석 @@@@ 추후 주석 지우기
-    // if (!validateEmail(email)) {
-    //   setMessage('유효한 이메일 주소를 입력하세요.');
-    //   return;
-    // }
+    // 유효성 검사
+    if (!validateEmail(email)) {
+      setMessage('유효한 이메일 주소를 입력하세요.');
+      return;
+    }
 
-    debugger;
 
     // 임시값 추후 수정@@@
     var memberBean = {
         memId : "MEM2157073142",
-        email : "jhcx7129@naver.com"
+        email : email
       }
 
 
 
     axios.post('/sendVerificationEmail', { memberBean })
       .then(response => {
-        if (response.data.success) {
-          setMessage('인증 이메일이 발송되었습니다.');
+
+        if (response.data.successResult) {
+          setMessage('인증 이메일이 발송되었습니다. 인증 코드를 입력해주세요.');
+
+          setVerificationCode(response.data.verificationCode);
+
         } else {
           setMessage('이메일 발송에 실패했습니다. 다시 시도해주세요.');
         }
@@ -74,6 +80,8 @@ const EmailCert = () => {
       });
   };
 
+
+  /** 이메일 재전송 */
   const resendVerificationEmail = () => {
     const email = `${emailId}@${emailDomain}`;
     axios.post('/resendVerificationEmail', { email })
@@ -90,6 +98,14 @@ const EmailCert = () => {
   };
 
   const verifyCode = () => {
+
+    // 인증 코드 검증
+    if(verificationCode != code){
+      setMessage('인증 코드가 올바르지 않습니다.');
+        return;
+    }
+
+
     const email = `${emailId}@${emailDomain}`;
     axios.post('/verifyCode', { email, code })
       .then(response => {

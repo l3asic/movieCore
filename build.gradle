@@ -55,6 +55,9 @@ dependencies {
 	// jackson 라이브러리 (json -> 자바 객체 파싱 용)
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 
+	// 이메일 발송 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 
 
 }

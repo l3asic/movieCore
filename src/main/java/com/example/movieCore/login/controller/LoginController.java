@@ -26,6 +26,8 @@ public class LoginController {
 
     private final PasswordEncoder passwordEncoder;
 
+    MakeUUID makeUUID = new MakeUUID();
+
     /** 회원 가입시 */
     @PostMapping(value = "/signUp")
     @ResponseBody
@@ -35,7 +37,6 @@ public class LoginController {
         // 가입일 생성
         Date memCreateDate = new Date();
         // 고유 id 생성 (memId)
-        MakeUUID makeUUID = new MakeUUID();
         String memId = makeUUID.makeShortUUID("MEM");
 
         memberBean.setMemId(memId);
@@ -302,10 +303,13 @@ public class LoginController {
 
         try {
 
+            // 인증 코드 생성
+            String verificationCode = makeUUID.makeShortUUID("");
 
+            // 인증코드 메일 전송
+            loginService.sendEmail(memVo.getMemberBean().getEmail(), "MovieCore 계정 이메일 인증 코드", verificationCode);
 
-
-
+            resMap.put("verificationCode", verificationCode);
             successResult =true;
 
         }catch (Exception e){
