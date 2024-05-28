@@ -94,7 +94,7 @@ const Login = () => {
                 <CCardBody className="text-center">
                   <div>
                     <h5 className="mt-3 mb-xl-4">아직 회원이 아니신가요?</h5>
-                    <Link to="/register">
+                    <Link to="/pages/Register">
                       <CButton color="dark" className="mt-3" active tabIndex={-1}>
                         회원 가입
                       </CButton>

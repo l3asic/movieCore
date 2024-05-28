@@ -1,5 +1,13 @@
 import React from 'react'
 
+/** 기본 페이지 */
+// 로그인
+// - 로그인 페이지
+const Login = React.lazy(() => import('./views/pages/login/Login'))
+// - 회원가입
+const Register = React.lazy(() => import('./views/pages/register/Register'))
+
+
 /** 커스텀 루트 주소 */
 // 관리자
 // - 회원 관리
@@ -118,6 +126,15 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
+
+  /** 기본 페이지 */
+
+  // 로그인
+  // - 로그인 페이지
+  { path: '/pages/Login', name: 'Login', element: Login },
+  // - 회원 가입
+  { path: '/pages/Register', name: 'Register', element: Register },
+
 
   /** 커스텀 루트 배열  */
 
