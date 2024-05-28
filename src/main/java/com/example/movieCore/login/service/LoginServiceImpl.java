@@ -85,11 +85,11 @@ public class LoginServiceImpl {
 
 
     // 이메일 인증 코드 전송
-    public void sendEmail(String to, String subject, String text) {
+    public void sendEmail(String to, String subject, String codeText) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
-        message.setText(text);
+        message.setText(codeText);
         mailSender.send(message);
     }
 

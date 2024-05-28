@@ -305,9 +305,12 @@ public class LoginController {
 
             // 인증 코드 생성
             String verificationCode = makeUUID.makeShortUUID("");
+            String codeText = "Movie Core 에서 보낸 이메일 인증 코드 입니다. \n\n" +
+                    "인증 코드 : " + verificationCode +
+                    "\n\n 코드를 인증 입력칸에 작성하고 확인을 눌러주세요";
 
             // 인증코드 메일 전송
-            loginService.sendEmail(memVo.getMemberBean().getEmail(), "MovieCore 계정 이메일 인증 코드", verificationCode);
+            loginService.sendEmail(memVo.getMemberBean().getEmail(), "MovieCore 계정 이메일 인증 코드", codeText);
 
             resMap.put("verificationCode", verificationCode);
             successResult =true;
