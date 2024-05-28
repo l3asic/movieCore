@@ -54,23 +54,17 @@ const EmailCert = () => {
       return;
     }
 
-
     // 임시값 추후 수정@@@
     var memberBean = {
-        memId : "MEM2157073142",
-        email : email
-      }
-
-
+      memId : "MEM2157073142",
+      email : email
+    }
 
     axios.post('/sendVerificationEmail', { memberBean })
       .then(response => {
-
         if (response.data.successResult) {
           setMessage('인증 이메일이 발송되었습니다. 인증 코드를 입력해주세요.');
-
           setVerificationCode(response.data.verificationCode);
-
         } else {
           setMessage('이메일 발송에 실패했습니다. 다시 시도해주세요.');
         }
@@ -81,30 +75,13 @@ const EmailCert = () => {
   };
 
 
-  /** 이메일 재전송 */
-  const resendVerificationEmail = () => {
-    const email = `${emailId}@${emailDomain}`;
-    axios.post('/resendVerificationEmail', { email })
-      .then(response => {
-        if (response.data.success) {
-          setMessage('인증 이메일이 재전송되었습니다.');
-        } else {
-          setMessage('이메일 재전송에 실패했습니다. 다시 시도해주세요.');
-        }
-      })
-      .catch(error => {
-        setMessage('오류가 발생했습니다. 다시 시도해주세요.');
-      });
-  };
-
   const verifyCode = () => {
 
     // 인증 코드 검증
     if(verificationCode != code){
       setMessage('인증 코드가 올바르지 않습니다.');
-        return;
+      return;
     }
-
 
     const email = `${emailId}@${emailDomain}`;
     axios.post('/verifyCode', { email, code })
@@ -152,38 +129,37 @@ const EmailCert = () => {
                   </>
                 ) : (
                   <CForm>
-                    <CInputGroup className="mb-3">
+                    <CInputGroup className="mb-3 mt-3 ">
                       <CFormInput
                         placeholder="이메일 아이디"
                         value={emailId}
                         onChange={handleEmailIdChange}
                       />
                       <CInputGroupText>@</CInputGroupText>
-                      <CFormSelect value={emailDomain} onChange={handleEmailDomainChange}>
+                      <CFormSelect className="rounded-end" value={emailDomain} onChange={handleEmailDomainChange}>
                         <option value="gmail.com">gmail.com</option>
                         <option value="naver.com">naver.com</option>
                         <option value="daum.net">daum.net</option>
                         <option value="hotmail.com">hotmail.com</option>
                       </CFormSelect>
+                      <CButton color="dark" onClick={sendVerificationEmail} className="ms-2 rounded">
+                        인증 이메일 발송
+                      </CButton>
                     </CInputGroup>
-                    <CButton color="dark" onClick={sendVerificationEmail} className="mt-3">
-                      인증 이메일 발송
-                    </CButton>
-                    <CInputGroup className="mt-3 mb-3">
+                    <CInputGroup className="mt-5 mb-3">
                       <CFormInput
+                        className="rounded-end"
                         placeholder="인증 코드"
                         value={code}
                         onChange={handleCodeChange}
                       />
+                      <CButton color="dark" onClick={verifyCode} className="ms-2 rounded">
+                        확인
+                      </CButton>
                     </CInputGroup>
-                    <CButton color="secondary" onClick={resendVerificationEmail} className="me-2" >
-                      인증 이메일 재전송
-                    </CButton>
-                    <CButton color="dark" onClick={verifyCode} className="me-2" >
-                      확인
-                    </CButton>
-                    {message && <p className="mt-3">{message}</p>}
+                    {message && <strong className="mt-3">{message}</strong>}
                   </CForm>
+
                 )}
               </CCardBody>
             </CCard>
