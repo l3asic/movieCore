@@ -63,10 +63,10 @@ const EmailCert = () => {
     axios.post('/sendVerificationEmail', { memberBean })
       .then(response => {
         if (response.data.successResult) {
-          setMessage('인증 이메일이 발송되었습니다. 인증 코드를 입력해주세요.');
+          setMessage('인증 이메일이 전송되었습니다. 인증 코드를 입력해주세요.');
           setVerificationCode(response.data.verificationCode);
         } else {
-          setMessage('이메일 발송에 실패했습니다. 다시 시도해주세요.');
+          setMessage('이메일 전송에 실패했습니다. 다시 시도해주세요.');
         }
       })
       .catch(error => {
@@ -143,7 +143,7 @@ const EmailCert = () => {
                         <option value="hotmail.com">hotmail.com</option>
                       </CFormSelect>
                       <CButton color="dark" onClick={sendVerificationEmail} className="ms-2 rounded">
-                        인증 이메일 발송
+                        인증 이메일 전송
                       </CButton>
                     </CInputGroup>
                     <CInputGroup className="mt-5 mb-3">
