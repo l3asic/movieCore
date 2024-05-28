@@ -16,6 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from "axios";
+import loginImg from "../../../assets/images/uiImg/loginImg.webp";
 
 const Login = () => {
 
@@ -30,13 +31,14 @@ const Login = () => {
 
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+    <div className="bg-light min-vh-100 d-flex flex-row /*align-items-center*/"
+    style={{ marginTop : "150px"}}>
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
               <CCard className="p-4">
-                <CCardBody>
+                <CCardBody className="mt-5">
                   <CForm>
                     <h1>Login</h1>
                     <p className="text-medium-emphasis">Sign In to your account</p>
@@ -92,6 +94,14 @@ const Login = () => {
               </CCard>
               <CCard className="text-white bg-dark py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
+                  <img
+                    alt="Movie poster"
+                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
+                    height="250"
+                    src={loginImg}
+                    width="320"
+                    style={{ borderRadius: '10px' }}
+                  />
                   <div>
                     <h5 className="mt-3 mb-xl-4">아직 회원이 아니신가요?</h5>
                     <Link to="/pages/Register">
