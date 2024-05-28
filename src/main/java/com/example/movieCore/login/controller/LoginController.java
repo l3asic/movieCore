@@ -292,6 +292,35 @@ public class LoginController {
 
 
 
+    /** 관리자 모듈 - 영화 상태값 정상/삭제로 변경 */
+    @PostMapping(value = "/sendVerificationEmail")
+    @ResponseBody
+    public Map<String, Object> sendVerificationEmail(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+
+
+
+
+            successResult =true;
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
+
+
 
 
 }

@@ -28,6 +28,8 @@ const ArticleListManage = React.lazy(() => import('./views/admin/brd/ArticleList
 const Login = React.lazy(() => import('./views/login/Login'))
 // - 회원가입
 const Register = React.lazy(() => import('./views/login/Register'))
+// - 이메일 인증 페이지
+const EmailCert = React.lazy(() => import('./views/login/EmailCert'))
 
 
 // 영화
@@ -141,6 +143,8 @@ const routes = [
   { path: '/login/Login', name: 'Login', element: Login },
   // - 회원 가입
   { path: '/login/Register', name: 'Register', element: Register },
+  // - 이메일 인증 페이지
+  { path: '/login/EmailCert', name: 'EmailCert', element: EmailCert },
 
 
   // - 영화 이관 관리
