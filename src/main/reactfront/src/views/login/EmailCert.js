@@ -22,7 +22,7 @@ const EmailCert = () => {
   const navigate = useNavigate();
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [emailId, setEmailId] = useState('');
-  const [emailDomain, setEmailDomain] = useState('gmail.com');
+  const [emailDomain, setEmailDomain] = useState('naver.com');
   const [code, setCode] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [message, setMessage] = useState('');
@@ -63,7 +63,7 @@ const EmailCert = () => {
     axios.post('/sendVerificationEmail', { memberBean })
       .then(response => {
         if (response.data.successResult) {
-          setMessage('인증 이메일이 전송되었습니다. 인증 코드를 입력해주세요.');
+          setMessage(email + ' 주소로 인증 이메일이 전송되었습니다. 인증 코드를 입력해주세요.');
           setVerificationCode(response.data.verificationCode);
         } else {
           setMessage('이메일 전송에 실패했습니다. 다시 시도해주세요.');
@@ -137,8 +137,8 @@ const EmailCert = () => {
                       />
                       <CInputGroupText>@</CInputGroupText>
                       <CFormSelect className="rounded-end" value={emailDomain} onChange={handleEmailDomainChange}>
-                        <option value="gmail.com">gmail.com</option>
                         <option value="naver.com">naver.com</option>
+                        <option value="gmail.com">gmail.com</option>
                         <option value="daum.net">daum.net</option>
                         <option value="hotmail.com">hotmail.com</option>
                       </CFormSelect>
