@@ -25,7 +25,6 @@ const Register = () => {
     gender: 'N', // 기본값 (성별을 밝히지 않음)
     address: '',
     addressInfo: '',
-    email: '',
   });
 
   const navigate  = useNavigate();
@@ -143,10 +142,10 @@ const Register = () => {
                     </CInputGroupText>
                     <CFormInput name="addressInfo" placeholder="상세주소" onChange={changeMemberInfo} />
                   </CInputGroup>
-                  <CInputGroup className="mb-3">
+                  {/*<CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
                     <CFormInput name="email" placeholder="이메일" onChange={changeMemberInfo} />
-                  </CInputGroup>
+                  </CInputGroup>*/}
                   <div className="d-grid">
                     <CButton color="dark" onClick={signUp}>
                       Create Account
@@ -209,7 +208,7 @@ const Register = () => {
         gender: memberInfo.gender,
         address: memberInfo.address,
         addressInfo: memberInfo.addressInfo,
-        email: memberInfo.email
+        /*email: memberInfo.email*/
       }
 
     }).then(function (res){
@@ -217,7 +216,7 @@ const Register = () => {
         alert(memberInfo.memName + "님 가입을 축하드립니다.");
 
         // 로그인 화면으로 이동
-        navigate('/login');
+        navigate('/login/Login');
 
 
       }else{
@@ -233,7 +232,7 @@ const Register = () => {
 
   /** 회원가입 유효성 검사 */
   function validateSignUpInfo() {
-    const { loginId, loginPassword, loginPasswordConfirm, memName, gender, address, email } = memberInfo;
+    const { loginId, loginPassword, loginPasswordConfirm, memName, gender, address/*, email*/ } = memberInfo;
 
     // 필수 항목 체크
     if (!loginId || !loginPassword || !loginPasswordConfirm || !memName || !gender){    // 필수에 주소, 이메일 제외|| !address || !email
@@ -254,11 +253,11 @@ const Register = () => {
     }
 
     // 이메일 유효성 체크 (예시: 정규식 사용)
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    /*const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       alert('유효한 이메일 주소를 입력하세요.');
       return false;
-    }
+    }*/
 
     // 유효성 검사 통과
     return true;

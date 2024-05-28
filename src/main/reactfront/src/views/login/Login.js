@@ -16,7 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from "axios";
-import loginImg from "../../../assets/images/uiImg/loginImg.webp";
+import loginImg from "../../assets/images/uiImg/loginImg.webp";
 
 const Login = () => {
 
@@ -104,7 +104,7 @@ const Login = () => {
                   />
                   <div>
                     <h5 className="mt-3 mb-xl-4">아직 회원이 아니신가요?</h5>
-                    <Link to="/pages/Register">
+                    <Link to="/login/Register">
                       <CButton color="dark" className="mt-3" active tabIndex={-1}>
                         회원 가입
                       </CButton>

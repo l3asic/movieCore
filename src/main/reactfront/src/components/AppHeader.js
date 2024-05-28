@@ -86,7 +86,7 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="/pages/Register">
+            <CNavLink href="/login/Register">
               <CIcon icon={cilEnvelopeOpen} size="lg" />
             </CNavLink>
           </CNavItem>
@@ -94,7 +94,7 @@ const AppHeader = () => {
           {/* 로그인 화면 이동 아이콘 부분 */}
           {!isLogin && (
             <CNavItem style={{ marginBottom: '30px' }}>
-              <CNavLink href="#/pages/Login" style={{ display: 'flex', alignItems: 'center' }}>
+              <CNavLink href="#/login/Login" style={{ display: 'flex', alignItems: 'center' }}>
                 <div style={{ marginRight: '5px' }}>
                   <img src={loginIcon} alt="Login Icon" style={{ width: '22px', height: '22px' }} />
                 </div>
