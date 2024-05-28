@@ -213,13 +213,9 @@ const Register = () => {
 
     }).then(function (res){
       if(res.data.succesResult){
-        alert(memberInfo.memName + "님 가입을 축하드립니다.");
 
         // 이메일 인증 페이지로 이동
-        navigate('/login/EmailCert');
-
-        // 로그인 화면으로 이동
-        // navigate('/login/Login');
+        navigate('/login/EmailCert', { state: { loginId: memberInfo.loginId } });
 
 
       }else{

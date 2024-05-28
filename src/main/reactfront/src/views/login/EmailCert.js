@@ -16,7 +16,7 @@ import {
 import CIcon from '@coreui/icons-react';
 import { cilEnvelopeClosed, cilCheckCircle } from '@coreui/icons';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const EmailCert = () => {
   const navigate = useNavigate();
@@ -27,7 +27,11 @@ const EmailCert = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [message, setMessage] = useState('');
 
-  const [memberInfo, setMemberInfo] = useState({
+  const location = useLocation();
+  const { loginId } = location.state;
+
+  const [memberBean, setMemberBean] = useState({
+    loginId : loginId
   });
 
 
@@ -46,25 +50,27 @@ const EmailCert = () => {
 
   /** 이메일 인증 코드 전송 */
   const sendVerificationEmail = () => {
-    const email = `${emailId}@${emailDomain}`;
+    memberBean.email = `${emailId}@${emailDomain}`;
 
     // 유효성 검사
-    if (!validateEmail(email)) {
+    if (!validateEmail(memberBean.email)) {
       setMessage('유효한 이메일 주소를 입력하세요.');
       return;
     }
 
-    // 임시값 추후 수정@@@
-    var memberBean = {
-      memId : "MEM2157073142",
-      email : email
-    }
 
     axios.post('/sendVerificationEmail', { memberBean })
       .then(response => {
         if (response.data.successResult) {
-          setMessage(email + ' 주소로 인증 이메일이 전송되었습니다. 인증 코드를 입력해주세요.');
+          setMessage(memberBean.email + ' 주소로 인증 이메일이 전송되었습니다. 인증 코드를 입력해주세요.');
           setVerificationCode(response.data.verificationCode);
+
+          setMemberBean((prevMemberBean) => ({
+            ...prevMemberBean,
+            email: memberBean.email
+          }));
+
+
         } else {
           setMessage('이메일 전송에 실패했습니다. 다시 시도해주세요.');
         }
