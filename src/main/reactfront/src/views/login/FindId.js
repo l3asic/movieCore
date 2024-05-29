@@ -70,8 +70,6 @@ const FindId = () => {
   // id 정보 조회
   const selectMemberListByEmail = () => {
 
-    debugger;
-
     // 인증코드 검증
     if (verificationCode !== code || verificationCode === "nothing") {
       setMessage('인증 코드가 올바르지 않습니다.');
@@ -81,7 +79,6 @@ const FindId = () => {
     memVo.memberBean.email = `${emailId}@${emailDomain}`;
     axios.post('/selectMemberListByEmail', { memberBean : memVo.memberBean })
       .then(response => {
-        debugger;
         if (response.data.successResult) {
           const maskedIds = response.data.memVo.memberBeanList.map(member => maskId(member.loginId));
           setMemVo(prevMemVo => ({
