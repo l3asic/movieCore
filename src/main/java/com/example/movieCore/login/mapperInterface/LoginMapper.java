@@ -36,4 +36,8 @@ public interface LoginMapper {
     void updateMemberEmail(LoginMemberVo memVo);
 
     ArrayList<LoginMemberBean> selectMemberListByEmail(LoginMemberVo memVo);
+
+    int checkLoginIdEmail(LoginMemberVo memVo);
+
+    void updatePassword(LoginMemberVo memVo);
 }

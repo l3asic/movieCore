@@ -317,6 +317,30 @@
     </select>
 
 
+    <!-- loginId와 email 로 id 존재 체크 -->
+    <select id="checkLoginIdEmail" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultType="integer">
+        SELECT
+            count(*) cnt
+        FROM
+            MEM_MEMBER_INFO
+        WHERE
+            EMAIL = #{memberBean.email}
+            and
+            login_id =  #{memberBean.loginId}
+    </select>
+
+
+    <!-- 사용자 비밀번호 업데이트 -->
+    <update id="updatePassword" parameterType="com.example.movieCore.login.vo.LoginMemberVo">
+        UPDATE MEM_MEMBER_INFO
+        SET
+            LOGIN_PASSWORD = #{memberBean.loginPassword}
+        WHERE
+            EMAIL = #{memberBean.email}
+          and
+            login_id = #{memberBean.loginId}
+    </update>
+
 
 
 </mapper>

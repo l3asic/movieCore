@@ -115,7 +115,7 @@ const FindId = () => {
           <CCol md={8}>
             <CCard className="mx-4" style={{ minWidth: "500px" }}>
               <CCardHeader>
-                <h4>이메일 인증</h4>
+                <h4>ID 찾기</h4>
               </CCardHeader>
               <CCardBody className="p-4">
                 <CForm>

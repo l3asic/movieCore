@@ -376,6 +376,66 @@ public class LoginController {
 
 
 
+    /** 사용자 비밀번호 초기화  */
+    @PostMapping(value = "/resetPassword")
+    @ResponseBody
+    public Map<String, Object> resetPassword(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            // loginId 와 email이 올바르게 일치하는지 확인
+            int sucCnt = 0;
+            sucCnt = loginService.checkLoginIdEmail(memVo);
+
+
+            if(sucCnt > 0){
+
+                // 새로운 비밀번호 생성
+                String newPw = makeUUID.makeShortUUID("pw");
+                memVo.getMemberBean().setLoginPassword(newPw);
+
+                /* password 인코딩*/
+                memVo.getMemberBean().setLoginPassword(passwordEncoder.encode(memVo.getMemberBean().getLoginPassword()));
+
+
+                // 비밀번호 디비 업데이트
+                loginService.updatePassword(memVo);
+
+
+                // 암호화 안 된 비밀번호 전달
+                memVo.getMemberBean().setLoginPassword(newPw);
+
+                resMap.put("memVo", memVo);
+
+
+
+
+
+                successResult =true;
+
+
+            }else{
+
+            }
+
+
+
+
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
 
 
 
