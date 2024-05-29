@@ -692,12 +692,17 @@ public class MigMovManageController {
     public Map<String, Object> specificDateBatch(@RequestBody MigMovVo movVo) throws Exception {
 
         Map<String, Object> resMap = new HashMap<>();
+        BatchLog batchLog ;
 
         try {
             // 일일 박스오피스 이관 동작
-            movManageService.syncDailyBoxOffice(movVo);
+            batchLog = movManageService.syncDailyBoxOffice(movVo);
+            if(batchLog.getBatchStatus().equals("정상 작동")){
+                resMap.put("success", "success");
+            }else{
+                resMap.put("success", "fail");
+            }
 
-            resMap.put("success", "success");
         }catch (Exception e){
             resMap.put("success", "fail");
         }

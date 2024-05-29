@@ -13,4 +13,7 @@ public class BatchConfig {
 
     private boolean batchRun;
 
+    // 배치 자동/수동 구분값
+    private String batchType;
+
 }

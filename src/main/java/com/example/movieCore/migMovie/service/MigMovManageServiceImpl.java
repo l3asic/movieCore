@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -144,46 +147,131 @@ public class MigMovManageServiceImpl {
     /**
      * 일일 박스오피스 이관
      * */
-    public void syncDailyBoxOffice(MigMovVo movVo){
+    public BatchLog syncDailyBoxOffice(MigMovVo movVo){
 
         MigMovieApiClientImpl movieApiClient = new MigMovieApiClientImpl();
 
-        // 박스오피스 api 호출
-        movVo = movieApiClient.callMovieBoxOfficeApi(movVo);
+        /** 배치 로그 */
+        BatchLog batchLog = new BatchLog();
+        // 배치명
+        batchLog.setBatchName("batchDailyBoxOffice");
+        // 동작시간
+        batchLog.setBatchRunTime(new Timestamp(System.currentTimeMillis()));
+        // 배치 자동/수동
+        batchLog.setBatchType(movVo.getBatchConfig().getBatchType());
+        // 실패 갯수
+        batchLog.setBatchFailCount(0);
+        // 오류 내용
+        batchLog.setBatchErrorText("");
+        // 배치 동작 상태
+        batchLog.setBatchStatus("정상 작동");
 
-        ArrayList<MovieBoxOfficeBean> boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
+
+
+
+        ArrayList<MovieBoxOfficeBean> boxOfficeBeanList = null;
 
         try {
-            for (int i = 0; i < boxOfficeBeanList.size(); i++) {
-                movVo.setBoxOfficeBean(boxOfficeBeanList.get(i));
-                String movieCd = movVo.getBoxOfficeBean().getMovieCd();
+            // 박스오피스 api 호출
+            movVo = movieApiClient.callMovieBoxOfficeApi(movVo);
 
-                int checkCnt = 0;
-
-                // 기존 디비에서 영화 확인
-                checkCnt = checkMovieCntByMovieCd(movieCd);
-
-                // 기존디비에 없는 영화의 경우
-                if(checkCnt==0){
-                    // 해당 영화 정보(1개) 이관
-                    migOneMovie(movVo.getBoxOfficeBean());
-                }
-
-                // 개봉일 openDt 정보 업데이트
-                updateOpenDt(movVo);
-
-
-            }
-
-            // 박스오피스 테이블 인서트
-            insertBoxOffice(movVo);
-
+            boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
 
         }catch (Exception e){
-            e.printStackTrace();
+            // 배치 동작 상태
+            batchLog.setBatchStatus("실패");
+
+            // 오류 내용
+            String errorText =
+                    "api 호출 오류 \n" +
+                    "오류 내용 : "  + getStackTraceAsString(e) +"\n\n" ;
+
+            // 문자열 길이를 200자로 제한
+            if (errorText.length() > 200) {
+                errorText = errorText.substring(0, 200);
+            }
+
+            batchLog.setBatchErrorText(batchLog.getBatchErrorText() + errorText);
 
         }
 
+
+
+
+        for (int i = 0; i < boxOfficeBeanList.size(); i++) {
+
+            try {
+
+                    movVo.setBoxOfficeBean(boxOfficeBeanList.get(i));
+                    String movieCd = movVo.getBoxOfficeBean().getMovieCd();
+
+                    int checkCnt = 0;
+
+                    // 기존 디비에서 영화 확인
+                    checkCnt = checkMovieCntByMovieCd(movieCd);
+
+                    // 기존디비에 없는 영화의 경우
+                    if(checkCnt==0){
+                        // 해당 영화 정보(1개) 이관
+                        migOneMovie(movVo.getBoxOfficeBean());
+                    }
+
+                    // 개봉일 openDt 정보 업데이트
+                    updateOpenDt(movVo);
+
+                // 박스오피스 테이블 인서트
+                insertBoxOffice(movVo);
+
+            }catch (Exception e){
+                /** 오류시 배치 로그 기록 */
+                // 배치 동작 상태
+                batchLog.setBatchStatus("실패");
+                // 실패 갯수
+                batchLog.setBatchFailCount(batchLog.getBatchFailCount()+1);
+                // 실패 내용
+                String errorText =
+                        "오류 영화 코드 : " + boxOfficeBeanList.get(i).getMovieCd()+"\n" +
+                        "오류 영화 내용 : " + boxOfficeBeanList.get(i).getMovieNm()+"\n" +
+                        "오류 내용 : "  + getStackTraceAsString(e) +"\n\n" ;
+
+                // 문자열 길이를 200자로 제한
+                if (errorText.length() > 300) {
+                    errorText = errorText.substring(0, 300);
+                }
+
+                batchLog.setBatchErrorText(batchLog.getBatchErrorText() + errorText);
+
+            }
+        }
+
+
+        /** 배치 로그 인서트 */
+
+        // 배치 종료 시간 기록
+        batchLog.setBatchEndTime(new Timestamp(System.currentTimeMillis()));
+
+        // 소요시간 계산
+        batchLog.calculateBatchDuration();
+        
+        // 배치로그 최종 디비 인서트
+        migMovManageMapper.insertBatchLog(batchLog);
+
+
+        return  batchLog;
+
+
+
+
+    }
+
+
+
+    /** 오류 내용 편집 */
+    public String getStackTraceAsString(Exception e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        return stringWriter.toString();
     }
 
 

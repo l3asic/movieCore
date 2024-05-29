@@ -46,9 +46,6 @@ function BoxOfficeBatchManage() {
 
   };
 
-  const navigateToBatchLogs = () => {
-    console.log("배치 로그 페이지로 이동");
-  };
 
   return (
     <CContainer>
@@ -107,9 +104,7 @@ function BoxOfficeBatchManage() {
           <strong>배치 로그</strong>
         </CCardHeader>
         <CCardBody>
-          <CButton color="secondary" onClick={navigateToBatchLogs}>
-            배치 로그 보기
-          </CButton>
+          {/* 배치 로그 테이블 자리 */}
         </CCardBody>
       </CCard>
     </CContainer>
@@ -170,7 +165,8 @@ function specificDateBatch(targetDt) {
     data: {
       batchConfig: {
         batchName : "batchDailyBoxOffice",
-        targetDt : targetDt
+        targetDt : targetDt,
+        batchType : "수동"
       }
     }
 

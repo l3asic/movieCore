@@ -1,5 +1,6 @@
 package com.example.movieCore.migMovie.scheldule;
 
+import com.example.movieCore.migMovie.bean.BatchConfig;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
 import com.example.movieCore.migMovie.vo.MigMovVo;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,10 +31,12 @@ public class SchMovBoxOffice {
         batchDailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
 
         if(batchDailyBoxOfficeRun){ // 배치 정상 동작 상태
+
+            movVo.setBatchConfig(new BatchConfig());
+            movVo.getBatchConfig().setBatchType("자동");
+
             // 일일 박스오피스 이관 동작
             movManageService.syncDailyBoxOffice(movVo);
-            System.out.println("배치 정상 동작");
-
         }else{
             // 배치 정지된 상태
             System.out.println("배치 정지 상태");
