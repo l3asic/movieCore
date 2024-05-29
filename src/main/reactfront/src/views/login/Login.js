@@ -167,6 +167,7 @@ const Login = () => {
 
           // 로그인 후 메인으로 이동
           navigate('/dashboard');
+          window.location.reload();
 
         }else{
           alert('로그인 오류');
