@@ -5,7 +5,7 @@ import {
   CCol, CButton
 } from '@coreui/react'
 import axios from "axios";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 
 
@@ -38,6 +38,8 @@ const ArticleReg = () => {
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
+
+  const navigate = useNavigate();
 
 
 
@@ -84,6 +86,7 @@ const ArticleReg = () => {
           value: boardBean.brdId,
         }));
         setBoardOptions(newBoardOptions);
+        articleBean.brdId =newBoardOptions[0].value;
       }
     } else {
       // 선택된 폴더가 없을 경우 게시판 옵션 초기화
@@ -307,7 +310,10 @@ const ArticleReg = () => {
       });
   }
 
-
+  /** 게시물 등록 후 게시글 리스트로 이동 */
+  function MoveToArticleListView(){
+    navigate('/brd/ArticleListView?brdId='+brdVo.articleBean.brdId);
+  }
 
 
 
@@ -343,6 +349,8 @@ const ArticleReg = () => {
       }else{
         alert("등록 그냥 실패?");
       }
+
+      MoveToArticleListView();
 
     }).catch(function (err){
       alert("등록 실패 (오류)");
