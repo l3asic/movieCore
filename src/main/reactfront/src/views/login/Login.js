@@ -84,8 +84,10 @@ const Login = () => {
                         </CButton>
                       </CCol>
                       <CCol xs={8} className="text-right">
-                        <CButton color="link" className="px-0">
-                          비밀번호를 잊으셨나요?
+                        <CButton
+                          onClick={() => navigate('/login/SelectFindIdPw')}
+                          color="link" className="px-0">
+                          ID / Password를 잊으셨나요?
                         </CButton>
                       </CCol>
                     </CRow>

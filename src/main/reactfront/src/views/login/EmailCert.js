@@ -24,7 +24,7 @@ const EmailCert = () => {
   const [emailId, setEmailId] = useState('');
   const [emailDomain, setEmailDomain] = useState('naver.com');
   const [code, setCode] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
+  let [verificationCode, setVerificationCode] = useState('nothing');
   const [message, setMessage] = useState('');
 
   const location = useLocation();
@@ -64,6 +64,7 @@ const EmailCert = () => {
         if (response.data.successResult) {
           setMessage(memberBean.email + ' 주소로 인증 이메일이 전송되었습니다. 인증 코드를 입력해주세요.');
           setVerificationCode(response.data.verificationCode);
+          verificationCode = response.data.verificationCode;
 
           setMemberBean((prevMemberBean) => ({
             ...prevMemberBean,
@@ -84,7 +85,7 @@ const EmailCert = () => {
   const updateMemberEmail = () => {
 
     // 인증 코드 검증
-    if(verificationCode != code){
+    if(verificationCode != code || verificationCode == "nothing"){
       setMessage('인증 코드가 올바르지 않습니다.');
       return;
     }

@@ -338,7 +338,30 @@ public class LoginController {
 
             loginService.updateMemberEmail(memVo);
 
-//            loginService.sendEmail(memVo.getMemberBean().getEmail(), "MovieCore 계정 이메일 인증 코드", codeText);
+            successResult =true;
+
+        }catch (Exception e){
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+    /** email로 사용자 정보들 조회 */
+    @PostMapping(value = "/selectMemberListByEmail")
+    @ResponseBody
+    public Map<String, Object> selectMemberListByEmail(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            memVo.setMemberBeanList(loginService.selectMemberListByEmail(memVo));
+            resMap.put("memVo", memVo);
 
             successResult =true;
 

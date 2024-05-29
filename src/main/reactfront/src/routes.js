@@ -30,6 +30,12 @@ const Login = React.lazy(() => import('./views/login/Login'))
 const Register = React.lazy(() => import('./views/login/Register'))
 // - 이메일 인증 페이지
 const EmailCert = React.lazy(() => import('./views/login/EmailCert'))
+// - 계정 찾기 선택
+const SelectFindIdPw = React.lazy(() => import('./views/login/SelectFindIdPw'))
+// - id 찾기
+const FindId = React.lazy(() => import('./views/login/FindId'))
+// - pw 찾기
+const FindPassword = React.lazy(() => import('./views/login/FindPassword'))
 
 
 // 영화
@@ -145,6 +151,12 @@ const routes = [
   { path: '/login/Register', name: 'Register', element: Register },
   // - 이메일 인증 페이지
   { path: '/login/EmailCert', name: 'EmailCert', element: EmailCert },
+  // - 계정 찾기 선택
+  { path: '/login/SelectFindIdPw', name: 'SelectFindIdPw', element: SelectFindIdPw },
+  // - id 찾기
+  { path: '/login/FindId', name: 'FindId', element: FindId },
+  // - 비밀번호 찾기
+  { path: '/login/FindPassword', name: 'FindPassword', element: FindPassword },
 
 
   // - 영화 이관 관리

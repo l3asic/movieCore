@@ -96,4 +96,8 @@ public class LoginServiceImpl {
     public void updateMemberEmail(LoginMemberVo memVo){
         loginMapper.updateMemberEmail(memVo);
     }
+
+    public ArrayList<LoginMemberBean> selectMemberListByEmail(LoginMemberVo memVo) {
+        return loginMapper.selectMemberListByEmail(memVo);
+    }
 }
