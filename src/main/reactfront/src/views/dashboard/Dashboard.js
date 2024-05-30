@@ -3,8 +3,6 @@ import {
   CBadge,
   CCardText,
 } from '@coreui/react';
-import CIcon from '@coreui/icons-react';
-import { cilChevronLeft, cilChevronRight } from '@coreui/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import GrayLine from "../uitils/GrayLine";
@@ -42,8 +40,7 @@ const Dashboard = () => {
         movieBoxOfficeBeanList: movies,
       }));
     } catch (err) {
-      console.error('Box office list fetch failed:', err);
-      alert('영화 목록 조회에 실패했습니다.');
+      // alert('영화 목록 조회에 실패했습니다.');
       setMovVo(prevState => ({
         ...prevState,
         movieBoxOfficeBeanList: [],
@@ -62,7 +59,6 @@ const Dashboard = () => {
 
     return [year, month, day].join('');
   };
-
 
   const moveToMovieInfo = (movieCd) => {
     navigate(`/movie/MovieInfo`, { state: { movieCd } });
@@ -103,7 +99,6 @@ const Dashboard = () => {
 
   return (
     <>
-
       {/** 박스오피스 영역 */}
       <GrayLine marginTop="20px" marginBottom="40px" />
       <h4 className="box-office-header">일일 박스 오피스</h4>
@@ -134,13 +129,10 @@ const Dashboard = () => {
         ))}
       </Slider>
 
-
       <GrayLine marginTop="20px" marginBottom="40px" />
 
       {/** 게시판 영역 */}
       <h4 className="box-office-header">게시판 영역</h4>
-
-
     </>
   );
 };

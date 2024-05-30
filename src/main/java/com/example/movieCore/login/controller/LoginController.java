@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,8 @@ public class LoginController {
 
         Map<String, Object> result = new HashMap<>();
         // 가입일 생성
-        Date memCreateDate = new Date();
+        Date date = new Date();
+        java.sql.Timestamp memCreateDate = new Timestamp(date.getTime());
         // 고유 id 생성 (memId)
         String memId = makeUUID.makeShortUUID("MEM");
 

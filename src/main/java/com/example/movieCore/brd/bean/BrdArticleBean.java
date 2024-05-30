@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -22,11 +21,11 @@ public class BrdArticleBean implements Serializable {
 
     private int viewCnt;
 
-    private Date createDt;
+    private java.sql.Timestamp createDt;
 
-    private Date updateDt;
+    private java.sql.Timestamp updateDt;
 
-    private Date expireDt;
+    private java.sql.Timestamp expireDt;
 
     private String expireYn;
 

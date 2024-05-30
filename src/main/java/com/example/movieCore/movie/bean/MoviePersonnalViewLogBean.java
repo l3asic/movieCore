@@ -13,7 +13,7 @@ public class MoviePersonnalViewLogBean {
     
     private String movieCd;
     private String memId;
-    private Date   openDt;
+    private java.sql.Timestamp   openDt;
 
 
 

@@ -13,7 +13,7 @@
         <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER"/>
-        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
 
         <!-- 해당 폴더에 속한 게시판들을 담을 리스트 -->
         <collection property="boardBeanList" ofType="com.example.movieCore.brd.bean.BrdBoardBean" resultMap="boardBean"/>
@@ -30,7 +30,7 @@
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER" />
-        <result column="CREATE_DT" property="createDt" jdbcType="DATE" />
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP" />
         <result column="NOTICE_YN" property="noticeYn" jdbcType="VARCHAR" />
         <result column="IMG_UPLOAD_YN" property="imgUploadYn" jdbcType="VARCHAR" />
         <result column="FILE_LIMIT" property="fileLimit" jdbcType="VARCHAR" />
@@ -103,7 +103,7 @@
             #{boardBean.memId},
             #{boardBean.state},
             #{boardBean.odr},
-            DATE_FORMAT(#{boardBean.createDt}, '%Y-%m-%d %h:%m:%s'),
+            #{boardBean.createDt},
             #{boardBean.noticeYn},
             #{boardBean.imgUploadYn},
             #{boardBean.fileLimit},

@@ -7,9 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.IOException;
+import java.util.Date;
 
 
 public class MakeFileBean {
@@ -94,7 +96,9 @@ public class MakeFileBean {
             fileBean.setVolume(fileSize);
 
             // 파일 날짜
-            fileBean.setCreateDt(java.sql.Date.valueOf(today));
+            Date date = new Date();
+            Timestamp nowTime = new Timestamp(date.getTime());
+            fileBean.setCreateDt(nowTime);
 
 
             // 짧은 파일 경로 (업로드파일즈/모듈명/날짜/파일이름.확장자)

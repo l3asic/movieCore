@@ -10,7 +10,7 @@
         <result column="movie_nm" property="movieNm" jdbcType="VARCHAR"/>
         <result column="movie_nm_en" property="movieNmEn" jdbcType="VARCHAR"/>
         <result column="prdt_year" property="prdtYear" jdbcType="VARCHAR"/>
-        <result column="open_dt" property="openDt" jdbcType="DATE"/>
+        <result column="open_dt" property="openDt" jdbcType="TIMESTAMP"/>
         <result column="type_nm" property="typeNm" jdbcType="VARCHAR"/>
         <result column="prdt_stat_nm" property="prdtStatNm" jdbcType="VARCHAR"/>
         <result column="genre_alt" property="genreAlt" jdbcType="VARCHAR"/>
@@ -134,7 +134,7 @@
             <result column="MOVIE_NM" property="movieNm" jdbcType="VARCHAR"/>
             <result column="MOVIE_NM_EN" property="movieNmEn" jdbcType="VARCHAR"/>
             <result column="PRDT_YEAR" property="prdtYear" jdbcType="VARCHAR"/>
-            <result column="OPEN_DT" property="openDt" jdbcType="DATE"/>
+            <result column="OPEN_DT" property="openDt" jdbcType="TIMESTAMP"/>
             <result column="TYPE_NM" property="typeNm" jdbcType="VARCHAR"/>
             <result column="PRDT_STAT_NM" property="prdtStatNm" jdbcType="VARCHAR"/>
             <result column="GENRE_ALT" property="genreAlt" jdbcType="VARCHAR"/>
@@ -876,6 +876,8 @@
         ORDER BY
             CAST(mbo.BOX_RANK AS UNSIGNED) ASC
     </select>
+
+
 
 
 

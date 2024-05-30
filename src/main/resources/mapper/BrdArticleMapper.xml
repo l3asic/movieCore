@@ -13,9 +13,9 @@
         <result column="SUBJECT" property="subject" jdbcType="VARCHAR"/>
         <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
         <result column="VIEW_CNT" property="viewCnt" jdbcType="INTEGER"/>
-        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
-        <result column="UPDATE_DT" property="updateDt" jdbcType="DATE"/>
-        <result column="EXPIRE_DT" property="expireDt" jdbcType="DATE"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DT" property="updateDt" jdbcType="TIMESTAMP"/>
+        <result column="EXPIRE_DT" property="expireDt" jdbcType="TIMESTAMP"/>
         <result column="EXPIRE_YN" property="expireYn" jdbcType="VARCHAR"/>
         <result column="STATE" property="state" jdbcType="VARCHAR"/>
         <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
@@ -35,7 +35,7 @@
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER" />
-        <result column="CREATE_DT" property="createDt" jdbcType="DATE" />
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP" />
         <result column="NOTICE_YN" property="noticeYn" jdbcType="VARCHAR" />
         <result column="IMG_UPLOAD_YN" property="imgUploadYn" jdbcType="VARCHAR" />
         <result column="FILE_LIMIT" property="fileLimit" jdbcType="VARCHAR" />
@@ -53,7 +53,7 @@
         <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER"/>
-        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
 
         <!-- 해당 폴더에 속한 게시판들을 담을 리스트 -->
         <collection property="boardBeanList" ofType="com.example.movieCore.brd.bean.BrdBoardBean" resultMap="boardBean"/>
@@ -87,9 +87,9 @@
                 #{articleBean.subject},
                 #{articleBean.content},
                 #{articleBean.viewCnt},
-                DATE_FORMAT(#{articleBean.createDt}, '%Y-%m-%d %h:%m:%s'),
-                DATE_FORMAT(#{articleBean.updateDt}, '%Y-%m-%d %h:%m:%s'),
-                DATE_FORMAT(#{articleBean.expireDt}, '%Y-%m-%d %h:%m:%s'),
+                #{articleBean.createDt},
+                #{articleBean.updateDt},
+                #{articleBean.expireDt},
                 #{articleBean.expireYn},
                 #{articleBean.state},
                 #{articleBean.atclReplCnt}
@@ -97,35 +97,6 @@
 
     </insert>
 
-
-    <!-- 게시판 id로 게시글 리스트 조회 -->
-    <!--<select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
-
-        SELECT
-            BA.ATCL_ID,
-            BA.BRD_ID,
-            BA.MEM_ID,
-            BA.SUBJECT,
-            BA.CONTENT,
-            BA.VIEW_CNT,
-            BA.CREATE_DT,
-            BA.UPDATE_DT,
-            BA.EXPIRE_DT,
-            BA.EXPIRE_YN,
-            BA.STATE,
-            BA.ATCL_REPL_CNT,
-            MMI.MEM_NAME
-        FROM
-            BRD_ARTICLE BA,
-            MEM_MEMBER_INFO MMI
-        where
-            BA.MEM_ID = MMI.MEM_ID
-        AND
-            BA.STATE = 'B'
-        AND
-            BA.BRD_ID = #{boardBean.brdId}
-
-    </select>-->
 
     <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
 

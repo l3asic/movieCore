@@ -5,6 +5,7 @@ import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -406,7 +407,7 @@ public class DataConverter {
 
         // Parse and set openDt as LocalDate
         String openDtStr = (String) linkedHashMap.get("openDt");
-        Date openDt = parseDateString(openDtStr);
+        Timestamp openDt = (Timestamp) parseDateString(openDtStr);
         movieBoxOfficeBean.setOpenDt(openDt);
 
         return movieBoxOfficeBean;

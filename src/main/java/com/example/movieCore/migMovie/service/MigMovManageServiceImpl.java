@@ -205,6 +205,17 @@ public class MigMovManageServiceImpl {
 
             batchLog.setBatchErrorText(batchLog.getBatchErrorText() + errorText);
 
+            /** api 호출 실패시 배치 로그 강제 인서트 */
+
+            // 배치 종료 시간 기록
+            batchLog.setBatchEndTime(new Timestamp(System.currentTimeMillis()));
+
+            // 소요시간 계산
+            batchLog.calculateBatchDuration();
+
+            // 배치로그 최종 디비 인서트
+            migMovManageMapper.insertBatchLog(batchLog);
+
         }
 
 

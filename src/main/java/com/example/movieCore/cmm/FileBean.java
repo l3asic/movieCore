@@ -17,13 +17,13 @@ public class FileBean {
     private String fileExt;
     private String url;
     private String volume;
-    private Date createDt;
+    private java.sql.Timestamp createDt;
     private String src;
 
 
     /** 영화 모듈용 컬럼 */
     private String role;
-    private Date mapDt;
+    private java.sql.Timestamp mapDt;
 
 
     /** 멤버 모듈용 컬럼 */

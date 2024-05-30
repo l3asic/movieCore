@@ -36,7 +36,7 @@ public class LoginMemberBean implements Serializable {
 
     private String email;
 
-    private Date memCreateDate;
+    private java.sql.Timestamp memCreateDate;
 
     private String memRole;
     

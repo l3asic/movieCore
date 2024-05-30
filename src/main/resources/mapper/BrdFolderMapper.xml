@@ -13,7 +13,7 @@
         <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER"/>
-        <result column="CREATE_DT" property="createDt" jdbcType="DATE"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
 
     </resultMap>
 
@@ -39,7 +39,7 @@
                    #{folderBean.depth},
                    #{folderBean.state},
                    #{folderBean.odr},
-                   DATE_FORMAT(#{folderBean.createDt}, '%Y-%m-%d %h:%m:%s')
+                   #{folderBean.createDt}
                )
 
     </insert>

@@ -40,7 +40,7 @@ public class MovieBoxOfficeBean {
     private String audiAcc;
 
     /** 개봉일 */
-    private Date openDt;
+    private java.sql.Timestamp openDt;
 
 
     /** 영화 정보 */

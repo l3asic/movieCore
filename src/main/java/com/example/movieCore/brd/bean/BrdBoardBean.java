@@ -24,7 +24,7 @@ public class BrdBoardBean {
 
     private int odr;
 
-    private Date createDt;
+    private java.sql.Timestamp createDt;
 
     private String noticeYn;
 

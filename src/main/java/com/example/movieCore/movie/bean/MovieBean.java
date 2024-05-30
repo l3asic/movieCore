@@ -17,7 +17,7 @@ public class MovieBean {
     private String movieNm;
     private String movieNmEn;
     private String prdtYear;
-    private Date   openDt;
+    private java.sql.Timestamp   openDt;
     private String typeNm;
     private String prdtStatNm;
     private String genreAlt;

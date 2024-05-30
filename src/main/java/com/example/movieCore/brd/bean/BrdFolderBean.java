@@ -23,7 +23,7 @@ public class BrdFolderBean {
 
     private int odr;
 
-    private Date createDt;
+    private java.sql.Timestamp createDt;
 
     private ArrayList<BrdBoardBean> boardBeanList;
 }

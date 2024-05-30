@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +40,9 @@ public class BrdFolderController {
         folderBean.setState("B");
 
         // 폴더 생성일
-        folderBean.setCreateDt(new Date());
+        Date date = new Date();
+        Timestamp nowTime = new Timestamp(date.getTime());
+        folderBean.setCreateDt(nowTime);
 
 
 

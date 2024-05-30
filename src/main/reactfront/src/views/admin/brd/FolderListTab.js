@@ -29,7 +29,7 @@ function FolderListTab(){
   );
 
   /** 폴더 리스트 조회 */
-  function selectFolderListAdmin(newPage){ debugger;
+  function selectFolderListAdmin(newPage){
     if (newPage != null) { // 페이지 이동시
       brdVo.paging.currentPage = newPage;
     } else {

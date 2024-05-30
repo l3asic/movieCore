@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,10 +53,12 @@ public class BrdArticleController {
         articleBean.setViewCnt(0);
 
         // 생성 날짜
-        articleBean.setCreateDt(new Date());
+        Date date = new Date();
+        Timestamp nowTime = new Timestamp(date.getTime());
+        articleBean.setCreateDt(nowTime);
 
         // 수정 날짜
-        articleBean.setUpdateDt(new Date());
+        articleBean.setUpdateDt(nowTime);
 
         // 만료일자 설정
         // articleBean.setExpireDt();
@@ -76,8 +79,10 @@ public class BrdArticleController {
         /** 테스트용 기본값 추가 세팅 */
 
         // 만료 일자 세팅
+        String dateString = "2099-12-31";
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date expireDt = formatter.parse("2099-12-31");
+        Date utilDate = formatter.parse(dateString);
+        java.sql.Timestamp expireDt = new Timestamp(utilDate.getTime());
         articleBean.setExpireDt(expireDt);;
 
 
