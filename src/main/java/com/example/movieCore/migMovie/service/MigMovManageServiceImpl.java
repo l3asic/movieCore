@@ -261,7 +261,6 @@ public class MigMovManageServiceImpl {
 
 
 
-
     }
 
 
@@ -273,6 +272,13 @@ public class MigMovManageServiceImpl {
         e.printStackTrace(printWriter);
         return stringWriter.toString();
     }
+
+    /** 정지된 배치상태 기록 */
+    public void insertStopBatchLog(BatchLog batchLog) {
+        migMovManageMapper.insertBatchLog(batchLog);
+    }
+
+
 
 
 
