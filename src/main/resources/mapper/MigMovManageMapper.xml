@@ -29,6 +29,19 @@
     </resultMap>
 
 
+    <!-- 배치 로그 -->
+    <resultMap id="BatchLogResultMap" type="com.example.movieCore.migMovie.bean.BatchLog">
+        <id property="batchName" column="BATCH_NAME" />
+        <id property="batchRunTime" column="BATCH_RUN_TIME" />
+        <result property="batchType" column="BATCH_TYPE" />
+        <result property="batchFailCount" column="BATCH_FAIL_COUNT" />
+        <result property="batchErrorText" column="BATCH_ERROR_TEXT" />
+        <result property="batchStatus" column="BATCH_STATUS" />
+        <result property="batchEndTime" column="BATCH_END_TIME" />
+        <result property="batchDuration" column="BATCH_DURATION" />
+    </resultMap>
+
+
 
 
     <!-- 영화 정보 인서트 -->
@@ -517,6 +530,25 @@
                      #{batchDuration}
                  )
     </insert>
+
+
+
+    <!-- 배치 로그 조회 -->
+    <select id="selectBatchLog" resultMap="BatchLogResultMap">
+        SELECT
+            BATCH_NAME,
+            BATCH_RUN_TIME,
+            BATCH_TYPE,
+            BATCH_FAIL_COUNT,
+            BATCH_ERROR_TEXT,
+            BATCH_STATUS,
+            BATCH_END_TIME,
+            BATCH_DURATION
+        FROM BATCH_LOG
+        ORDER BY
+            BATCH_RUN_TIME desc
+    </select>
+
 
 
 

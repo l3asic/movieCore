@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CButton,
   CContainer,
@@ -6,7 +6,17 @@ import {
   CCol,
   CCard,
   CCardBody,
-  CCardHeader
+  CCardHeader,
+  CTable,
+  CTableHead,
+  CTableRow,
+  CTableHeaderCell,
+  CTableBody,
+  CTableDataCell,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle
 } from "@coreui/react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,12 +25,14 @@ import axios from "axios";
 function BoxOfficeBatchManage() {
   const [batchDailyBoxOfficeRun, setBatchDailyBoxOfficeRun] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-
+  const [batchLogs, setBatchLogs] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentErrorText, setCurrentErrorText] = useState('');
 
   useEffect(() => {
     dailyBoxOfficeBatchActiveCheck(setBatchDailyBoxOfficeRun);
+    selectBatchLog();
   }, []);
-
 
   const toggleBatch = () => {
     setBatchDailyBoxOfficeRun(!batchDailyBoxOfficeRun);
@@ -29,31 +41,56 @@ function BoxOfficeBatchManage() {
 
   /** 특정 날짜 수동 배치 */
   const runBatchForDate = () => {
-    // Date 객체에서 연, 월, 일을 추출
     const year = selectedDate.getFullYear();
-    const month = selectedDate.getMonth() + 1; // 월은 0부터 시작하므로 1을 추가
+    const month = selectedDate.getMonth() + 1;
     const day = selectedDate.getDate();
 
-    // 월과 일이 한 자리 수일 경우 앞에 '0'을 붙여 두 자리로 만듦
     const formattedMonth = month < 10 ? '0' + month : month;
     const formattedDay = day < 10 ? '0' + day : day;
 
-    // YYYYMMDD 형식으로 문자열 결합
     const targetDt = `${year}${formattedMonth}${formattedDay}`;
-
     specificDateBatch(targetDt);
-
-
+    selectBatchLog();
   };
 
+  /** 배치 로그 리스트 조회 */
+  const selectBatchLog = () => {
+    axios({
+      url: '/selectBatchLog',
+      method: 'post',
+      data: {}
+    })
+      .then(function (res) {
+        setBatchLogs(res.data.movVo.batchLogList); // 서버에서 받아온 배치 로그 데이터를 상태에 저장
+      })
+      .catch(function (err) {
+        alert("실패 (오류)");
+      });
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (`0${date.getMonth() + 1}`).slice(-2);
+    const day = (`0${date.getDate()}`).slice(-2);
+    const hours = (`0${date.getHours()}`).slice(-2);
+    const minutes = (`0${date.getMinutes()}`).slice(-2);
+    const seconds = (`0${date.getSeconds()}`).slice(-2);
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const showErrorMessage = (errorText) => {
+    setCurrentErrorText(errorText);
+    setModalVisible(true);
+  };
 
   return (
     <CContainer>
-      <h4 className="mb-lg-5">일일 박스 오피스</h4>
+      <h4 className="mb-lg-5">일일 박스 오피스 배치 관리</h4>
 
       <CCard className="mb-4">
         <CCardHeader style={{ backgroundColor: '#343a40', color: 'white' }}>
-          <strong >배치 컨트롤</strong>
+          <strong>배치 컨트롤</strong>
         </CCardHeader>
         <CCardBody>
           <CRow className="mb-3 align-items-center">
@@ -104,14 +141,56 @@ function BoxOfficeBatchManage() {
           <strong>배치 로그</strong>
         </CCardHeader>
         <CCardBody>
-          {/* 배치 로그 테이블 자리 */}
+          <CTable>
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell>배치 명</CTableHeaderCell>
+                <CTableHeaderCell>배치 시작 시간</CTableHeaderCell>
+                <CTableHeaderCell>배치 타입</CTableHeaderCell>
+                <CTableHeaderCell>배치 오류 내용</CTableHeaderCell>
+                <CTableHeaderCell>배치 종료 시간</CTableHeaderCell>
+                <CTableHeaderCell>배치 소요 시간</CTableHeaderCell>
+                <CTableHeaderCell>배치 실패 갯수</CTableHeaderCell>
+                <CTableHeaderCell>배치 성공 여부</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              {batchLogs.map((log, index) => (
+                <CTableRow key={index}>
+                  <CTableDataCell>{log.batchName}</CTableDataCell>
+                  <CTableDataCell>{formatDate(log.batchRunTime)}</CTableDataCell>
+                  <CTableDataCell>{log.batchType}</CTableDataCell>
+                  <CTableDataCell>
+                    <CButton color="dark" onClick={() => showErrorMessage(log.batchErrorText)}>
+                      오류 내용 보기
+                    </CButton>
+                  </CTableDataCell>
+                  <CTableDataCell>{formatDate(log.batchEndTime)}</CTableDataCell>
+                  <CTableDataCell>{log.batchDuration}</CTableDataCell>
+                  <CTableDataCell>{log.batchFailCount}</CTableDataCell>
+                  <CTableDataCell>{log.batchStatus}</CTableDataCell>
+                </CTableRow>
+              ))}
+            </CTableBody>
+          </CTable>
         </CCardBody>
       </CCard>
+
+      <CModal
+        size="xl"
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      >
+        <CModalHeader onClose={() => setModalVisible(false)}>
+          <CModalTitle>배치 오류 내용</CModalTitle>
+        </CModalHeader>
+        <CModalBody >
+          {currentErrorText}
+        </CModalBody>
+      </CModal>
     </CContainer>
   );
 }
-
-
 
 /** 일일 박스 오피스 배치 상태 확인 */
 function dailyBoxOfficeBatchActiveCheck(setBatchRun) {
@@ -128,10 +207,8 @@ function dailyBoxOfficeBatchActiveCheck(setBatchRun) {
     });
 }
 
-
 /** 일일 박스 오피스 배치 동작/정지 업데이트 */
 function dailyBoxOfficeBatchActiveUpdate(batchDailyBoxOfficeRun) {
-
   axios({
     url: '/dailyBoxOfficeBatchActiveUpdate',
     method: 'post',
@@ -141,14 +218,12 @@ function dailyBoxOfficeBatchActiveUpdate(batchDailyBoxOfficeRun) {
         batchRun: batchDailyBoxOfficeRun
       }
     }
-
   })
-
     .then(function (res) {
-      if(res.data.success == 'success'){
-        alert('배치 상태 업데이트 완료')
-      }else{
-        alert('배치 상태 업데이트 실패')
+      if (res.data.success === 'success') {
+        alert('배치 상태 업데이트 완료');
+      } else {
+        alert('배치 상태 업데이트 실패');
       }
     })
     .catch(function (err) {
@@ -158,35 +233,30 @@ function dailyBoxOfficeBatchActiveUpdate(batchDailyBoxOfficeRun) {
 
 /** 특정 일자 일일 박스 오피스 수동 배치 */
 function specificDateBatch(targetDt) {
-
   axios({
     url: '/specificDateBatch',
     method: 'post',
     data: {
       batchConfig: {
-        batchName : "batchDailyBoxOffice",
-        targetDt : targetDt,
-        batchType : "수동"
+        batchName: "batchDailyBoxOffice",
+        targetDt: targetDt,
+        batchType: "수동"
       }
     }
-
   })
-
     .then(function (res) {
-      if(res.data.success == 'success'){
+      if (res.data.success === 'success') {
         alert('수동 배치 성공');
-      }else if(res.data.success == 'fail'){
+      } else if (res.data.success === 'fail') {
         alert('수동 배치 실패');
       }
     })
     .catch(function (err) {
       alert("실패 (오류)");
     });
+
+
 }
-
-
-
-
 
 
 

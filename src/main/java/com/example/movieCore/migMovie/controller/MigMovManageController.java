@@ -6,6 +6,7 @@ import com.example.movieCore.migMovie.bean.*;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
 import com.example.movieCore.migMovie.vo.MigMovVo;
 import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
+import com.example.movieCore.movie.vo.MovVo;
 import com.example.movieCore.utils.MakeUUID;
 import io.netty.util.internal.StringUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -754,6 +755,28 @@ public class MigMovManageController {
             batchDailyBoxOfficeRun = movManageService.BoxOfficeBatchActiveUpdate(movVo);
             resMap.put("batchDailyBoxOfficeRun", batchDailyBoxOfficeRun);
             resMap.put("success", "success");
+        } catch (Exception e) {
+            // 오류 처리
+        }
+
+        return resMap;
+    }
+
+
+    /** 배치 로그 조회 */
+    @PostMapping(value = "/selectBatchLog")
+    @ResponseBody
+    public Map<String, Object> selectBatchLog(@RequestBody MovVo movVo) throws Exception{
+
+
+        Map<String, Object> resMap = new HashMap<>();
+
+        try {
+
+            movVo.setBatchLogList(movManageService.selectBatchLog());
+            resMap.put("movVo", movVo);
+
+
         } catch (Exception e) {
             // 오류 처리
         }

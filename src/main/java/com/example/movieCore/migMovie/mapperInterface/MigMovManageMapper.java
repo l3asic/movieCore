@@ -67,4 +67,6 @@ public interface MigMovManageMapper {
     boolean BoxOfficeBatchActiveUpdate(MigMovVo movVo);
 
     void insertBatchLog(BatchLog batchLog);
+
+    ArrayList<BatchLog> selectBatchLog();
 }

@@ -2,6 +2,7 @@ package com.example.movieCore.movie.vo;
 
 import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.login.bean.LoginMemberBean;
+import com.example.movieCore.migMovie.bean.BatchLog;
 import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.utils.Paging;
 import lombok.Getter;
@@ -36,7 +37,10 @@ public class MovVo {
     /** 일일 박스 오피스 리스트 */
     private ArrayList<MovieBoxOfficeBean> movieBoxOfficeBeanList;
 
-    
+
+    /** 배치 로그 리스트 */
+    private ArrayList<BatchLog> BatchLogList;
+
 
     /** 검색 조건 */
     private SearchBean searchBean;

@@ -177,6 +177,18 @@ public class MigMovManageServiceImpl {
 
             boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
 
+            // 호출된 박스오피스 영화 없음
+            if(boxOfficeBeanList.size() == 0){
+                // 배치 동작 상태
+                batchLog.setBatchStatus("실패");
+
+                // 오류 내용
+                String errorText =
+                        "api 호출 오류 \n" +
+                                "오류 내용 : 호출된 영화 갯수 0 " +"\n\n" ;
+                batchLog.setBatchErrorText(batchLog.getBatchErrorText() + errorText);
+            }
+
         }catch (Exception e){
             // 배치 동작 상태
             batchLog.setBatchStatus("실패");
@@ -629,5 +641,9 @@ public class MigMovManageServiceImpl {
 
     public boolean BoxOfficeBatchActiveUpdate(MigMovVo movVo) {
         return migMovManageMapper.BoxOfficeBatchActiveUpdate(movVo);
+    }
+
+    public ArrayList<BatchLog> selectBatchLog() {
+        return migMovManageMapper.selectBatchLog();
     }
 }

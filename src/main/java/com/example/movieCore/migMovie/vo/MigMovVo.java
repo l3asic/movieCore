@@ -63,6 +63,11 @@ public class MigMovVo {
     /** 배치 설정 */
     private BatchConfig batchConfig;
 
+    /** 배치 로그 리스트 */
+    private ArrayList<BatchLog> BatchLogList;
+
+
+
 
 
 
