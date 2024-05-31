@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.service;
 
 import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.login.vo.LoginMemberVo;
 import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.mapperInterface.MovMovieMapper;
 import com.example.movieCore.movie.vo.MovVo;
@@ -150,4 +151,23 @@ public class MovMovieServiceImpl {
         movMovieMapper.updateGenreTaste(movVo);
     }
 
+    public ArrayList<MovieGenreBean> viewLogTopMovGr(LoginMemberVo memVo) {
+        return movMovieMapper.viewLogTopMovGr(memVo);
+    }
+
+    public ArrayList<MovieGenreBean> pointAvgTopMovGr(LoginMemberVo memVo) {
+        return movMovieMapper.pointAvgTopMovGr(memVo);
+    }
+
+    public ArrayList<MovieGenreBean> favTopMovGr(LoginMemberVo memVo) {
+        return movMovieMapper.favTopMovGr(memVo);
+    }
+
+    public ArrayList<MovieGenreBean> pointMaxTopMovGr(LoginMemberVo memVo) {
+        return movMovieMapper.pointMaxTopMovGr(memVo);
+    }
+
+    public ArrayList<MovieBean> selectPersonalRecommendMov(MovVo movVo) {
+        return movMovieMapper.selectPersonalRecommendMov(movVo);
+    }
 }

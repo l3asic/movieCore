@@ -131,6 +131,12 @@ const _nav = [
       },
 
       {
+        component: CNavItem,
+        name: 'Movie Core 추천 영화',
+        to: '/movie/MovieRecommend',
+      },
+
+      {
         component: CNavGroup,
         name: '더미 폴더1',
         to: '/admin/boardManage',

@@ -19,4 +19,9 @@ public class MovieGenreBean {
     private int pointTotal;
     private int pointCount;
 
+
+    /** 영화 추천 집계용 */
+    private String repGenreNm;
+    private String genreTmpCol;
+
 }

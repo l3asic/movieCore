@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.mapperInterface;
 
 import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.login.vo.LoginMemberVo;
 import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -74,4 +75,14 @@ public interface MovMovieMapper {
     void insertGenreTaste(MovVo movVo);
 
     void updateGenreTaste(MovVo movVo);
+
+    ArrayList<MovieGenreBean> viewLogTopMovGr(LoginMemberVo memVo);
+
+    ArrayList<MovieGenreBean> pointAvgTopMovGr(LoginMemberVo memVo);
+
+    ArrayList<MovieGenreBean> favTopMovGr(LoginMemberVo memVo);
+
+    ArrayList<MovieGenreBean> pointMaxTopMovGr(LoginMemberVo memVo);
+
+    ArrayList<MovieBean> selectPersonalRecommendMov(MovVo movVo);
 }

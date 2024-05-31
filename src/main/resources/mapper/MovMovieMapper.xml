@@ -59,6 +59,8 @@
     <resultMap type="com.example.movieCore.movie.bean.MovieGenreBean" id="movieGenreBeanList">
         <result column="GENRE_CD" property="genreCd" jdbcType="VARCHAR"/>
         <result column="GENRE_NM" property="genreNm" jdbcType="VARCHAR"/>
+        <result column="genre_tmp_col" property="genreTmpCol" jdbcType="VARCHAR"/>
+        <result column="REP_GENRE_NM" property="repGenreNm" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -915,6 +917,164 @@
     </select>
 
 
+
+    <!-- 사용자 최다 조회 장르 -->
+    <select id="viewLogTopMovGr" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultMap="movieGenreBeanList">
+        SELECT
+            latest_movies.REP_GENRE_NM,
+            COUNT(*) AS genre_tmp_col
+        FROM
+            (SELECT
+                 pvl.VIEW_DT,
+                 pvl.MEM_ID,
+                 pvl.MOVIE_CD,
+                 mv.MOVIE_NM,
+                 mv.MOVIE_NM_EN,
+                 mv.PRDT_YEAR,
+                 mv.OPEN_DT,
+                 mv.TYPE_NM,
+                 mv.PRDT_STAT_NM,
+                 mv.GENRE_ALT,
+                 mv.REP_GENRE_NM,
+                 mv.STATE
+             FROM
+                 MOV_PERSONNAL_VIEW_LOG pvl
+                     JOIN
+                 MOV_MOVIE mv
+                 ON
+                     pvl.MOVIE_CD = mv.MOVIE_CD
+             WHERE
+                 pvl.MEM_ID = #{memberBean.memId}
+             ORDER BY
+                 pvl.VIEW_DT DESC
+                 LIMIT 20) AS latest_movies
+        GROUP BY
+            latest_movies.REP_GENRE_NM
+        ORDER BY
+            genre_tmp_col DESC
+            LIMIT 3
+    </select>
+
+
+    <!-- 포인트 평균 영화 최다 장르 -->
+    <select id="pointAvgTopMovGr" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultMap="movieGenreBeanList">
+        SELECT
+            mv.REP_GENRE_NM,
+            AVG(pmp.POINT) AS genre_tmp_col
+        FROM
+            MOV_MOVIE mv
+                JOIN
+            MOV_PERSONAL_MOVIE_POINT pmp
+            ON
+                mv.MOVIE_CD = pmp.MOVIE_CD
+        WHERE
+            pmp.MEM_ID = #{memberBean.memId}
+        GROUP BY
+            mv.REP_GENRE_NM
+        ORDER BY
+            genre_tmp_col DESC
+            LIMIT 3
+    </select>
+
+
+    <!-- 최다 좋아요 영화 장르 -->
+    <select id="favTopMovGr" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultMap="movieGenreBeanList">
+        SELECT
+            mv.REP_GENRE_NM,
+            COUNT(*) AS genre_tmp_col
+        FROM
+            MOV_MOVIE mv
+                JOIN
+            MOV_FAVORITE mf
+            ON
+                mv.MOVIE_CD = mf.MOVIE_CD
+        WHERE
+            mf.MEM_ID = #{memberBean.memId}
+        GROUP BY
+            mv.REP_GENRE_NM
+        ORDER BY
+            genre_tmp_col DESC
+            LIMIT 3
+    </select>
+
+
+    <select id="pointMaxTopMovGr" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultMap="movieGenreBeanList">
+        SELECT
+            mv.REP_GENRE_NM,
+            COUNT(*) AS genre_tmp_col
+        FROM
+            MOV_MOVIE mv
+                JOIN
+            MOV_PERSONAL_MOVIE_POINT pmp
+            ON
+                mv.MOVIE_CD = pmp.MOVIE_CD
+        WHERE
+            pmp.MEM_ID = #{memberBean.memId}
+        GROUP BY
+            mv.REP_GENRE_NM
+        ORDER BY
+            genre_tmp_col DESC
+            LIMIT 3
+    </select>
+
+
+
+    <!-- 영화 모듈 - 영화 리스트 조회 -->
+    <select id="selectPersonalRecommendMov" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
+        SELECT
+        mm.movie_cd,
+        mm.movie_nm,
+        mm.movie_nm_en,
+        mm.prdt_year,
+        mm.open_dt,
+        mm.type_nm,
+        mm.prdt_stat_nm,
+        mm.genre_alt,
+        mm.rep_genre_nm,
+        mm.STATE,
+        mmi.POINT_AVG,
+        mmi.POINT_TOTAL_CNT,
+        mfm.role,
+        mfm.map_dt,
+        cf.FILE_ID,
+        cf.MODULE,
+        cf.FILE_NAME,
+        cf.LOCAL_NAME,
+        cf.FILE_EXT,
+        cf.URL,
+        cf.VOLUME,
+        cf.CREATE_DT,
+        cf.SRC,
+        COALESCE(pmp.AVG_POINT, 0) AS AVG_POINT
+        FROM
+        MOV_MOVIE mm
+        JOIN
+        MOV_MOVIE_INFO mmi ON mm.MOVIE_CD = mmi.MOVIE_CD
+        LEFT JOIN
+        MOV_FILE_MAPPING mfm ON mm.MOVIE_CD = mfm.MOVIE_CD and mfm.state = 'B'
+        LEFT JOIN
+        CMM_FILE cf ON mfm.FILE_ID = cf.FILE_ID
+        JOIN
+        MOV_GENRE_MAP mgm ON mm.MOVIE_CD = mgm.MOVIE_CD
+        JOIN
+        MOV_GENRE mg ON mgm.GENRE_CD = mg.GENRE_CD
+        LEFT JOIN
+        (SELECT
+        MOVIE_CD, AVG(POINT) AS AVG_POINT
+        FROM
+        MOV_PERSONAL_MOVIE_POINT
+        GROUP BY
+        MOVIE_CD) pmp ON mm.MOVIE_CD = pmp.MOVIE_CD
+        WHERE
+        mm.STATE = 'B'
+        AND mg.GENRE_NM IN
+        <foreach item="genre" index="index" collection="movieBean.movieGenreBeanList" open="(" separator="," close=")">
+            #{genre.repGenreNm}
+        </foreach>
+        ORDER BY
+        AVG_POINT DESC
+        LIMIT 100
+    </select>
 
 
 

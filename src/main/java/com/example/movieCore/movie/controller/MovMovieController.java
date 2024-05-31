@@ -1,10 +1,8 @@
 package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.cmm.FileBean;
-import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
-import com.example.movieCore.movie.bean.MovieGenreBean;
-import com.example.movieCore.movie.bean.MoviePeopleBean;
-import com.example.movieCore.movie.bean.SearchBean;
+import com.example.movieCore.login.vo.LoginMemberVo;
+import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
 import com.example.movieCore.movie.vo.MovVo;
 import com.example.movieCore.utils.MakeFileBean;
@@ -20,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -503,6 +503,79 @@ public class MovMovieController {
         return resMap;
 
     }
+
+
+
+    /** 사용자 추천 영화 조회 */
+    @PostMapping(value = "/selectPersonalRecommendMov")
+    @ResponseBody
+    public Map<String, Object> selectPersonalRecommendMov(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+        MovVo movVo = new MovVo();
+        movVo.setMovieBean(new MovieBean());
+
+        try {
+
+            /** 최다 별점 장르 30%, 최다 좋아요 장르 30%, 최다 평가 장르 20%, 최근 조회 장르 20% */
+            ArrayList <MovieGenreBean> movieGenreBeanList = new ArrayList<>();
+            
+            // 최다 별점 장르
+            movieGenreBeanList.addAll(movieService.pointAvgTopMovGr(memVo));
+            
+            // 최다 좋아요 장르
+            movieGenreBeanList.addAll(movieService.favTopMovGr(memVo));
+            
+            // 최다 평가 장르
+            movieGenreBeanList.addAll(movieService.pointMaxTopMovGr(memVo));
+            
+            // 최근 조회 장르
+            movieGenreBeanList.addAll(movieService.viewLogTopMovGr(memVo));
+
+
+            // 장르별 빈도 계산
+            Map<String, Integer> genreCountMap = new HashMap<>();
+            for (MovieGenreBean bean : movieGenreBeanList) {
+                genreCountMap.put(bean.getRepGenreNm(), genreCountMap.getOrDefault(bean.getRepGenreNm(), 0) + 1);
+            }
+
+            // 빈도수 기준으로 정렬하여 상위 3개 추출
+            List<Map.Entry<String, Integer>> topGenres = genreCountMap.entrySet().stream()
+                    .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
+                    .limit(3)
+                    .collect(Collectors.toList());
+
+            // 상위 3개의 장르를 새로운 MovieGenreBean 객체에 담기
+            ArrayList<MovieGenreBean> topGenreBeans = new ArrayList<>();
+            for (Map.Entry<String, Integer> entry : topGenres) {
+                MovieGenreBean topGenreBean = new MovieGenreBean();
+                topGenreBean.setRepGenreNm(entry.getKey());
+                // 필요하다면 다른 필드도 설정할 수 있습니다.
+                topGenreBeans.add(topGenreBean);
+            }
+
+            movVo.getMovieBean().setMovieGenreBeanList(topGenreBeans);
+
+            // 장르 기준으로 별점 높은순 100개 조회
+            movVo.setMovieBeanList(movieService.selectPersonalRecommendMov(movVo));;
+
+
+            // 그 중 랜덤 10개 리턴
+            resMap.put("movVo", movVo);
+
+
+
+        }catch (Exception e){
+            successResult = false;
+
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
 
 
 

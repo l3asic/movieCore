@@ -45,6 +45,8 @@ const MovieList = React.lazy(() => import('./views/movie/MovieList'))
 const BoxOffice = React.lazy(() => import('./views/movie/BoxOffice'))
 // - 영화 상세정보
 const MovieInfo = React.lazy(() => import('./views/movie/MovieInfo'))
+// - 무비코어 추천 영화
+const MovieRecommend = React.lazy(() => import('./views/movie/MovieRecommend'))
 
 
 
@@ -184,6 +186,8 @@ const routes = [
   { path: '/movie/BoxOffice', name: 'BoxOffice', element: BoxOffice },
   // - 영화 상세정보
   { path: '/movie/MovieInfo', name: 'MovieInfo', element: MovieInfo },
+  // - 무비코어 추천 영화
+  { path: '/movie/MovieRecommend', name: 'MovieRecommend', element: MovieRecommend },
 
 
   // 게시판
