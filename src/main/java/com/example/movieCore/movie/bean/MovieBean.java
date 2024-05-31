@@ -76,6 +76,9 @@ public class MovieBean {
 
 
     /** 장르 */
+    private MovieGenreBean movieGenreBean ;
+
+    /** 장르 리스트 */
     private ArrayList<MovieGenreBean> movieGenreBeanList;
 
 

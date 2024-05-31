@@ -809,6 +809,7 @@ export default function MovieInfo() {
       data: {
         moviePersonalMoviePointBean : movVo.moviePersonalMoviePointBean,
         memberBean: movVo.memberBean,
+        movieBean : movVo.movieBean,
         mode : mode
       }
     })

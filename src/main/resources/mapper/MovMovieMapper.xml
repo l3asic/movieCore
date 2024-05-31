@@ -588,7 +588,7 @@
 
 
     <!-- 영화 평가(별점, 한줄평) 없을시 등록/ 이미 있을시 업데이트  -->
-    <insert id="updateMovPersonalMoviePoint" parameterType="com.example.movieCore.movie.vo.MovVo" >
+    <insert id="updateMovPersonalMoviePoint" parameterType="com.example.movieCore.movie.vo.MovVo">
         INSERT INTO MOV_PERSONAL_MOVIE_POINT (mem_id, movie_cd, point, repl, state)
         VALUES (#{moviePersonalMoviePointBean.memId},
                 #{moviePersonalMoviePointBean.movieCd},
@@ -639,6 +639,43 @@
     </update>
 
 
+
+    <!-- 영화 장르 취향 체크 -->
+    <select id="checkGenreTaste" parameterType="com.example.movieCore.movie.vo.MovVo" resultType="integer" >
+        select count(*) checkCnt
+        from MOV_PERSONAL_GRNRE_TASTE
+        where
+            MEM_ID = #{memberBean.memId}
+        and
+            GENRE_CD = #{movieBean.movieGenreBean.genreCd}
+
+    </select>
+
+    <!-- 영화 장르 취향 인서트 -->
+    <insert id="insertGenreTaste" parameterType="com.example.movieCore.movie.vo.MovVo">
+        INSERT INTO MOV_PERSONAL_GRNRE_TASTE
+            (GENRE_CD, GENRE_NM, MEM_ID, POINT_AVG, POINT_COUNT, POINT_TOTAL)
+        VALUES
+            (#{movieBean.movieGenreBean.genreCd},
+             #{movieBean.movieGenreBean.genreNm},
+             #{memberBean.memId},
+             0,
+             0,
+             0)
+    </insert>
+
+
+    <!-- 영화 장르 취향 업데이트 -->
+    <update id="updateGenreTaste" parameterType="com.example.movieCore.movie.vo.MovVo">
+        UPDATE MOV_PERSONAL_GRNRE_TASTE
+        SET
+            POINT_TOTAL = POINT_TOTAL + #{moviePersonalMoviePointBean.point},
+            POINT_COUNT = POINT_COUNT + 1,
+            POINT_AVG = (POINT_TOTAL + #{moviePersonalMoviePointBean.point}) / (POINT_COUNT + 1)
+        WHERE
+            GENRE_CD = #{movieBean.movieGenreBean.genreCd}
+          AND MEM_ID = #{movieBean.movieGenreBean.memId}
+    </update>
 
 
     <!-- 영화 평가 정보 리스트 조회 -->

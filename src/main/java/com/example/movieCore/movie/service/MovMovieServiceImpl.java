@@ -79,8 +79,8 @@ public class MovMovieServiceImpl {
         }
     }
 
-    public void updateMovPersonalMoviePoint(MovVo movVo) {
-        movMovieMapper.updateMovPersonalMoviePoint(movVo);
+    public int updateMovPersonalMoviePoint(MovVo movVo) {
+        return movMovieMapper.updateMovPersonalMoviePoint(movVo);
     }
 
     public MoviePersonalMoviePoint selectMoviePersonalMoviePointBean(MovVo movVo) {
@@ -135,6 +135,19 @@ public class MovMovieServiceImpl {
 
     public ArrayList<MovieBoxOfficeBean> selectDailyBoxOfficeList(MovVo movVo) {
         return movMovieMapper.selectDailyBoxOfficeList(movVo);
+    }
+
+
+    public int checkGenreTaste(MovVo movVo) {
+       return movMovieMapper.checkGenreTaste(movVo);
+    }
+
+    public void insertGenreTaste(MovVo movVo) {
+        movMovieMapper.insertGenreTaste(movVo);
+    }
+
+    public void updateGenreTaste(MovVo movVo) {
+        movMovieMapper.updateGenreTaste(movVo);
     }
 
 }

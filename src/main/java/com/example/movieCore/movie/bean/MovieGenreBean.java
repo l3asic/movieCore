@@ -13,4 +13,10 @@ public class MovieGenreBean {
     private String genreCd;
     private String genreNm;
 
+
+    /** 장르 취향 테이블 MOV_PERSONAL_GRNRE_TASTE */
+    private String pointAvg;
+    private int pointTotal;
+    private int pointCount;
+
 }

@@ -910,6 +910,7 @@ export default function MovieInfoManage() {
       data: {
         moviePersonalMoviePointBean : movVo.moviePersonalMoviePointBean,
         memberBean: movVo.memberBean,
+        movieBean : movVo.movieBean,
         mode : mode
       }
     })

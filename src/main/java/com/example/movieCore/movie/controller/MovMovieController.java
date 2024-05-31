@@ -2,6 +2,7 @@ package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
+import com.example.movieCore.movie.bean.MovieGenreBean;
 import com.example.movieCore.movie.bean.MoviePeopleBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
@@ -339,6 +340,8 @@ public class MovMovieController {
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
 
+        int insertUpdateCheck = 0; // 인서트면 1 업데이트면 2
+        
         try {
 
             // 포인트 빈에 memId 세팅
@@ -348,11 +351,33 @@ public class MovMovieController {
             if(movVo.getMode().equals("update")){
                 // 상태값 기본 세팅
                 movVo.getMoviePersonalMoviePointBean().setState("B");
-                movieService.updateMovPersonalMoviePoint(movVo);
+                insertUpdateCheck = movieService.updateMovPersonalMoviePoint(movVo);
 
-            // 삭제 모드)
+            // 삭제 모드
             }else if(movVo.getMode().equals("delete")){
                 movieService.deleteMovPersonalMoviePoint(movVo);
+            }
+            
+
+
+            /** 사용자 장르 취향 갱신 (장르값 널이 아니고, 해당 영화를 첫평가 한다면 */
+            if (movVo.getMovieBean() != null && movVo.getMovieBean().getMovieGenreBeanList() != null && insertUpdateCheck ==1){
+                for (int i = 0; i < movVo.getMovieBean().getMovieGenreBeanList().size(); i++) {
+                    MovieGenreBean movieGenreBean = movVo.getMovieBean().getMovieGenreBeanList().get(i);
+                    movVo.getMovieBean().setMovieGenreBean(movieGenreBean);
+
+                    // 사용자 장르 취향 존재 확인
+                    int checkCnt = 0;
+                    checkCnt = movieService.checkGenreTaste(movVo);
+                    if(checkCnt == 0){
+                        // 장르 취향 인서트
+                        movieService.insertGenreTaste(movVo);
+                    }else{
+                        // 장르 취향 업데이트
+                        movieService.updateGenreTaste(movVo);
+                    }
+
+                }
             }
 
             // 영화 상세정보 평가 값 갱신

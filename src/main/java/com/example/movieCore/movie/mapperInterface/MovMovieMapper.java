@@ -40,7 +40,7 @@ public interface MovMovieMapper {
 
     int selectMovieFavorite(MovVo movVo);
 
-    void updateMovPersonalMoviePoint(MovVo movVo);
+    int updateMovPersonalMoviePoint(MovVo movVo);
 
     MoviePersonalMoviePoint selectMoviePersonalMoviePointBean(MovVo movVo);
 
@@ -69,4 +69,9 @@ public interface MovMovieMapper {
 
     ArrayList<MovieBoxOfficeBean> selectDailyBoxOfficeList(MovVo movVo);
 
+    int checkGenreTaste(MovVo movVo);
+
+    void insertGenreTaste(MovVo movVo);
+
+    void updateGenreTaste(MovVo movVo);
 }
