@@ -3,10 +3,8 @@ import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { CBadge, CCard, CCardBody, CCardImage, CCardText, CCardTitle, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react';
+import { CCard, CCardBody, CCardImage, CCardText, CCardTitle, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react';
 import '../../cstmCss/MovieRecommend.css';
-import { cilChevronLeft, cilChevronRight } from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 const MovieRecommend = () => {
@@ -37,7 +35,9 @@ const MovieRecommend = () => {
 
   const selectHotMovies = async () => {
     try {
-      const response = await axios.post('/selectHotMovies');
+      const response = await axios.post('/selectHotMovies', {
+        memberBean: memberBean,
+      });
       setMovVo(prevState => ({ ...prevState, hotMoviesList: response.data.movVo.movieBeanList }));
     } catch (err) {
       // alert('실패 (오류)');
@@ -46,10 +46,12 @@ const MovieRecommend = () => {
 
   const selectTopRatedMovies = async () => {
     try {
-      const response = await axios.post('/selectTopRatedMovies');
+      const response = await axios.post('/selectTopRatedMovies', {
+        memberBean: memberBean,
+      });
       setMovVo(prevState => ({ ...prevState, topRatedMoviesList: response.data.movVo.movieBeanList }));
     } catch (err) {
-      // alert('실패 (오류)');
+      alert('실패 (오류)');
     }
   };
 

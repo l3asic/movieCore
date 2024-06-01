@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -169,5 +170,13 @@ public class MovMovieServiceImpl {
 
     public ArrayList<MovieBean> selectPersonalRecommendMov(MovVo movVo) {
         return movMovieMapper.selectPersonalRecommendMov(movVo);
+    }
+
+    public ArrayList<MovieBean> pointAvgTopMov() {
+        return movMovieMapper.pointAvgTopMov();
+    }
+
+    public List<MovieBean> viewLogTopMov() {
+        return movMovieMapper.viewLogTopMov();
     }
 }

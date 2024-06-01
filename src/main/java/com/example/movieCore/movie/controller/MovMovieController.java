@@ -579,6 +579,77 @@ public class MovMovieController {
 
 
 
+    /** 최근 핫한 영화 조회 */
+    @PostMapping(value = "/selectHotMovies")
+    @ResponseBody
+    public Map<String, Object> selectHotMovies(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+        MovVo movVo = new MovVo();
+        movVo.setMovieBean(new MovieBean());
+
+        try {
+
+            // 조회 로그 한달 기준 가장 많이 조회된 영화 top 100
+            List<MovieBean> movieList = movieService.viewLogTopMov();
+
+            // 리스트를 무작위로 섞기
+            Collections.shuffle(movieList);
+
+            // 상위 10개를 선택하여 movVo에 설정
+            List<MovieBean> randomTop10Movies = movieList.stream().limit(10).collect(Collectors.toList());
+            movVo.setMovieBeanList((ArrayList<MovieBean>) randomTop10Movies);
+
+            // 성공 결과 설정
+            successResult = true;
+
+            // 결과를 resMap에 설정
+            resMap.put("movVo", movVo);
+
+        } catch (Exception e) {
+            successResult = false;
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
+    /** 역대 최고 평점 영화 조회 */
+    @PostMapping(value = "/selectTopRatedMovies")
+    @ResponseBody
+    public Map<String, Object> selectTopRatedMovies(@RequestBody LoginMemberVo memVo) throws Exception {
+
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+        MovVo movVo = new MovVo();
+        movVo.setMovieBean(new MovieBean());
+
+        try {
+
+            // 최고 별점 영화 리스트 10개
+            movVo.setMovieBeanList(movieService.pointAvgTopMov());
+
+            // 성공 결과 설정
+            successResult = true;
+
+            // 결과를 resMap에 설정
+            resMap.put("movVo", movVo);
+
+        } catch (Exception e) {
+            successResult = false;
+        }
+
+        resMap.put("successResult", successResult);
+
+        return resMap;
+    }
+
+
+
 
 
 

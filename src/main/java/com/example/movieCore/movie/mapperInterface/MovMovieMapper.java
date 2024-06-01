@@ -7,6 +7,7 @@ import com.example.movieCore.movie.vo.MovVo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Mapper
@@ -85,4 +86,8 @@ public interface MovMovieMapper {
     ArrayList<MovieGenreBean> pointMaxTopMovGr(LoginMemberVo memVo);
 
     ArrayList<MovieBean> selectPersonalRecommendMov(MovVo movVo);
+
+    ArrayList<MovieBean> pointAvgTopMov();
+
+    List<MovieBean> viewLogTopMov();
 }
