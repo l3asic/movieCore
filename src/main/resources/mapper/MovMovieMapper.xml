@@ -1073,7 +1073,7 @@
         </foreach>
         ORDER BY
         AVG_POINT DESC
-        LIMIT 100
+        LIMIT 10
     </select>
 
 

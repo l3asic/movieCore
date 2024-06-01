@@ -23,28 +23,8 @@ const MovieRecommend = () => {
 
   // 영화 객체 관리
   const [movVo, setMovVo] = useState({
-    PersonalRecommendMovList: [],
+    personalRecommendMovList: [],
   });
-
-
-  const movies = [
-    {
-      title: "Inception",
-      description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
-      image: "https://example.com/inception.jpg"
-    },
-    {
-      title: "The Matrix",
-      description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
-      image: "https://example.com/matrix.jpg"
-    },
-    {
-      title: "Interstellar",
-      description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-      image: "https://example.com/interstellar.jpg"
-    }
-  ]
-
 
 
   useEffect(() => {
@@ -74,7 +54,7 @@ const MovieRecommend = () => {
     })
       .then(function (res) {
         debugger;
-        movVo.PersonalRecommendMovList = res.data.movVo.movieBeanList;
+        movVo.personalRecommendMovList = res.data.movVo.movieBeanList;
         debugger;
       })
       .catch(function (err) {
