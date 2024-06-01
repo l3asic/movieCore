@@ -1019,7 +1019,7 @@
 
 
 
-    <!-- 영화 모듈 - 영화 리스트 조회 -->
+    <!-- 사용자 추천 영화 리스트 조회 -->
     <select id="selectPersonalRecommendMov" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="MovieBean">
         SELECT
         mm.movie_cd,
@@ -1073,7 +1073,7 @@
         </foreach>
         ORDER BY
         AVG_POINT DESC
-        LIMIT 10
+        LIMIT 100
     </select>
 
 

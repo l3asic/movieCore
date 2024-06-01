@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -518,21 +515,19 @@ public class MovMovieController {
 
         try {
 
-            /** 최다 별점 장르 30%, 최다 좋아요 장르 30%, 최다 평가 장르 20%, 최근 조회 장르 20% */
-            ArrayList <MovieGenreBean> movieGenreBeanList = new ArrayList<>();
-            
+            ArrayList<MovieGenreBean> movieGenreBeanList = new ArrayList<>();
+
             // 최다 별점 장르
             movieGenreBeanList.addAll(movieService.pointAvgTopMovGr(memVo));
-            
+
             // 최다 좋아요 장르
             movieGenreBeanList.addAll(movieService.favTopMovGr(memVo));
-            
+
             // 최다 평가 장르
             movieGenreBeanList.addAll(movieService.pointMaxTopMovGr(memVo));
-            
+
             // 최근 조회 장르
             movieGenreBeanList.addAll(movieService.viewLogTopMovGr(memVo));
-
 
             // 장르별 빈도 계산
             Map<String, Integer> genreCountMap = new HashMap<>();
@@ -558,23 +553,30 @@ public class MovMovieController {
             movVo.getMovieBean().setMovieGenreBeanList(topGenreBeans);
 
             // 장르 기준으로 별점 높은순 100개 조회
-            movVo.setMovieBeanList(movieService.selectPersonalRecommendMov(movVo));;
+            List<MovieBean> movieList = movieService.selectPersonalRecommendMov(movVo);
 
+            // 리스트를 무작위로 섞기
+            Collections.shuffle(movieList);
 
-            // 그 중 랜덤 10개 리턴
+            // 상위 10개를 선택하여 movVo에 설정
+            List<MovieBean> randomTop10Movies = movieList.stream().limit(10).collect(Collectors.toList());
+            movVo.setMovieBeanList((ArrayList<MovieBean>) randomTop10Movies);
+
+            // 성공 결과 설정
+            successResult = true;
+
+            // 결과를 resMap에 설정
             resMap.put("movVo", movVo);
 
-
-
-        }catch (Exception e){
+        } catch (Exception e) {
             successResult = false;
-
         }
 
         resMap.put("successResult", successResult);
 
         return resMap;
     }
+
 
 
 

@@ -1,69 +1,189 @@
-import React, {useEffect, useState} from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CContainer,
-  CCardImage,
-  CCardTitle,
-  CCardText,
-  CButton
-} from '@coreui/react'
-import axios from "axios";
-
-
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { CBadge, CCard, CCardBody, CCardImage, CCardText, CCardTitle, CNav, CNavItem, CNavLink, CTabContent, CTabPane } from '@coreui/react';
+import '../../cstmCss/MovieRecommend.css';
+import { cilChevronLeft, cilChevronRight } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+import { useNavigate } from 'react-router-dom';
 
 const MovieRecommend = () => {
-
-  // 회원 객체 관리
+  const [activeTab, setActiveTab] = useState('core');
   const [memberBean, setMemberBean] = useState(JSON.parse(localStorage.getItem('memberBean')));
-
-  // 영화 객체 관리
   const [movVo, setMovVo] = useState({
     personalRecommendMovList: [],
+    hotMoviesList: [],
+    topRatedMoviesList: [],
   });
 
-
   useEffect(() => {
-    // 사용자 추천 영화 리스트 조회
     selectPersonalRecommendMov();
+    selectHotMovies();
+    selectTopRatedMovies();
   }, []);
 
+  const selectPersonalRecommendMov = async () => {
+    try {
+      const response = await axios.post('/selectPersonalRecommendMov', {
+        memberBean: memberBean,
+      });
+      setMovVo(prevState => ({ ...prevState, personalRecommendMovList: response.data.movVo.movieBeanList }));
+    } catch (err) {
+      alert('실패 (오류)');
+    }
+  };
 
+  const selectHotMovies = async () => {
+    try {
+      const response = await axios.post('/selectHotMovies');
+      setMovVo(prevState => ({ ...prevState, hotMoviesList: response.data.movVo.movieBeanList }));
+    } catch (err) {
+      // alert('실패 (오류)');
+    }
+  };
+
+  const selectTopRatedMovies = async () => {
+    try {
+      const response = await axios.post('/selectTopRatedMovies');
+      setMovVo(prevState => ({ ...prevState, topRatedMoviesList: response.data.movVo.movieBeanList }));
+    } catch (err) {
+      // alert('실패 (오류)');
+    }
+  };
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  const navigate = useNavigate();
+
+  const moveToMovieInfo = (movieCd) => {
+    navigate(`/movie/MovieInfo`, { state: { movieCd } });
+  };
 
   return (
     <>
-      <h4> 영화 추천 페이지 입니다. </h4>
-
+      <CNav variant="tabs" className="justify-content-center mt-5">
+        <CNavItem>
+          <CNavLink active={activeTab === 'core'} onClick={() => setActiveTab('core')}>
+            무비코어 추천 영화
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink active={activeTab === 'hot'} onClick={() => setActiveTab('hot')}>
+            최근 핫한 영화
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink active={activeTab === 'top'} onClick={() => setActiveTab('top')}>
+            역대 최고 평점
+          </CNavLink>
+        </CNavItem>
+      </CNav>
+      <CTabContent>
+        <CTabPane visible={activeTab === 'core'}>
+          <Slider {...settings}>
+            {movVo.personalRecommendMovList.map((movie, index) => (
+              <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
+                <CCard className="movie-card-content">
+                  <CCardImage
+                    orientation="top"
+                    src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
+                    alt={movie.movieNm}
+                    className="movie-image"
+                  />
+                  <CCardBody>
+                    <CCardTitle className="movie-title">{movie.movieNm}</CCardTitle>
+                    <CCardText className="movie-genre">{movie.repGenreNm}</CCardText>
+                    <CCardText className="movie-rating">
+                      <small className="text-medium-emphasis">★ {movie.pointAvg} ({movie.pointTotalCnt})</small>
+                    </CCardText>
+                  </CCardBody>
+                </CCard>
+              </div>
+            ))}
+          </Slider>
+        </CTabPane>
+        <CTabPane visible={activeTab === 'hot'}>
+          <Slider {...settings}>
+            {movVo.hotMoviesList.map((movie, index) => (
+              <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
+                <CCard className="movie-card-content">
+                  <CCardImage
+                    orientation="top"
+                    src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
+                    alt={movie.movieNm}
+                    className="movie-image"
+                  />
+                  <CCardBody>
+                    <CCardTitle className="movie-title">{movie.movieNm}</CCardTitle>
+                    <CCardText className="movie-genre">{movie.repGenreNm}</CCardText>
+                    <CCardText className="movie-rating">
+                      <small className="text-medium-emphasis">★ {movie.pointAvg} ({movie.pointTotalCnt})</small>
+                    </CCardText>
+                  </CCardBody>
+                </CCard>
+              </div>
+            ))}
+          </Slider>
+        </CTabPane>
+        <CTabPane visible={activeTab === 'top'}>
+          <Slider {...settings}>
+            {movVo.topRatedMoviesList.map((movie, index) => (
+              <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
+                <CCard className="movie-card-content">
+                  <CCardImage
+                    orientation="top"
+                    src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
+                    alt={movie.movieNm}
+                    className="movie-image"
+                  />
+                  <CCardBody>
+                    <CCardTitle className="movie-title">{movie.movieNm}</CCardTitle>
+                    <CCardText className="movie-genre">{movie.repGenreNm}</CCardText>
+                    <CCardText className="movie-rating">
+                      <small className="text-medium-emphasis">★ {movie.pointAvg} ({movie.pointTotalCnt})</small>
+                    </CCardText>
+                  </CCardBody>
+                </CCard>
+              </div>
+            ))}
+          </Slider>
+        </CTabPane>
+      </CTabContent>
     </>
-  )
+  );
+};
 
-
-  /** 사용자 추천 영화 조회 */
-  function selectPersonalRecommendMov(){
-
-    axios({
-      url: '/selectPersonalRecommendMov',
-      method: 'post',
-      data: {
-        memberBean : memberBean
-      }
-    })
-      .then(function (res) {
-        debugger;
-        movVo.personalRecommendMovList = res.data.movVo.movieBeanList;
-        debugger;
-      })
-      .catch(function (err) {
-        alert("실패 (오류)");
-      });
-  }
-
-
-
-}
-
-export default MovieRecommend
+export default MovieRecommend;
