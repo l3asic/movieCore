@@ -142,7 +142,8 @@
                 )
             </otherwise>
         </choose>
-        <if test="boardBean.sortKey != null and boardBean.sortOdr != null">
+        <choose>
+        <when test="boardBean.sortKey != null and boardBean.sortOdr != null">
             ORDER BY
             <choose>
                 <when test="boardBean.sortKey == 'subject'">
@@ -167,7 +168,11 @@
             <if test="boardBean.sortOdr == 'desc'">
                 DESC
             </if>
-        </if>
+        </when>
+        <otherwise>
+            ORDER BY BA.CREATE_DT DESC
+        </otherwise>
+        </choose>
 
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
 
