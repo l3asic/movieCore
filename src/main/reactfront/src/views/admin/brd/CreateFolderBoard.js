@@ -16,7 +16,7 @@ const CreateFolderBoard = () => {
   return (
     <>
       {/** 상단 탭 네비 */}
-      <CNav variant="pills">
+      <CNav variant="pills" className="mb-5">
         <CNavItem>
           <CNavLink  onClick={() => toggleTab(0)} active={activeTab === 0}>
             폴더 생성 탭
