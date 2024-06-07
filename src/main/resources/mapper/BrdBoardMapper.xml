@@ -9,8 +9,6 @@
         <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
         <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
-        <result column="FOL_LOC" property="folLoc" jdbcType="VARCHAR" />
-        <result column="DEPTH" property="depth" jdbcType="INTEGER"/>
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER"/>
         <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
@@ -46,8 +44,6 @@
             bf.FOL_ID,
             bf.MEM_ID,
             bf.FOL_NAME,
-            bf.FOL_LOC,
-            bf.DEPTH,
             bf.STATE,
             bf.ODR,
             bf.CREATE_DT,

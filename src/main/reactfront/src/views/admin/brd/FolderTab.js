@@ -6,8 +6,6 @@ function FolderTab() {
   const [folderBean, setFolderBean] = useState({
     memId: '',
     folName: '',
-    folLoc: '',
-    depth: 0,
     odr: 0
   });
 
@@ -59,8 +57,6 @@ function FolderTab() {
       params: {
         memId: folderBean.memId,
         folName: folderBean.folName,
-        folLoc: folderBean.folLoc,
-        depth: folderBean.depth,
         odr: folderBean.odr
       }
     }).then(function (res) {

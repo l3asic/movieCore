@@ -4,6 +4,7 @@ import com.example.movieCore.brd.bean.BrdArticleBean;
 import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.bean.BrdFolderBean;
 import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.utils.Paging;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,8 @@ public class BrdVo {
 
     /** 페이지 이동시 새페이지 번호 */
     private int newPage;
+
+    private SearchBean searchBean;
 
     /** 파일 빈 */
     private FileBean fileBean;

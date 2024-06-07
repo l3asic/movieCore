@@ -15,15 +15,13 @@ public class BrdFolderBean {
 
     private String folName;
 
-    private String folLoc;
-
-    private int depth;
-
     private String state;
 
     private int odr;
 
     private java.sql.Timestamp createDt;
+
+    private String boardCnt;
 
     private ArrayList<BrdBoardBean> boardBeanList;
 }

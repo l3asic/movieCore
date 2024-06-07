@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Timestamp;
@@ -52,12 +53,6 @@ public class BrdFolderController {
 
         // 회원 id
         folderBean.setMemId("001");
-
-        // 폴더 경로
-        folderBean.setFolLoc(folId);
-
-        // 폴더 뎁스
-        folderBean.setDepth(0);
 
         // 폴더 순서
         folderBean.setOdr(0);
@@ -113,40 +108,28 @@ public class BrdFolderController {
     /** 관리자 모듈 - 폴더 리스트 조회 */
     @PostMapping(value = "/selectFolderListAdmin")
     @ResponseBody
-    public Map<String, Object> selectFolderListAdmin(HttpServletRequest request, HttpServletResponse response, BrdFolderBean folderBean) throws Exception{
-
-
-        /** 폴더 리스트 조회디비서 셀렉트  */
-        BrdVo brdVo = new BrdVo();
-        brdVo.setFolderBean(folderBean);
-
+    public Map<String, Object> selectFolderListAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        Map<String, Object> resMap = new HashMap<>();
         boolean succesResult = false;
 
-        Map resMap = new HashMap<>();
         try {
-
             brdVo.setPaging(new Paging());
             brdVo.getPaging().setTotalItems(folderService.selectFolderListAdminTotalCnt(brdVo));
 
-            //  페이지 이동시 (최초 조회시에는 패스)
+            // 페이지 이동시 (최초 조회시에는 패스)
             if(brdVo.getNewPage() != 0){
                 // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
                 brdVo.getPaging().setCurrentPage(brdVo.getNewPage());
             }
 
-
             brdVo.setFolderBeanList(folderService.selectFolderListAdmin(brdVo));
-            resMap.put("brdVo",brdVo);
+            resMap.put("brdVo", brdVo);
             succesResult = true;
-        }catch (Exception e){
-
+        } catch (Exception e) {
         }
 
-        resMap.put("succesResult",succesResult);
-
+        resMap.put("succesResult", succesResult);
         return resMap;
-
-
     }
 
 
