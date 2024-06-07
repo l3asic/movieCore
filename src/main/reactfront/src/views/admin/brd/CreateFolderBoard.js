@@ -10,7 +10,6 @@ const CreateFolderBoard = () => {
     if (activeTab !== tabIndex) {
       setActiveTab(tabIndex);
     }
-    console.log("탭인덱스 : " + activeTab)
   };
 
   return (
