@@ -25,19 +25,16 @@ const FolderBoardList = () => {
   return (
     <>
 
-      <h3 className="pb-lg-3"> 폴더/게시판 관리</h3>
-
-
       {/** 상단 탭 네비 */}
       <CNav variant="pills" >
         <CNavItem>
           <CNavLink  onClick={() => toggleTab(0)} active={activeTab === 0}>
-            폴더 리스트 탭
+            폴더 리스트
           </CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink onClick={() => toggleTab(1)} active={activeTab === 1}>
-            게시판 리스트 탭
+            게시판 리스트
           </CNavLink>
         </CNavItem>
       </CNav>

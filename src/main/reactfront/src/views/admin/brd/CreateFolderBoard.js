@@ -19,12 +19,12 @@ const CreateFolderBoard = () => {
       <CNav variant="pills" className="mb-5">
         <CNavItem>
           <CNavLink  onClick={() => toggleTab(0)} active={activeTab === 0}>
-            폴더 생성 탭
+            폴더 생성
           </CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink onClick={() => toggleTab(1)} active={activeTab === 1}>
-            게시판 생성 탭
+            게시판 생성
           </CNavLink>
         </CNavItem>
       </CNav>
