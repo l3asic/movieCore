@@ -19,4 +19,6 @@ public interface BrdFolderMapper {
     ArrayList<BrdFolderBean> selectFolderListAdmin(BrdVo brdVo);
 
     int updateFolderStateAdmin(BrdVo brdVo);
+
+    void updateFolderOrderAdmin(BrdFolderBean folderBean);
 }

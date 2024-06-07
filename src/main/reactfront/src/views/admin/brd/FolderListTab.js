@@ -25,6 +25,7 @@ import {
   cilRecycle,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Paging from "../../uitils/Paging"; // 페이징 컴포넌트 가져오기
 import GrayLine from "../../uitils/GrayLine";
 
@@ -44,6 +45,7 @@ function FolderListTab() {
   });
 
   const [selectAll, setSelectAll] = useState(false);
+  const [isEditingOrder, setIsEditingOrder] = useState(false);
 
   useEffect(() => {
     selectFolderListAdmin();
@@ -138,9 +140,6 @@ function FolderListTab() {
 
 
 
-
-
-
   /** 폴더 리스트 조회  */
   const selectFolderListAdmin = (newPage = 0) => {
     axios({
@@ -183,6 +182,61 @@ function FolderListTab() {
     selectFolderListAdmin(newPage);
   };
 
+  const handleDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const items = Array.from(brdVo.folderBeanList);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setBrdVo((prevState) => ({
+      ...prevState,
+      folderBeanList: items,
+    }));
+    setIsEditingOrder(true);
+  };
+
+
+  /** 폴더 순서 변경 저장 */
+  const handleSaveOrder = () => {
+    const reorderedFolders = brdVo.folderBeanList.map((folder, index) => ({
+      ...folder,
+      odr: index + 1,  // 새로운 순서 지정
+      createDt: folder.createDt ? new Date(folder.createDt.replace(/\./g, '-')).toISOString() : null,  // ISO 형식으로 변환
+    }));
+
+    axios({
+      url: "/updateFolderOrderAdmin",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        folderBeanList: reorderedFolders,
+      }),
+    })
+      .then((res) => {
+        if(res.data.successResult){
+          alert('순서 변경 완료');
+        }else{
+          alert('순서 변경 실패');
+        }
+        setIsEditingOrder(false);
+        selectFolderListAdmin();
+      })
+      .catch((err) => {
+        alert('실패 (오류)');
+      });
+  };
+
+
+  const handleCancelOrder = () => {
+    setIsEditingOrder(false);
+    selectFolderListAdmin();  // 변경 사항 취소
+  };
+
   return (
     <>
       <GrayLine marginTop="30px" marginBottom="30px" />
@@ -211,6 +265,16 @@ function FolderListTab() {
             </CButton>
 
             <CNavbarBrand className="ms-3">Total : {brdVo.paging.totalItems}</CNavbarBrand>
+            {isEditingOrder && (
+              <div className="ms-auto d-flex">
+                <CButton color="dark" onClick={handleSaveOrder} className="me-2">
+                  순서 저장
+                </CButton>
+                <CButton color="secondary" onClick={handleCancelOrder}>
+                  취소
+                </CButton>
+              </div>
+            )}
           </div>
 
           <CForm className="d-flex">
@@ -261,67 +325,88 @@ function FolderListTab() {
         </CContainer>
       </CNavbar>
 
-      <CTable color="dark" striped className="mt-3 mb-lg-5">
-        <CTableHead>
-          <CTableRow>
-            <CTableHeaderCell scope="col" style={{ width: "10px" }}>
-              <CFormCheck
-                id="selectAllCheckBox"
-                checked={selectAll}
-                onChange={handleSelectAll}
-              />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "40px" }}>
-              순서
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("odr")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "60px" }}>
-              고유번호
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("fol_id")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
-              폴더 명
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("fol_name")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "100px" }}>
-              생성자 명
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("mem_id")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "100px" }}>
-              게시판 갯수
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("board_cnt")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "80px" }}>
-              상태
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("state")} />
-            </CTableHeaderCell>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="folders">
+          {(provided) => (
+            <CTable
+              color="dark"
+              striped
+              className="mt-3 mb-lg-5"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope="col" style={{ width: "10px" }}>
+                    <CFormCheck
+                      id="selectAllCheckBox"
+                      checked={selectAll}
+                      onChange={handleSelectAll}
+                    />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "40px" }}>
+                    순서
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("odr")} />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "60px" }}>
+                    고유번호
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("fol_id")} />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "120px" }}>
+                    폴더 명
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("fol_name")} />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "100px" }}>
+                    생성자 명
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("mem_id")} />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "100px" }}>
+                    게시판 갯수
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("board_cnt")} />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "80px" }}>
+                    상태
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("state")} />
+                  </CTableHeaderCell>
 
-            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
-              폴더 생성일
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("create_dt")} />
-            </CTableHeaderCell>
-          </CTableRow>
-        </CTableHead>
-        <CTableBody>
-          {brdVo.folderBeanList.map((folder, index) => (
-            <CTableRow key={index}>
-              <CTableDataCell style={{ width: "10px" }}>
-                <CFormCheck
-                  checked={folder.selected || selectAll}
-                  onChange={() => handleSelect(index)}
-                />
-              </CTableDataCell>
-              <CTableDataCell style={{ width: "40px" }}>{folder.odr}</CTableDataCell>
-              <CTableDataCell style={{ width: "60px" }}>{folder.folId}</CTableDataCell>
-              <CTableDataCell style={{ width: "120px" }}>{folder.folName}</CTableDataCell>
-              <CTableDataCell style={{ width: "100px" }}>{folder.memId}</CTableDataCell>
-              <CTableDataCell style={{ width: "100px" }}>{folder.boardCnt}</CTableDataCell>
-              <CTableDataCell style={{ width: "80px" }}>{folder.stateText}</CTableDataCell>
-              <CTableDataCell style={{ width: "120px" }}>{folder.createDt}</CTableDataCell>
-            </CTableRow>
-          ))}
-        </CTableBody>
-      </CTable>
+                  <CTableHeaderCell scope="col" style={{ width: "120px" }}>
+                    폴더 생성일
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("create_dt")} />
+                  </CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody>
+                {brdVo.folderBeanList.map((folder, index) => (
+                  <Draggable key={folder.folId} draggableId={folder.folId} index={index}>
+                    {(provided) => (
+                      <CTableRow
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <CTableDataCell style={{ width: "10px" }}>
+                          <CFormCheck
+                            checked={folder.selected || selectAll}
+                            onChange={() => handleSelect(index)}
+                          />
+                        </CTableDataCell>
+                        <CTableDataCell style={{ width: "40px" }}>{folder.odr}</CTableDataCell>
+                        <CTableDataCell style={{ width: "60px" }}>{folder.folId}</CTableDataCell>
+                        <CTableDataCell style={{ width: "120px" }}>{folder.folName}</CTableDataCell>
+                        <CTableDataCell style={{ width: "100px" }}>{folder.memId}</CTableDataCell>
+                        <CTableDataCell style={{ width: "100px" }}>{folder.boardCnt}</CTableDataCell>
+                        <CTableDataCell style={{ width: "80px" }}>{folder.stateText}</CTableDataCell>
+                        <CTableDataCell style={{ width: "120px" }}>{folder.createDt}</CTableDataCell>
+                      </CTableRow>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </CTableBody>
+            </CTable>
+          )}
+        </Droppable>
+      </DragDropContext>
 
       <Paging
         paging={brdVo.paging}

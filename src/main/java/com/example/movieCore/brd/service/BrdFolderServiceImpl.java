@@ -36,4 +36,8 @@ public class BrdFolderServiceImpl {
     public int updateFolderStateAdmin(BrdVo brdVo) {
         return brdFolderMapper.updateFolderStateAdmin(brdVo);
     }
+
+    public void updateFolderOrderAdmin(BrdFolderBean folderBean) {
+        brdFolderMapper.updateFolderOrderAdmin(folderBean);
+    }
 }

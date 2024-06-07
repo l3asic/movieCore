@@ -64,6 +64,9 @@
             BRD_FOLDER bf
                 LEFT JOIN
             BRD_BOARD bb ON bf.FOL_ID = bb.FOL_ID
+        where
+            bf.state != 'D'
+        order by bf.odr asc, bb.odr asc
 
     </select>
 

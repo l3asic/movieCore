@@ -114,6 +114,15 @@
     </update>
 
 
+    <!-- 폴더 순서 업데이트 -->
+    <update id="updateFolderOrderAdmin" parameterType="com.example.movieCore.brd.bean.BrdFolderBean">
+        UPDATE BRD_FOLDER
+        SET ODR = #{odr}
+        WHERE FOL_ID = #{folId}
+    </update>
+
+
+
 
 
 </mapper>

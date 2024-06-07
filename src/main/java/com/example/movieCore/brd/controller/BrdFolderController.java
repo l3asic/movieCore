@@ -174,6 +174,33 @@ public class BrdFolderController {
 
 
 
+    /** 관리자 모듈 - 폴더 순서 변경  */
+    @PostMapping(value = "/updateFolderOrderAdmin")
+    @ResponseBody
+    public Map<String, Object> updateFolderOrderAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+
+        try {
+
+            for (BrdFolderBean folderBean : brdVo.getFolderBeanList()) {
+                folderService.updateFolderOrderAdmin(folderBean);
+            }
+
+            successResult = true;
+
+
+        } catch (Exception e) {
+        }
+
+        resMap.put("successResult", successResult);
+        return resMap;
+    }
+
+
+
+
+
 
 
 
