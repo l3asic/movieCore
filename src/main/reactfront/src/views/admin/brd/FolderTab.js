@@ -97,7 +97,7 @@ const styles = {
     justifyContent: 'space-between'
   },
   inputGroupText: {
-    backgroundColor: '#ffc107', // 사이드 네비게이션 톤에 맞춘 색상
+    backgroundColor: '#DAA520', // 사이드 네비게이션 톤에 맞춘 색상
     color: '#333',
     border: 'none'
   },
@@ -106,8 +106,8 @@ const styles = {
     borderRadius: '4px'
   },
   button: {
-    backgroundColor: '#ffc107', // 사이드 네비게이션 톤에 맞춘 색상
-    borderColor: '#ffc107',
+    backgroundColor: '#DAA520', // 사이드 네비게이션 톤에 맞춘 색상
+    borderColor: '#DAA520',
     color: '#333',
     height: '38px'
   }
