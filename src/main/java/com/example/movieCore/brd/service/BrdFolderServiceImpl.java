@@ -32,4 +32,8 @@ public class BrdFolderServiceImpl {
     public ArrayList<BrdFolderBean> selectFolderListAdmin(BrdVo brdVo) {
         return brdFolderMapper.selectFolderListAdmin(brdVo);
     }
+
+    public int updateFolderStateAdmin(BrdVo brdVo) {
+        return brdFolderMapper.updateFolderStateAdmin(brdVo);
+    }
 }

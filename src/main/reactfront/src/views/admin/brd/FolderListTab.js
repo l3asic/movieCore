@@ -36,36 +36,41 @@ function FolderListTab() {
       currentPage: 0,
     },
     searchBean: {
-      schFilter: "",
-      schText: "",
+      searchFilter: "fol_name",
+      searchText: "",
+      sortKey: "",
+      sortOdr: "",
     },
   });
 
   const [selectAll, setSelectAll] = useState(false);
-  const [schFilter, setSchFilter] = useState("");
-  const [schText, setSchText] = useState("");
-  const [sortKey, setSortKey] = useState("");
-  const [sortOdr, setSortOdr] = useState("");
 
   useEffect(() => {
     selectFolderListAdmin();
   }, []);
 
   const searchFilter = (event) => {
-    setSchFilter(event.target.value);
+    setBrdVo((prevState) => ({
+      ...prevState,
+      searchBean: { ...prevState.searchBean, searchFilter: event.target.value },
+    }));
   };
 
   const searchText = (event) => {
-    setSchText(event.target.value);
+    setBrdVo((prevState) => ({
+      ...prevState,
+      searchBean: { ...prevState.searchBean, searchText: event.target.value },
+    }));
   };
 
   const sortColumn = (key) => {
-    if (sortKey === key) {
-      setSortOdr(sortOdr === "asc" ? "desc" : "asc");
-    } else {
-      setSortKey(key);
-      setSortOdr("asc");
-    }
+    setBrdVo((prevState) => {
+      const sortOdr = prevState.searchBean.sortKey === key && prevState.searchBean.sortOdr === "asc" ? "desc" : "asc";
+      return {
+        ...prevState,
+        searchBean: { ...prevState.searchBean, sortKey: key, sortOdr: sortOdr },
+      };
+    });
     selectFolderListAdmin();
   };
 
@@ -96,23 +101,31 @@ function FolderListTab() {
   };
 
   const refreshFilterSearch = () => {
-    setSchFilter("");
-    setSchText("");
-    setSortKey("");
-    setSortOdr("");
+    setBrdVo((prevState) => ({
+      ...prevState,
+      searchBean: { searchFilter: "", searchText: "", sortKey: "", sortOdr: "" },
+    }));
     selectFolderListAdmin();
   };
 
+
+  /** 폴더 상태 변경 (삭제/ 원복) */
   const updateFolderStateAdmin = (mode) => {
-    const selectedFolders = brdVo.folderBeanList.filter((folder) => folder.selected);
+    const selectedFolders = brdVo.folderBeanList.filter((folder) => folder.selected).map(folder => ({
+      ...folder,
+      createDt: folder.createDt ? new Date(folder.createDt.replace(/\./g, '-')).toISOString() : null,  // ISO 형식으로 변환
+    }));
 
     axios({
       url: "/updateFolderStateAdmin",
       method: "post",
-      data: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
         folderBeanList: selectedFolders,
         mode: mode,
-      },
+      }),
     })
       .then((res) => {
         alert(res.data.successMsg);
@@ -123,18 +136,19 @@ function FolderListTab() {
       });
   };
 
+
+
+
+
+
+  /** 폴더 리스트 조회  */
   const selectFolderListAdmin = (newPage = 0) => {
     axios({
       url: "/selectFolderListAdmin",
       method: "post",
       data: {
         newPage: newPage,
-        searchBean : {
-          schFilter: schFilter,
-          schText: schText,
-          sortKey: sortKey,
-          sortOdr: sortOdr
-        }
+        searchBean: brdVo.searchBean,
       },
     })
       .then((res) => {
@@ -164,7 +178,6 @@ function FolderListTab() {
         alert("조회 실패 (오류)");
       });
   };
-
 
   const handlePageChange = (newPage) => {
     selectFolderListAdmin(newPage);
@@ -204,14 +217,13 @@ function FolderListTab() {
             <CFormSelect
               style={{ marginRight: "5px" }}
               options={[
-                { label: "전체", value: "all" },
-                { label: "폴더 고유번호", value: "folId" },
-                { label: "폴더 명", value: "folName" },
-                { label: "생성자 명", value: "memId" },
+                { label: "폴더 명", value: "fol_name" },
+                { label: "폴더 고유번호", value: "fol_id" },
+                { label: "생성자 명", value: "mem_id" },
                 { label: "상태", value: "state" },
               ]}
               onChange={searchFilter}
-              value={schFilter}
+              value={brdVo.searchBean.searchFilter}
             />
 
             <CFormInput
@@ -219,7 +231,7 @@ function FolderListTab() {
               className="me-2"
               placeholder="Search"
               onChange={searchText}
-              value={schText}
+              value={brdVo.searchBean.searchText}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   searchFolderList();
@@ -252,59 +264,60 @@ function FolderListTab() {
       <CTable color="dark" striped className="mt-3 mb-lg-5">
         <CTableHead>
           <CTableRow>
-            <CTableHeaderCell scope="col" style={{ width: "50px" }}>
+            <CTableHeaderCell scope="col" style={{ width: "10px" }}>
               <CFormCheck
                 id="selectAllCheckBox"
                 checked={selectAll}
                 onChange={handleSelectAll}
               />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
+            <CTableHeaderCell scope="col" style={{ width: "40px" }}>
+              순서
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("odr")} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" style={{ width: "60px" }}>
               고유번호
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("folId")} />
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("fol_id")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
+            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
               폴더 명
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("folName")} />
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("fol_name")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
+            <CTableHeaderCell scope="col" style={{ width: "100px" }}>
               생성자 명
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("memId")} />
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("mem_id")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
+            <CTableHeaderCell scope="col" style={{ width: "100px" }}>
               게시판 갯수
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("boardCnt")} />
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("board_cnt")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
+            <CTableHeaderCell scope="col" style={{ width: "80px" }}>
               상태
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("state")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
-              폴더 순서
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("odr")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col">
+
+            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
               폴더 생성일
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("createDt")} />
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("create_dt")} />
             </CTableHeaderCell>
           </CTableRow>
         </CTableHead>
         <CTableBody>
           {brdVo.folderBeanList.map((folder, index) => (
             <CTableRow key={index}>
-              <CTableDataCell style={{ width: "50px" }}>
+              <CTableDataCell style={{ width: "10px" }}>
                 <CFormCheck
                   checked={folder.selected || selectAll}
                   onChange={() => handleSelect(index)}
                 />
               </CTableDataCell>
-              <CTableDataCell>{folder.folId}</CTableDataCell>
-              <CTableDataCell>{folder.folName}</CTableDataCell>
-              <CTableDataCell>{folder.memId}</CTableDataCell>
-              <CTableDataCell>{folder.boardCnt}</CTableDataCell>
-              <CTableDataCell>{folder.stateText}</CTableDataCell>
-              <CTableDataCell>{folder.odr}</CTableDataCell>
-              <CTableDataCell>{folder.createDt}</CTableDataCell>
+              <CTableDataCell style={{ width: "40px" }}>{folder.odr}</CTableDataCell>
+              <CTableDataCell style={{ width: "60px" }}>{folder.folId}</CTableDataCell>
+              <CTableDataCell style={{ width: "120px" }}>{folder.folName}</CTableDataCell>
+              <CTableDataCell style={{ width: "100px" }}>{folder.memId}</CTableDataCell>
+              <CTableDataCell style={{ width: "100px" }}>{folder.boardCnt}</CTableDataCell>
+              <CTableDataCell style={{ width: "80px" }}>{folder.stateText}</CTableDataCell>
+              <CTableDataCell style={{ width: "120px" }}>{folder.createDt}</CTableDataCell>
             </CTableRow>
           ))}
         </CTableBody>

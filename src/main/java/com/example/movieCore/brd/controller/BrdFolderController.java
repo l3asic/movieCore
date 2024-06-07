@@ -135,4 +135,47 @@ public class BrdFolderController {
 
 
 
+    /** 관리자 모듈 - 폴더 상태 변경 (삭제/ 원복) */
+    @PostMapping(value = "/updateFolderStateAdmin")
+    @ResponseBody
+    public Map<String, Object> updateFolderStateAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+        String successMsg = "";
+
+        try {
+
+            if ("restore".equals(brdVo.getMode())) {
+                brdVo.setMode("B");
+            } else if ("delete".equals(brdVo.getMode())) {
+                brdVo.setMode("D");
+            }
+
+            int sucCnt = folderService.updateFolderStateAdmin(brdVo);
+
+            if (brdVo.getFolderBeanList().size() == sucCnt) {
+                successResult = true;
+                successMsg = sucCnt + " 개의 폴더 상태가 변경되었습니다.";
+            } else {
+                successResult = false;
+                int failCnt = brdVo.getFolderBeanList().size() - sucCnt;
+                successMsg = failCnt + " 개의 폴더 상태 변경이 실패 하였습니다.";
+            }
+
+        } catch (Exception e) {
+        }
+
+        resMap.put("successResult", successResult);
+        resMap.put("successMsg", successMsg);
+        return resMap;
+    }
+
+
+
+
+
+
+
+
+
 }

@@ -71,17 +71,48 @@
     <!-- 관리자모듈- 폴더 리스트 조회 -->
     <select id="selectFolderListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="folderBean">
         SELECT
-            BF.FOL_ID,
-            BF.MEM_ID,
-            BF.FOL_NAME,
-            BF.STATE,
-            BF.ODR,
-            BF.CREATE_DT,
-            (SELECT COUNT(*) FROM BRD_BOARD BB WHERE BB.FOL_ID = BF.FOL_ID) AS BOARD_CNT
+        BF.FOL_ID,
+        BF.MEM_ID,
+        BF.FOL_NAME,
+        BF.STATE,
+        BF.ODR,
+        BF.CREATE_DT,
+        (SELECT COUNT(*) FROM BRD_BOARD BB WHERE BB.FOL_ID = BF.FOL_ID) AS BOARD_CNT
         FROM
-            BRD_FOLDER BF
-            LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+        BRD_FOLDER BF
+        WHERE
+        1=1
+        <if test="searchBean.searchFilter != null and searchBean.searchFilter != '' and searchBean.searchText != null and searchBean.searchText != ''">
+            AND ${searchBean.searchFilter} LIKE CONCAT('%', #{searchBean.searchText}, '%')
+        </if>
+        <choose>
+            <when test="searchBean.sortKey != null and searchBean.sortKey == 'boardCnt'">
+                ORDER BY (SELECT COUNT(*) FROM BRD_BOARD BB WHERE BB.FOL_ID = BF.FOL_ID) ${searchBean.sortOdr}, BF.ODR ASC
+            </when>
+            <otherwise>
+                <if test="searchBean.sortKey != null and searchBean.sortKey != ''">
+                    ORDER BY ${searchBean.sortKey} ${searchBean.sortOdr}, BF.ODR ASC
+                </if>
+                <if test="searchBean.sortKey == null or searchBean.sortKey == ''">
+                    ORDER BY BF.ODR ASC
+                </if>
+            </otherwise>
+        </choose>
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
+
+
+
+    <!-- 폴더 상태 변경 (삭제/ 원복) -->
+    <update id="updateFolderStateAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" >
+        UPDATE BRD_FOLDER
+        SET STATE = #{mode}
+        WHERE FOL_ID IN
+        <foreach item="folder" collection="folderBeanList" open="(" separator="," close=")">
+            #{folder.folId}
+        </foreach>
+    </update>
+
 
 
 

@@ -38,4 +38,7 @@ public class BrdVo {
     private FileBean fileBean;
 
 
+    /** 삭제/ 변경 용 모드 */
+    private String mode;
+
 }
