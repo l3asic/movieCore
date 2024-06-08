@@ -10,7 +10,7 @@ import '../../cstmCss/BoxOffice.css';
 import { cilChevronLeft, cilChevronRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import GrayLine from "../uitils/GrayLine";
-import {CBadge, CCardText} from "@coreui/react";
+import { CCard, CCardBody, CCardImage, CCardText, CCardTitle, CBadge } from '@coreui/react';
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -59,7 +59,6 @@ const BoxOffice = () => {
       }));
     }
   };
-
 
   const handlePrevDay = () => {
     const current = new Date(startDate);
@@ -114,57 +113,49 @@ const BoxOffice = () => {
     <>
       <h4 className="box-office-header">일일 박스 오피스</h4>
 
-      {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="20px" marginBottom="40px" />
 
-      <div className="date-selector"
-           style={{
-             justifyContent: 'center',
-             display: 'flex',
-             alignItems: 'center',
-             marginBottom: '40px'
-      }}>
+      <div className="date-selector" style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
         <button onClick={handlePrevDay} className="arrow-button">
-          <CIcon icon={cilChevronLeft}/>
+          <CIcon icon={cilChevronLeft} />
         </button>
         <DatePicker
           selected={startDate}
           onChange={setStartDate}
-          dateFormat="yyyy-MM-dd" // 날짜 형식을 yyyy-MM-dd로 설정
+          dateFormat="yyyy-MM-dd"
+          className="form-control"
+          style={{ width: '50%' }}
         />
-
         <button onClick={handleNextDay} className="arrow-button">
-          <CIcon icon={cilChevronRight}/>
+          <CIcon icon={cilChevronRight} />
         </button>
       </div>
 
       <Slider {...settings}>
         {movVo.movieBoxOfficeBeanList.map((movie, index) => (
-          <div key={index} className="movie-card " onClick={() => moveToMovieInfo(movie.movieCd)}>
-
-            {movie.rankOldAndNew !== "OLD" && (
-              <div className="position-relative">
-                <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
-                  {movie.rankOldAndNew} <span className="visually-hidden">unread messages</span>
-                </CBadge>
-              </div>
-            )}
-            <img
-              src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
-              alt={movie.movieNm}
-              className="movie-image"
-            >
-            </img>
-
-            <div className="movie-info">
-              <h5 className="movie-title">{movie.movieNm}</h5>
-              {movie.openDtYearStr && <span>({movie.openDtYearStr})</span>}
-              <CCardText>
-                <small className="text-medium-emphasis">★ {movie.movieBean.pointAvg} ({movie.movieBean.pointTotalCnt}) </small>
-              </CCardText>
-
-
-            </div>
+          <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
+            <CCard className="movie-card-content">
+              {movie.rankOldAndNew !== "OLD" && (
+                <div className="position-relative">
+                  <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
+                    {movie.rankOldAndNew} <span className="visually-hidden">unread messages</span>
+                  </CBadge>
+                </div>
+              )}
+              <CCardImage
+                orientation="top"
+                src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
+                alt={movie.movieNm}
+                className="movie-image"
+              />
+              <CCardBody>
+                <CCardTitle className="movie-title">{movie.movieNm}</CCardTitle>
+                <CCardText className="movie-genre">{movie.repGenreNm}</CCardText>
+                <CCardText className="movie-rating">
+                  <small className="text-medium-emphasis">★ {movie.movieBean.pointAvg} ({movie.movieBean.pointTotalCnt})</small>
+                </CCardText>
+              </CCardBody>
+            </CCard>
           </div>
         ))}
       </Slider>

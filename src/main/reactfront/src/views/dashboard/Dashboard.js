@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
   CBadge,
   CCardText,
+  CCard,
+  CCardBody,
+  CCardImage,
+  CCardTitle
 } from '@coreui/react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -106,25 +110,28 @@ const Dashboard = () => {
       <Slider {...settings}>
         {movVo.movieBoxOfficeBeanList.map((movie, index) => (
           <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
-            {movie.rankOldAndNew !== "OLD" && (
-              <div className="position-relative">
-                <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
-                  {movie.rankOldAndNew} <span className="visually-hidden">unread messages</span>
-                </CBadge>
-              </div>
-            )}
-            <img
-              src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
-              alt={movie.movieNm}
-              className="movie-image"
-            />
-            <div className="movie-info">
-              <h5 className="movie-title">{movie.movieNm}</h5>
-              {movie.openDtYearStr && <span>({movie.openDtYearStr})</span>}
-              <CCardText>
-                <small className="text-medium-emphasis">★ {movie.movieBean.pointAvg} ({movie.movieBean.pointTotalCnt}) </small>
-              </CCardText>
-            </div>
+            <CCard className="movie-card-content">
+              {movie.rankOldAndNew !== "OLD" && (
+                <div className="position-relative">
+                  <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
+                    {movie.rankOldAndNew} <span className="visually-hidden">unread messages</span>
+                  </CBadge>
+                </div>
+              )}
+              <CCardImage
+                orientation="top"
+                src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : 'default-movie.jpg'}
+                alt={movie.movieNm}
+                className="movie-image"
+              />
+              <CCardBody>
+                <CCardTitle className="movie-title">{movie.movieNm}</CCardTitle>
+                <CCardText className="movie-genre">{movie.repGenreNm}</CCardText>
+                <CCardText className="movie-rating">
+                  <small className="text-medium-emphasis">★ {movie.movieBean.pointAvg} ({movie.movieBean.pointTotalCnt})</small>
+                </CCardText>
+              </CCardBody>
+            </CCard>
           </div>
         ))}
       </Slider>
