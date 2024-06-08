@@ -18,8 +18,8 @@
 
 
 
-    <insert id="createFolder" parameterType="com.example.movieCore.brd.vo.BrdVo" >
-
+    <!-- 폴더 생성 -->
+    <insert id="createFolder" parameterType="com.example.movieCore.brd.vo.BrdVo">
         insert into BRD_FOLDER (
             FOL_ID,
             MEM_ID,
@@ -36,8 +36,9 @@
                    #{folderBean.odr},
                    #{folderBean.createDt}
                )
-
     </insert>
+
+
 
 
 
@@ -120,6 +121,13 @@
         SET ODR = #{odr}
         WHERE FOL_ID = #{folId}
     </update>
+
+
+    <!-- 폴더 순서 odr 맥스값 조회 -->
+    <select id="getMaxOdr" resultType="int">
+        SELECT IFNULL(MAX(ODR), 0) AS maxOdr
+        FROM BRD_FOLDER
+    </select>
 
 
 

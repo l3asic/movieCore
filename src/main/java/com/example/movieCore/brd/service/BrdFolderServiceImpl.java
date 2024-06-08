@@ -40,4 +40,8 @@ public class BrdFolderServiceImpl {
     public void updateFolderOrderAdmin(BrdFolderBean folderBean) {
         brdFolderMapper.updateFolderOrderAdmin(folderBean);
     }
+
+    public int getMaxOdr() {
+        return brdFolderMapper.getMaxOdr();
+    }
 }

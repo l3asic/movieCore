@@ -6,7 +6,7 @@ import CIcon from "@coreui/icons-react";
 
 function FolderTab() {
   const [folderBean, setFolderBean] = useState({
-    memId: '',
+    memId: JSON.parse(localStorage.getItem('memberBean')).memId,
     folName: '',
     odr: 0
   });

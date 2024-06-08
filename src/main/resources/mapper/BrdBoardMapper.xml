@@ -305,8 +305,7 @@
 
 
     <!-- 게시판 정보 업데이트 -->
-    <!-- 게시판 정보 업데이트 -->
-    <update id="updateBoard" parameterType="com.example.movieCore.brd.bean.BrdBoardBean">
+    <update id="updateBoard" parameterType="com.example.movieCore.brd.vo.BrdVo" >
         UPDATE BRD_BOARD
         SET
             FOL_ID = #{boardBean.folId},
@@ -321,6 +320,15 @@
         WHERE
             BRD_ID = #{boardBean.brdId}
     </update>
+
+
+    <!-- 게시판 순서 odr 맥스값 조회 -->
+    <select id="getMaxBoardOdr" resultType="int" parameterType="com.example.movieCore.brd.bean.BrdBoardBean">
+        SELECT IFNULL(MAX(ODR), 0) AS maxOdr
+        FROM BRD_BOARD
+        WHERE
+            FOL_ID = #{folId}
+    </select>
 
 
 

@@ -25,7 +25,7 @@ function BoardTab() {
     folId: "",
     brdName: "",
     brdComment: "",
-    memId: "",
+    memId: JSON.parse(localStorage.getItem('memberBean')).memId,
     odr: 0,
     noticeYn: "N",
     imgUploadYn: "Y",
@@ -70,6 +70,7 @@ function BoardTab() {
                   value: folderBean.folId,
                 }))}
                 name="folId"
+                value={boardBean.folId} // 선택된 값 표시
                 onChange={changeBoardBean}
                 style={styles.input}
               />
@@ -221,9 +222,9 @@ function BoardTab() {
 
         <CCol md={12} className="d-flex justify-content-end">
           <CButton
-            color="primary"
+            color="dark"
             onClick={createBoard}
-            style={styles.button}
+            /*style={styles.button}*/
           >
             게시판 생성
           </CButton>

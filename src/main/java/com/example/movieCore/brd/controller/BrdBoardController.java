@@ -45,14 +45,9 @@ public class BrdBoardController {
         boardBean.setCreateDt(nowTime);
 
 
-
-
-        /** 추가 임시 값 세팅 추후 삭제(변경)할 것*/
-        // 회원 id
-        boardBean.setMemId("001");
-
         // 게시판 순서
-        boardBean.setOdr(0);
+        int newOdr = boardService.getMaxBoardOdr(boardBean) + 1; // getMaxOdr 메서드에서 최대 ODR 값을 가져온 후 +1
+        boardBean.setOdr(newOdr);
 
 
 

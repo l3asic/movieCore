@@ -25,4 +25,6 @@ public interface BrdBoardMapper {
     void updateBoardOrderAndFolderAdmin(BrdBoardBean boardBean);
 
     void updateBoard(BrdVo brdVo);
+
+    int getMaxBoardOdr(BrdBoardBean boardBean);
 }

@@ -45,36 +45,22 @@ public class BrdFolderController {
         Timestamp nowTime = new Timestamp(date.getTime());
         folderBean.setCreateDt(nowTime);
 
-
-
-
-
-        /** 추가 임시 값 세팅 추후 삭제(변경)할 것*/
-
-        // 회원 id
-        folderBean.setMemId("001");
-
-        // 폴더 순서
-        folderBean.setOdr(0);
-
-
+        // 새로운 ODR 값 설정
+        int newOdr = folderService.getMaxOdr() + 1; // getMaxOdr 메서드에서 최대 ODR 값을 가져온 후 +1
+        folderBean.setOdr(newOdr);
 
         /** 폴더 최종 디비 인서트 */
         BrdVo brdVo = new BrdVo();
         brdVo.setFolderBean(folderBean);
 
-        boolean succesResult = false;
+        boolean succesResult = folderService.createFolder(brdVo);
 
-
-        succesResult = folderService.createFolder(brdVo);
-
-        Map resMap = new HashMap<>();
-        resMap.put("succesResult",succesResult);
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("succesResult", succesResult);
 
         return resMap;
-
-
     }
+
 
 
 

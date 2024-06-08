@@ -21,4 +21,6 @@ public interface BrdFolderMapper {
     int updateFolderStateAdmin(BrdVo brdVo);
 
     void updateFolderOrderAdmin(BrdFolderBean folderBean);
+
+    int getMaxOdr();
 }

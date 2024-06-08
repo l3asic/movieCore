@@ -51,4 +51,8 @@ public class BrdBoardServiceImpl {
     public void updateBoard(BrdVo brdVo) {
         brdBoardMapper.updateBoard(brdVo);
     }
+
+    public int getMaxBoardOdr(BrdBoardBean boardBean) {
+        return brdBoardMapper.getMaxBoardOdr(boardBean);
+    }
 }
