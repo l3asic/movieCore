@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {CInputGroup, CInputGroupText, CForm, CFormInput, CCol, CButton} from "@coreui/react";
+import { cilFolder } from '@coreui/icons';
 import axios from "axios";
+import CIcon from "@coreui/icons-react";
 
 function FolderTab() {
   const [folderBean, setFolderBean] = useState({
@@ -11,7 +13,10 @@ function FolderTab() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>폴더 생성</h1>
+      <h1 style={styles.title}>
+        <CIcon icon={cilFolder} style={{ marginRight: '10px',  width : '25px', height : '25px' }} />
+        폴더 생성
+      </h1>
       <div style={styles.spacing}></div> {/* 폴더 생성 탭과 폴더 생성 UI 간의 간격을 위해 추가 */}
       <CForm className="row g-3" style={styles.form}>
         <CCol md={5}>

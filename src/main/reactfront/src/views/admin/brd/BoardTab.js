@@ -13,6 +13,8 @@ import {
   CFormTextarea,
   CRow,
 } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import {cilClipboard} from "@coreui/icons";
 
 function BoardTab() {
   const [brdVo, setBrdVo] = useState({
@@ -50,7 +52,10 @@ function BoardTab() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>게시판 생성</h1>
+      <h1 style={styles.title}>
+        <CIcon icon={cilClipboard} style={{ marginRight: '10px',  width : '25px', height : '25px' }} />
+        게시판 생성
+      </h1>
       <CForm className="row g-3" style={styles.form}>
         <CRow className="g-3">
           <CCol md={6}>
