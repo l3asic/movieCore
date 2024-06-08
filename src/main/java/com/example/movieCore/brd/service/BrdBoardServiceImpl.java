@@ -44,8 +44,8 @@ public class BrdBoardServiceImpl {
         return brdBoardMapper.updateBoardStateAdmin(brdVo);
     }
 
-    public void updateBoardOrderAdmin(BrdBoardBean boardBean) {
-        brdBoardMapper.updateBoardOrderAdmin(boardBean);
+    public void updateBoardOrderAndFolderAdmin(BrdBoardBean boardBean) {
+        brdBoardMapper.updateBoardOrderAndFolderAdmin(boardBean);
     }
 
     public void updateBoard(BrdVo brdVo) {

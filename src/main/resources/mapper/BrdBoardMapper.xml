@@ -103,6 +103,8 @@
             BRD_BOARD bb ON bf.FOL_ID = bb.FOL_ID
         where
             bf.state != 'D'
+        and
+            bb.state != 'D'
         order by bf.odr asc, bb.odr asc
 
     </select>
@@ -291,12 +293,14 @@
     </update>
 
 
-    <!-- 게시판 순서 업데이트 -->
-    <update id="updateBoardOrderAdmin" parameterType="com.example.movieCore.brd.bean.BrdBoardBean">
+    <!-- 게시판 순서 및 폴더 업데이트 -->
+    <update id="updateBoardOrderAndFolderAdmin" parameterType="com.example.movieCore.brd.bean.BrdBoardBean">
         UPDATE BRD_BOARD
-        SET ODR = #{odr}
+        SET ODR = #{odr},
+            FOL_ID = #{folId}
         WHERE BRD_ID = #{brdId}
     </update>
+
 
 
 

@@ -22,7 +22,7 @@ public interface BrdBoardMapper {
 
     int updateBoardStateAdmin(BrdVo brdVo);
 
-    void updateBoardOrderAdmin(BrdBoardBean boardBean);
+    void updateBoardOrderAndFolderAdmin(BrdBoardBean boardBean);
 
     void updateBoard(BrdVo brdVo);
 }

@@ -27,7 +27,9 @@ import {
   cilTrash,
   cilSwapVertical,
   cilMagnifyingGlass,
-  cilRecycle, cilClipboard, cilFolder,
+  cilRecycle,
+  cilClipboard,
+  cilFolder,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -48,6 +50,7 @@ function BoardListTab() {
   const [isEditingOrder, setIsEditingOrder] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [showDragInfo, setShowDragInfo] = useState(true);
 
   useEffect(() => {
     selectBoardListAdmin();
@@ -69,7 +72,10 @@ function BoardListTab() {
 
   const sortColumn = (key) => {
     setBrdVo((prevState) => {
-      const sortOdr = prevState.searchBean.sortKey === key && prevState.searchBean.sortOdr === "asc" ? "desc" : "asc";
+      const sortOdr =
+        prevState.searchBean.sortKey === key && prevState.searchBean.sortOdr === "asc"
+          ? "desc"
+          : "asc";
       return {
         ...prevState,
         searchBean: { ...prevState.searchBean, sortKey: key, sortOdr: sortOdr },
@@ -95,12 +101,15 @@ function BoardListTab() {
 
   const handleSelect = (folderIndex, boardIndex) => {
     const updatedList = [...brdVo.folderBeanList];
-    updatedList[folderIndex].boardBeanList[boardIndex].selected = !updatedList[folderIndex].boardBeanList[boardIndex].selected;
+    updatedList[folderIndex].boardBeanList[boardIndex].selected =
+      !updatedList[folderIndex].boardBeanList[boardIndex].selected;
     setBrdVo((prevState) => ({
       ...prevState,
       folderBeanList: updatedList,
     }));
-    setSelectAll(updatedList.every((folder) => folder.boardBeanList.every((board) => board.selected)));
+    setSelectAll(
+      updatedList.every((folder) => folder.boardBeanList.every((board) => board.selected))
+    );
   };
 
   const searchBoardList = () => {
@@ -116,12 +125,15 @@ function BoardListTab() {
   };
 
   const updateBoardStateAdmin = (mode) => {
-    const selectedBoards = brdVo.folderBeanList.flatMap((folder) =>
-      folder.boardBeanList.filter((board) => board.selected).map((board) => ({
-        ...board,
-        createDt: board.createDt ? new Date(board.createDt.replace(/\./g, '-')).toISOString() : null, // ISO 형식으로 변환
-      }))
-    );
+    const selectedBoards = brdVo.folderBeanList
+      .flatMap((folder) =>
+        folder.boardBeanList.filter((board) => board.selected).map((board) => ({
+          ...board,
+          createDt: board.createDt
+            ? new Date(board.createDt.replace(/\./g, "-")).toISOString()
+            : null, // ISO 형식으로 변환
+        }))
+      );
 
     axios({
       url: "/updateBoardStateAdmin",
@@ -139,7 +151,7 @@ function BoardListTab() {
         selectBoardListAdmin();
       })
       .catch((err) => {
-        alert('실패(오류)');
+        alert("실패(오류)");
       });
   };
 
@@ -157,11 +169,13 @@ function BoardListTab() {
             ...folder,
             boardBeanList: folder.boardBeanList.map((board) => {
               const date = new Date(board.createDt);
-              const formattedDate = date.toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              }).replace(/\.$/, "");
+              const formattedDate = date
+                .toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+                .replace(/\.$/, "");
 
               return {
                 ...board,
@@ -188,28 +202,58 @@ function BoardListTab() {
       return;
     }
 
-    const folderIndex = result.source.droppableId;
-    const items = Array.from(brdVo.folderBeanList[folderIndex].boardBeanList);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    const sourceFolderIndex = parseInt(result.source.droppableId);
+    const destinationFolderIndex = parseInt(result.destination.droppableId);
 
-    const updatedList = [...brdVo.folderBeanList];
-    updatedList[folderIndex].boardBeanList = items;
+    if (sourceFolderIndex === destinationFolderIndex) {
+      const items = Array.from(brdVo.folderBeanList[sourceFolderIndex].boardBeanList);
+      const [reorderedItem] = items.splice(result.source.index, 1);
+      items.splice(result.destination.index, 0, reorderedItem);
 
-    setBrdVo((prevState) => ({
-      ...prevState,
-      folderBeanList: updatedList,
-    }));
+      const updatedList = [...brdVo.folderBeanList];
+      updatedList[sourceFolderIndex].boardBeanList = items;
+
+      setBrdVo((prevState) => ({
+        ...prevState,
+        folderBeanList: updatedList,
+      }));
+    } else {
+      const sourceItems = Array.from(brdVo.folderBeanList[sourceFolderIndex].boardBeanList);
+      const [reorderedItem] = sourceItems.splice(result.source.index, 1);
+
+      const destinationItems = Array.from(
+        brdVo.folderBeanList[destinationFolderIndex].boardBeanList
+      );
+      destinationItems.splice(result.destination.index, 0, reorderedItem);
+
+      const updatedList = [...brdVo.folderBeanList];
+      updatedList[sourceFolderIndex].boardBeanList = sourceItems;
+      updatedList[destinationFolderIndex].boardBeanList = destinationItems;
+
+      updatedList[destinationFolderIndex].boardBeanList[
+        result.destination.index
+        ].folId = updatedList[destinationFolderIndex].folId;
+
+      setBrdVo((prevState) => ({
+        ...prevState,
+        folderBeanList: updatedList,
+      }));
+    }
+
     setIsEditingOrder(true);
+    setShowDragInfo(false);
   };
 
   /** 게시판 순서 변경 저장 */
   const handleSaveOrder = () => {
-    const reorderedBoards = brdVo.folderBeanList.flatMap((folder, folderIndex) =>
+    const reorderedBoards = brdVo.folderBeanList.flatMap((folder) =>
       folder.boardBeanList.map((board, boardIndex) => ({
         ...board,
         odr: boardIndex + 1, // 새로운 순서 지정
-        createDt: board.createDt ? new Date(board.createDt.replace(/\./g, '-')).toISOString() : null, // ISO 형식으로 변환
+        folId: folder.folId, // 폴더 ID 포함
+        createDt: board.createDt
+          ? new Date(board.createDt.replace(/\./g, "-")).toISOString()
+          : null, // ISO 형식으로 변환
       }))
     );
 
@@ -225,25 +269,28 @@ function BoardListTab() {
     })
       .then((res) => {
         if (res.data.successResult) {
-          alert('순서 변경 완료');
+          alert("순서 및 소속 폴더 저장 완료");
         } else {
-          alert('순서 변경 실패');
+          alert("순서 및 소속 폴더 저장 실패");
         }
         setIsEditingOrder(false);
+        setShowDragInfo(true);
         selectBoardListAdmin();
       })
       .catch((err) => {
-        alert('실패 (오류)');
+        alert("실패 (오류)");
       });
   };
 
+
   const handleCancelOrder = () => {
     setIsEditingOrder(false);
+    setShowDragInfo(true);
     selectBoardListAdmin(); // 변경 사항 취소
   };
 
   const handleBoardClick = (board, event) => {
-    if (event.target.type === 'checkbox') return;
+    if (event.target.type === "checkbox") return;
     setSelectedBoard(board);
     setVisible(true);
   };
@@ -257,10 +304,11 @@ function BoardListTab() {
   };
 
   const handleBoardSave = () => {
-
     const updatedBoard = {
       ...selectedBoard,
-      createDt: selectedBoard.createDt ? new Date(selectedBoard.createDt.replace(/\./g, '-')).toISOString() : null
+      createDt: selectedBoard.createDt
+        ? new Date(selectedBoard.createDt.replace(/\./g, "-")).toISOString()
+        : null,
     };
 
     axios({
@@ -274,15 +322,14 @@ function BoardListTab() {
       }),
     })
       .then((res) => {
-        alert('수정 완료');
+        alert("수정 완료");
         setVisible(false);
         selectBoardListAdmin();
       })
       .catch((err) => {
-        alert('수정 실패');
+        alert("수정 실패");
       });
   };
-
 
   const handleModalClose = () => {
     setVisible(false);
@@ -291,10 +338,19 @@ function BoardListTab() {
   const generateOptions = (start, end, step, unit, includeUnlimited = false) => {
     const options = [];
     for (let i = start; i <= end; i += step) {
-      options.push(<option key={i} value={i}>{i}{unit}</option>);
+      options.push(
+        <option key={i} value={i}>
+          {i}
+          {unit}
+        </option>
+      );
     }
     if (includeUnlimited) {
-      options.push(<option key="unlimited" value="unlimited">제한없음</option>);
+      options.push(
+        <option key="unlimited" value="unlimited">
+          제한없음
+        </option>
+      );
     }
     return options;
   };
@@ -328,15 +384,17 @@ function BoardListTab() {
 
             <CNavbarBrand className="ms-3">
               Total : {brdVo.folderBeanList.reduce((acc, folder) => acc + folder.boardBeanList.length, 0)}
-              <span style={{fontSize: '0.8rem', color: 'gray', marginLeft: '10px'}}>
-                게시판을 끌어다 놓으면 순서를 변경할 수 있습니다.
-              </span>
+              {showDragInfo && (
+                <span style={{ fontSize: "0.8rem", color: "gray", marginLeft: "10px" }}>
+                  게시판을 끌어다 놓으면 순서 및 소속 폴더를 변경할 수 있습니다.
+                </span>
+              )}
             </CNavbarBrand>
 
             {isEditingOrder && (
               <div className="ms-auto d-flex">
                 <CButton color="dark" onClick={handleSaveOrder} className="me-2">
-                  순서 저장
+                  순서 및 소속 폴더 저장
                 </CButton>
                 <CButton color="secondary" onClick={handleCancelOrder}>
                   취소
@@ -393,24 +451,27 @@ function BoardListTab() {
         </CContainer>
       </CNavbar>
 
-      {brdVo.folderBeanList.map((folder, folderIndex) => (
-        <div key={folder.folId} style={{ marginTop: "20px" }}>
-          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '5px', marginBottom: '0', border: '1px solid #dee2e6', color: '#495057' }}>
-            <CIcon icon={cilFolder} style={{ marginRight: '10px' }} />
-            <h5 style={{ margin: 0 }}>
-              {folder.folName}
-            </h5>
-          </div>
-          <DragDropContext onDragEnd={(result) => handleDragEnd({ ...result, source: { ...result.source, droppableId: folderIndex.toString() }, destination: { ...result.destination, droppableId: folderIndex.toString() } })}>
-            <Droppable droppableId={folderIndex.toString()}>
-              {(provided) => (
-                <CTable
-                  color="dark"
-                  striped
-                  className="mt-3 mb-lg-5"
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
+      <DragDropContext onDragEnd={handleDragEnd}>
+        {brdVo.folderBeanList.map((folder, folderIndex) => (
+          <Droppable key={folder.folId} droppableId={folderIndex.toString()}>
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef} style={{ marginTop: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "#f8f9fa",
+                    padding: "10px",
+                    borderRadius: "5px",
+                    marginBottom: "0",
+                    border: "1px solid #dee2e6",
+                    color: "#495057",
+                  }}
                 >
+                  <CIcon icon={cilFolder} style={{ marginRight: "10px" }} />
+                  <h5 style={{ margin: 0 }}>{folder.folName}</h5>
+                </div>
+                <CTable color="dark" striped className="mt-3 mb-lg-5">
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell scope="col" style={{ width: "10px" }}>
@@ -480,11 +541,11 @@ function BoardListTab() {
                     {provided.placeholder}
                   </CTableBody>
                 </CTable>
-              )}
-            </Droppable>
-          </DragDropContext>
-        </div>
-      ))}
+              </div>
+            )}
+          </Droppable>
+        ))}
+      </DragDropContext>
 
       <CModal visible={visible} onClose={handleModalClose}>
         <CModalHeader>
@@ -510,12 +571,7 @@ function BoardListTab() {
                 />
               </div>
               <div className="mb-3">
-                <CFormInput
-                  label="생성자 명"
-                  name="memId"
-                  value={selectedBoard.memName}
-                  readOnly
-                />
+                <CFormInput label="생성자 명" name="memId" value={selectedBoard.memName} readOnly />
               </div>
               <div className="mb-3">
                 <CFormSelect
@@ -540,12 +596,7 @@ function BoardListTab() {
                 </CFormSelect>
               </div>
               <div className="mb-3">
-                <CFormInput
-                  label="게시글 수"
-                  name="atclCnt"
-                  value={selectedBoard.atclCnt}
-                  readOnly
-                />
+                <CFormInput label="게시글 수" name="atclCnt" value={selectedBoard.atclCnt} readOnly />
               </div>
               <div className="mb-3">
                 <CFormSelect
@@ -554,7 +605,7 @@ function BoardListTab() {
                   value={selectedBoard.fileLimit}
                   onChange={handleBoardChange}
                 >
-                  {generateOptions(10, 100, 10, 'MB', true)}
+                  {generateOptions(10, 100, 10, "MB", true)}
                 </CFormSelect>
               </div>
               <div className="mb-3">
@@ -564,7 +615,7 @@ function BoardListTab() {
                   value={selectedBoard.fileCntLimit}
                   onChange={handleBoardChange}
                 >
-                  {generateOptions(0, 10, 1, '개', true)}
+                  {generateOptions(0, 10, 1, "개", true)}
                 </CFormSelect>
               </div>
               <div className="mb-3">

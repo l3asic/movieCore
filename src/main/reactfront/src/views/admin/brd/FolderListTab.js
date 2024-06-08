@@ -46,6 +46,7 @@ function FolderListTab() {
 
   const [selectAll, setSelectAll] = useState(false);
   const [isEditingOrder, setIsEditingOrder] = useState(false);
+  const [showDragInfo, setShowDragInfo] = useState(true);
 
   useEffect(() => {
     selectFolderListAdmin();
@@ -67,7 +68,10 @@ function FolderListTab() {
 
   const sortColumn = (key) => {
     setBrdVo((prevState) => {
-      const sortOdr = prevState.searchBean.sortKey === key && prevState.searchBean.sortOdr === "asc" ? "desc" : "asc";
+      const sortOdr =
+        prevState.searchBean.sortKey === key && prevState.searchBean.sortOdr === "asc"
+          ? "desc"
+          : "asc";
       return {
         ...prevState,
         searchBean: { ...prevState.searchBean, sortKey: key, sortOdr: sortOdr },
@@ -110,12 +114,11 @@ function FolderListTab() {
     selectFolderListAdmin();
   };
 
-
   /** 폴더 상태 변경 (삭제/ 원복) */
   const updateFolderStateAdmin = (mode) => {
-    const selectedFolders = brdVo.folderBeanList.filter((folder) => folder.selected).map(folder => ({
+    const selectedFolders = brdVo.folderBeanList.filter((folder) => folder.selected).map((folder) => ({
       ...folder,
-      createDt: folder.createDt ? new Date(folder.createDt.replace(/\./g, '-')).toISOString() : null,  // ISO 형식으로 변환
+      createDt: folder.createDt ? new Date(folder.createDt.replace(/\./g, "-")).toISOString() : null, // ISO 형식으로 변환
     }));
 
     axios({
@@ -138,8 +141,6 @@ function FolderListTab() {
       });
   };
 
-
-
   /** 폴더 리스트 조회  */
   const selectFolderListAdmin = (newPage = 0) => {
     axios({
@@ -153,11 +154,13 @@ function FolderListTab() {
       .then((res) => {
         const folderBeanList = res.data.brdVo.folderBeanList.map((folder) => {
           const date = new Date(folder.createDt);
-          const formattedDate = date.toLocaleDateString("ko-KR", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          }).replace(/\.$/, "");
+          const formattedDate = date
+            .toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            })
+            .replace(/\.$/, "");
 
           return {
             ...folder,
@@ -196,15 +199,15 @@ function FolderListTab() {
       folderBeanList: items,
     }));
     setIsEditingOrder(true);
+    setShowDragInfo(false);
   };
-
 
   /** 폴더 순서 변경 저장 */
   const handleSaveOrder = () => {
     const reorderedFolders = brdVo.folderBeanList.map((folder, index) => ({
       ...folder,
-      odr: index + 1,  // 새로운 순서 지정
-      createDt: folder.createDt ? new Date(folder.createDt.replace(/\./g, '-')).toISOString() : null,  // ISO 형식으로 변환
+      odr: index + 1, // 새로운 순서 지정
+      createDt: folder.createDt ? new Date(folder.createDt.replace(/\./g, "-")).toISOString() : null, // ISO 형식으로 변환
     }));
 
     axios({
@@ -218,23 +221,24 @@ function FolderListTab() {
       }),
     })
       .then((res) => {
-        if(res.data.successResult){
-          alert('순서 변경 완료');
-        }else{
-          alert('순서 변경 실패');
+        if (res.data.successResult) {
+          alert("순서 변경 완료");
+        } else {
+          alert("순서 변경 실패");
         }
         setIsEditingOrder(false);
+        setShowDragInfo(true);
         selectFolderListAdmin();
       })
       .catch((err) => {
-        alert('실패 (오류)');
+        alert("실패 (오류)");
       });
   };
 
-
   const handleCancelOrder = () => {
     setIsEditingOrder(false);
-    selectFolderListAdmin();  // 변경 사항 취소
+    setShowDragInfo(true);
+    selectFolderListAdmin(); // 변경 사항 취소
   };
 
   return (
@@ -266,9 +270,11 @@ function FolderListTab() {
 
             <CNavbarBrand className="ms-3">
               Total : {brdVo.paging.totalItems}
-              <span style={{ fontSize: '0.8rem', color: 'gray', marginLeft: '10px' }}>
-                폴더를 끌어다 놓으면 순서를 변경할 수 있습니다.
-              </span>
+              {showDragInfo && (
+                <span style={{ fontSize: "0.8rem", color: "gray", marginLeft: "10px" }}>
+                  폴더를 끌어다 놓으면 순서를 변경할 수 있습니다.
+                </span>
+              )}
             </CNavbarBrand>
 
             {isEditingOrder && (
@@ -414,11 +420,7 @@ function FolderListTab() {
         </Droppable>
       </DragDropContext>
 
-      <Paging
-        paging={brdVo.paging}
-        onPageChange={handlePageChange}
-        itemsPerPage={10}
-      />
+      <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
     </>
   );
 }

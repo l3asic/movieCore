@@ -194,23 +194,17 @@ public class BrdBoardController {
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
         try {
-
-
             for (BrdBoardBean boardBean : brdVo.getBoardBeanList()) {
-                boardService.updateBoardOrderAdmin(boardBean);
+                boardService.updateBoardOrderAndFolderAdmin(boardBean);
             }
-
-            successResult = true;
-
-
-
-            resMap.put("brdVo", brdVo);
             successResult = true;
         } catch (Exception e) {
+            // Log the exception
         }
         resMap.put("successResult", successResult);
         return resMap;
     }
+
 
 
     /** 관리자 모듈 - 폴더 별 게시판 정보 업데이트 */
