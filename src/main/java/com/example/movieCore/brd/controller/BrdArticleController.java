@@ -24,6 +24,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -277,18 +278,58 @@ public class BrdArticleController {
 
 
 
+    /** 관리자 - 게시글 리스트 조회 */
+    @PostMapping(value = "/selectArticleListAdmin")
+    @ResponseBody
+    public Map<String, Object> selectArticleListAdmin(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
+        /** 게시글 리스트 조회디비서 셀렉트  */
+        BrdVo brdVo = new BrdVo();
+        brdVo.setBoardBean(boardBean);
 
+        boolean succesResult = false;
 
+        Map resMap = new HashMap<>();
+        try {
+            brdVo.setPaging(new Paging());
+            brdVo.getPaging().setTotalItems(articleService.selectArticleListTotalCntAdmin(brdVo));
 
+            //  페이지 이동시 (최초 조회시에는 패스)
+            if(brdVo.getNewPage() != 0){
+                // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
+                brdVo.getPaging().setCurrentPage(brdVo.getNewPage());
+            }
 
+            ArrayList<BrdArticleBean> articleList = articleService.selectArticleListAdmin(brdVo);
+            for (BrdArticleBean article : articleList) {
+                article.setCreateDt(article.getCreateDt() != null ? new Timestamp(article.getCreateDt().getTime()) : null);
+                article.setExpireDt(article.getExpireDt() != null ? new Timestamp(article.getExpireDt().getTime()) : null);
+            }
+            brdVo.setArticleBeanList(articleList);
+            resMap.put("brdVo", brdVo);
+            succesResult = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-
-
-
-
-
-
-
-
-
+        resMap.put("succesResult", succesResult);
+        return resMap;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

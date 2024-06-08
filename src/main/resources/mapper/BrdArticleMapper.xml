@@ -59,6 +59,27 @@
     </resultMap>
 
 
+
+
+    <!-- 관리자 게시글 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdArticleBean" id="articleBeanAdmin">
+        <id column="ATCL_ID" property="atclId" jdbcType="VARCHAR"/>
+        <result column="BRD_ID" property="brdId" jdbcType="VARCHAR"/>
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="SUBJECT" property="subject" jdbcType="VARCHAR"/>
+        <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
+        <result column="VIEW_CNT" property="viewCnt" jdbcType="INTEGER"/>
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_DT" property="updateDt" jdbcType="TIMESTAMP"/>
+        <result column="EXPIRE_DT" property="expireDt" jdbcType="TIMESTAMP"/>
+        <result column="EXPIRE_YN" property="expireYn" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="VARCHAR"/>
+        <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
+        <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
     <!-- 게시글 작성 -->
     <insert id="atclRegistry" parameterType="com.example.movieCore.brd.vo.BrdVo" >
         insert into
@@ -296,6 +317,7 @@
             BB.FOL_ID = #{boardBean.folId}
 
     </select>
+
     <select id="selectArticleListTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
         SELECT
         COUNT(BA.ATCL_ID) totalCnt
@@ -384,6 +406,124 @@
              )
 
     </insert>
+
+
+    <!-- 관리자 - 게시글 갯수 조회 -->
+    <select id="selectArticleListTotalCntAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
+        SELECT
+        COUNT(BA.ATCL_ID) AS totalCnt
+        FROM
+        BRD_ARTICLE BA
+        LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
+        WHERE
+        1=1
+        <choose>
+            <when test="searchBean != null and searchBean.searchFilter == 'subject' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <when test="searchBean != null and searchBean.searchFilter == 'content' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <when test="searchBean != null and searchBean.searchFilter == 'mem_name' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <otherwise>
+                <if test="searchBean != null and searchBean.searchText != null and searchBean.searchText != ''">
+                    AND (
+                    BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    OR BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    OR MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    )
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 관리자 - 게시글 리스트 조회 -->
+    <select id="selectArticleListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBeanAdmin">
+        SELECT
+        BA.ATCL_ID,
+        BA.BRD_ID,
+        BB.BRD_NAME,
+        MMI.MEM_NAME,
+        BA.SUBJECT,
+        BA.CONTENT,
+        BA.VIEW_CNT,
+        BA.CREATE_DT,
+        BA.UPDATE_DT,
+        BA.EXPIRE_DT,
+        BA.EXPIRE_YN,
+        BA.STATE,
+        BA.ATCL_REPL_CNT
+        FROM
+        BRD_ARTICLE BA
+        LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
+        LEFT JOIN BRD_BOARD BB ON BA.BRD_ID = BB.BRD_ID
+        LEFT JOIN BRD_REPLY BR ON BA.ATCL_ID = BR.ATCL_ID
+        WHERE
+        1=1
+        <choose>
+            <when test="searchBean != null and searchBean.searchFilter == 'subject' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <when test="searchBean != null and searchBean.searchFilter == 'content' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <when test="searchBean != null and searchBean.searchFilter == 'mem_name' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <otherwise>
+                <if test="searchBean != null and searchBean.searchText != null and searchBean.searchText != ''">
+                    AND (
+                    BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    OR BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    OR MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    )
+                </if>
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="searchBean != null and searchBean.sortKey != null and searchBean.sortKey != '' and searchBean.sortOdr != null and searchBean.sortOdr != ''">
+                ORDER BY
+                <choose>
+                    <when test="searchBean.sortKey == 'subject'">
+                        BA.SUBJECT
+                    </when>
+                    <when test="searchBean.sortKey == 'mem_name'">
+                        MMI.MEM_NAME
+                    </when>
+                    <when test="searchBean.sortKey == 'create_dt'">
+                        BA.CREATE_DT
+                    </when>
+                    <when test="searchBean.sortKey == 'view_cnt'">
+                        BA.VIEW_CNT
+                    </when>
+                    <otherwise>
+                        BA.CREATE_DT
+                    </otherwise>
+                </choose>
+                <if test="searchBean.sortOdr == 'asc'">
+                    ASC
+                </if>
+                <if test="searchBean.sortOdr == 'desc'">
+                    DESC
+                </if>
+            </when>
+            <otherwise>
+                ORDER BY BA.CREATE_DT DESC
+            </otherwise>
+        </choose>
+        LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+    </select>
+
+
+
+
+
+
+
+
+
 
 
 

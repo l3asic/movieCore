@@ -28,4 +28,8 @@ public interface BrdArticleMapper {
     void insertFileBean(BrdVo brdVo);
 
     void insertArticleFileMap(BrdVo brdVo);
+
+    int selectArticleListTotalCntAdmin(BrdVo brdVo);
+
+    ArrayList<BrdArticleBean> selectArticleListAdmin(BrdVo brdVo);
 }

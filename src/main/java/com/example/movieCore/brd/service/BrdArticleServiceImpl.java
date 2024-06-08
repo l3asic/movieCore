@@ -53,4 +53,15 @@ public class BrdArticleServiceImpl {
     public void insertArticleFileMap(BrdVo brdVo) {
         brdArticleMapper.insertArticleFileMap(brdVo);
     }
+
+    public int selectArticleListTotalCntAdmin(BrdVo brdVo) {
+        return brdArticleMapper.selectArticleListTotalCntAdmin(brdVo);
+    }
+
+
+    public ArrayList<BrdArticleBean> selectArticleListAdmin(BrdVo brdVo) {
+        return brdArticleMapper.selectArticleListAdmin(brdVo);
+    }
+
+
 }
