@@ -13,6 +13,8 @@ public class BrdFolderBean {
 
     private String memId;
 
+    private String memName;
+
     private String folName;
 
     private String state;

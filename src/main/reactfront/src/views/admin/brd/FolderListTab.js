@@ -264,7 +264,13 @@ function FolderListTab() {
               <CIcon icon={cilTrash} />
             </CButton>
 
-            <CNavbarBrand className="ms-3">Total : {brdVo.paging.totalItems}</CNavbarBrand>
+            <CNavbarBrand className="ms-3">
+              Total : {brdVo.paging.totalItems}
+              <span style={{ fontSize: '0.8rem', color: 'gray', marginLeft: '10px' }}>
+                폴더를 끌어다 놓으면 순서를 변경할 수 있습니다.
+              </span>
+            </CNavbarBrand>
+
             {isEditingOrder && (
               <div className="ms-auto d-flex">
                 <CButton color="dark" onClick={handleSaveOrder} className="me-2">

@@ -42,7 +42,8 @@
     <!-- 관리자 - 게시판관리 - 폴더 빈 -->
     <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBoardListAdmin">
         <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
-        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="FOL_MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="FOL_MEM_NAME" property="memName" jdbcType="VARCHAR"/>
         <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
         <result column="FOL_STATE" property="state" jdbcType="VARCHAR" />
         <result column="FOL_ODR" property="odr" jdbcType="INTEGER"/>
@@ -53,6 +54,8 @@
     <!-- 관리자 - 게시판관리 - 게시판 빈 -->
     <resultMap type="com.example.movieCore.brd.bean.BrdBoardBean" id="boardBeanAdmin">
         <id column="BRD_ID" property="brdId" jdbcType="VARCHAR" />
+        <result column="BOARD_MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="BOARD_MEM_NAME" property="memName" jdbcType="VARCHAR"/>
         <result column="BOARD_FOL_ID" property="folId" jdbcType="VARCHAR"/>
         <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
         <result column="BRD_COMMENT" property="brdComment" jdbcType="VARCHAR" />
@@ -226,6 +229,7 @@
         BB.BRD_NAME,
         BB.BRD_COMMENT,
         BB.MEM_ID AS BOARD_MEM_ID,
+        MMI.MEM_NAME AS BOARD_MEM_NAME,
         BB.STATE AS BRD_STATE,
         BB.ODR AS BRD_ODR,
         BB.CREATE_DT AS BRD_CREATE_DT,
@@ -240,25 +244,79 @@
         BF.FOL_NAME,
         BF.STATE AS FOL_STATE,
         BF.ODR AS FOL_ODR,
-        BF.CREATE_DT AS FOL_CREATE_DT
+        BF.CREATE_DT AS FOL_CREATE_DT,
+        MMI.MEM_NAME AS FOL_MEM_NAME
         FROM
         BRD_BOARD BB
         LEFT JOIN
         BRD_FOLDER BF ON BB.FOL_ID = BF.FOL_ID
+        LEFT JOIN
+        MEM_MEMBER_INFO MMI ON BB.MEM_ID = MMI.MEM_ID
         WHERE
         1=1
         <if test="searchBean.searchFilter != null and searchBean.searchFilter != '' and searchBean.searchText != null and searchBean.searchText != ''">
-            AND ${searchBean.searchFilter} LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            <choose>
+                <when test="searchBean.searchFilter == 'mem_name'">
+                    AND MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                </when>
+                <when test="searchBean.searchFilter == 'fol_name'">
+                    AND BF.FOL_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                </when>
+                <otherwise>
+                    AND ${searchBean.searchFilter} LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                </otherwise>
+            </choose>
         </if>
         <choose>
             <when test="searchBean.sortKey != null and searchBean.sortKey != ''">
                 ORDER BY ${searchBean.sortKey} ${searchBean.sortOdr}, BB.ODR ASC
             </when>
             <otherwise>
-                ORDER BY BB.ODR ASC
+                ORDER BY BF.ODR ASC, BB.ODR ASC
             </otherwise>
         </choose>
     </select>
+
+
+
+
+    <!-- 게시판 상태 변경 (삭제/ 원복) -->
+    <update id="updateBoardStateAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" >
+        UPDATE BRD_BOARD
+        SET STATE = #{mode}
+        WHERE brd_id IN
+        <foreach item="board" collection="boardBeanList" open="(" separator="," close=")">
+            #{board.brdId}
+        </foreach>
+    </update>
+
+
+    <!-- 게시판 순서 업데이트 -->
+    <update id="updateBoardOrderAdmin" parameterType="com.example.movieCore.brd.bean.BrdBoardBean">
+        UPDATE BRD_BOARD
+        SET ODR = #{odr}
+        WHERE BRD_ID = #{brdId}
+    </update>
+
+
+
+    <!-- 게시판 정보 업데이트 -->
+    <!-- 게시판 정보 업데이트 -->
+    <update id="updateBoard" parameterType="com.example.movieCore.brd.bean.BrdBoardBean">
+        UPDATE BRD_BOARD
+        SET
+            FOL_ID = #{boardBean.folId},
+            BRD_NAME = #{boardBean.brdName},
+            BRD_COMMENT = #{boardBean.brdComment},
+            STATE = #{boardBean.state},
+            NOTICE_YN = #{boardBean.noticeYn},
+            IMG_UPLOAD_YN = #{boardBean.imgUploadYn},
+            FILE_LIMIT = #{boardBean.fileLimit},
+            FILE_CNT_LIMIT = #{boardBean.fileCntLimit},
+            REPL_YN = #{boardBean.replYn}
+        WHERE
+            BRD_ID = #{boardBean.brdId}
+    </update>
 
 
 

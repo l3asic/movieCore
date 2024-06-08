@@ -131,7 +131,7 @@ public class BrdBoardController {
     }
 
 
-    /** 관리자 모듈 - 게시판 리스트 조회 */
+    /** 관리자 모듈 - 폴더 별 게시판 리스트 조회 */
     @PostMapping(value = "/selectBoardListAdmin")
     @ResponseBody
     public Map<String, Object> selectBoardListAdmin(@RequestBody BrdVo brdVo) throws Exception {
@@ -144,11 +144,92 @@ public class BrdBoardController {
             resMap.put("brdVo", brdVo);
             successResult = true;
         } catch (Exception e) {
-            e.printStackTrace();
         }
         resMap.put("successResult", successResult);
         return resMap;
     }
+
+
+    /** 관리자 모듈 - 게시판 상태 변경 */
+    @PostMapping(value = "/updateBoardStateAdmin")
+    @ResponseBody
+    public Map<String, Object> updateBoardStateAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        boolean successResult = false;
+        String successMsg = "";
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+
+            if ("restore".equals(brdVo.getMode())) {
+                brdVo.setMode("B");
+            } else if ("delete".equals(brdVo.getMode())) {
+                brdVo.setMode("D");
+            }
+
+            int sucCnt = boardService.updateBoardStateAdmin(brdVo);
+
+            if (brdVo.getBoardBeanList().size() == sucCnt) {
+                successResult = true;
+                successMsg = sucCnt + " 개의 게시판 상태가 변경되었습니다.";
+            } else {
+                successResult = false;
+                int failCnt = brdVo.getFolderBeanList().size() - sucCnt;
+                successMsg = failCnt + " 개의 게시판 상태 변경이 실패 하였습니다.";
+            }
+
+
+            resMap.put("brdVo", brdVo);
+            successResult = true;
+        } catch (Exception e) {
+        }
+        resMap.put("successResult", successResult);
+        resMap.put("successMsg", successMsg);
+        return resMap;
+    }
+
+
+    /** 관리자 모듈 - 폴더 별 게시판 순서 변경 */
+    @PostMapping(value = "/updateBoardOrderAdmin")
+    @ResponseBody
+    public Map<String, Object> updateBoardOrderAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+
+
+            for (BrdBoardBean boardBean : brdVo.getBoardBeanList()) {
+                boardService.updateBoardOrderAdmin(boardBean);
+            }
+
+            successResult = true;
+
+
+
+            resMap.put("brdVo", brdVo);
+            successResult = true;
+        } catch (Exception e) {
+        }
+        resMap.put("successResult", successResult);
+        return resMap;
+    }
+
+
+    /** 관리자 모듈 - 폴더 별 게시판 정보 업데이트 */
+    @PostMapping(value = "/updateBoard")
+    @ResponseBody
+    public Map<String, Object> updateBoard(@RequestBody BrdVo brdVo) throws Exception {
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            boardService.updateBoard(brdVo);
+
+            successResult = true;
+        } catch (Exception e) {
+            // 예외 처리
+        }
+        resMap.put("successResult", successResult);
+        return resMap;
+    }
+
 
 
 

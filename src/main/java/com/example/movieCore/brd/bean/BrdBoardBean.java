@@ -22,6 +22,8 @@ public class BrdBoardBean {
 
     private String memId;
 
+    private String memName;
+
     private String state;
 
     private int odr;

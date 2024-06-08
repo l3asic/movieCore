@@ -39,4 +39,16 @@ public class BrdBoardServiceImpl {
     public ArrayList<BrdFolderBean> selectBoardListAdmin(BrdVo brdVo) {
         return brdBoardMapper.selectBoardListAdmin(brdVo);
     }
+
+    public int updateBoardStateAdmin(BrdVo brdVo) {
+        return brdBoardMapper.updateBoardStateAdmin(brdVo);
+    }
+
+    public void updateBoardOrderAdmin(BrdBoardBean boardBean) {
+        brdBoardMapper.updateBoardOrderAdmin(boardBean);
+    }
+
+    public void updateBoard(BrdVo brdVo) {
+        brdBoardMapper.updateBoard(brdVo);
+    }
 }

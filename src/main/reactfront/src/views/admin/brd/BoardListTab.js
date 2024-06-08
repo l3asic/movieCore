@@ -27,7 +27,7 @@ import {
   cilTrash,
   cilSwapVertical,
   cilMagnifyingGlass,
-  cilRecycle,
+  cilRecycle, cilClipboard, cilFolder,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -139,7 +139,7 @@ function BoardListTab() {
         selectBoardListAdmin();
       })
       .catch((err) => {
-        alert(err.response.data.errorMsg);
+        alert('실패(오류)');
       });
   };
 
@@ -242,7 +242,8 @@ function BoardListTab() {
     selectBoardListAdmin(); // 변경 사항 취소
   };
 
-  const handleBoardClick = (board) => {
+  const handleBoardClick = (board, event) => {
+    if (event.target.type === 'checkbox') return;
     setSelectedBoard(board);
     setVisible(true);
   };
@@ -256,13 +257,21 @@ function BoardListTab() {
   };
 
   const handleBoardSave = () => {
+
+    const updatedBoard = {
+      ...selectedBoard,
+      createDt: selectedBoard.createDt ? new Date(selectedBoard.createDt.replace(/\./g, '-')).toISOString() : null
+    };
+
     axios({
       url: "/updateBoard",
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-      data: JSON.stringify(selectedBoard),
+      data: JSON.stringify({
+        boardBean: updatedBoard,
+      }),
     })
       .then((res) => {
         alert('수정 완료');
@@ -274,8 +283,20 @@ function BoardListTab() {
       });
   };
 
+
   const handleModalClose = () => {
     setVisible(false);
+  };
+
+  const generateOptions = (start, end, step, unit, includeUnlimited = false) => {
+    const options = [];
+    for (let i = start; i <= end; i += step) {
+      options.push(<option key={i} value={i}>{i}{unit}</option>);
+    }
+    if (includeUnlimited) {
+      options.push(<option key="unlimited" value="unlimited">제한없음</option>);
+    }
+    return options;
   };
 
   return (
@@ -305,7 +326,13 @@ function BoardListTab() {
               <CIcon icon={cilTrash} />
             </CButton>
 
-            <CNavbarBrand className="ms-3">Total : {brdVo.folderBeanList.reduce((acc, folder) => acc + folder.boardBeanList.length, 0)}</CNavbarBrand>
+            <CNavbarBrand className="ms-3">
+              Total : {brdVo.folderBeanList.reduce((acc, folder) => acc + folder.boardBeanList.length, 0)}
+              <span style={{fontSize: '0.8rem', color: 'gray', marginLeft: '10px'}}>
+                게시판을 끌어다 놓으면 순서를 변경할 수 있습니다.
+              </span>
+            </CNavbarBrand>
+
             {isEditingOrder && (
               <div className="ms-auto d-flex">
                 <CButton color="dark" onClick={handleSaveOrder} className="me-2">
@@ -324,8 +351,8 @@ function BoardListTab() {
               options={[
                 { label: "게시판 명", value: "brd_name" },
                 { label: "게시판 고유번호", value: "brd_id" },
-                { label: "생성자 명", value: "mem_id" },
-                { label: "상태", value: "state" },
+                { label: "생성자 명", value: "mem_name" },
+                { label: "폴더 명", value: "fol_name" },
               ]}
               onChange={searchFilter}
               value={brdVo.searchBean.searchFilter}
@@ -368,7 +395,12 @@ function BoardListTab() {
 
       {brdVo.folderBeanList.map((folder, folderIndex) => (
         <div key={folder.folId} style={{ marginTop: "20px" }}>
-          <h5>{folder.folName}</h5>
+          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#f8f9fa', padding: '10px', borderRadius: '5px', marginBottom: '0', border: '1px solid #dee2e6', color: '#495057' }}>
+            <CIcon icon={cilFolder} style={{ marginRight: '10px' }} />
+            <h5 style={{ margin: 0 }}>
+              {folder.folName}
+            </h5>
+          </div>
           <DragDropContext onDragEnd={(result) => handleDragEnd({ ...result, source: { ...result.source, droppableId: folderIndex.toString() }, destination: { ...result.destination, droppableId: folderIndex.toString() } })}>
             <Droppable droppableId={folderIndex.toString()}>
               {(provided) => (
@@ -426,7 +458,7 @@ function BoardListTab() {
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
-                            onClick={() => handleBoardClick(board)}
+                            onClick={(e) => handleBoardClick(board, e)}
                           >
                             <CTableDataCell style={{ width: "10px" }}>
                               <CFormCheck
@@ -478,6 +510,14 @@ function BoardListTab() {
                 />
               </div>
               <div className="mb-3">
+                <CFormInput
+                  label="생성자 명"
+                  name="memId"
+                  value={selectedBoard.memName}
+                  readOnly
+                />
+              </div>
+              <div className="mb-3">
                 <CFormSelect
                   label="상태"
                   name="state"
@@ -490,13 +530,13 @@ function BoardListTab() {
               </div>
               <div className="mb-3">
                 <CFormSelect
-                  label="공지 여부"
+                  label="공지 게시판 여부"
                   name="noticeYn"
                   value={selectedBoard.noticeYn}
                   onChange={handleBoardChange}
                 >
-                  <option value="Y">예</option>
-                  <option value="N">아니오</option>
+                  <option value="Y">공지 게시판</option>
+                  <option value="N">일반 게시판</option>
                 </CFormSelect>
               </div>
               <div className="mb-3">
@@ -506,6 +546,48 @@ function BoardListTab() {
                   value={selectedBoard.atclCnt}
                   readOnly
                 />
+              </div>
+              <div className="mb-3">
+                <CFormSelect
+                  label="파일 용량 제한"
+                  name="fileLimit"
+                  value={selectedBoard.fileLimit}
+                  onChange={handleBoardChange}
+                >
+                  {generateOptions(10, 100, 10, 'MB', true)}
+                </CFormSelect>
+              </div>
+              <div className="mb-3">
+                <CFormSelect
+                  label="파일 개수 제한"
+                  name="fileCntLimit"
+                  value={selectedBoard.fileCntLimit}
+                  onChange={handleBoardChange}
+                >
+                  {generateOptions(0, 10, 1, '개', true)}
+                </CFormSelect>
+              </div>
+              <div className="mb-3">
+                <CFormSelect
+                  label="댓글 작성 여부"
+                  name="replYn"
+                  value={selectedBoard.replYn}
+                  onChange={handleBoardChange}
+                >
+                  <option value="Y">댓글 작성가능</option>
+                  <option value="N">댓글 작성 제한</option>
+                </CFormSelect>
+              </div>
+              <div className="mb-3">
+                <CFormSelect
+                  label="이미지 업로드 여부"
+                  name="imgUploadYn"
+                  value={selectedBoard.imgUploadYn}
+                  onChange={handleBoardChange}
+                >
+                  <option value="Y">예</option>
+                  <option value="N">아니오</option>
+                </CFormSelect>
               </div>
             </CForm>
           )}
