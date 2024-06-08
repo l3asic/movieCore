@@ -32,11 +32,24 @@ const ArticleReg = () => {
 
 
   // 파일 상태
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
 
   // 파일 선택 핸들러
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    //setFile(event.target.files[0]);
+    //setFiles(Array.from(event.target.files));
+    setFiles((prevFiles) => [
+      ...prevFiles,
+      ...Array.from(event.target.files)
+    ]);
+  };
+
+  const handleUpload = () => {
+    // 파일 업로드 로직
+    files.forEach(file => {
+      // 각 파일을 서버로 업로드하는 로직 추가
+      console.log(file);
+    });
   };
 
   const navigate = useNavigate();
@@ -184,8 +197,17 @@ const ArticleReg = () => {
 
         <CCol md={12}>
           <div className="mb-3">
-            <CFormLabel htmlFor="formFileMultiple">파일 첨부</CFormLabel>
+            {/*<CFormLabel htmlFor="formFileMultiple">파일 첨부</CFormLabel>*/}
+            <CFormLabel onClick={handleUpload}>파일 첨부</CFormLabel>
             <CFormInput type="file" id="formFileMultiple" multiple onChange={handleFileChange} />
+            <div>
+
+              <ul>
+                {files.map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </CCol>
 
@@ -294,7 +316,7 @@ const ArticleReg = () => {
   // 파일 업로드 함수
   function atclFileUpload(brdVo) {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('file', files);
     formData.append('brdVo', JSON.stringify(brdVo)); // brdVo 객체를 직접 FormData에 추가
 
     return axios.post('/atclFileUpload', formData, {
@@ -342,7 +364,7 @@ const ArticleReg = () => {
       if(res.data.succesResult){
 
         // 첨부파일 추가 처리
-        if (file) {
+        if (files) {
           atclFileUpload(res.data.brdVo);
         }
 
