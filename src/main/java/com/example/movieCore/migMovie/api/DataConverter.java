@@ -393,9 +393,7 @@ public class DataConverter {
     private MovieBoxOfficeBean convertToMovieBoxOfficeBean(LinkedHashMap<String, Object> linkedHashMap, String targetDt) {
         MovieBoxOfficeBean movieBoxOfficeBean = new MovieBoxOfficeBean();
 
-//        String targetDt = getYesterdayDateString();
         movieBoxOfficeBean.setShowRange(targetDt);
-
         movieBoxOfficeBean.setMovieCd((String) linkedHashMap.get("movieCd"));
         movieBoxOfficeBean.setMovieNm((String) linkedHashMap.get("movieNm"));
         movieBoxOfficeBean.setRank((String) linkedHashMap.get("rank"));
@@ -405,14 +403,13 @@ public class DataConverter {
         movieBoxOfficeBean.setAudiChange((String) linkedHashMap.get("audiChange"));
         movieBoxOfficeBean.setAudiAcc((String) linkedHashMap.get("audiAcc"));
 
-        // Parse and set openDt as LocalDate
+        // Parse and set openDt as Timestamp
         String openDtStr = (String) linkedHashMap.get("openDt");
-        Timestamp openDt = (Timestamp) parseDateString(openDtStr);
+        Timestamp openDt = parseDateStringToTimestamp(openDtStr);
         movieBoxOfficeBean.setOpenDt(openDt);
 
         return movieBoxOfficeBean;
     }
-
 
     private String getYesterdayDateString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -420,10 +417,11 @@ public class DataConverter {
         return dateFormat.format(new Date(yesterdayTimestamp));
     }
 
-    private Date parseDateString(String dateString) {
+    private Timestamp parseDateStringToTimestamp(String dateString) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            return dateFormat.parse(dateString);
+            Date parsedDate = dateFormat.parse(dateString);
+            return new Timestamp(parsedDate.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             return null;

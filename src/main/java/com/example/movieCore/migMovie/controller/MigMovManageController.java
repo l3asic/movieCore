@@ -698,7 +698,7 @@ public class MigMovManageController {
         try {
             // 일일 박스오피스 이관 동작
             batchLog = movManageService.syncDailyBoxOffice(movVo);
-            if(batchLog.getBatchStatus().equals("정상 작동")){
+            if(batchLog.getBatchStatus().equals("정상 동작")){
                 resMap.put("success", "success");
             }else{
                 resMap.put("success", "fail");

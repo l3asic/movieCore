@@ -164,7 +164,7 @@ public class MigMovManageServiceImpl {
         // 오류 내용
         batchLog.setBatchErrorText("");
         // 배치 동작 상태
-        batchLog.setBatchStatus("정상 작동");
+        batchLog.setBatchStatus("정상 동작");
 
 
 

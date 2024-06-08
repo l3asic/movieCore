@@ -16,7 +16,7 @@ import CIcon from "@coreui/icons-react";
 
 import heartIcon from '../../../assets/brand/heartIcon.png';
 import fillHeartIcon from '../../../assets/brand/fillHeartIcon.png';
-import {cilRecycle, cilTrash} from "@coreui/icons";
+import {cilRecycle, cilTrash, cilUser} from "@coreui/icons";
 import GrayLine from "../../uitils/GrayLine";
 
 
@@ -232,7 +232,19 @@ export default function MovieInfoManage() {
                     }}
                     width="40"
                   />*/}
-                <CAvatar src={avatar2}/>
+                {/*<CAvatar src={avatar2}/>*/}
+                <div style={{
+                  border: "2px solid gray", /* 테두리 색상을 회색으로 설정 */
+                  borderRadius: "10px", /* 모서리를 조금만 깎기 위한 설정 */
+                  display: "inline-flex", /* 아이콘이 가운데 정렬되도록 설정 */
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "5px", /* 내부 패딩을 추가하여 아이콘과 테두리 사이의 간격 설정 */
+                  marginRight : "10px"
+                }}>
+                  <CIcon icon={cilUser} className="" size="xl" />
+                </div>
+
 
                 {/** 감독 */}
 
@@ -254,8 +266,21 @@ export default function MovieInfoManage() {
 
                 {movVo.movieBean.movieActorBeanList && movVo.movieBean.movieActorBeanList.map((actor, index) => (
                   <div key={index} className="flex items-center gap-2" style={{display: "flex"}}>
+
+                    <div style={{
+                      border: "2px solid gray", /* 테두리 색상을 회색으로 설정 */
+                      borderRadius: "10px", /* 모서리를 조금만 깎기 위한 설정 */
+                      display: "inline-flex", /* 아이콘이 가운데 정렬되도록 설정 */
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "5px", /* 내부 패딩을 추가하여 아이콘과 테두리 사이의 간격 설정 */
+                      marginRight : "10px"
+                    }}>
+                      <CIcon icon={cilUser} className="text-secondary" size="xl" />
+                    </div>
+
                     {/* 배우 사진 */}
-                    <img
+                    {/*<img
                       alt="Actor avatar"
                       className="rounded-full object-cover"
                       height="40"
@@ -265,7 +290,7 @@ export default function MovieInfoManage() {
                         objectFit: "cover",
                       }}
                       width="40"
-                    />
+                    />*/}
                     {/* 배우명, 역할명 */}
                     <div className="flex flex-col">
                       <span className="font-semibold">{actor.peopleNm}</span>

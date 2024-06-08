@@ -154,6 +154,7 @@ function BoxOfficeBatchManage() {
                 <CTableHeaderCell>배치 성공 여부</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
+
             <CTableBody>
               {batchLogs.map((log, index) => (
                 <CTableRow key={index}>
@@ -161,9 +162,11 @@ function BoxOfficeBatchManage() {
                   <CTableDataCell>{formatDate(log.batchRunTime)}</CTableDataCell>
                   <CTableDataCell>{log.batchType}</CTableDataCell>
                   <CTableDataCell>
-                    <CButton color="dark" onClick={() => showErrorMessage(log.batchErrorText)}>
-                      오류 내용 보기
-                    </CButton>
+                    {log.batchStatus !== "정상 작동" && (
+                      <CButton color="dark" onClick={() => showErrorMessage(log.batchErrorText)}>
+                        오류 내용 보기
+                      </CButton>
+                    )}
                   </CTableDataCell>
                   <CTableDataCell>{formatDate(log.batchEndTime)}</CTableDataCell>
                   <CTableDataCell>{log.batchDuration}</CTableDataCell>
@@ -172,6 +175,8 @@ function BoxOfficeBatchManage() {
                 </CTableRow>
               ))}
             </CTableBody>
+
+
           </CTable>
         </CCardBody>
       </CCard>
