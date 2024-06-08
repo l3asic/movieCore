@@ -15,6 +15,7 @@ const MovieRecommend = () => {
     hotMoviesList: [],
     topRatedMoviesList: [],
   });
+  const [returnMsg, setReturnMsg] = useState('');
 
   useEffect(() => {
     selectPersonalRecommendMov();
@@ -96,6 +97,7 @@ const MovieRecommend = () => {
 
   return (
     <>
+      {returnMsg && <div className="return-msg">{returnMsg}</div>}
       <CNav variant="tabs" className="justify-content-center mt-5">
         <CNavItem>
           <CNavLink active={activeTab === 'core'} onClick={() => setActiveTab('core')}>

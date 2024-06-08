@@ -1,6 +1,7 @@
 package com.example.movieCore.movie.controller;
 
 import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.login.bean.LoginMemberBean;
 import com.example.movieCore.login.vo.LoginMemberVo;
 import com.example.movieCore.movie.bean.*;
 import com.example.movieCore.movie.service.MovMovieServiceImpl;
@@ -512,8 +513,19 @@ public class MovMovieController {
         Map<String, Object> resMap = new HashMap<>();
         MovVo movVo = new MovVo();
         movVo.setMovieBean(new MovieBean());
+        String returnMsg = "";
 
         try {
+
+            // 비회원 처리
+            if (memVo == null || memVo.getMemberBean() == null || memVo.getMemberBean().getMemId() == null) {
+                if (memVo.getMemberBean() == null) {
+                    memVo.setMemberBean(new LoginMemberBean());
+                }
+                memVo.getMemberBean().setMemId("MEM2157073142");
+                returnMsg = "회원가입을 하고 더욱 좋은 영화를 추천 받아보세요";
+                resMap.put("returnMsg", returnMsg);
+            }
 
             ArrayList<MovieGenreBean> movieGenreBeanList = new ArrayList<>();
 
