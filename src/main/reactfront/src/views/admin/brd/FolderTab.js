@@ -3,6 +3,7 @@ import {CInputGroup, CInputGroupText, CForm, CFormInput, CCol, CButton} from "@c
 import { cilFolder } from '@coreui/icons';
 import axios from "axios";
 import CIcon from "@coreui/icons-react";
+import {useNavigate} from "react-router-dom";
 
 function FolderTab() {
   const [folderBean, setFolderBean] = useState({
@@ -10,6 +11,8 @@ function FolderTab() {
     folName: '',
     odr: 0
   });
+
+  const navigate  = useNavigate();
 
   return (
     <div style={styles.container}>
@@ -67,6 +70,8 @@ function FolderTab() {
     }).then(function (res) {
       if (res.data.succesResult) {
         alert("등록 성공");
+        // 메인화면으로
+        navigate('/dashboard');
       } else {
         alert("등록 실패");
       }

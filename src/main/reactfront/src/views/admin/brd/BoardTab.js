@@ -15,6 +15,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import {cilClipboard} from "@coreui/icons";
+import {useNavigate} from "react-router-dom";
 
 function BoardTab() {
   const [brdVo, setBrdVo] = useState({
@@ -33,6 +34,8 @@ function BoardTab() {
     fileCntLimit: "5",
     replYn: "Y",
   });
+
+  const navigate  = useNavigate();
 
   /** 모든 폴더 리스트 조회 */
   useEffect(() => {
@@ -281,8 +284,10 @@ function BoardTab() {
       .then(function (res) {
         if (res.data.succesResult) {
           alert("등록 성공");
+          // 메인화면으로
+          navigate('/dashboard');
         } else {
-          alert("등록 그냥 실패?");
+          alert("등록 실패");
         }
       })
       .catch(function (err) {
