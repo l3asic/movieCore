@@ -18,5 +18,5 @@ public interface BrdBoardMapper {
 
     int selectBoardListAdminTotalCnt(BrdVo brdVo);
 
-    ArrayList<BrdBoardBean> selectBoardListAdmin(BrdVo brdVo);
+    ArrayList<BrdFolderBean> selectBoardListAdmin(BrdVo brdVo);
 }

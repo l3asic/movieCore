@@ -1,6 +1,7 @@
 package com.example.movieCore.brd.controller;
 
 import com.example.movieCore.brd.bean.BrdBoardBean;
+import com.example.movieCore.brd.bean.BrdFolderBean;
 import com.example.movieCore.brd.service.BrdBoardServiceImpl;
 import com.example.movieCore.brd.vo.BrdVo;
 import com.example.movieCore.utils.MakeUUID;
@@ -10,12 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -130,44 +130,32 @@ public class BrdBoardController {
 
     }
 
+
     /** 관리자 모듈 - 게시판 리스트 조회 */
     @PostMapping(value = "/selectBoardListAdmin")
     @ResponseBody
-    public Map<String, Object> selectBoardListAdmin(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
-
-
-        /** 폴더 리스트 조회디비서 셀렉트  */
-        BrdVo brdVo = new BrdVo();
-        brdVo.setBoardBean(boardBean);
-
-        boolean succesResult = false;
-
-        Map resMap = new HashMap<>();
+    public Map<String, Object> selectBoardListAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        boolean successResult = false;
+        Map<String, Object> resMap = new HashMap<>();
         try {
-
-            brdVo.setPaging(new Paging());
-            brdVo.getPaging().setTotalItems(boardService.selectBoardListAdminTotalCnt(brdVo));
-
-            //  페이지 이동시 (최초 조회시에는 패스)
-            if(brdVo.getNewPage() != 0){
-                // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
-                brdVo.getPaging().setCurrentPage(brdVo.getNewPage());
-            }
-
-
-            brdVo.setBoardBeanList(boardService.selectBoardListAdmin(brdVo));
-            resMap.put("brdVo",brdVo);
-            succesResult = true;
-        }catch (Exception e){
-
+            // 데이터 조회
+            ArrayList<BrdFolderBean> folderBeanList = boardService.selectBoardListAdmin(brdVo);
+            brdVo.setFolderBeanList(folderBeanList);
+            resMap.put("brdVo", brdVo);
+            successResult = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        resMap.put("succesResult",succesResult);
-
+        resMap.put("successResult", successResult);
         return resMap;
-
-
     }
+
+
+
+
+
+
+
 
 
 

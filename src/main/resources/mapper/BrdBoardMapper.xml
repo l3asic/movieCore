@@ -18,7 +18,6 @@
 
     </resultMap>
 
-
     <!-- 게시판 빈 -->
     <resultMap type="com.example.movieCore.brd.bean.BrdBoardBean" id="boardBean">
         <id column="BRD_ID" property="brdId" jdbcType="VARCHAR" />
@@ -34,8 +33,43 @@
         <result column="FILE_LIMIT" property="fileLimit" jdbcType="VARCHAR" />
         <result column="FILE_CNT_LIMIT" property="fileCntLimit" jdbcType="VARCHAR" />
         <result column="REPL_YN" property="replYn" jdbcType="VARCHAR" />
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR" />
+        <result column="ATCL_CNT" property="atclCnt" jdbcType="VARCHAR" />
 
     </resultMap>
+
+
+    <!-- 관리자 - 게시판관리 - 폴더 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBoardListAdmin">
+        <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
+        <result column="FOL_STATE" property="state" jdbcType="VARCHAR" />
+        <result column="FOL_ODR" property="odr" jdbcType="INTEGER"/>
+        <result column="FOL_CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
+        <collection property="boardBeanList" ofType="com.example.movieCore.brd.bean.BrdBoardBean" resultMap="boardBeanAdmin"/>
+    </resultMap>
+
+    <!-- 관리자 - 게시판관리 - 게시판 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdBoardBean" id="boardBeanAdmin">
+        <id column="BRD_ID" property="brdId" jdbcType="VARCHAR" />
+        <result column="BOARD_FOL_ID" property="folId" jdbcType="VARCHAR"/>
+        <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
+        <result column="BRD_COMMENT" property="brdComment" jdbcType="VARCHAR" />
+        <result column="BOARD_MEM_ID" property="memId" jdbcType="VARCHAR" />
+        <result column="BRD_STATE" property="state" jdbcType="VARCHAR" />
+        <result column="BRD_ODR" property="odr" jdbcType="INTEGER" />
+        <result column="BRD_CREATE_DT" property="createDt" jdbcType="TIMESTAMP" />
+        <result column="NOTICE_YN" property="noticeYn" jdbcType="VARCHAR" />
+        <result column="IMG_UPLOAD_YN" property="imgUploadYn" jdbcType="VARCHAR" />
+        <result column="FILE_LIMIT" property="fileLimit" jdbcType="VARCHAR" />
+        <result column="FILE_CNT_LIMIT" property="fileCntLimit" jdbcType="VARCHAR" />
+        <result column="REPL_YN" property="replYn" jdbcType="VARCHAR" />
+        <result column="ATCL_CNT" property="atclCnt" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+
 
 
     <!-- 모든 폴더/게시판 리스트 조회 -->
@@ -137,7 +171,7 @@
             STATE = 'B'
     </select>
 
-    <!-- 관리자모듈- 게시판 리스트 조회 -->
+    <!-- 관리자모듈- 게시판 갯수 조회 -->
     <select id="selectBoardListAdminTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
         SELECT
             COUNT(BB.BRD_ID) totalCnt
@@ -146,26 +180,97 @@
 
     </select>
 
-    <select id="selectBoardListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean" >
-        SELECT
-            BB.BRD_ID,
-            BB.BRD_NAME,
-            BB.BRD_COMMENT,
-            BB.MEM_ID,
-            CASE WHEN BB.STATE = 'D' THEN '삭제'
-                 ELSE '사용' END STATE,
-            BB.ODR,
-            BB.CREATE_DT,
-            CASE WHEN BB.NOTICE_YN = 'Y' THEN '예'
-                 ELSE '아니오' END NOTICE_YN,
-            CASE WHEN BB.IMG_UPLOAD_YN = 'Y' THEN '예'
-                 ELSE '아니오' END IMG_UPLOAD_YN
-        FROM
-            BRD_BOARD BB
 
-            LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
+
+
+
+    <!-- 관리자모듈- 폴더별 게시판 리스트 조회 -->
+    <select id="selectBoardListAdmin0" resultMap="folderBean">
+        SELECT
+            bf.FOL_ID,
+            bf.MEM_ID,
+            bf.FOL_NAME,
+            bf.STATE,
+            bf.ODR,
+            bf.CREATE_DT,
+            bb.BRD_ID,
+            bb.FOL_ID,
+            bb.BRD_NAME,
+            bb.BRD_COMMENT,
+            bb.MEM_ID,
+            bb.STATE,
+            bb.ODR,
+            bb.CREATE_DT,
+            bb.NOTICE_YN,
+            bb.IMG_UPLOAD_YN,
+            bb.FILE_LIMIT,
+            bb.FILE_CNT_LIMIT,
+            bb.REPL_YN
+        FROM
+            BRD_FOLDER bf
+                LEFT JOIN
+            BRD_BOARD bb ON bf.FOL_ID = bb.FOL_ID
+        where
+            bf.state != 'D'
+        order by bf.odr asc, bb.odr asc
 
     </select>
+
+
+
+    <!-- 관리자모듈- 폴더별 게시판 리스트 조회 -->
+    <select id="selectBoardListAdmin" resultMap="folderBoardListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        SELECT
+        BB.BRD_ID,
+        BB.FOL_ID AS BOARD_FOL_ID,
+        BB.BRD_NAME,
+        BB.BRD_COMMENT,
+        BB.MEM_ID AS BOARD_MEM_ID,
+        BB.STATE AS BRD_STATE,
+        BB.ODR AS BRD_ODR,
+        BB.CREATE_DT AS BRD_CREATE_DT,
+        CASE WHEN BB.NOTICE_YN = 'Y' THEN '예' ELSE '아니오' END AS NOTICE_YN,
+        CASE WHEN BB.IMG_UPLOAD_YN = 'Y' THEN '예' ELSE '아니오' END AS IMG_UPLOAD_YN,
+        BB.FILE_LIMIT,
+        BB.FILE_CNT_LIMIT,
+        BB.REPL_YN,
+        (SELECT COUNT(*) FROM BRD_ARTICLE BA WHERE BA.BRD_ID = BB.BRD_ID) AS ATCL_CNT,
+        BF.FOL_ID,
+        BF.MEM_ID,
+        BF.FOL_NAME,
+        BF.STATE AS FOL_STATE,
+        BF.ODR AS FOL_ODR,
+        BF.CREATE_DT AS FOL_CREATE_DT
+        FROM
+        BRD_BOARD BB
+        LEFT JOIN
+        BRD_FOLDER BF ON BB.FOL_ID = BF.FOL_ID
+        WHERE
+        1=1
+        <if test="searchBean.searchFilter != null and searchBean.searchFilter != '' and searchBean.searchText != null and searchBean.searchText != ''">
+            AND ${searchBean.searchFilter} LIKE CONCAT('%', #{searchBean.searchText}, '%')
+        </if>
+        <choose>
+            <when test="searchBean.sortKey != null and searchBean.sortKey != ''">
+                ORDER BY ${searchBean.sortKey} ${searchBean.sortOdr}, BB.ODR ASC
+            </when>
+            <otherwise>
+                ORDER BY BB.ODR ASC
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 @Getter
 @Setter
 public class BrdBoardBean {
+
     private String brdId;
 
     private String folId;
+
+    private String folName;
 
     private String brdName;
 
@@ -37,6 +39,8 @@ public class BrdBoardBean {
     private String replYn;
 
     private ArrayList<BrdArticleBean> articleBeanList;
+
+    private String atclCnt;
 
 
     /** 검색 조건 */

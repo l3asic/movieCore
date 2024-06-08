@@ -36,7 +36,7 @@ public class BrdBoardServiceImpl {
         return brdBoardMapper.selectBoardListAdminTotalCnt(brdVo);
     }
 
-    public ArrayList<BrdBoardBean> selectBoardListAdmin(BrdVo brdVo) {
+    public ArrayList<BrdFolderBean> selectBoardListAdmin(BrdVo brdVo) {
         return brdBoardMapper.selectBoardListAdmin(brdVo);
     }
 }
