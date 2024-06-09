@@ -30,6 +30,8 @@ import {
   cilRecycle,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import '../../../cstmCss/ArticleListManage.css';
 import Paging from "../../uitils/Paging"; // 페이징 컴포넌트 가져오기
 import GrayLine from "../../uitils/GrayLine";
@@ -125,10 +127,20 @@ function ArticleListManage() {
 
   /** 게시글 상태 변경 (삭제/ 원복) */
   const updateArticleStateAdmin = (mode) => {
-    const selectedArticles = brdVo.articleBeanList.filter((article) => article.selected).map((article) => ({
-      ...article,
-      createDt: article.createDt ? new Date(article.createDt.replace(/\./g, "-")).toISOString() : null, // ISO 형식으로 변환
-    }));
+    const selectedArticles = brdVo.articleBeanList.filter((article) => article.selected).map((article) => {
+      const formattedCreateDt = article.createDt && !isNaN(Date.parse(article.createDt.replace(/\./g, "-")))
+        ? new Date(article.createDt.replace(/\./g, "-")).toISOString()
+        : null;
+      const formattedExpireDt = article.expireDt && !isNaN(Date.parse(article.expireDt.replace(/\./g, "-")))
+        ? new Date(article.expireDt.replace(/\./g, "-")).toISOString()
+        : null;
+
+      return {
+        ...article,
+        createDt: formattedCreateDt,
+        expireDt: formattedExpireDt,
+      };
+    });
 
     axios({
       url: "/updateArticleStateAdmin",
@@ -180,7 +192,7 @@ function ArticleListManage() {
           return {
             ...article,
             createDt: formattedCreateDt,
-            expireDt: formattedExpireDt,
+            expireDt: isNaN(Date.parse(article.expireDt)) ? null : formattedExpireDt,
             selected: false,
             stateText: article.state === "B" ? "정상" : article.state === "D" ? "삭제" : "기타",
           };
@@ -201,9 +213,11 @@ function ArticleListManage() {
     selectArticleListAdmin(newPage);
   };
 
-  const handleRowClick = (article) => {
-    setSelectedArticle(article);
-    toggleModal();
+  const handleRowClick = (index, article) => {
+    if (!brdVo.articleBeanList[index].selected) {
+      setSelectedArticle(article);
+      toggleModal();
+    }
   };
 
   const handleArticleChange = (event) => {
@@ -213,7 +227,6 @@ function ArticleListManage() {
       [name]: value,
     }));
   };
-
 
   /** 팝업 게시글 수정 저장 */
   const handleSaveArticle = () => {
@@ -225,7 +238,10 @@ function ArticleListManage() {
         "Content-Type": "application/json",
       },
       data: {
-        boardBean : selectedArticle
+        articleBean: {
+          ...selectedArticle,
+          expireDt: selectedArticle.expireDt ? new Date(selectedArticle.expireDt).toISOString() : null,
+        }
       },
     })
       .then((res) => {
@@ -363,7 +379,7 @@ function ArticleListManage() {
         <CTableBody>
           {brdVo.articleBeanList.length > 0 ? (
             brdVo.articleBeanList.map((article, index) => (
-              <CTableRow key={article.atclId} onClick={() => handleRowClick(article)}>
+              <CTableRow key={article.atclId} onClick={() => handleRowClick(index, article)}>
                 <CTableDataCell style={{ width: "50px" }}>
                   <CFormCheck checked={article.selected || selectAll} onChange={() => handleSelect(index)} />
                 </CTableDataCell>
@@ -399,91 +415,115 @@ function ArticleListManage() {
         <CModalHeader onClose={toggleModal}>
           <CModalTitle>게시글 상세 정보</CModalTitle>
         </CModalHeader>
-        <CModalBody>
+        <CModalBody style={{ maxWidth: '800px' }}>
           {selectedArticle && (
-            <div>
-              <CFormInput
-                type="text"
-                name="atclId"
-                label="고유번호"
-                value={selectedArticle.atclId}
-                onChange={handleArticleChange}
-                readOnly
-              />
-              <CFormInput
-                type="text"
-                name="brdName"
-                label="게시판 명"
-                value={selectedArticle.brdName}
-                onChange={handleArticleChange}
-              />
-              <CFormInput
-                type="text"
-                name="subject"
-                label="제목"
-                value={selectedArticle.subject}
-                onChange={handleArticleChange}
-              />
-              <CFormInput
-                type="textarea"
-                name="content"
-                label="내용"
-                value={selectedArticle.content}
-                onChange={handleArticleChange}
-              />
-              <CFormInput
-                type="text"
-                name="memName"
-                label="작성자"
-                value={selectedArticle.memName}
-                onChange={handleArticleChange}
-              />
-              <CFormInput
-                type="text"
-                name="createDt"
-                label="작성일"
-                value={selectedArticle.createDt}
-                onChange={handleArticleChange}
-                readOnly
-              />
-              <CFormInput
-                type="text"
-                name="expireYn"
-                label="게시 종료여부"
-                value={selectedArticle.expireYn === "N" ? "게시 중" : "게시 종료"}
-                onChange={handleArticleChange}
-              />
-              <CFormInput
-                type="text"
-                name="stateText"
-                label="상태"
-                value={selectedArticle.stateText}
-                onChange={handleArticleChange}
-              />
-              <CFormInput
-                type="text"
-                name="viewCnt"
-                label="조회수"
-                value={selectedArticle.viewCnt}
-                onChange={handleArticleChange}
-                readOnly
-              />
-              <CFormInput
-                type="text"
-                name="atclReplCnt"
-                label="댓글 수"
-                value={selectedArticle.atclReplCnt}
-                onChange={handleArticleChange}
-                readOnly
-              />
-              <CFormInput
-                type="text"
-                name="folderBeanList"
-                label="폴더"
-                value={selectedArticle.folderBeanList}
-                onChange={handleArticleChange}
-                readOnly
-              />
+            <div className="form-container">
+              <div className="form-row">
+                <CFormInput
+                  type="text"
+                  name="folderBeanList"
+                  label="폴더"
+                  value={selectedArticle.folderBeanList || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                />
+                <CFormInput
+                  type="text"
+                  name="brdName"
+                  label="게시판 명"
+                  value={selectedArticle.brdName || ''}
+                  onChange={handleArticleChange}
+                />
+              </div>
+              <div className="form-row">
+                <CFormInput
+                  type="text"
+                  name="atclId"
+                  label="고유번호"
+                  value={selectedArticle.atclId || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                />
+                <CFormInput
+                  type="text"
+                  name="memName"
+                  label="작성자"
+                  value={selectedArticle.memName || ''}
+                  onChange={handleArticleChange}
+                />
+              </div>
+              <div className="form-row">
+                <CFormInput
+                  type="text"
+                  name="subject"
+                  label="제목"
+                  value={selectedArticle.subject || ''}
+                  onChange={handleArticleChange}
+                />
+              </div>
+              <div className="form-row">
+                <CFormInput
+                  type="textarea"
+                  name="content"
+                  label="내용"
+                  value={selectedArticle.content || ''}
+                  onChange={handleArticleChange}
+                />
+              </div>
+              <div className="form-row">
+                <CFormInput
+                  type="text"
+                  name="createDt"
+                  label="작성일"
+                  value={selectedArticle.createDt || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                />
+                <CFormInput
+                  type="text"
+                  name="expireYn"
+                  label="게시 종료 여부"
+                  value={selectedArticle.expireYn === "N" ? "게시 중" : "게시 종료"}
+                  onChange={handleArticleChange}
+                  readOnly
+                />
+              </div>
+              <div className="form-row">
+                <DatePicker
+                  selected={isNaN(Date.parse(selectedArticle.expireDt)) ? null : new Date(selectedArticle.expireDt)}
+                  onChange={(date) => setSelectedArticle({ ...selectedArticle, expireDt: date })}
+                  dateFormat="yyyy-MM-dd"
+                  className="form-control"
+                />
+              </div>
+              <div className="form-row">
+                <CFormSelect
+                  name="state"
+                  label="상태"
+                  value={selectedArticle.state || 'other'}
+                  onChange={handleArticleChange}
+                >
+                  <option value="B">정상</option>
+                  <option value="D">삭제</option>
+                  <option value="other">기타</option>
+                </CFormSelect>
+                <CFormInput
+                  type="text"
+                  name="viewCnt"
+                  label="조회수"
+                  value={selectedArticle.viewCnt || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                />
+                <CFormInput
+                  type="text"
+                  name="atclReplCnt"
+                  label="댓글 수"
+                  value={selectedArticle.atclReplCnt || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                />
+              </div>
             </div>
           )}
         </CModalBody>

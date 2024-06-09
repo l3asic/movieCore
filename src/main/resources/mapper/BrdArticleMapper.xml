@@ -512,14 +512,16 @@
 
 
 
-    <!--  -->
-    <update id="updateArticleAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+    <!-- 게시글 상태 변경 -->
+    <update id="updateArticleStateAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
         UPDATE
             BRD_ARTICLE
         SET
-
-        WHERE
-
+            STATE = #{mode}
+        WHERE atcl_id IN
+        <foreach item="article" collection="articleBeanList" open="(" separator="," close=")">
+            #{article.atclId}
+        </foreach>
     </update>
 
 
