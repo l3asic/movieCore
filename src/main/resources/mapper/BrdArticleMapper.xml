@@ -65,6 +65,7 @@
     <resultMap type="com.example.movieCore.brd.bean.BrdArticleBean" id="articleBeanAdmin">
         <id column="ATCL_ID" property="atclId" jdbcType="VARCHAR"/>
         <result column="BRD_ID" property="brdId" jdbcType="VARCHAR"/>
+        <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
         <result column="SUBJECT" property="subject" jdbcType="VARCHAR"/>
         <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
@@ -448,18 +449,14 @@
         MMI.MEM_NAME,
         BA.SUBJECT,
         BA.CONTENT,
-        BA.VIEW_CNT,
         BA.CREATE_DT,
-        BA.UPDATE_DT,
         BA.EXPIRE_DT,
         BA.EXPIRE_YN,
-        BA.STATE,
-        BA.ATCL_REPL_CNT
+        BA.STATE
         FROM
         BRD_ARTICLE BA
         LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
         LEFT JOIN BRD_BOARD BB ON BA.BRD_ID = BB.BRD_ID
-        LEFT JOIN BRD_REPLY BR ON BA.ATCL_ID = BR.ATCL_ID
         WHERE
         1=1
         <choose>
@@ -495,9 +492,6 @@
                     <when test="searchBean.sortKey == 'create_dt'">
                         BA.CREATE_DT
                     </when>
-                    <when test="searchBean.sortKey == 'view_cnt'">
-                        BA.VIEW_CNT
-                    </when>
                     <otherwise>
                         BA.CREATE_DT
                     </otherwise>
@@ -515,6 +509,21 @@
         </choose>
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
+
+
+
+    <!--  -->
+    <update id="updateArticleAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+        UPDATE
+            BRD_ARTICLE
+        SET
+
+        WHERE
+
+    </update>
+
+
+
 
 
 

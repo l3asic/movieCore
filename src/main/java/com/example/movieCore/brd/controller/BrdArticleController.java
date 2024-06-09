@@ -281,20 +281,18 @@ public class BrdArticleController {
     /** 관리자 - 게시글 리스트 조회 */
     @PostMapping(value = "/selectArticleListAdmin")
     @ResponseBody
-    public Map<String, Object> selectArticleListAdmin(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
+    public Map<String, Object> selectArticleListAdmin(@RequestBody BrdVo brdVo) throws Exception {
         /** 게시글 리스트 조회디비서 셀렉트  */
-        BrdVo brdVo = new BrdVo();
-        brdVo.setBoardBean(boardBean);
 
         boolean succesResult = false;
 
-        Map resMap = new HashMap<>();
+        Map<String, Object> resMap = new HashMap<>();
         try {
             brdVo.setPaging(new Paging());
             brdVo.getPaging().setTotalItems(articleService.selectArticleListTotalCntAdmin(brdVo));
 
             //  페이지 이동시 (최초 조회시에는 패스)
-            if(brdVo.getNewPage() != 0){
+            if (brdVo.getNewPage() != 0) {
                 // 페이지 이동 조회시 (setCurrentPage 로 페이징변수 갱신)
                 brdVo.getPaging().setCurrentPage(brdVo.getNewPage());
             }
@@ -314,6 +312,27 @@ public class BrdArticleController {
         resMap.put("succesResult", succesResult);
         return resMap;
     }
+
+    /** 관리자 - 게시글 수정 */
+    @PostMapping(value = "/updateArticleAdmin")
+    @ResponseBody
+    public Map<String, Object> updateArticleAdmin(@RequestBody BrdVo brdVo) {
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+
+        try {
+            articleService.updateArticleAdmin(brdVo);
+            successResult = true;
+            resMap.put("successMsg", "게시글이 성공적으로 수정되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resMap.put("errorMsg", "게시글 수정에 실패했습니다.");
+        }
+
+        resMap.put("successResult", successResult);
+        return resMap;
+    }
+
 
 
 

@@ -16,6 +16,11 @@ import {
   CButton,
   CFormInput,
   CFormSelect,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -45,10 +50,16 @@ function ArticleListManage() {
   });
 
   const [selectAll, setSelectAll] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   useEffect(() => {
     selectArticleListAdmin();
   }, []);
+
+  const toggleModal = () => {
+    setModal(!modal);
+  };
 
   const searchFilter = (event) => {
     setBrdVo((prevState) => ({
@@ -157,7 +168,6 @@ function ArticleListManage() {
             day: "2-digit",
             hour: "2-digit",
             minute: "2-digit",
-            second: "2-digit",
           }).replace(/\.$/, "");
           const formattedExpireDt = new Date(article.expireDt).toLocaleString("ko-KR", {
             year: "numeric",
@@ -165,7 +175,6 @@ function ArticleListManage() {
             day: "2-digit",
             hour: "2-digit",
             minute: "2-digit",
-            second: "2-digit",
           }).replace(/\.$/, "");
 
           return {
@@ -190,6 +199,43 @@ function ArticleListManage() {
 
   const handlePageChange = (newPage) => {
     selectArticleListAdmin(newPage);
+  };
+
+  const handleRowClick = (article) => {
+    setSelectedArticle(article);
+    toggleModal();
+  };
+
+  const handleArticleChange = (event) => {
+    const { name, value } = event.target;
+    setSelectedArticle((prevArticle) => ({
+      ...prevArticle,
+      [name]: value,
+    }));
+  };
+
+
+  /** 팝업 게시글 수정 저장 */
+  const handleSaveArticle = () => {
+    // Save article logic here, you can make API call to save the article.
+    axios({
+      url: "/updateArticleAdmin",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: {
+        boardBean : selectedArticle
+      },
+    })
+      .then((res) => {
+        alert(res.data.successMsg);
+        toggleModal();
+        selectArticleListAdmin();
+      })
+      .catch((err) => {
+        alert(err.response.data.errorMsg);
+      });
   };
 
   return (
@@ -284,6 +330,10 @@ function ArticleListManage() {
               고유번호
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("atcl_id")} />
             </CTableHeaderCell>
+            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
+              게시판 명
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("brd_name")} />
+            </CTableHeaderCell>
             <CTableHeaderCell scope="col" style={{ width: "150px" }}>
               제목
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("subject")} />
@@ -292,34 +342,17 @@ function ArticleListManage() {
               내용
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("content")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
-              게시판 명
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("brd_name")} />
-            </CTableHeaderCell>
             <CTableHeaderCell scope="col" style={{ width: "100px" }}>
               작성자
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("mem_name")} />
             </CTableHeaderCell>
-
             <CTableHeaderCell scope="col" style={{ width: "120px" }}>
               작성일
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("create_dt")} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "120px" }}>
-              게시 종료일
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("expire_dt")} />
-            </CTableHeaderCell>
             <CTableHeaderCell scope="col" style={{ width: "100px" }}>
               게시 종료 여부
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn("expire_yn")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "100px" }}>
-              조회수
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("view_cnt")} />
-            </CTableHeaderCell>
-            <CTableHeaderCell scope="col" style={{ width: "100px" }}>
-              댓글 수
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn("atcl_repl_cnt")} />
             </CTableHeaderCell>
             <CTableHeaderCell scope="col" style={{ width: "80px" }}>
               상태
@@ -330,34 +363,29 @@ function ArticleListManage() {
         <CTableBody>
           {brdVo.articleBeanList.length > 0 ? (
             brdVo.articleBeanList.map((article, index) => (
-              <CTableRow key={article.atclId}>
+              <CTableRow key={article.atclId} onClick={() => handleRowClick(article)}>
                 <CTableDataCell style={{ width: "50px" }}>
                   <CFormCheck checked={article.selected || selectAll} onChange={() => handleSelect(index)} />
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "100px" }}>{article.atclId}</CTableDataCell>
+                <CTableDataCell style={{ width: "120px" }}>{article.brdName}</CTableDataCell>
                 <CTableDataCell style={{ width: "150px" }}>
                   {article.subject.length > 10 ? `${article.subject.substring(0, 10)}...` : article.subject}
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "200px" }}>
                   {article.content.length > 10 ? `${article.content.substring(0, 10)}...` : article.content}
                 </CTableDataCell>
-                <CTableDataCell style={{ width: "120px" }}>{article.brdName}</CTableDataCell>
                 <CTableDataCell style={{ width: "100px" }}>{article.memName}</CTableDataCell>
                 <CTableDataCell style={{ width: "120px" }}>{article.createDt}</CTableDataCell>
-                <CTableDataCell style={{ width: "120px" }}>
-                  {article.expireDt.startsWith("2099") ? "무기한" : article.expireDt}
-                </CTableDataCell>
                 <CTableDataCell style={{ width: "100px" }}>
                   {article.expireYn === "N" ? "게시 중" : "게시 종료"}
                 </CTableDataCell>
-                <CTableDataCell style={{ width: "100px" }}>{article.viewCnt}</CTableDataCell>
-                <CTableDataCell style={{ width: "100px" }}>{article.atclReplCnt}</CTableDataCell>
                 <CTableDataCell style={{ width: "80px" }}>{article.stateText}</CTableDataCell>
               </CTableRow>
             ))
           ) : (
             <CTableRow>
-              <CTableDataCell colSpan={12} className="text-center">
+              <CTableDataCell colSpan={10} className="text-center">
                 게시글이 없습니다.
               </CTableDataCell>
             </CTableRow>
@@ -366,6 +394,108 @@ function ArticleListManage() {
       </CTable>
 
       <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
+
+      <CModal visible={modal} onClose={toggleModal}>
+        <CModalHeader onClose={toggleModal}>
+          <CModalTitle>게시글 상세 정보</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          {selectedArticle && (
+            <div>
+              <CFormInput
+                type="text"
+                name="atclId"
+                label="고유번호"
+                value={selectedArticle.atclId}
+                onChange={handleArticleChange}
+                readOnly
+              />
+              <CFormInput
+                type="text"
+                name="brdName"
+                label="게시판 명"
+                value={selectedArticle.brdName}
+                onChange={handleArticleChange}
+              />
+              <CFormInput
+                type="text"
+                name="subject"
+                label="제목"
+                value={selectedArticle.subject}
+                onChange={handleArticleChange}
+              />
+              <CFormInput
+                type="textarea"
+                name="content"
+                label="내용"
+                value={selectedArticle.content}
+                onChange={handleArticleChange}
+              />
+              <CFormInput
+                type="text"
+                name="memName"
+                label="작성자"
+                value={selectedArticle.memName}
+                onChange={handleArticleChange}
+              />
+              <CFormInput
+                type="text"
+                name="createDt"
+                label="작성일"
+                value={selectedArticle.createDt}
+                onChange={handleArticleChange}
+                readOnly
+              />
+              <CFormInput
+                type="text"
+                name="expireYn"
+                label="게시 종료여부"
+                value={selectedArticle.expireYn === "N" ? "게시 중" : "게시 종료"}
+                onChange={handleArticleChange}
+              />
+              <CFormInput
+                type="text"
+                name="stateText"
+                label="상태"
+                value={selectedArticle.stateText}
+                onChange={handleArticleChange}
+              />
+              <CFormInput
+                type="text"
+                name="viewCnt"
+                label="조회수"
+                value={selectedArticle.viewCnt}
+                onChange={handleArticleChange}
+                readOnly
+              />
+              <CFormInput
+                type="text"
+                name="atclReplCnt"
+                label="댓글 수"
+                value={selectedArticle.atclReplCnt}
+                onChange={handleArticleChange}
+                readOnly
+              />
+              <CFormInput
+                type="text"
+                name="folderBeanList"
+                label="폴더"
+                value={selectedArticle.folderBeanList}
+                onChange={handleArticleChange}
+                readOnly
+              />
+            </div>
+          )}
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={toggleModal}>
+            닫기
+          </CButton>
+          <CButton color="primary" onClick={handleSaveArticle}>
+            저장
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </>
   );
 }

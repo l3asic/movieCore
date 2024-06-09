@@ -32,4 +32,6 @@ public interface BrdArticleMapper {
     int selectArticleListTotalCntAdmin(BrdVo brdVo);
 
     ArrayList<BrdArticleBean> selectArticleListAdmin(BrdVo brdVo);
+
+    void updateArticleAdmin(BrdVo brdVo);
 }

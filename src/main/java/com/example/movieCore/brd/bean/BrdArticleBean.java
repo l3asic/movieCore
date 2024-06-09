@@ -9,9 +9,12 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class BrdArticleBean implements Serializable {
+
     private String atclId;
 
     private String brdId;
+
+    private String brdName;
 
     private String memId;
 
