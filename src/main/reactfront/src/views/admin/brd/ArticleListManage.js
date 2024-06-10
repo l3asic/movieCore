@@ -55,7 +55,9 @@ function ArticleListManage() {
   const [boards, setBoards] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [modal, setModal] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [selectedArticle, setSelectedArticle] = useState({
+    files: [], // Add files array to hold the attached files
+  });
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 상태
 
   useEffect(() => {
@@ -169,6 +171,18 @@ function ArticleListManage() {
       });
   };
 
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).replace(/\./g, ".");
+  };
+
   /** 게시글 리스트 조회  */
   const selectArticleListAdmin = (newPage = 0) => {
     axios({
@@ -181,20 +195,8 @@ function ArticleListManage() {
     })
       .then((res) => {
         const articleBeanList = res.data.brdVo.articleBeanList.map((article) => {
-          const formattedCreateDt = new Date(article.createDt).toLocaleString("ko-KR", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-          }).replace(/\.$/, "");
-          const formattedExpireDt = new Date(article.expireDt).toLocaleString("ko-KR", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-          }).replace(/\.$/, "");
+          const formattedCreateDt = formatDateTime(article.createDt);
+          const formattedExpireDt = formatDateTime(article.expireDt);
 
           return {
             ...article,
@@ -221,13 +223,38 @@ function ArticleListManage() {
   };
 
   const handleRowClick = (index, article) => {
+
+    // 기존동작
     if (!brdVo.articleBeanList[index].selected) {
-      setSelectedArticle(article);
+      const formattedArticle = {
+        ...article,
+        createDt: article.createDt ? formatDateTime(article.createDt) : null,
+        updateDt: article.updateDt ? formatDateTime(article.updateDt) : null,
+        expireDt: article.expireDt ? formatDateTime(article.expireDt) : null,
+      };
+      setSelectedArticle(formattedArticle);
       setModal(true); // 팝업을 여는 부분
 
       // 모든 폴더 게시판 리스트 조회
       selectBoardListAdmin(article.brdId);
     }
+
+    /** 추후 게시글에 속한 파일 조회 예정 */
+    /*if (!brdVo.articleBeanList[index].selected) {
+      axios({
+        url: "/getArticleFiles", // Assuming you have an endpoint to get article files
+        method: "post",
+        data: { atclId: article.atclId },
+      })
+        .then((res) => {
+          setSelectedArticle({ ...article, files: res.data.files });
+          setModal(true); // 팝업을 여는 부분
+          selectBoardListAdmin(article.brdId);
+        })
+        .catch((err) => {
+          alert("파일 조회 실패 (오류)");
+        });
+    }*/
   };
 
   const handleArticleChange = (event) => {
@@ -241,7 +268,7 @@ function ArticleListManage() {
   const handleExpireDtChange = (date) => {
     setSelectedArticle((prevArticle) => ({
       ...prevArticle,
-      expireDt: date.toISOString().slice(0, 19).replace('T', ' '),
+      expireDt: formatDateTime(date.toISOString()),
     }));
     setShowDatePicker(false);
   };
@@ -271,20 +298,43 @@ function ArticleListManage() {
       });
   };
 
+
+  /** 날짜 형식을 'yyyy-MM-dd HH:mm:ss' 형식으로 변환 */
+  const formatDateToSQLTimestamp = (dateString) => {
+    if (!dateString) return null;
+
+    const [datePart, timePart] = dateString.trim().split(' ');
+    if (!datePart || !timePart) return null;
+
+    const dateParts = datePart.split('.').map(part => part.trim());
+    const timeParts = timePart.split(':').map(part => part.trim());
+
+    if (dateParts.length !== 3 || timeParts.length !== 2) return null;
+
+    const [year, month, day] = dateParts;
+    const [hours, minutes] = timeParts;
+
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`; // 'yyyy-MM-dd HH:mm:ss' 형식
+  };
+
   /** 팝업 게시글 수정 저장 */
   const handleSaveArticle = () => {
+    const updatedArticle = {
+      ...selectedArticle,
+      createDt: selectedArticle.createDt ? formatDateToSQLTimestamp(selectedArticle.createDt) : null,
+      updateDt: selectedArticle.updateDt ? formatDateToSQLTimestamp(selectedArticle.updateDt) : null,
+      expireDt: selectedArticle.expireDt ? formatDateToSQLTimestamp(selectedArticle.expireDt) : null,
+    };
+
     axios({
       url: "/updateArticleAdmin",
       method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-      data: {
-        articleBean: {
-          ...selectedArticle,
-          expireDt: selectedArticle.expireDt ? new Date(selectedArticle.expireDt).toISOString() : null,
-        }
-      },
+      data: JSON.stringify({
+        articleBean: updatedArticle,
+      }),
     })
       .then((res) => {
         alert(res.data.successMsg);
@@ -616,7 +666,7 @@ function ArticleListManage() {
                   type="text"
                   name="viewCnt"
                   label="조회수"
-                  value={selectedArticle.viewCnt || ''}
+                  value={selectedArticle.viewCnt !== undefined ? selectedArticle.viewCnt : '0'}
                   onChange={handleArticleChange}
                   readOnly
                   style={{ flex: 1 }}
@@ -625,12 +675,30 @@ function ArticleListManage() {
                   type="text"
                   name="atclReplCnt"
                   label="댓글 수"
-                  value={selectedArticle.atclReplCnt || ''}
+                  value={selectedArticle.atclReplCnt !== undefined ? selectedArticle.atclReplCnt : '0'}
                   onChange={handleArticleChange}
                   readOnly
                   style={{ flex: 1 }}
                 />
               </div>
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
+                <label>첨부 파일:</label>
+                {/** 추후 첨부파일 처리 */}
+                {/*<ul>
+                  {selectedArticle.files.length > 0 ? (
+                    selectedArticle.files.map((file, index) => (
+                      <li key={index}>
+                        <a href={file.url} target="_blank" rel="noopener noreferrer">
+                          {file.fileName}
+                        </a>
+                      </li>
+                    ))
+                  ) : (
+                    <li>첨부 파일이 없습니다.</li>
+                  )}
+                </ul>*/}
+              </div>
+
             </div>
           )}
         </CModalBody>

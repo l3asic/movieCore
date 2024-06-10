@@ -493,14 +493,29 @@
             <when test="searchBean != null and searchBean.sortKey != null and searchBean.sortKey != '' and searchBean.sortOdr != null and searchBean.sortOdr != ''">
                 ORDER BY
                 <choose>
+                    <when test="searchBean.sortKey == 'atcl_id'">
+                        BA.atcl_id
+                    </when>
+                    <when test="searchBean.sortKey == 'brd_name'">
+                        BB.brd_name
+                    </when>
                     <when test="searchBean.sortKey == 'subject'">
                         BA.SUBJECT
+                    </when>
+                    <when test="searchBean.sortKey == 'content'">
+                        BA.content
                     </when>
                     <when test="searchBean.sortKey == 'mem_name'">
                         MMI.MEM_NAME
                     </when>
                     <when test="searchBean.sortKey == 'create_dt'">
                         BA.CREATE_DT
+                    </when>
+                    <when test="searchBean.sortKey == 'expire_yn'">
+                        BA.expire_yn
+                    </when>
+                    <when test="searchBean.sortKey == 'state'">
+                        BA.state
                     </when>
                     <otherwise>
                         BA.CREATE_DT

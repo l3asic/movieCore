@@ -315,10 +315,10 @@ public class BrdArticleController {
 
 
     
-    /** 관리자 - 게시글 수정 */
+    /** 관리자 - 게시글 상태 수정 */
     @PostMapping(value = "/updateArticleStateAdmin")
     @ResponseBody
-    public Map<String, Object> updateArticleAdmin(@RequestBody BrdVo brdVo) {
+    public Map<String, Object> updateArticleStateAdmin(@RequestBody BrdVo brdVo) {
         Map<String, Object> resMap = new HashMap<>();
         boolean successResult = false;
         String successMsg = "";
@@ -357,13 +357,13 @@ public class BrdArticleController {
     /** 게시글 상세 정보 수정 */
     @PostMapping(value = "/updateArticleAdmin")
     @ResponseBody
-    public Map<String, Object> updateArticleAdmin(HttpServletRequest request, HttpServletResponse response, BrdArticleBean articleBean) throws Exception {
+    public Map<String, Object> updateArticleAdmin(@RequestBody BrdVo brdVo) throws Exception {
         Map<String, Object> resMap = new HashMap<>();
         boolean successResult = false;
 
         try {
             // 업데이트 로직 호출
-//            articleService.updateArticleAdmin(articleBean);
+            // articleService.updateArticleAdmin(brdVo.getArticleBean());
             successResult = true;
             resMap.put("successMsg", "게시글이 성공적으로 업데이트되었습니다.");
         } catch (Exception e) {
@@ -371,7 +371,6 @@ public class BrdArticleController {
             resMap.put("errorMsg", "게시글 업데이트 중 오류가 발생했습니다.");
         }
 
-        resMap.put("successResult", successResult);
         return resMap;
     }
 
