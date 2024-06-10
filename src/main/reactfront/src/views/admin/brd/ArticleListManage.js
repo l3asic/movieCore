@@ -294,8 +294,8 @@ function ArticleListManage() {
               options={[
                 { label: "제목", value: "subject" },
                 { label: "고유번호", value: "atcl_id" },
+                { label: "게시판 명", value: "brd_name" },
                 { label: "작성자", value: "mem_name" },
-                { label: "상태", value: "state" },
               ]}
               onChange={searchFilter}
               value={brdVo.searchBean.searchFilter}

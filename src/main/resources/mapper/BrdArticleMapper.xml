@@ -416,17 +416,21 @@
         FROM
         BRD_ARTICLE BA
         LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
+        LEFT JOIN BRD_BOARD BB ON BA.BRD_ID = BB.BRD_ID
         WHERE
         1=1
         <choose>
             <when test="searchBean != null and searchBean.searchFilter == 'subject' and searchBean.searchText != null and searchBean.searchText != ''">
                 AND BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
             </when>
-            <when test="searchBean != null and searchBean.searchFilter == 'content' and searchBean.searchText != null and searchBean.searchText != ''">
-                AND BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            <when test="searchBean != null and searchBean.searchFilter == 'atcl_id' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BA.ATCL_ID LIKE CONCAT('%', #{searchBean.searchText}, '%')
             </when>
             <when test="searchBean != null and searchBean.searchFilter == 'mem_name' and searchBean.searchText != null and searchBean.searchText != ''">
                 AND MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <when test="searchBean != null and searchBean.searchFilter == 'brd_name' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BB.BRD_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
             </when>
             <otherwise>
                 <if test="searchBean != null and searchBean.searchText != null and searchBean.searchText != ''">
@@ -434,6 +438,7 @@
                     BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
                     OR BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
                     OR MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    OR BB.BRD_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
                     )
                 </if>
             </otherwise>
@@ -463,11 +468,14 @@
             <when test="searchBean != null and searchBean.searchFilter == 'subject' and searchBean.searchText != null and searchBean.searchText != ''">
                 AND BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
             </when>
-            <when test="searchBean != null and searchBean.searchFilter == 'content' and searchBean.searchText != null and searchBean.searchText != ''">
-                AND BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            <when test="searchBean != null and searchBean.searchFilter == 'atcl_id' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BA.ATCL_ID LIKE CONCAT('%', #{searchBean.searchText}, '%')
             </when>
             <when test="searchBean != null and searchBean.searchFilter == 'mem_name' and searchBean.searchText != null and searchBean.searchText != ''">
                 AND MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+            </when>
+            <when test="searchBean != null and searchBean.searchFilter == 'brd_name' and searchBean.searchText != null and searchBean.searchText != ''">
+                AND BB.BRD_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
             </when>
             <otherwise>
                 <if test="searchBean != null and searchBean.searchText != null and searchBean.searchText != ''">
@@ -475,6 +483,7 @@
                     BA.SUBJECT LIKE CONCAT('%', #{searchBean.searchText}, '%')
                     OR BA.CONTENT LIKE CONCAT('%', #{searchBean.searchText}, '%')
                     OR MMI.MEM_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
+                    OR BB.BRD_NAME LIKE CONCAT('%', #{searchBean.searchText}, '%')
                     )
                 </if>
             </otherwise>
@@ -509,6 +518,7 @@
         </choose>
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
+
 
 
 
