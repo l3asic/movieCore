@@ -414,19 +414,23 @@ function ArticleListManage() {
 
       <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
 
+
+      {/** 게시글 상세 정보 팝업  */}
+
       <CModal size="lg" visible={modal} onClose={handleModalClose} alignment="center">
         <CModalHeader onClose={handleModalClose}>
           <CModalTitle>게시글 상세 정보</CModalTitle>
         </CModalHeader>
-        <CModalBody style={{ maxWidth: '800px' }}>
+        <CModalBody style={{ maxWidth: '800px', paddingTop: '40px', paddingBottom: '40px' }}>
           {selectedArticle && (
             <div className="form-container">
-              <div className="form-row">
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormSelect
                   name="folderBeanList"
                   label="폴더"
                   value={selectedArticle.folderBeanList || ''}
                   onChange={handleArticleChange}
+                  style={{ flex: 1 }}
                 >
                   <option value="1">폴더1</option>
                   <option value="2">폴더2</option>
@@ -436,12 +440,13 @@ function ArticleListManage() {
                   label="게시판 명"
                   value={selectedArticle.brdName || ''}
                   onChange={handleArticleChange}
+                  style={{ flex: 1 }}
                 >
                   <option value="게시판1">게시판1</option>
                   <option value="게시판2">게시판2</option>
                 </CFormSelect>
               </div>
-              <div className="form-row">
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormInput
                   type="text"
                   name="atclId"
@@ -449,6 +454,7 @@ function ArticleListManage() {
                   value={selectedArticle.atclId || ''}
                   onChange={handleArticleChange}
                   readOnly
+                  style={{ flex: 1 }}
                 />
                 <CFormInput
                   type="text"
@@ -456,27 +462,30 @@ function ArticleListManage() {
                   label="작성자"
                   value={selectedArticle.memName || ''}
                   onChange={handleArticleChange}
+                  style={{ flex: 1 }}
                 />
               </div>
-              <div className="form-row">
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormInput
                   type="text"
                   name="subject"
                   label="제목"
                   value={selectedArticle.subject || ''}
                   onChange={handleArticleChange}
+                  style={{ flex: 1 }}
                 />
               </div>
-              <div className="form-row">
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormInput
                   type="textarea"
                   name="content"
                   label="내용"
                   value={selectedArticle.content || ''}
                   onChange={handleArticleChange}
+                  style={{ flex: 1, height: '150px' }}
                 />
               </div>
-              <div className="form-row">
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormInput
                   type="text"
                   name="createDt"
@@ -484,32 +493,62 @@ function ArticleListManage() {
                   value={selectedArticle.createDt || ''}
                   onChange={handleArticleChange}
                   readOnly
+                  style={{ flex: 1 }}
                 />
+                <CFormInput
+                  type="text"
+                  name="updateDt"
+                  label="수정일"
+                  value={selectedArticle.updateDt || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                  style={{ flex: 1 }}
+                />
+              </div>
+              <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormSelect
                   name="expireYn"
                   label="게시 종료 여부"
                   value={selectedArticle.expireYn}
                   onChange={handleArticleChange}
-                  readOnly
+                  style={{ flex: 0.4 }}
                 >
                   <option value="N">게시 중</option>
                   <option value="Y">게시 종료</option>
                 </CFormSelect>
-              </div>
-              <div className="form-row">
-                <DatePicker
-                  selected={isNaN(Date.parse(selectedArticle.expireDt)) ? null : new Date(selectedArticle.expireDt)}
-                  onChange={(date) => setSelectedArticle({ ...selectedArticle, expireDt: date })}
-                  dateFormat="yyyy-MM-dd"
-                  className="form-control"
+
+
+                <CFormInput
+                  type="text"
+                  name="expireDt"
+                  label="게시 종료일"
+                  value={selectedArticle.expireDt || ''}
+                  onChange={handleArticleChange}
+                  readOnly
+                  style={{ flex: 1 }}
                 />
+
+                <DatePicker
+                  selected={selectedArticle && selectedArticle.expireDt && !isNaN(Date.parse(selectedArticle.expireDt)) ? new Date(selectedArticle.expireDt.replace(' ', 'T')) : null}
+                  onChange={(date) => setSelectedArticle({ ...selectedArticle, expireDt: date.toISOString().slice(0, 19).replace('T', ' ') })}
+                  dateFormat="yyyy.MM.dd HH:mm"
+                  className="form-control"
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  timeCaption="time"
+                  style={{ flex: 0.6 }}
+                />
+
+
               </div>
-              <div className="form-row">
+              <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                 <CFormSelect
                   name="state"
                   label="상태"
                   value={selectedArticle.state || 'other'}
                   onChange={handleArticleChange}
+                  style={{ flex: 1 }}
                 >
                   <option value="B">정상</option>
                   <option value="D">삭제</option>
@@ -522,6 +561,7 @@ function ArticleListManage() {
                   value={selectedArticle.viewCnt || ''}
                   onChange={handleArticleChange}
                   readOnly
+                  style={{ flex: 1 }}
                 />
                 <CFormInput
                   type="text"
@@ -530,6 +570,7 @@ function ArticleListManage() {
                   value={selectedArticle.atclReplCnt || ''}
                   onChange={handleArticleChange}
                   readOnly
+                  style={{ flex: 1 }}
                 />
               </div>
             </div>
@@ -544,6 +585,16 @@ function ArticleListManage() {
           </CButton>
         </CModalFooter>
       </CModal>
+
+
+
+
+
+
+
+
+
+
     </>
   );
 }

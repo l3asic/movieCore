@@ -455,6 +455,7 @@
         BA.SUBJECT,
         BA.CONTENT,
         BA.CREATE_DT,
+        BA.UPDATE_DT,
         BA.EXPIRE_DT,
         BA.EXPIRE_YN,
         BA.STATE
