@@ -51,6 +51,8 @@ function ArticleListManage() {
     },
   });
 
+  const [folders, setFolders] = useState([]);
+  const [boards, setBoards] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [modal, setModal] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
@@ -222,6 +224,9 @@ function ArticleListManage() {
     if (!brdVo.articleBeanList[index].selected) {
       setSelectedArticle(article);
       setModal(true); // 팝업을 여는 부분
+
+      // 모든 폴더 게시판 리스트 조회
+      selectBoardListAdmin(article.brdId);
     }
   };
 
@@ -239,6 +244,31 @@ function ArticleListManage() {
       expireDt: date.toISOString().slice(0, 19).replace('T', ' '),
     }));
     setShowDatePicker(false);
+  };
+
+  /** 모든 폴더 게시판 리스트 조회 */
+  const selectBoardListAdmin = (brdId) => {
+    axios({
+      url: "/selectBoardListAdmin",
+      method: "post",
+      data: {
+        searchBean: {},
+      },
+    })
+      .then((res) => {
+        setFolders(res.data.brdVo.folderBeanList);
+        const selectedFolder = res.data.brdVo.folderBeanList.find(folder =>
+          folder.boardBeanList.some(board => board.brdId === brdId)
+        );
+        setBoards(selectedFolder ? selectedFolder.boardBeanList : []);
+        setSelectedArticle(prevArticle => ({
+          ...prevArticle,
+          folderId: selectedFolder ? selectedFolder.folId : '',
+        }));
+      })
+      .catch((err) => {
+        alert("조회 실패 (오류)");
+      });
   };
 
   /** 팝업 게시글 수정 저장 */
@@ -264,6 +294,17 @@ function ArticleListManage() {
       .catch((err) => {
         alert(err.response.data.errorMsg);
       });
+  };
+
+  const handleFolderChange = (event) => {
+    const folderId = event.target.value;
+    setSelectedArticle(prevArticle => ({
+      ...prevArticle,
+      folderId: folderId,
+      brdName: '',
+    }));
+    const selectedFolder = folders.find(folder => folder.folId === folderId);
+    setBoards(selectedFolder ? selectedFolder.boardBeanList : []);
   };
 
   return (
@@ -435,24 +476,26 @@ function ArticleListManage() {
             <div className="form-container">
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <CFormSelect
-                  name="folderBeanList"
+                  name="folderId"
                   label="폴더"
-                  value={selectedArticle.folderBeanList || ''}
-                  onChange={handleArticleChange}
+                  value={selectedArticle.folderId || ''}
+                  onChange={handleFolderChange}
                   style={{ flex: 1 }}
                 >
-                  <option value="1">폴더1</option>
-                  <option value="2">폴더2</option>
+                  {folders.map(folder => (
+                    <option key={folder.folId} value={folder.folId}>{folder.folName}</option>
+                  ))}
                 </CFormSelect>
                 <CFormSelect
-                  name="brdName"
+                  name="brdId"
                   label="게시판 명"
-                  value={selectedArticle.brdName || ''}
+                  value={selectedArticle.brdId || ''}
                   onChange={handleArticleChange}
                   style={{ flex: 1 }}
                 >
-                  <option value="게시판1">게시판1</option>
-                  <option value="게시판2">게시판2</option>
+                  {boards.map(board => (
+                    <option key={board.brdId} value={board.brdId}>{board.brdName}</option>
+                  ))}
                 </CFormSelect>
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
@@ -600,16 +643,6 @@ function ArticleListManage() {
           </CButton>
         </CModalFooter>
       </CModal>
-
-
-
-
-
-
-
-
-
-
     </>
   );
 }
