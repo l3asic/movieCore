@@ -54,6 +54,7 @@ function ArticleListManage() {
   const [selectAll, setSelectAll] = useState(false);
   const [modal, setModal] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 상태
 
   useEffect(() => {
     selectArticleListAdmin();
@@ -230,6 +231,14 @@ function ArticleListManage() {
       ...prevArticle,
       [name]: value,
     }));
+  };
+
+  const handleExpireDtChange = (date) => {
+    setSelectedArticle((prevArticle) => ({
+      ...prevArticle,
+      expireDt: date.toISOString().slice(0, 19).replace('T', ' '),
+    }));
+    setShowDatePicker(false);
   };
 
   /** 팝업 게시글 수정 저장 */
@@ -518,28 +527,34 @@ function ArticleListManage() {
                 </CFormSelect>
 
 
-                <CFormInput
-                  type="text"
-                  name="expireDt"
-                  label="게시 종료일"
-                  value={selectedArticle.expireDt || ''}
-                  onChange={handleArticleChange}
-                  readOnly
-                  style={{ flex: 1 }}
-                />
-
-                <DatePicker
-                  selected={selectedArticle && selectedArticle.expireDt && !isNaN(Date.parse(selectedArticle.expireDt)) ? new Date(selectedArticle.expireDt.replace(' ', 'T')) : null}
-                  onChange={(date) => setSelectedArticle({ ...selectedArticle, expireDt: date.toISOString().slice(0, 19).replace('T', ' ') })}
-                  dateFormat="yyyy.MM.dd HH:mm"
-                  className="form-control"
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  timeIntervals={15}
-                  timeCaption="time"
-                  style={{ flex: 0.6 }}
-                />
-
+                <div style={{ display: 'flex', flex: 1, gap: '10px', alignItems: 'center' }}>
+                  {!showDatePicker ? (
+                    <>
+                      <CFormInput
+                        type="text"
+                        name="expireDt"
+                        label="게시 종료일"
+                        value={selectedArticle.expireDt || ''}
+                        onChange={handleArticleChange}
+                        readOnly
+                        style={{ flex: 1 }}
+                      />
+                      <CButton color="dark" onClick={() => setShowDatePicker(true)}>변경</CButton>
+                    </>
+                  ) : (
+                    <DatePicker
+                      selected={selectedArticle && selectedArticle.expireDt && !isNaN(Date.parse(selectedArticle.expireDt.replace(' ', 'T'))) ? new Date(selectedArticle.expireDt.replace(' ', 'T')) : null}
+                      onChange={handleExpireDtChange}
+                      dateFormat="yyyy.MM.dd HH:mm"
+                      className="form-control"
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      timeCaption="time"
+                      style={{ flex: 1 }}
+                    />
+                  )}
+                </div>
 
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
