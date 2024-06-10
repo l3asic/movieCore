@@ -63,6 +63,10 @@ function ArticleListManage() {
     setModal(!modal);
   };
 
+  const handleModalClose = () => {
+    setModal(false);
+  };
+
   const searchFilter = (event) => {
     setBrdVo((prevState) => ({
       ...prevState,
@@ -216,7 +220,7 @@ function ArticleListManage() {
   const handleRowClick = (index, article) => {
     if (!brdVo.articleBeanList[index].selected) {
       setSelectedArticle(article);
-      toggleModal();
+      setModal(true); // 팝업을 여는 부분
     }
   };
 
@@ -230,7 +234,6 @@ function ArticleListManage() {
 
   /** 팝업 게시글 수정 저장 */
   const handleSaveArticle = () => {
-    // Save article logic here, you can make API call to save the article.
     axios({
       url: "/updateArticleAdmin",
       method: "post",
@@ -246,7 +249,7 @@ function ArticleListManage() {
     })
       .then((res) => {
         alert(res.data.successMsg);
-        toggleModal();
+        setModal(false); // 팝업창을 닫음
         selectArticleListAdmin();
       })
       .catch((err) => {
@@ -380,7 +383,7 @@ function ArticleListManage() {
           {brdVo.articleBeanList.length > 0 ? (
             brdVo.articleBeanList.map((article, index) => (
               <CTableRow key={article.atclId} onClick={() => handleRowClick(index, article)}>
-                <CTableDataCell style={{ width: "50px" }}>
+                <CTableDataCell style={{ width: "50px" }} onClick={(e) => e.stopPropagation()}>
                   <CFormCheck checked={article.selected || selectAll} onChange={() => handleSelect(index)} />
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "100px" }}>{article.atclId}</CTableDataCell>
@@ -411,29 +414,32 @@ function ArticleListManage() {
 
       <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
 
-      <CModal visible={modal} onClose={toggleModal}>
-        <CModalHeader onClose={toggleModal}>
+      <CModal size="lg" visible={modal} onClose={handleModalClose} alignment="center">
+        <CModalHeader onClose={handleModalClose}>
           <CModalTitle>게시글 상세 정보</CModalTitle>
         </CModalHeader>
         <CModalBody style={{ maxWidth: '800px' }}>
           {selectedArticle && (
             <div className="form-container">
               <div className="form-row">
-                <CFormInput
-                  type="text"
+                <CFormSelect
                   name="folderBeanList"
                   label="폴더"
                   value={selectedArticle.folderBeanList || ''}
                   onChange={handleArticleChange}
-                  readOnly
-                />
-                <CFormInput
-                  type="text"
+                >
+                  <option value="1">폴더1</option>
+                  <option value="2">폴더2</option>
+                </CFormSelect>
+                <CFormSelect
                   name="brdName"
                   label="게시판 명"
                   value={selectedArticle.brdName || ''}
                   onChange={handleArticleChange}
-                />
+                >
+                  <option value="게시판1">게시판1</option>
+                  <option value="게시판2">게시판2</option>
+                </CFormSelect>
               </div>
               <div className="form-row">
                 <CFormInput
@@ -479,14 +485,16 @@ function ArticleListManage() {
                   onChange={handleArticleChange}
                   readOnly
                 />
-                <CFormInput
-                  type="text"
+                <CFormSelect
                   name="expireYn"
                   label="게시 종료 여부"
-                  value={selectedArticle.expireYn === "N" ? "게시 중" : "게시 종료"}
+                  value={selectedArticle.expireYn}
                   onChange={handleArticleChange}
                   readOnly
-                />
+                >
+                  <option value="N">게시 중</option>
+                  <option value="Y">게시 종료</option>
+                </CFormSelect>
               </div>
               <div className="form-row">
                 <DatePicker
@@ -528,7 +536,7 @@ function ArticleListManage() {
           )}
         </CModalBody>
         <CModalFooter>
-          <CButton color="secondary" onClick={toggleModal}>
+          <CButton color="secondary" onClick={handleModalClose}>
             닫기
           </CButton>
           <CButton color="primary" onClick={handleSaveArticle}>
