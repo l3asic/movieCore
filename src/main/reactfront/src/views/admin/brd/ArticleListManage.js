@@ -179,6 +179,7 @@ function ArticleListManage() {
       day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
+      second: "2-digit",
       hour12: false,
     }).replace(/\./g, ".");
   };
@@ -268,10 +269,29 @@ function ArticleListManage() {
   const handleExpireDtChange = (date) => {
     setSelectedArticle((prevArticle) => ({
       ...prevArticle,
-      expireDt: formatDateTime(date.toISOString()),
+      expireDt: formatDateToKoreanString(date),
     }));
     setShowDatePicker(false);
   };
+
+
+  const formatDateToKoreanString = (date) => {
+    if (!date) return null;
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
+  };
+
+
+
+
+
 
   /** 모든 폴더 게시판 리스트 조회 */
   const selectBoardListAdmin = (brdId) => {
@@ -298,32 +318,27 @@ function ArticleListManage() {
       });
   };
 
+  // 날짜 형식을 'yyyy-MM-dd HH:mm:ss' 형식으로 변환하는 함수 추가
+  const formatDateToSQLTimestamp = (date) => {
+    if (!date) return null;
 
-  /** 날짜 형식을 'yyyy-MM-dd HH:mm:ss' 형식으로 변환 */
-  const formatDateToSQLTimestamp = (dateString) => {
-    if (!dateString) return null;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    const [datePart, timePart] = dateString.trim().split(' ');
-    if (!datePart || !timePart) return null;
-
-    const dateParts = datePart.split('.').map(part => part.trim());
-    const timeParts = timePart.split(':').map(part => part.trim());
-
-    if (dateParts.length !== 3 || timeParts.length !== 2) return null;
-
-    const [year, month, day] = dateParts;
-    const [hours, minutes] = timeParts;
-
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`; // 'yyyy-MM-dd HH:mm:ss' 형식
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
   /** 팝업 게시글 수정 저장 */
   const handleSaveArticle = () => {
     const updatedArticle = {
       ...selectedArticle,
-      createDt: selectedArticle.createDt ? formatDateToSQLTimestamp(selectedArticle.createDt) : null,
-      updateDt: selectedArticle.updateDt ? formatDateToSQLTimestamp(selectedArticle.updateDt) : null,
-      expireDt: selectedArticle.expireDt ? formatDateToSQLTimestamp(selectedArticle.expireDt) : null,
+      createDt: selectedArticle.createDt && !isNaN(Date.parse(selectedArticle.createDt.replace(/\./g, "-"))) ? new Date(selectedArticle.createDt.replace(/\./g, "-")).toISOString() : null,
+      updateDt: selectedArticle.updateDt && !isNaN(Date.parse(selectedArticle.updateDt.replace(/\./g, "-"))) ? new Date(selectedArticle.updateDt.replace(/\./g, "-")).toISOString() : null,
+      expireDt: selectedArticle.expireDt && !isNaN(Date.parse(selectedArticle.expireDt.replace(/\./g, "-"))) ? new Date(selectedArticle.expireDt.replace(/\./g, "-")).toISOString() : null,
     };
 
     axios({
