@@ -2,6 +2,7 @@ package com.example.movieCore.brd.service;
 
 import com.example.movieCore.brd.bean.BrdArticleBean;
 import com.example.movieCore.brd.bean.BrdBoardBean;
+import com.example.movieCore.brd.bean.BrdReplyBean;
 import com.example.movieCore.brd.mapperInterface.BrdArticleMapper;
 import com.example.movieCore.brd.vo.BrdVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,9 @@ public class BrdArticleServiceImpl {
 
     public void updateArticleAdmin(BrdVo brdVo) {
         brdArticleMapper.updateArticleAdmin(brdVo);
+    }
+
+    public ArrayList<BrdReplyBean> selectReplyListAdmin(BrdVo brdVo) {
+        return brdArticleMapper.selectReplyListAdmin(brdVo);
     }
 }

@@ -61,16 +61,11 @@ function ArticleListManage() {
   });
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 상태
   const [commentsCollapsed, setCommentsCollapsed] = useState(true); // 댓글 접기/펼치기 상태
-  const [dummyComments, setDummyComments] = useState([]); // 댓글 더미 데이터
+  const [comments, setComments] = useState([]); // 댓글 목록 상태
   const [selectedComments, setSelectedComments] = useState([]); // 선택된 댓글 목록
 
   useEffect(() => {
     selectArticleListAdmin();
-    // 더미 댓글 데이터 추가
-    setDummyComments([
-      { replId: 1, memName: 'User1', content: 'This is a dummy comment.', createDt: '2024-06-20 12:00:00', state: 'B' },
-      { replId: 2, memName: 'User2', content: 'This is another dummy comment.', createDt: '2024-06-20 12:05:00', state: 'B' },
-    ]);
   }, []);
 
   const toggleModal = () => {
@@ -108,7 +103,6 @@ function ArticleListManage() {
     });
     selectArticleListAdmin();
   };
-
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -247,6 +241,9 @@ function ArticleListManage() {
 
       // 모든 폴더 게시판 리스트 조회
       selectBoardListAdmin(article.brdId);
+
+      // 게시글의 댓글 리스트 조회
+      selectReplyListAdmin(article.atclId);
     }
 
     /** 추후 게시글에 속한 파일 조회 예정 */
@@ -294,6 +291,26 @@ function ArticleListManage() {
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
     return `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
+  };
+
+
+  // 댓글 목록 조회
+  const selectReplyListAdmin = (atclId) => {
+    axios({
+      url: "/selectReplyListAdmin",
+      method: "post",
+      data: {
+        articleBean: {
+          atclId: atclId,
+        },
+      },
+    })
+      .then((res) => {
+        setComments(res.data.replyBeanList || []); // 댓글 목록 설정, 없으면 빈 배열
+      })
+      .catch((err) => {
+        alert("댓글 조회 실패 (오류)");
+      });
   };
 
   /** 모든 폴더 게시판 리스트 조회 */
@@ -766,12 +783,12 @@ function ArticleListManage() {
                     <CTableRow>
                       <CTableHeaderCell scope="col" style={{ width: "50px" }}>
                         <CFormCheck
-                          checked={selectedComments.length === dummyComments.length}
+                          checked={selectedComments.length === comments.length}
                           onChange={() => {
                             setSelectedComments(
-                              selectedComments.length === dummyComments.length
+                              selectedComments.length === comments.length
                                 ? []
-                                : dummyComments.map((comment) => comment.replId)
+                                : comments.map((comment) => comment.replId)
                             );
                           }}
                         />
@@ -783,22 +800,31 @@ function ArticleListManage() {
                       <CTableHeaderCell scope="col">상태</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
+                  {/*팝업 내 댓글 테이블*/}
                   <CTableBody>
-                    {dummyComments.map(comment => (
-                      <CTableRow key={comment.replId}>
-                        <CTableDataCell style={{ width: "50px" }}>
-                          <CFormCheck
-                            checked={selectedComments.includes(comment.replId)}
-                            onChange={() => handleCommentSelect(comment.replId)}
-                          />
+                    {comments.length > 0 ? (
+                      comments.map((comment) => (
+                        <CTableRow key={comment.replId}>
+                          <CTableDataCell style={{ width: "50px" }}>
+                            <CFormCheck
+                              checked={selectedComments.includes(comment.replId)}
+                              onChange={() => handleCommentSelect(comment.replId)}
+                            />
+                          </CTableDataCell>
+                          <CTableDataCell>{comment.replId}</CTableDataCell>
+                          <CTableDataCell>{comment.memName}</CTableDataCell>
+                          <CTableDataCell>{comment.content}</CTableDataCell>
+                          <CTableDataCell>{comment.createDt}</CTableDataCell>
+                          <CTableDataCell>{comment.state}</CTableDataCell>
+                        </CTableRow>
+                      ))
+                    ) : (
+                      <CTableRow>
+                        <CTableDataCell colSpan={6} className="text-center">
+                          댓글이 없습니다.
                         </CTableDataCell>
-                        <CTableDataCell>{comment.replId}</CTableDataCell>
-                        <CTableDataCell>{comment.memName}</CTableDataCell>
-                        <CTableDataCell>{comment.content}</CTableDataCell>
-                        <CTableDataCell>{comment.createDt}</CTableDataCell>
-                        <CTableDataCell>{comment.state}</CTableDataCell>
                       </CTableRow>
-                    ))}
+                    )}
                   </CTableBody>
                 </CTable>
               </CCollapse>

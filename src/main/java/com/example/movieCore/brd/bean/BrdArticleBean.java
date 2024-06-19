@@ -43,4 +43,7 @@ public class BrdArticleBean implements Serializable {
     /** 폴더 리스트 */
     private ArrayList<BrdFolderBean> folderBeanList;
 
+    /** 댓글 리스트 */
+    private ArrayList<BrdReplyBean> replyBeanList;
+
 }

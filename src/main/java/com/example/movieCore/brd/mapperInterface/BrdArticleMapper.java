@@ -2,6 +2,7 @@ package com.example.movieCore.brd.mapperInterface;
 
 import com.example.movieCore.brd.bean.BrdArticleBean;
 import com.example.movieCore.brd.bean.BrdBoardBean;
+import com.example.movieCore.brd.bean.BrdReplyBean;
 import com.example.movieCore.brd.vo.BrdVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -36,4 +37,6 @@ public interface BrdArticleMapper {
     int updateArticleStateAdmin(BrdVo brdVo);
 
     void updateArticleAdmin(BrdVo brdVo);
+
+    ArrayList<BrdReplyBean> selectReplyListAdmin(BrdVo brdVo);
 }

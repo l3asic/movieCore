@@ -386,6 +386,24 @@ public class BrdArticleController {
     }
 
 
+    /** 게시글의 댓글 리스트 조회 */
+    @PostMapping(value = "/selectReplyListAdmin")
+    @ResponseBody
+    public Map<String, Object> selectReplyListAdmin(@RequestBody BrdVo brdVo) throws Exception {
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+
+        try {
+            brdVo.setReplyBeanList(articleService.selectReplyListAdmin(brdVo));
+            resMap.put("brdVo", brdVo );
+
+        } catch (Exception e) {
+        }
+
+        return resMap;
+    }
+
+
 
 
 

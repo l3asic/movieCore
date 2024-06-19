@@ -80,6 +80,19 @@
     </resultMap>
 
 
+    <!-- 관리자 게시글 - 댓글 빈 -->
+    <resultMap type="com.example.movieCore.brd.bean.BrdReplyBean" id="replyBean">
+        <id column="REPL_ID" property="replId" jdbcType="INTEGER" />
+        <result column="ATCL_ID" property="atclId" jdbcType="INTEGER" />
+        <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+        <result column="MEM_ID" property="memId" jdbcType="VARCHAR" />
+        <result column="MEM_NAME" property="memName" jdbcType="VARCHAR" />
+        <result column="CREATE_DT" property="createDt" jdbcType="TIMESTAMP" />
+        <result column="UPDATE_DT" property="updateDt" jdbcType="TIMESTAMP" />
+        <result column="STATE" property="state" jdbcType="VARCHAR" />
+    </resultMap>
+
+
 
     <!-- 게시글 작성 -->
     <insert id="atclRegistry" parameterType="com.example.movieCore.brd.vo.BrdVo" >
@@ -537,7 +550,6 @@
 
 
 
-
     <!-- 게시글 상태 변경 -->
     <update id="updateArticleStateAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
         UPDATE
@@ -566,6 +578,22 @@
         WHERE
             ATCL_ID = #{articleBean.atclId}
     </update>
+
+
+    <!-- 게시글의 댓글 리스트 조회 -->
+    <select id="selectReplyListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="replyBean">
+        SELECT
+            REPL_ID,
+            ATCL_ID,
+            CONTENT,
+            MEM_ID,
+            MEM_NAME,
+            CREATE_DT,
+            UPDATE_DT,
+            STATE
+        FROM BRD_REPLY
+        WHERE ATCL_ID = #{articleBean.atclId}
+    </select>
 
 
 

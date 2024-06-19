@@ -3,6 +3,7 @@ package com.example.movieCore.brd.vo;
 import com.example.movieCore.brd.bean.BrdArticleBean;
 import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.bean.BrdFolderBean;
+import com.example.movieCore.brd.bean.BrdReplyBean;
 import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.movie.bean.SearchBean;
 import com.example.movieCore.utils.Paging;
@@ -25,6 +26,8 @@ public class BrdVo {
     private ArrayList<BrdBoardBean> boardBeanList;
 
     private ArrayList<BrdArticleBean> articleBeanList;
+
+    private ArrayList<BrdReplyBean> replyBeanList;
 
     /** 페이징 */
     private Paging paging;
