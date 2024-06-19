@@ -67,4 +67,8 @@ public class BrdArticleServiceImpl {
     public int updateArticleStateAdmin(BrdVo brdVo) {
         return brdArticleMapper.updateArticleStateAdmin(brdVo);
     }
+
+    public void updateArticleAdmin(BrdVo brdVo) {
+        brdArticleMapper.updateArticleAdmin(brdVo);
+    }
 }

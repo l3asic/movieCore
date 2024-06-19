@@ -551,6 +551,26 @@
     </update>
 
 
+    <!-- 게시글 정보 변경 -->
+    <update id="updateArticleAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        UPDATE
+            BRD_ARTICLE
+        SET
+            BRD_ID = #{articleBean.brdId},
+            SUBJECT = #{articleBean.subject},
+            CONTENT = #{articleBean.content},
+            UPDATE_DT = #{articleBean.updateDt},
+            EXPIRE_DT = #{articleBean.expireDt},
+            EXPIRE_YN = #{articleBean.expireYn},
+            STATE = #{articleBean.state}
+        WHERE
+            ATCL_ID = #{articleBean.atclId}
+    </update>
+
+
+
+
+
 
 
 

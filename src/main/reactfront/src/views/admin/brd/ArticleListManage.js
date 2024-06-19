@@ -334,10 +334,11 @@ function ArticleListManage() {
 
   /** 팝업 게시글 수정 저장 */
   const handleSaveArticle = () => {
+    const currentDate = new Date(); // 현재 날짜와 시간을 가져옴
     const updatedArticle = {
       ...selectedArticle,
       createDt: selectedArticle.createDt && !isNaN(Date.parse(selectedArticle.createDt.replace(/\./g, "-"))) ? new Date(selectedArticle.createDt.replace(/\./g, "-")).toISOString() : null,
-      updateDt: selectedArticle.updateDt && !isNaN(Date.parse(selectedArticle.updateDt.replace(/\./g, "-"))) ? new Date(selectedArticle.updateDt.replace(/\./g, "-")).toISOString() : null,
+      updateDt: currentDate.toISOString(), // 항상 현재 날짜와 시간으로 설정
       expireDt: selectedArticle.expireDt && !isNaN(Date.parse(selectedArticle.expireDt.replace(/\./g, "-"))) ? new Date(selectedArticle.expireDt.replace(/\./g, "-")).toISOString() : null,
     };
 

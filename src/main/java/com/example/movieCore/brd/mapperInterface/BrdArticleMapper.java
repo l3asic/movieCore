@@ -34,4 +34,6 @@ public interface BrdArticleMapper {
     ArrayList<BrdArticleBean> selectArticleListAdmin(BrdVo brdVo);
 
     int updateArticleStateAdmin(BrdVo brdVo);
+
+    void updateArticleAdmin(BrdVo brdVo);
 }

@@ -362,8 +362,19 @@ public class BrdArticleController {
         boolean successResult = false;
 
         try {
+
+            // 게시글 만료여부 검사
+            // 현재 시간 가져오기
+            Timestamp nowTime = new Timestamp(System.currentTimeMillis());
+            Timestamp expireDt = brdVo.getArticleBean().getExpireDt();
+            if (expireDt != null && expireDt.before(nowTime)) {
+                brdVo.getArticleBean().setExpireYn("Y");
+            }
+
+
             // 업데이트 로직 호출
-            // articleService.updateArticleAdmin(brdVo.getArticleBean());
+             articleService.updateArticleAdmin(brdVo);
+
             successResult = true;
             resMap.put("successMsg", "게시글이 성공적으로 업데이트되었습니다.");
         } catch (Exception e) {
