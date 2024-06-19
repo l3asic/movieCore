@@ -21,6 +21,7 @@ import {
   CModalTitle,
   CModalBody,
   CModalFooter,
+  CCollapse,
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -59,9 +60,17 @@ function ArticleListManage() {
     files: [], // Add files array to hold the attached files
   });
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 상태
+  const [commentsCollapsed, setCommentsCollapsed] = useState(true); // 댓글 접기/펼치기 상태
+  const [dummyComments, setDummyComments] = useState([]); // 댓글 더미 데이터
+  const [selectedComments, setSelectedComments] = useState([]); // 선택된 댓글 목록
 
   useEffect(() => {
     selectArticleListAdmin();
+    // 더미 댓글 데이터 추가
+    setDummyComments([
+      { replId: 1, memName: 'User1', content: 'This is a dummy comment.', createDt: '2024-06-20 12:00:00', state: 'B' },
+      { replId: 2, memName: 'User2', content: 'This is another dummy comment.', createDt: '2024-06-20 12:05:00', state: 'B' },
+    ]);
   }, []);
 
   const toggleModal = () => {
@@ -99,6 +108,7 @@ function ArticleListManage() {
     });
     selectArticleListAdmin();
   };
+
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -224,7 +234,6 @@ function ArticleListManage() {
   };
 
   const handleRowClick = (index, article) => {
-
     // 기존동작
     if (!brdVo.articleBeanList[index].selected) {
       const formattedArticle = {
@@ -274,7 +283,6 @@ function ArticleListManage() {
     setShowDatePicker(false);
   };
 
-
   const formatDateToKoreanString = (date) => {
     if (!date) return null;
 
@@ -287,11 +295,6 @@ function ArticleListManage() {
 
     return `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
   };
-
-
-
-
-
 
   /** 모든 폴더 게시판 리스트 조회 */
   const selectBoardListAdmin = (brdId) => {
@@ -371,6 +374,23 @@ function ArticleListManage() {
     }));
     const selectedFolder = folders.find(folder => folder.folId === folderId);
     setBoards(selectedFolder ? selectedFolder.boardBeanList : []);
+  };
+
+  const toggleComments = () => {
+    setCommentsCollapsed(!commentsCollapsed);
+  };
+
+  const handleCommentSelect = (replId) => {
+    setSelectedComments((prevSelected) =>
+      prevSelected.includes(replId)
+        ? prevSelected.filter((id) => id !== replId)
+        : [...prevSelected, replId]
+    );
+  };
+
+  const updateCommentStateAdmin = (mode) => {
+    // Update selected comments state here
+    console.log("Updating comments state", selectedComments, mode);
   };
 
   return (
@@ -530,7 +550,6 @@ function ArticleListManage() {
 
       <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
 
-
       {/** 게시글 상세 정보 팝업  */}
 
       <CModal size="lg" visible={modal} onClose={handleModalClose} alignment="center">
@@ -635,7 +654,6 @@ function ArticleListManage() {
                   <option value="Y">게시 종료</option>
                 </CFormSelect>
 
-
                 <div style={{ display: 'flex', flex: 1, gap: '10px', alignItems: 'center' }}>
                   {!showDatePicker ? (
                     <>
@@ -664,7 +682,6 @@ function ArticleListManage() {
                     />
                   )}
                 </div>
-
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                 <CFormSelect
@@ -715,6 +732,76 @@ function ArticleListManage() {
                 </ul>*/}
               </div>
 
+              <div className="form-row" style={{ marginTop: '20px' }}>
+                <h5 style={{ flex: 1 }}>댓글</h5>
+                <div>
+                  <CButton
+                    color="black"
+                    variant="outline"
+                    style={{ whiteSpace: "nowrap", border: "1px solid gray", marginRight: "10px" }}
+                    title="댓글 상태 정상으로 변경"
+                    onClick={() => updateCommentStateAdmin("restore")}
+                  >
+                    <CIcon icon={cilRecycle} />
+                  </CButton>
+
+                  <CButton
+                    color="black"
+                    variant="outline"
+                    style={{ whiteSpace: "nowrap", border: "1px solid gray", marginRight: "10px" }}
+                    title="댓글 상태 삭제로 변경"
+                    onClick={() => updateCommentStateAdmin("delete")}
+                  >
+                    <CIcon icon={cilTrash} />
+                  </CButton>
+
+                  <CButton color="dark" onClick={toggleComments}>
+                    {commentsCollapsed ? '펼치기' : '접어두기'}
+                  </CButton>
+                </div>
+              </div>
+              <CCollapse visible={!commentsCollapsed} className="mt-3">
+                <CTable striped hover>
+                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell scope="col" style={{ width: "50px" }}>
+                        <CFormCheck
+                          checked={selectedComments.length === dummyComments.length}
+                          onChange={() => {
+                            setSelectedComments(
+                              selectedComments.length === dummyComments.length
+                                ? []
+                                : dummyComments.map((comment) => comment.replId)
+                            );
+                          }}
+                        />
+                      </CTableHeaderCell>
+                      <CTableHeaderCell scope="col">고유번호</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">작성자</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">내용</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">작성일</CTableHeaderCell>
+                      <CTableHeaderCell scope="col">상태</CTableHeaderCell>
+                    </CTableRow>
+                  </CTableHead>
+                  <CTableBody>
+                    {dummyComments.map(comment => (
+                      <CTableRow key={comment.replId}>
+                        <CTableDataCell style={{ width: "50px" }}>
+                          <CFormCheck
+                            checked={selectedComments.includes(comment.replId)}
+                            onChange={() => handleCommentSelect(comment.replId)}
+                          />
+                        </CTableDataCell>
+                        <CTableDataCell>{comment.replId}</CTableDataCell>
+                        <CTableDataCell>{comment.memName}</CTableDataCell>
+                        <CTableDataCell>{comment.content}</CTableDataCell>
+                        <CTableDataCell>{comment.createDt}</CTableDataCell>
+                        <CTableDataCell>{comment.state}</CTableDataCell>
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+              </CCollapse>
             </div>
           )}
         </CModalBody>
