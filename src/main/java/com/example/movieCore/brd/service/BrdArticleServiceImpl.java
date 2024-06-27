@@ -17,7 +17,6 @@ public class BrdArticleServiceImpl {
     private BrdArticleMapper brdArticleMapper;
 
     public boolean atclRegistry(BrdVo brdVo) {
-
         return brdArticleMapper.atclRegistry(brdVo);
     }
 
