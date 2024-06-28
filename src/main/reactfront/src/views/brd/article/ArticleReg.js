@@ -99,7 +99,6 @@ const ArticleReg = () => {
   };
 
   const submitArticle = () => {
-    debugger;
     brdVo.articleBean = { ...articleBean }; // articleBean을 직접 복사
     const memberBean = JSON.parse(localStorage.getItem('memberBean'));
     brdVo.articleBean.memId = memberBean.memId;
@@ -118,7 +117,7 @@ const ArticleReg = () => {
             atclFileUpload(res.data.brdVo);
           }
         } else {
-          alert("등록 그냥 실패?");
+          alert("등록 실패");
         }
         MoveToArticleListView();
       }).catch(() => {
@@ -129,7 +128,9 @@ const ArticleReg = () => {
 
   const atclFileUpload = (brdVo) => {
     const formData = new FormData();
-    formData.append('file', files);
+    files.forEach(file => {
+      formData.append('files', file);
+    });
     formData.append('brdVo', JSON.stringify(brdVo));
 
     return axios.post('/atclFileUpload', formData, {

@@ -40,6 +40,8 @@ public class BrdVo {
     /** 파일 빈 */
     private FileBean fileBean;
 
+    private ArrayList<FileBean> fileBeanList;
+
 
     /** 삭제/ 변경 용 모드 */
     private String mode;

@@ -5,6 +5,7 @@ import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.bean.BrdReplyBean;
 import com.example.movieCore.brd.mapperInterface.BrdArticleMapper;
 import com.example.movieCore.brd.vo.BrdVo;
+import com.example.movieCore.cmm.FileBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,13 +47,19 @@ public class BrdArticleServiceImpl {
         return brdArticleMapper.deleteArticle(brdVo);
     }
 
-    public void insertFileBean(BrdVo brdVo) {
-        brdArticleMapper.insertFileBean(brdVo);
+
+    public void insertFileBeans(BrdVo brdVo) {
+        for (FileBean fileBean : brdVo.getFileBeanList()) {
+            brdArticleMapper.insertFileBean(fileBean);
+        }
     }
 
     public void insertArticleFileMap(BrdVo brdVo) {
-        brdArticleMapper.insertArticleFileMap(brdVo);
+        for (FileBean fileBean : brdVo.getFileBeanList()) {
+            brdArticleMapper.insertArticleFileMapping(brdVo.getArticleBean().getAtclId(), fileBean.getFileId());
+        }
     }
+
 
     public int selectArticleListTotalCntAdmin(BrdVo brdVo) {
         return brdArticleMapper.selectArticleListTotalCntAdmin(brdVo);

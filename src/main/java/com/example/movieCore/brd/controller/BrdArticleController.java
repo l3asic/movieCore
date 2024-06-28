@@ -24,10 +24,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -208,35 +205,34 @@ public class BrdArticleController {
 
 
 
-
-
-
-
-
-
-
+    /**
+    * 파일 업로드
+    * */
     @PostMapping("/atclFileUpload")
-    public Map<String, Object> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("brdVo") String brdVoString) {
+    public Map<String, Object> uploadFile(@RequestParam("files") ArrayList<MultipartFile> files, @RequestParam("brdVo") String brdVoString) {
         BrdVo brdVo = new Gson().fromJson(brdVoString, BrdVo.class);
 
-        Map resMap = new HashMap<>();
+        Map<String, Object> resMap = new HashMap<>();
         boolean succesResult = false;
 
         try {
-
             MakeFileBean makeFileBean = new MakeFileBean();
 
             // 파일 업로드 및 파일 빈 값 할당
-            FileBean fileBean = makeFileBean.makingFileBean("BRD",file);
-            brdVo.setFileBean(fileBean);
+            ArrayList<FileBean> fileBeans = new ArrayList<>();
+            for (MultipartFile file : files) {
+                FileBean fileBean = makeFileBean.makingFileBean("BRD", file);
+                fileBeans.add(fileBean);
+            }
+            brdVo.setFileBeanList(fileBeans);
 
             // 파일빈 디비 인서트
-            articleService.insertFileBean(brdVo);
+            articleService.insertFileBeans(brdVo);
 
             // 게시글 <-> 첨부파일 매핑 인서트
             articleService.insertArticleFileMap(brdVo);
 
-            succesResult =true;
+            succesResult = true;
 
         } catch (Exception e) {
             e.printStackTrace();

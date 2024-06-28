@@ -4,7 +4,9 @@ import com.example.movieCore.brd.bean.BrdArticleBean;
 import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.bean.BrdReplyBean;
 import com.example.movieCore.brd.vo.BrdVo;
+import com.example.movieCore.cmm.FileBean;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 
@@ -26,9 +28,8 @@ public interface BrdArticleMapper {
 
     int deleteArticle(BrdVo brdVo);
 
-    void insertFileBean(BrdVo brdVo);
-
-    void insertArticleFileMap(BrdVo brdVo);
+    void insertFileBean(FileBean fileBean);
+    void insertArticleFileMapping(@Param("atclId") String atclId, @Param("fileId") String fileId);
 
     int selectArticleListTotalCntAdmin(BrdVo brdVo);
 

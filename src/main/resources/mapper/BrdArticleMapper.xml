@@ -380,49 +380,41 @@
 
 
     <!-- 게시글 첨부파일 인서트 -->
-    <insert id="insertFileBean" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
-        INSERT INTO
-            CMM_FILE (
-                      FILE_ID,
-                      MODULE,
-                      FILE_NAME,
-                      LOCAL_NAME,
-                      FILE_EXT,
-                      URL,
-                      VOLUME,
-                      CREATE_DT,
-                      SRC
-        )
-        VALUES
-            (
-             #{fileBean.fileId},
-             #{fileBean.module},
-             #{fileBean.fileName},
-             #{fileBean.localName},
-             #{fileBean.fileExt},
-             #{fileBean.url},
-             #{fileBean.volume},
-             #{fileBean.createDt},
-             #{fileBean.src}
-             )
-
+    <insert id="insertFileBean" parameterType="com.example.movieCore.cmm.FileBean">
+        INSERT INTO CMM_FILE (
+            FILE_ID,
+            MODULE,
+            FILE_NAME,
+            LOCAL_NAME,
+            FILE_EXT,
+            URL,
+            VOLUME,
+            CREATE_DT,
+            SRC
+        ) VALUES (
+                     #{fileId},
+                     #{module},
+                     #{fileName},
+                     #{localName},
+                     #{fileExt},
+                     #{url},
+                     #{volume},
+                     #{createDt},
+                     #{src}
+                 )
     </insert>
-
 
     <!-- 게시글 <-> 첨부파일 매핑 인서트 -->
-    <insert id="insertArticleFileMap" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
-        INSERT INTO
-            BRD_FILE_MAPPING (
-                      ATCL_ID,
-                      FILE_ID
-                      )
-        VALUES
-            (
-             #{articleBean.atclId},
-             #{fileBean.fileId}
-             )
-
+    <insert id="insertArticleFileMapping">
+        INSERT INTO BRD_FILE_MAPPING (
+            ATCL_ID,
+            FILE_ID
+        ) VALUES (
+                     #{atclId},
+                     #{fileId}
+                 )
     </insert>
+
 
 
     <!-- 관리자 - 게시글 갯수 조회 -->
