@@ -156,7 +156,8 @@
             BA.STATE = 'B'
         AND
             BA.BRD_ID = #{boardBean.brdId}
-
+        AND
+            BA.EXPIRE_YN = 'N'
         <choose>
             <when test="boardBean.schSelect == 'subject'">
                 AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
@@ -339,9 +340,11 @@
         BRD_ARTICLE BA
 
         WHERE
-        BA.STATE = 'B'
+            BA.STATE = 'B'
         AND
-        BA.BRD_ID = #{boardBean.brdId}
+            BA.BRD_ID = #{boardBean.brdId}
+        AND
+            BA.EXPIRE_YN = 'N'
         <choose>
             <when test="boardBean.schSelect == 'subject'">
                 AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')

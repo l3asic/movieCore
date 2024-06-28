@@ -239,15 +239,15 @@ const ArticleReg = () => {
         </CCol>
 
         <CCol md={3}>
-          <CFormSelect
-            label="말머리?"
-            options={[
-              { label: '말머리1', value: '1' },
-              { label: '말머리2', value: '2' }
-            ]}
-            name="head"
-            className="mb-1"
-          />
+          <div className="mb-1">
+            <CFormLabel htmlFor="exampleFormControlInput1">작성자</CFormLabel>
+            <CFormInput
+              id="memName"
+              placeholder=""
+              value={JSON.parse(localStorage.getItem('memberBean')).memName}
+              disabled
+            />
+          </div>
         </CCol>
 
         <CCol md={12}>
