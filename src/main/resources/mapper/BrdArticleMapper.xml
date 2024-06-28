@@ -9,6 +9,9 @@
     <resultMap type="com.example.movieCore.brd.bean.BrdArticleBean" id="articleBean">
         <id column="ATCL_ID" property="atclId" jdbcType="VARCHAR"/>
         <result column="BRD_ID" property="brdId" jdbcType="VARCHAR"/>
+        <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
+        <result column="FOL_ID" property="folId" jdbcType="VARCHAR"/>
+        <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
         <result column="SUBJECT" property="subject" jdbcType="VARCHAR"/>
         <result column="CONTENT" property="content" jdbcType="VARCHAR"/>
@@ -257,6 +260,9 @@
         </choose>
 
     </select>
+
+
+    <!-- 게시글 상세 정보 조회 -->
     <select id="selectArticleDetail" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean">
         SELECT
             BA.ATCL_ID,

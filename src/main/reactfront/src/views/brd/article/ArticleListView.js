@@ -9,20 +9,19 @@ import {
   CFormInput,
   CInputGroup,
   CButton,
-  CFormText,
   CCardImage
 } from '@coreui/react'
 import axios from "axios";
-import { useNavigate, useLocation  } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
 import CIcon from "@coreui/icons-react";
-import {cilJustifyCenter, cilLoopCircular, cilSwapVertical} from "@coreui/icons";
+import { cilLoopCircular, cilSwapVertical } from "@coreui/icons";
 import ReactImg from '../../../assets/images/react.jpg';
 
 const ArticleListView = () => {
 
   const location = useLocation();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const [brdVo, setBrdVo] = useState({
     brdBoardBean: {},
     articleBeanList: [],
@@ -43,7 +42,7 @@ const ArticleListView = () => {
       ...prevBrdVo,
       brdBoardBean: {
         ...prevBrdVo.brdBoardBean,
-        brdId : brdIdFromQuery
+        brdId: brdIdFromQuery
       }
     }));
     // 최초 접근시 brdId 동기화 문제로 강제 할당
@@ -82,9 +81,9 @@ const ArticleListView = () => {
   };
 
   /** 게시글 리스트 조회 */
-  function selectArticleList(newPage){
+  function selectArticleList(newPage) {
     if (newPage != null) { // 페이지 이동시
-        brdVo.paging.currentPage = newPage;
+      brdVo.paging.currentPage = newPage;
     } else {
       brdVo.paging = { totalItems: 0, currentPage: 0 }; // 기본 paging 객체를 생성하여 할당
       newPage = 0;
@@ -93,16 +92,16 @@ const ArticleListView = () => {
     axios({
       url: '/selectArticleList',
       method: 'post',
-      params:{
-        brdId : brdVo.brdBoardBean.brdId,
-        newPage : newPage,
-        schSelect : schSelect,
-        schText : schText,
+      params: {
+        brdId: brdVo.brdBoardBean.brdId,
+        newPage: newPage,
+        schSelect: schSelect,
+        schText: schText,
         sortKey: sortKey, // 정렬 기준 컬럼
         sortOdr: sortOdr // 정렬 순서
       }
 
-    }).then(function (res){
+    }).then(function (res) {
       const paging = res.data.brdVo.paging;
       let articleBeanList = res.data.brdVo.articleBeanList.map(article => {
         // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
@@ -133,7 +132,7 @@ const ArticleListView = () => {
       setSortKey(res.data.brdVo.boardBean.sortKey);
       setSortOdr(res.data.brdVo.boardBean.sortOdr);
 
-    }).catch(function (err){
+    }).catch(function (err) {
       alert("조회 실패 (오류)");
     });
   }
@@ -144,53 +143,20 @@ const ArticleListView = () => {
   }
 
   function selectArticleDetail(atclId) {
-    axios({
-      url: '/selectArticleDetail',
-      method: 'post',
-      params: {
-        atclId: atclId,
-        folId : brdVo.brdBoardBean.folId
-      }
-    })
-      .then(function (res) { debugger;
-       // let articleBeanList = res.data.brdVo.articleBeanList;
-
-        let articleBeanList = res.data.brdVo.articleBeanList.map(article => {
-          // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
-          const date = new Date(article.createDt);
-
-          // Date 객체를 '0000.00.00' 형식의 문자열로 변환
-          const formattedDate = date.toLocaleDateString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-          }).replace(/\.$/, '');
-
-          // article 객체에 새로운 속성으로 변환된 날짜를 할당
-          return {
-            ...article,
-            createDt: formattedDate
-          };
-        });
-        // ArticleDetail 페이지로 이동하면서 데이터 전달
-        navigate('/brd/ArticleDetail', { state: { articleData: articleBeanList } });
-      })
-      .catch(function (err) {
-        alert('조회 실패 (오류)');
-      });
+    navigate('/brd/ArticleDetail', { state: { atclId } });
   }
 
-  function searchArticle(){
+  function searchArticle() {
     axios({
       url: '/searchArticle',
       method: 'get',
-      params:{
-        brdId : brdVo.brdBoardBean.brdId,
-        schSelect : schSelect,
-        schText : schText
+      params: {
+        brdId: brdVo.brdBoardBean.brdId,
+        schSelect: schSelect,
+        schText: schText
       }
 
-    }).then(function (res){
+    }).then(function (res) {
       let searchResult = res.data.brdVo.articleBeanList.map(article => {
         // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
         const date = new Date(article.createDt);
@@ -219,14 +185,14 @@ const ArticleListView = () => {
       // ㅇ
 
 
-    }).catch(function (err){
+    }).catch(function (err) {
       alert("조회 실패 (오류)");
     });
 
   }
 
   /** 검색, 필터 초기화  */
-  function refreshFilterSearch(){
+  function refreshFilterSearch() {
 
     // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
     schSelect = '';
@@ -249,29 +215,29 @@ const ArticleListView = () => {
     <div>
       {/** 배너 영역 */}
       <div>
-        <CCardImage orientation="top" src={ReactImg} style={{height:"200px", marginBottom:"30px"}}/>
+        <CCardImage orientation="top" src={ReactImg} style={{ height: "200px", marginBottom: "30px" }} />
       </div>
       <h2>게시판입니다</h2>
       <div>
-      <CInputGroup className="mb-3" style={{width: "30%", display: "flex", float:"right"}}>
-        <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect} name="schSelect">
-          <option value="all">전체</option>
-          <option value="subject">제목</option>
-          <option value="content">내용</option>
-          <option value="memName">작성자</option>
-        </CFormSelect>
-        <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name="schText"/>
-        <CButton size="sm" className="mb-3" color="secondary" onClick={searchArticle} name="searchBtn">검색</CButton>
-        {/* 초기화 */}
-        <CButton
-          className="mb-3"
-          color="black"
-          variant="outline"
-          style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-          onClick={refreshFilterSearch}>
-          <CIcon icon={cilLoopCircular} />
-        </CButton>
-      </CInputGroup>
+        <CInputGroup className="mb-3" style={{ width: "30%", display: "flex", float: "right" }}>
+          <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect} name="schSelect">
+            <option value="all">전체</option>
+            <option value="subject">제목</option>
+            <option value="content">내용</option>
+            <option value="memName">작성자</option>
+          </CFormSelect>
+          <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name="schText" />
+          <CButton size="sm" className="mb-3" color="secondary" onClick={searchArticle} name="searchBtn">검색</CButton>
+          {/* 초기화 */}
+          <CButton
+            className="mb-3"
+            color="black"
+            variant="outline"
+            style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
+            onClick={refreshFilterSearch}>
+            <CIcon icon={cilLoopCircular} />
+          </CButton>
+        </CInputGroup>
       </div>
       <CTable className="boardTableList">
         <CTableHead color="light">

@@ -31,7 +31,7 @@ public class BrdArticleServiceImpl {
         return brdArticleMapper.searchArticle(brdVo);
     }
 
-    public ArrayList<BrdArticleBean> selectArticleDetail(BrdVo brdVo) {
+    public BrdArticleBean selectArticleDetail(BrdVo brdVo) {
         return brdArticleMapper.selectArticleDetail(brdVo);
     }
 

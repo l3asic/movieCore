@@ -147,13 +147,12 @@ public class BrdArticleController {
     }
 
     /**
-     * 게시글 상세내역 디비서 셀렉트
+     * 게시글 상세정보 조회
      */
     @PostMapping(value = "/selectArticleDetail")
     @ResponseBody
     public Map<String, Object> selectArticleDetail(HttpServletRequest request, HttpServletResponse response, BrdArticleBean articleBean) throws Exception {
 
-        /** 게시글 리스트 조회디비서 셀렉트  */
         BrdVo brdVo = new BrdVo();
         brdVo.setArticleBean(articleBean);
 
@@ -161,9 +160,7 @@ public class BrdArticleController {
 
         Map resMap = new HashMap<>();
         try {
-            brdVo.setArticleBeanList(articleService.selectArticleDetail(brdVo));
-            brdVo.setBoardBeanList(articleService.selectBoardList(brdVo));
-
+            brdVo.setArticleBean(articleService.selectArticleDetail(brdVo));
 
             resMap.put("brdVo", brdVo);
             succesResult = true;

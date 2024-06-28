@@ -12,6 +12,10 @@ public class BrdArticleBean implements Serializable {
 
     private String atclId;
 
+    private String folId;
+
+    private String folName;
+
     private String brdId;
 
     private String brdName;
