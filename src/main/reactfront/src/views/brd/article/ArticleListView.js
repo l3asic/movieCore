@@ -217,7 +217,8 @@ const ArticleListView = () => {
       <div>
         <CCardImage orientation="top" src={ReactImg} style={{ height: "200px", marginBottom: "30px" }} />
       </div>
-      <h2>게시판입니다</h2>
+
+      <h4>{brdVo.brdBoardBean.brdName} 게시판 이름 추후 수정 필요</h4>
       <div>
         <CInputGroup className="mb-3" style={{ width: "30%", display: "flex", float: "right" }}>
           <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect} name="schSelect">

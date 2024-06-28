@@ -7,6 +7,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
+import GrayLine from "../../uitils/GrayLine";
 
 const ArticleDetail = () => {
   const location = useLocation();
@@ -74,7 +75,8 @@ const ArticleDetail = () => {
 
   return (
     <>
-      <h1 className="pb-lg-5"> 게시판 이름</h1>
+      <h4 className="pb-lg-3"> {articleBean.brdName}</h4>
+      <GrayLine marginBottom="20px" marginTop="0px"/>
       <CForm className="row g-3">
         <CCol md={3}>
           <CFormLabel htmlFor="folderName">폴더</CFormLabel>
