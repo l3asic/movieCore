@@ -1,5 +1,6 @@
 package com.example.movieCore.brd.bean;
 
+import com.example.movieCore.cmm.FileBean;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,5 +50,8 @@ public class BrdArticleBean implements Serializable {
 
     /** 댓글 리스트 */
     private ArrayList<BrdReplyBean> replyBeanList;
+
+    /** 첨부파일 리스트 */
+    private ArrayList<FileBean> fileBeanList;
 
 }

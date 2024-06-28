@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   CFormInput, CForm, CFormLabel, CFormTextarea,
-  CCol, CButton
+  CCol, CButton, CCard, CCardBody, CCardTitle, CCardText, CCardFooter
 } from '@coreui/react';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -69,6 +69,7 @@ const ArticleDetail = () => {
   }
 
   const { articleBean } = brdVo;
+  const { fileBeanList } = articleBean;
   const formatDateTime = (datetime) => dayjs(datetime).format('YYYY.MM.DD HH:mm:ss');
 
   return (
@@ -121,8 +122,32 @@ const ArticleDetail = () => {
 
         <CCol md={12}>
           <div className="mb-3">
-            <CFormLabel htmlFor="formFileMultiple">파일 첨부</CFormLabel>
-            <CFormInput type="file" id="formFileMultiple" multiple disabled />
+            <CFormLabel htmlFor="fileList">파일 첨부</CFormLabel>
+            <div className="d-flex flex-wrap">
+              {fileBeanList && fileBeanList.length > 0 ? (
+                fileBeanList.map((file, index) => (
+                  <CCard key={index} className="m-2" style={{ minWidth: '200px', maxWidth: '200px' }}>
+                    <CCardBody>
+                      <CCardTitle>{file.fileName}</CCardTitle>
+                      <CCardText>
+                        {file.fileExt.toUpperCase()} 파일
+                      </CCardText>
+                    </CCardBody>
+                    <CCardFooter>
+                      <CButton href={file.src} download={file.localName} color="primary">
+                        다운로드
+                      </CButton>
+                    </CCardFooter>
+                  </CCard>
+                ))
+              ) : (
+                <CCard className="m-2" style={{ minWidth: '200px' }}>
+                  <CCardBody>
+                    <CCardText>첨부된 파일이 없습니다.</CCardText>
+                  </CCardBody>
+                </CCard>
+              )}
+            </div>
           </div>
         </CCol>
 

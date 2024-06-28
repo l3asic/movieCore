@@ -22,12 +22,28 @@
         <result column="EXPIRE_YN" property="expireYn" jdbcType="VARCHAR"/>
         <result column="STATE" property="state" jdbcType="VARCHAR"/>
         <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
-
         <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
+
+        <!-- 파일 리스트 -->
+        <collection property="fileBeanList" ofType="com.example.movieCore.cmm.FileBean">
+            <id column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+            <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+            <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+            <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+            <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+            <result column="URL" property="url" jdbcType="VARCHAR"/>
+            <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+            <result column="FILE_CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
+            <result column="SRC" property="src" jdbcType="VARCHAR"/>
+        </collection>
 
         <!-- 해당 폴더에 속한 게시판들을 담을 리스트 -->
         <collection property="folderBeanList" ofType="com.example.movieCore.brd.bean.BrdFolderBean" resultMap="folderBean"/>
     </resultMap>
+
+
+
+
 
     <!-- 게시판 빈 -->
     <resultMap type="com.example.movieCore.brd.bean.BrdBoardBean" id="boardBean">
@@ -297,22 +313,28 @@
             BB.IMG_UPLOAD_YN,
             BB.FILE_LIMIT,
             BB.FILE_CNT_LIMIT,
-            BB.REPL_YN
+            BB.REPL_YN,
+
+            CF.FILE_ID,
+            CF.MODULE,
+            CF.FILE_NAME,
+            CF.LOCAL_NAME,
+            CF.FILE_EXT,
+            CF.URL,
+            CF.VOLUME,
+            CF.CREATE_DT as FILE_CREATE_DT,
+            CF.SRC
         FROM
             BRD_ARTICLE BA
-
-        LEFT JOIN BRD_BOARD BB
-        ON BA.BRD_ID = BB.BRD_ID
-        LEFT JOIN BRD_FOLDER BF
-        ON BB.FOL_ID = BF.FOL_ID
-        LEFT JOIN MEM_MEMBER_INFO MMI
-        ON BA.MEM_ID = MMI.MEM_ID
-
+                LEFT JOIN BRD_BOARD BB ON BA.BRD_ID = BB.BRD_ID
+                LEFT JOIN BRD_FOLDER BF ON BB.FOL_ID = BF.FOL_ID
+                LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
+                LEFT JOIN BRD_FILE_MAPPING BFM ON BA.ATCL_ID = BFM.ATCL_ID
+                LEFT JOIN CMM_FILE CF ON BFM.FILE_ID = CF.FILE_ID
         WHERE
             BA.STATE = 'B'
           AND
             BA.ATCL_ID = #{articleBean.atclId}
-
     </select>
 
     <select id="selectBoardList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean">
