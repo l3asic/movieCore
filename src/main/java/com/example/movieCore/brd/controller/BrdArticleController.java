@@ -160,6 +160,15 @@ public class BrdArticleController {
 
         Map resMap = new HashMap<>();
         try {
+
+            /** 조회수 증가 동작 */
+            // 조회 로그 업데이트
+            articleService.addArticleViewLog(brdVo);
+
+            // 게시글 조회수 갱신
+            articleService.updateArticleViewCnt(brdVo);
+
+            // 게시글 정보 조회
             brdVo.setArticleBean(articleService.selectArticleDetail(brdVo));
 
             resMap.put("brdVo", brdVo);

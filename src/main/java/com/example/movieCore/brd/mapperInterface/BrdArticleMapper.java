@@ -40,4 +40,8 @@ public interface BrdArticleMapper {
     void updateArticleAdmin(BrdVo brdVo);
 
     ArrayList<BrdReplyBean> selectReplyListAdmin(BrdVo brdVo);
+
+    void addArticleViewLog(BrdVo brdVo);
+
+    void updateArticleViewCnt(BrdVo brdVo);
 }

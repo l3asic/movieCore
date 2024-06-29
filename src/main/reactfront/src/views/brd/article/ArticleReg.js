@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CFormInput, CForm, CFormLabel, CFormTextarea,
-  CFormSelect,
-  CCol, CButton
+  CFormInput, CForm, CFormLabel,
+  CCol, CButton, CFormSelect
 } from '@coreui/react';
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import GrayLine from "../../uitils/GrayLine";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw } from 'draft-js';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import draftToHtml from 'draftjs-to-html';
 
 const ArticleReg = () => {
   const location = useLocation();
@@ -30,9 +33,10 @@ const ArticleReg = () => {
     content: ''
   });
 
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [files, setFiles] = useState([]);
-  const [selectedFolder, setSelectedFolder] = useState(articleData && articleData.length > 0 ? articleData[0].folderBeanList[0].folId : null);
-  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [selectedFolder, setSelectedFolder] = useState(articleData && articleData.length > 0 ? articleData[0].folderBeanList[0].folId : '');
+  const [selectedBoard, setSelectedBoard] = useState('');
   const [boardOptions, setBoardOptions] = useState([]);
   const [isPermanent, setIsPermanent] = useState('N');
   const [expireYn, setExpireYn] = useState('N');
@@ -53,7 +57,7 @@ const ArticleReg = () => {
           value: boardBean.brdId,
         }));
         setBoardOptions(newBoardOptions);
-        setArticleBean((prev) => ({ ...prev, brdId: newBoardOptions[0].value }));
+        setArticleBean((prev) => ({ ...prev, brdId: newBoardOptions[0] ? newBoardOptions[0].value : '' }));
       }
     } else {
       setBoardOptions([]);
@@ -69,7 +73,7 @@ const ArticleReg = () => {
 
   const handleFolderChange = (event) => {
     const folderValue = event.target.value;
-    setSelectedBoard(null);
+    setSelectedBoard('');
     setSelectedFolder(folderValue);
   };
 
@@ -99,7 +103,7 @@ const ArticleReg = () => {
   };
 
   const submitArticle = () => {
-    brdVo.articleBean = { ...articleBean }; // articleBean을 직접 복사
+    brdVo.articleBean = { ...articleBean, content: draftToHtml(convertToRaw(editorState.getCurrentContent())) }; // articleBean을 직접 복사
     const memberBean = JSON.parse(localStorage.getItem('memberBean'));
     brdVo.articleBean.memId = memberBean.memId;
 
@@ -162,7 +166,7 @@ const ArticleReg = () => {
           value: board.brdId,
         }));
         setBoardOptions(newBoardOptions);
-        setSelectedBoard(newBoardOptions.length > 0 ? newBoardOptions[0].value : null);
+        setSelectedBoard(newBoardOptions.length > 0 ? newBoardOptions[0].value : '');
       }
     }).catch(() => {
       alert("등록 실패 (오류)");
@@ -187,7 +191,7 @@ const ArticleReg = () => {
               value: folderBean.folId
             }))}
             name="folId"
-            value={selectedFolder}
+            value={selectedFolder || ''}
             onChange={handleFolderChange}
           />
         </CCol>
@@ -197,7 +201,7 @@ const ArticleReg = () => {
             label="게시판 선택"
             options={boardOptions}
             name="brdId"
-            value={selectedBoard}
+            value={selectedBoard || ''}
             onChange={handleBoardChange}
           />
         </CCol>
@@ -254,12 +258,33 @@ const ArticleReg = () => {
         <CCol md={12}>
           <div className="mb-3">
             <CFormLabel htmlFor="exampleFormControlTextarea1">내용</CFormLabel>
-            <CFormTextarea
-              id="exampleFormControlTextarea1"
-              rows={10}
-              name="content"
-              onChange={changeAtclBean}
+            <Editor
+              editorState={editorState}
+              onEditorStateChange={setEditorState}
+              wrapperClassName="wrapper-class"
+              editorClassName="editor-class"
+              toolbarClassName="toolbar-class"
+              toolbar={{
+                image: {
+                  uploadCallback: async (file) => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const res = await axios.post('/uploadImage', formData, {
+                      headers: {
+                        'Content-Type': 'multipart/form-data'
+                      }
+                    });
+
+                    return { data: { link: res.data.imageUrl } };
+                  },
+                  previewImage: true,
+                  alt: { present: true, mandatory: false },
+                },
+              }}
+              editorStyle={{ height: '500px', backgroundColor: '#f5f5f5', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
             />
+
           </div>
         </CCol>
 
@@ -277,7 +302,7 @@ const ArticleReg = () => {
 
         <div className="d-grid gap-2 d-md-flex justify-content-md-end pb-3">
           <CButton color="dark" >임시 저장</CButton>
-          <CButton className="me-md-2"  onClick={submitArticle}>게시글 등록</CButton>
+          <CButton className="me-md-2" onClick={submitArticle}>게시글 등록</CButton>
         </div>
       </CForm>
     </>

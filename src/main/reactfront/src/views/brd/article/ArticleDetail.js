@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CFormInput, CForm, CFormLabel, CFormTextarea,
-  CCol, CButton, CCard, CCardBody, CCardTitle, CCardText, CCardFooter
+  CFormInput, CForm, CFormLabel, CCol, CButton, CCard, CCardBody, CCardTitle, CCardText, CCardFooter
 } from '@coreui/react';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,7 +22,8 @@ const ArticleDetail = () => {
         url: '/selectArticleDetail',
         method: 'post',
         params: {
-          atclId: atclId
+          atclId: atclId,
+          memId : JSON.parse(localStorage.getItem('memberBean')).memId
         }
       }).then(function (res) {
         setBrdVo(res.data.brdVo);
@@ -118,7 +118,13 @@ const ArticleDetail = () => {
         <CCol md={12}>
           <div className="mb-3">
             <CFormLabel htmlFor="content">내용</CFormLabel>
-            <CFormTextarea id="content" rows={10} name="content" value={articleBean.content} disabled />
+            <div
+              id="content"
+              name="content"
+              className="form-control"
+              style={{ minHeight: '200px', backgroundColor: '#f5f5f5', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+              dangerouslySetInnerHTML={{ __html: articleBean.content }}
+            />
           </div>
         </CCol>
 

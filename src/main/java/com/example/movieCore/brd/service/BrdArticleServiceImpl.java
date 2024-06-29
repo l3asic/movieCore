@@ -82,4 +82,12 @@ public class BrdArticleServiceImpl {
     public ArrayList<BrdReplyBean> selectReplyListAdmin(BrdVo brdVo) {
         return brdArticleMapper.selectReplyListAdmin(brdVo);
     }
+
+    public void addArticleViewLog(BrdVo brdVo) {
+        brdArticleMapper.addArticleViewLog(brdVo);
+    }
+
+    public void updateArticleViewCnt(BrdVo brdVo) {
+        brdArticleMapper.updateArticleViewCnt(brdVo);
+    }
 }

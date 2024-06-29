@@ -619,6 +619,27 @@
     </select>
 
 
+    <!-- 게시글 조회수 증가 -->
+    <insert id="addArticleViewLog" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        INSERT INTO BRD_VIEW_LOG (MEM_ID, ATCL_ID, VIEW_DT, LAST_VIEW_DT)
+        VALUES (#{articleBean.memId}, #{articleBean.atclId}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            ON DUPLICATE KEY UPDATE LAST_VIEW_DT = CURRENT_TIMESTAMP;
+    </insert>
+
+
+
+    <!-- 게시글 조회 수 갱신 -->
+    <update id="updateArticleViewCnt" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        UPDATE BRD_ARTICLE
+        SET VIEW_CNT = (
+            SELECT COUNT(*)
+            FROM BRD_VIEW_LOG
+            WHERE ATCL_ID = #{articleBean.atclId}
+        )
+        WHERE ATCL_ID = #{articleBean.atclId}
+    </update>
+
+
 
 
 
