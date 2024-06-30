@@ -121,12 +121,20 @@ const ArticleListView = () => {
         };
       });
 
+      // 게시판 이름을 한 번만 추출하여 설정
+      let brdName = '';
+      if (articleBeanList.length > 0) {
+        brdName = articleBeanList[0].brdName;
+      }
 
       // 데이터를 상태로 설정하여 화면에 렌더링될 수 있도록 함
       setBrdVo(prevState => ({
         ...prevState,
         articleBeanList: articleBeanList,
-        paging
+        paging,
+        brdBoardBean : {
+          brdName : brdName
+        }
       }));
 
       setSortKey(res.data.brdVo.boardBean.sortKey);
@@ -218,7 +226,7 @@ const ArticleListView = () => {
         <CCardImage orientation="top" src={ReactImg} style={{ height: "200px", marginBottom: "30px" }} />
       </div>
 
-      <h4>{brdVo.brdBoardBean.brdName} 게시판 이름 추후 수정 필요</h4>
+      <h4>{brdVo.brdBoardBean.brdName}</h4>
       <div>
         <CInputGroup className="mb-3" style={{ width: "30%", display: "flex", float: "right" }}>
           <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect} name="schSelect">

@@ -150,33 +150,38 @@
     </insert>
 
 
+    <!-- 게시글 리스트 조회 -->
     <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
 
         SELECT
-            BA.ATCL_ID,
-            BA.BRD_ID,
-            MMI.MEM_NAME,
-            BA.SUBJECT,
-            BA.CONTENT,
-            BA.VIEW_CNT,
-            BA.CREATE_DT,
-            BA.UPDATE_DT,
-            BA.EXPIRE_DT,
-            BA.EXPIRE_YN,
-            BA.STATE,
-            BA.ATCL_REPL_CNT
+        BA.ATCL_ID,
+        BA.BRD_ID,
+        MMI.MEM_NAME,
+        BA.SUBJECT,
+        BA.CONTENT,
+        BA.VIEW_CNT,
+        BA.CREATE_DT,
+        BA.UPDATE_DT,
+        BA.EXPIRE_DT,
+        BA.EXPIRE_YN,
+        BA.STATE,
+        BA.ATCL_REPL_CNT,
+        BB.BRD_NAME
         FROM
-            BRD_ARTICLE BA
+        BRD_ARTICLE BA
 
         LEFT JOIN MEM_MEMBER_INFO MMI
         ON BA.MEM_ID = MMI.MEM_ID
 
+        LEFT JOIN BRD_BOARD BB
+        ON BA.BRD_ID = BB.BRD_ID
+
         WHERE
-            BA.STATE = 'B'
+        BA.STATE = 'B'
         AND
-            BA.BRD_ID = #{boardBean.brdId}
+        BA.BRD_ID = #{boardBean.brdId}
         AND
-            BA.EXPIRE_YN = 'N'
+        BA.EXPIRE_YN = 'N'
         <choose>
             <when test="boardBean.schSelect == 'subject'">
                 AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
@@ -196,35 +201,35 @@
             </otherwise>
         </choose>
         <choose>
-        <when test="boardBean.sortKey != null and boardBean.sortOdr != null">
-            ORDER BY
-            <choose>
-                <when test="boardBean.sortKey == 'subject'">
-                    BA.SUBJECT
-                </when>
-                <when test="boardBean.sortKey == 'memName'">
-                    MMI.MEM_NAME
-                </when>
-                <when test="boardBean.sortKey == 'createDt'">
-                    BA.CREATE_DT
-                </when>
-                <when test="boardBean.sortKey == 'viewCnt'">
-                    BA.VIEW_CNT
-                </when>
-                <otherwise>
-                    BA.CREATE_DT
-                </otherwise>
-            </choose>
-            <if test="boardBean.sortOdr == 'asc'">
-                ASC
-            </if>
-            <if test="boardBean.sortOdr == 'desc'">
-                DESC
-            </if>
-        </when>
-        <otherwise>
-            ORDER BY BA.CREATE_DT DESC
-        </otherwise>
+            <when test="boardBean.sortKey != null and boardBean.sortOdr != null">
+                ORDER BY
+                <choose>
+                    <when test="boardBean.sortKey == 'subject'">
+                        BA.SUBJECT
+                    </when>
+                    <when test="boardBean.sortKey == 'memName'">
+                        MMI.MEM_NAME
+                    </when>
+                    <when test="boardBean.sortKey == 'createDt'">
+                        BA.CREATE_DT
+                    </when>
+                    <when test="boardBean.sortKey == 'viewCnt'">
+                        BA.VIEW_CNT
+                    </when>
+                    <otherwise>
+                        BA.CREATE_DT
+                    </otherwise>
+                </choose>
+                <if test="boardBean.sortOdr == 'asc'">
+                    ASC
+                </if>
+                <if test="boardBean.sortOdr == 'desc'">
+                    DESC
+                </if>
+            </when>
+            <otherwise>
+                ORDER BY BA.CREATE_DT DESC
+            </otherwise>
         </choose>
 
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
