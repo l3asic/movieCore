@@ -79,6 +79,32 @@ public class BrdArticleController {
 
 
 
+    /** 게시판 조회 */
+    @PostMapping(value = "/selectBoardByBrdId")
+    @ResponseBody
+    public Map<String, Object> selectBoardByBrdId(@RequestBody BrdVo brdVo) throws Exception{
+
+        boolean succesResult = false;
+
+        Map resMap = new HashMap<>();
+        try {
+            brdVo.setBoardBean(articleService.selectBoardByBrdId(brdVo));
+
+            resMap.put("brdVo",brdVo);
+            succesResult = true;
+        }catch (Exception e){
+
+        }
+
+        resMap.put("succesResult",succesResult);
+
+        return resMap;
+
+
+    }
+
+
+
     /** 게시판의 게시글 리스트 조회 */
     @PostMapping(value = "/selectArticleList")
     @ResponseBody

@@ -20,7 +20,6 @@ import axios from "axios";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
 import { cilLoopCircular, cilSwapVertical, cilMagnifyingGlass } from "@coreui/icons";
-import ReactImg from '../../../assets/images/react.jpg';
 import GrayLine from "../../uitils/GrayLine";
 
 const ArticleListView = () => {
@@ -28,7 +27,7 @@ const ArticleListView = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [brdVo, setBrdVo] = useState({
-    brdBoardBean: {},
+    boardBean: {},
     articleBeanList: [],
     boardBeanList: [],
     paging: {
@@ -44,14 +43,18 @@ const ArticleListView = () => {
 
     setBrdVo(prevBrdVo => ({
       ...prevBrdVo,
-      brdBoardBean: {
-        ...prevBrdVo.brdBoardBean,
+      boardBean: {
+        ...prevBrdVo.boardBean,
         brdId: brdIdFromQuery
       }
     }));
     // 최초 접근시 brdId 동기화 문제로 강제 할당
-    brdVo.brdBoardBean.brdId = brdIdFromQuery;
+    brdVo.boardBean.brdId = brdIdFromQuery;
 
+    // 게시판 조회
+    selectBoardByBrdId();
+
+    // 게시글 리스트 조회
     selectArticleList();
 
   }, [location]);
@@ -84,6 +87,33 @@ const ArticleListView = () => {
     selectArticleList();
   };
 
+
+
+  /** 게시판 조회 */
+  function selectBoardByBrdId() {
+    axios({
+      url: '/selectBoardByBrdId',
+      method: 'post',
+      data: {
+        boardBean: brdVo.boardBean
+      }
+
+    }).then(function (res) {
+      // 게시판 이름, 설명 세팅
+      setBrdVo(prevState => ({
+        ...prevState,
+        boardBean: res.data.brdVo.boardBean
+      }));
+
+
+    }).catch(function (err) {
+      alert("조회 실패 (오류)");
+    });
+  }
+
+
+
+
   /** 게시글 리스트 조회 */
   function selectArticleList(newPage) {
     if (newPage != null) { // 페이지 이동시
@@ -97,7 +127,7 @@ const ArticleListView = () => {
       url: '/selectArticleList',
       method: 'post',
       params: {
-        brdId: brdVo.brdBoardBean.brdId,
+        brdId: brdVo.boardBean.brdId,
         newPage: newPage,
         schSelect: schSelect,
         schText: schText,
@@ -125,23 +155,11 @@ const ArticleListView = () => {
         };
       });
 
-      // 게시판 이름, 설명을 한 번만 추출하여 설정
-      let brdName = '';
-      let brdComment = '';
-      if (articleBeanList.length > 0) {
-        brdName = articleBeanList[0].brdName;
-        brdComment = articleBeanList[0].brdComment;
-      }
-
       // 데이터를 상태로 설정하여 화면에 렌더링될 수 있도록 함
       setBrdVo(prevState => ({
         ...prevState,
         articleBeanList: articleBeanList,
-        paging,
-        brdBoardBean: {
-          brdName: brdName,
-          brdComment: brdComment
-        }
+        paging
       }));
 
       setSortKey(res.data.brdVo.boardBean.sortKey);
@@ -166,7 +184,7 @@ const ArticleListView = () => {
       url: '/searchArticle',
       method: 'get',
       params: {
-        brdId: brdVo.brdBoardBean.brdId,
+        brdId: brdVo.boardBean.brdId,
         schSelect: schSelect,
         schText: schText
       }
@@ -226,13 +244,21 @@ const ArticleListView = () => {
 
   return (
     <div>
-      <h4>{brdVo.brdBoardBean.brdName}</h4>
-      <p>{brdVo.brdBoardBean.brdComment}</p>
+      <h4>{brdVo.boardBean.brdName}</h4>
+      <p>{brdVo.boardBean.brdComment}</p>
 
       {/** 배너 영역 */}
-      <div>
-        <CCardImage orientation="top" src={ReactImg} style={{ height: "200px", marginBottom: "30px" }} />
-      </div>
+      {brdVo.boardBean && brdVo.boardBean.fileBean && brdVo.boardBean.fileBean.src && (
+        <div>
+          <CCardImage
+            orientation="top"
+            src={brdVo.boardBean.fileBean.src}
+            style={{ height: "200px", marginBottom: "30px" }}
+          />
+        </div>
+      )}
+
+
       <GrayLine marginBottom="10px" marginTop="10px"/>
 
       <CNavbar colorScheme="light" className="bg-light">

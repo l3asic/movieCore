@@ -90,4 +90,8 @@ public class BrdArticleServiceImpl {
     public void updateArticleViewCnt(BrdVo brdVo) {
         brdArticleMapper.updateArticleViewCnt(brdVo);
     }
+
+    public BrdBoardBean selectBoardByBrdId(BrdVo brdVo) {
+        return brdArticleMapper.selectBoardByBrdId(brdVo);
+    }
 }

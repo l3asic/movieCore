@@ -62,7 +62,20 @@
         <result column="FILE_CNT_LIMIT" property="fileCntLimit" jdbcType="VARCHAR" />
         <result column="REPL_YN" property="replYn" jdbcType="VARCHAR" />
 
+        <association property="fileBean" javaType="com.example.movieCore.cmm.FileBean">
+            <result column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+            <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+            <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+            <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+            <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+            <result column="URL" property="url" jdbcType="VARCHAR"/>
+            <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+            <result column="FILE_CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
+            <result column="SRC" property="src" jdbcType="VARCHAR"/>
+        </association>
     </resultMap>
+
+
 
     <!-- 폴더 빈 -->
     <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBean">
@@ -645,6 +658,42 @@
         )
         WHERE ATCL_ID = #{articleBean.atclId}
     </update>
+
+
+    <!-- 게시판 조회 -->
+    <select id="selectBoardByBrdId" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="boardBean">
+        SELECT
+            BB.BRD_ID,
+            BB.FOL_ID,
+            BB.BRD_NAME,
+            BB.BRD_COMMENT,
+            BB.MEM_ID,
+            BB.STATE,
+            BB.ODR,
+            BB.CREATE_DT,
+            BB.NOTICE_YN,
+            BB.IMG_UPLOAD_YN,
+            BB.FILE_LIMIT,
+            BB.FILE_CNT_LIMIT,
+            BB.REPL_YN,
+            CF.FILE_ID as FILE_ID,
+            CF.MODULE as MODULE,
+        CF.FILE_NAME as FILE_NAME,
+        CF.LOCAL_NAME as LOCAL_NAME,
+        CF.FILE_EXT as FILE_EXT,
+        CF.URL as URL,
+        CF.VOLUME as VOLUME,
+        CF.CREATE_DT as FILE_CREATE_DT,
+        CF.SRC as SRC
+        FROM
+            BRD_BOARD BB
+            LEFT JOIN BRD_BOARD_BANNER_MAP BMB ON BB.BRD_ID = BMB.BRD_ID
+            LEFT JOIN CMM_FILE CF ON BMB.FILE_ID = CF.FILE_ID
+        WHERE
+            BB.STATE = 'B'
+          AND BB.BRD_ID = #{boardBean.brdId}
+    </select>
+
 
 
 
