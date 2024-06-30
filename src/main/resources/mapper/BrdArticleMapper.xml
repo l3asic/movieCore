@@ -688,17 +688,17 @@
         FROM
             BRD_BOARD BB
             LEFT JOIN BRD_BOARD_BANNER_MAP BMB ON BB.BRD_ID = BMB.BRD_ID
-            LEFT JOIN CMM_FILE CF ON BMB.FILE_ID = CF.FILE_ID
-        WHERE
-            BB.STATE = 'B'
-          AND BB.BRD_ID = #{boardBean.brdId}
-          AND CF.CREATE_DT = (
+            LEFT JOIN CMM_FILE CF ON BMB.FILE_ID = CF.FILE_ID AND CF.CREATE_DT = (
             SELECT MAX(CF2.CREATE_DT)
             FROM CMM_FILE CF2
             LEFT JOIN BRD_BOARD_BANNER_MAP BMB2 ON CF2.FILE_ID = BMB2.FILE_ID
             WHERE BMB2.BRD_ID = BB.BRD_ID
             )
+        WHERE
+            BB.STATE = 'B'
+          AND BB.BRD_ID = #{boardBean.brdId}
     </select>
+
 
 
 
