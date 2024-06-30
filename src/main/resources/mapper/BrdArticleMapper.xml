@@ -692,7 +692,14 @@
         WHERE
             BB.STATE = 'B'
           AND BB.BRD_ID = #{boardBean.brdId}
+          AND CF.CREATE_DT = (
+            SELECT MAX(CF2.CREATE_DT)
+            FROM CMM_FILE CF2
+            LEFT JOIN BRD_BOARD_BANNER_MAP BMB2 ON CF2.FILE_ID = BMB2.FILE_ID
+            WHERE BMB2.BRD_ID = BB.BRD_ID
+            )
     </select>
+
 
 
 
