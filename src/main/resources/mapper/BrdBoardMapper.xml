@@ -69,7 +69,19 @@
         <result column="FILE_CNT_LIMIT" property="fileCntLimit" jdbcType="VARCHAR" />
         <result column="REPL_YN" property="replYn" jdbcType="VARCHAR" />
         <result column="ATCL_CNT" property="atclCnt" jdbcType="VARCHAR" />
+        <association property="fileBean" javaType="com.example.movieCore.cmm.FileBean">
+            <id column="FILE_ID" property="fileId" jdbcType="VARCHAR" />
+            <result column="MODULE" property="module" jdbcType="VARCHAR" />
+            <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR" />
+            <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR" />
+            <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR" />
+            <result column="URL" property="url" jdbcType="VARCHAR" />
+            <result column="VOLUME" property="volume" jdbcType="VARCHAR" />
+            <result column="FILE_CREATE_DT" property="createDt" jdbcType="TIMESTAMP" />
+            <result column="SRC" property="src" jdbcType="VARCHAR" />
+        </association>
     </resultMap>
+
 
 
 
@@ -224,7 +236,8 @@
 
 
     <!-- 관리자모듈- 폴더별 게시판 리스트 조회 -->
-    <select id="selectBoardListAdmin" resultMap="folderBoardListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo">
+    <!-- 관리자모듈- 폴더별 게시판 리스트 조회 -->
+    <select id="selectBoardListAdmin" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="folderBoardListAdmin">
         SELECT
         BB.BRD_ID,
         BB.FOL_ID AS BOARD_FOL_ID,
@@ -247,13 +260,27 @@
         BF.STATE AS FOL_STATE,
         BF.ODR AS FOL_ODR,
         BF.CREATE_DT AS FOL_CREATE_DT,
-        MMI.MEM_NAME AS FOL_MEM_NAME
+        MMI.MEM_NAME AS FOL_MEM_NAME,
+        CF.FILE_ID AS FILE_ID,
+        CF.MODULE AS MODULE,
+        CF.FILE_NAME AS FILE_NAME,
+        CF.LOCAL_NAME AS LOCAL_NAME,
+        CF.FILE_EXT AS FILE_EXT,
+        CF.URL AS URL,
+        CF.VOLUME AS VOLUME,
+        CF.CREATE_DT AS FILE_CREATE_DT,
+        CF.SRC AS SRC
         FROM
         BRD_BOARD BB
-        LEFT JOIN
-        BRD_FOLDER BF ON BB.FOL_ID = BF.FOL_ID
-        LEFT JOIN
-        MEM_MEMBER_INFO MMI ON BB.MEM_ID = MMI.MEM_ID
+        LEFT JOIN BRD_FOLDER BF ON BB.FOL_ID = BF.FOL_ID
+        LEFT JOIN MEM_MEMBER_INFO MMI ON BB.MEM_ID = MMI.MEM_ID
+        LEFT JOIN BRD_BOARD_BANNER_MAP BMB ON BB.BRD_ID = BMB.BRD_ID
+        LEFT JOIN CMM_FILE CF ON BMB.FILE_ID = CF.FILE_ID
+        AND CF.CREATE_DT = (
+        SELECT MAX(CREATE_DT)
+        FROM CMM_FILE CF2
+        WHERE CF2.FILE_ID = CF.FILE_ID
+        )
         WHERE
         1=1
         <if test="searchBean.searchFilter != null and searchBean.searchFilter != '' and searchBean.searchText != null and searchBean.searchText != ''">
@@ -278,6 +305,9 @@
             </otherwise>
         </choose>
     </select>
+
+
+
 
 
 

@@ -21,6 +21,7 @@ import {
   CModalTitle,
   CModalBody,
   CModalFooter,
+  CCardImage,
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -51,6 +52,8 @@ function BoardListTab() {
   const [selectedBoard, setSelectedBoard] = useState(null);
   const [visible, setVisible] = useState(false);
   const [showDragInfo, setShowDragInfo] = useState(true);
+  const [bannerImage, setBannerImage] = useState(null);
+  const [bannerPreview, setBannerPreview] = useState(null);
 
   useEffect(() => {
     selectBoardListAdmin();
@@ -292,6 +295,7 @@ function BoardListTab() {
   const handleBoardClick = (board, event) => {
     if (event.target.type === "checkbox") return;
     setSelectedBoard(board);
+    setBannerPreview(board.fileBean ? board.fileBean.src : null); // 배너 이미지 미리보기 설정
     setVisible(true);
   };
 
@@ -303,6 +307,8 @@ function BoardListTab() {
     }));
   };
 
+
+  /** 게시판 수정 (저장) */
   const handleBoardSave = () => {
     const updatedBoard = {
       ...selectedBoard,
@@ -311,15 +317,23 @@ function BoardListTab() {
         : null,
     };
 
+    // selected 및 stateText 필드를 제거한 객체를 생성
+    const { selected, stateText, ...boardBeanWithoutSelectedAndStateText } = updatedBoard;
+
+    const formData = new FormData();
+    const brdVoJson = JSON.stringify({ boardBean: boardBeanWithoutSelectedAndStateText }); // brdVo 객체를 JSON 문자열로 변환
+    formData.append("brdVo", brdVoJson);
+    if (bannerImage) {
+      formData.append("bannerImage", bannerImage);
+    }
+
     axios({
       url: "/updateBoard",
       method: "post",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
-      data: JSON.stringify({
-        boardBean: updatedBoard,
-      }),
+      data: formData,
     })
       .then((res) => {
         alert("수정 완료");
@@ -331,8 +345,22 @@ function BoardListTab() {
       });
   };
 
+
+
+
   const handleModalClose = () => {
     setVisible(false);
+  };
+
+  const handleBannerImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setBannerImage(file);
+      setBannerPreview(URL.createObjectURL(file));
+    } else {
+      setBannerImage(null);
+      setBannerPreview(null);
+    }
   };
 
   const generateOptions = (start, end, step, unit, includeUnlimited = false) => {
@@ -639,6 +667,20 @@ function BoardListTab() {
                   <option value="Y">예</option>
                   <option value="N">아니오</option>
                 </CFormSelect>
+              </div>
+              <div className="mb-3">
+                {bannerPreview && (
+                  <CCardImage
+                    src={bannerPreview}
+                    style={{ height: "200px", marginBottom: "20px" }}
+                  />
+                )}
+                <CFormInput
+                  type="file"
+                  label="게시판 배너"
+                  name="bannerImage"
+                  onChange={handleBannerImageChange}
+                />
               </div>
             </CForm>
           )}

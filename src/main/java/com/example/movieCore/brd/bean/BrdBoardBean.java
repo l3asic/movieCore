@@ -62,4 +62,6 @@ public class BrdBoardBean {
     /** 배너 이미지 */
     private FileBean fileBean;
 
+    private boolean selected;
+
 }

@@ -215,18 +215,39 @@ public class BrdBoardController {
 
 
     /** 관리자 모듈 - 폴더 별 게시판 정보 업데이트 */
-    @PostMapping(value = "/updateBoard")
+    @PostMapping(value = "/updateBoard", consumes = "multipart/form-data")
     @ResponseBody
-    public Map<String, Object> updateBoard(@RequestBody BrdVo brdVo) throws Exception {
+    public Map<String, Object> updateBoard(MultipartHttpServletRequest request) throws Exception {
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
+
         try {
+            // JSON 형식의 게시판 정보를 받기 위한 코드
+            String brdVoJson = request.getParameter("brdVo");
+            ObjectMapper objectMapper = new ObjectMapper();
+            BrdVo brdVo = objectMapper.readValue(brdVoJson, BrdVo.class);
+
+            // 배너 이미지 파일 처리
+            MultipartFile bannerImage = request.getFile("bannerImage");
+            if (bannerImage != null && !bannerImage.isEmpty()) {
+                MakeFileBean makeFileBean = new MakeFileBean();
+                FileBean fileBean = makeFileBean.makingFileBean("BRD", bannerImage);
+                brdVo.getBoardBean().setFileBean(fileBean);
+
+                // 파일빈 인서트
+                boardService.insertFileBean(brdVo);
+                // 게시판 파일 매핑 인서트
+                boardService.insertFileBeanMap(brdVo);
+            }
+
+            // 게시판 정보 업데이트
             boardService.updateBoard(brdVo);
 
             successResult = true;
         } catch (Exception e) {
             // 예외 처리
         }
+
         resMap.put("successResult", successResult);
         return resMap;
     }
