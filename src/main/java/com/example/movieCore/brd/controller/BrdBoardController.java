@@ -4,8 +4,11 @@ import com.example.movieCore.brd.bean.BrdBoardBean;
 import com.example.movieCore.brd.bean.BrdFolderBean;
 import com.example.movieCore.brd.service.BrdBoardServiceImpl;
 import com.example.movieCore.brd.vo.BrdVo;
+import com.example.movieCore.cmm.FileBean;
+import com.example.movieCore.utils.MakeFileBean;
 import com.example.movieCore.utils.MakeUUID;
 import com.example.movieCore.utils.Paging;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -23,50 +28,57 @@ public class BrdBoardController {
 
     private final BrdBoardServiceImpl boardService;
 
+    MakeUUID makeUUID = new MakeUUID();
+
+
 
     /** 게시판 생성 시 */
-    @PostMapping(value = "/createBoard")
+    @PostMapping(value = "/createBoard", consumes = "multipart/form-data")
     @ResponseBody
-    public Map<String, Object> createBoard(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
+    public Map<String, Object> createBoard(MultipartHttpServletRequest request) throws Exception {
+        // JSON 형식의 기타 게시판 정보를 받기 위한 코드
+        String brdVoJson = request.getParameter("brdVo");
+        ObjectMapper objectMapper = new ObjectMapper();
+        BrdVo brdVo = objectMapper.readValue(brdVoJson, BrdVo.class);
 
         /** 기본값 세팅 */
 
         // 고유 id 생성 (folId)
-        MakeUUID makeUUID = new MakeUUID();
         String brdId = makeUUID.makeShortUUID("BB");    // BB = BoardBoard
-        boardBean.setBrdId(brdId);
+        brdVo.getBoardBean().setBrdId(brdId);
 
         // 게시판 상태
-        boardBean.setState("B");
+        brdVo.getBoardBean().setState("B");
 
         // 게시판 생성일
         Date date = new Date();
         Timestamp nowTime = new Timestamp(date.getTime());
-        boardBean.setCreateDt(nowTime);
-
+        brdVo.getBoardBean().setCreateDt(nowTime);
 
         // 게시판 순서
-        int newOdr = boardService.getMaxBoardOdr(boardBean) + 1; // getMaxOdr 메서드에서 최대 ODR 값을 가져온 후 +1
-        boardBean.setOdr(newOdr);
+        int newOdr = boardService.getMaxBoardOdr(brdVo.getBoardBean()) + 1; // getMaxOdr 메서드에서 최대 ODR 값을 가져온 후 +1
+        brdVo.getBoardBean().setOdr(newOdr);
 
+        // 배너 이미지 파일 처리
+        MultipartFile bannerImage = request.getFile("bannerImage");
+        if (bannerImage != null && !bannerImage.isEmpty()) {
+            MakeFileBean makeFileBean = new MakeFileBean();
+            FileBean fileBean = makeFileBean.makingFileBean("BRD", bannerImage);
+            brdVo.getBoardBean().setFileBean(fileBean);
 
-
-
+            // 파일빈 인서트
+            boardService.insertFileBean(brdVo);
+            // 게시판 파일 매핑 인서트
+            boardService.insertFileBeanMap(brdVo);
+        }
 
         /** 게시판 최종 디비 인서트 */
-        BrdVo brdVo = new BrdVo();
-        brdVo.setBoardBean(boardBean);
+        boardService.createBoard(brdVo);
 
-        boolean succesResult = false;
+        Map<String, Object> resMap = new HashMap<>();
 
-        succesResult = boardService.createBoard(brdVo);
-
-        Map resMap = new HashMap<>();
-        resMap.put("succesResult",succesResult);
 
         return resMap;
-
-
     }
 
 

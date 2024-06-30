@@ -1,5 +1,6 @@
 package com.example.movieCore.brd.bean;
 
+import com.example.movieCore.cmm.FileBean;
 import com.example.movieCore.utils.Paging;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,5 +58,8 @@ public class BrdBoardBean {
     /** 정렬 조건 */
     private String sortKey;
     private String sortOdr;
+
+    /** 배너 이미지 */
+    private FileBean fileBean;
 
 }

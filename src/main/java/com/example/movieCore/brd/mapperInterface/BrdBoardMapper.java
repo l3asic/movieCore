@@ -27,4 +27,8 @@ public interface BrdBoardMapper {
     void updateBoard(BrdVo brdVo);
 
     int getMaxBoardOdr(BrdBoardBean boardBean);
+
+    void insertFileBean(BrdVo brdVo);
+
+    void insertFileBeanMap(BrdVo brdVo);
 }

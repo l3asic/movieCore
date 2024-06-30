@@ -12,10 +12,14 @@ import {
   CButton,
   CFormTextarea,
   CRow,
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CCardImage
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import {cilClipboard} from "@coreui/icons";
-import {useNavigate} from "react-router-dom";
+import { cilClipboard, cilImage } from "@coreui/icons";
+import { useNavigate } from "react-router-dom";
 
 function BoardTab() {
   const [brdVo, setBrdVo] = useState({
@@ -35,7 +39,10 @@ function BoardTab() {
     replYn: "Y",
   });
 
-  const navigate  = useNavigate();
+  const [bannerImage, setBannerImage] = useState(null);
+  const [bannerPreview, setBannerPreview] = useState(null);
+
+  const navigate = useNavigate();
 
   /** 모든 폴더 리스트 조회 */
   useEffect(() => {
@@ -53,10 +60,52 @@ function BoardTab() {
     }
   }, [brdVo.folderBeanList]);
 
+  /** 이미지 선택 시 미리보기 설정 */
+  const handleBannerImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBannerImage(file);
+      setBannerPreview(URL.createObjectURL(file));
+    } else {
+      setBannerImage(null);
+      setBannerPreview(null);
+    }
+  };
+
+  /** 게시판 최종 생성 */
+  const createBoard = () => {
+    const formData = new FormData();
+    const brdVo = {
+      boardBean: boardBean
+    };
+    formData.append("brdVo", JSON.stringify(brdVo));
+    if (bannerImage) {
+      formData.append('bannerImage', bannerImage);
+    }
+
+    axios({
+      url: '/createBoard',
+      method: 'post',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+      .then(function (res) {
+        navigate('/dashboard');
+      })
+      .catch(function (err) {
+        alert("등록 실패 (오류)");
+      });
+  };
+
+
+
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>
-        <CIcon icon={cilClipboard} style={{ marginRight: '10px',  width : '25px', height : '25px' }} />
+        <CIcon icon={cilClipboard} style={{ marginRight: '10px', width: '25px', height: '25px' }} />
         게시판 생성
       </h1>
       <CForm className="row g-3" style={styles.form}>
@@ -223,11 +272,35 @@ function BoardTab() {
           </CInputGroup>
         </CCol>
 
+        <CCol md={12}>
+          <CCard>
+            <CCardHeader>
+              <CIcon icon={cilImage} style={{ marginRight: '10px' }} />
+              배너 이미지 업로드
+            </CCardHeader>
+            <CCardBody>
+              <CInputGroup className="mb-3">
+                <CFormInput
+                  type="file"
+                  name="bannerImage"
+                  accept="image/*"
+                  onChange={handleBannerImageChange}
+                  style={styles.input}
+                />
+              </CInputGroup>
+              {bannerPreview && (
+                <div style={styles.previewContainer}>
+                  <CCardImage src={bannerPreview} alt="배너 이미지 미리보기" style={styles.previewImage} />
+                </div>
+              )}
+            </CCardBody>
+          </CCard>
+        </CCol>
+
         <CCol md={12} className="d-flex justify-content-end">
           <CButton
             color="dark"
             onClick={createBoard}
-            /*style={styles.button}*/
           >
             게시판 생성
           </CButton>
@@ -262,38 +335,6 @@ function BoardTab() {
       [name]: value,
     });
   }
-
-  /** 게시판 최종 생성 */
-  function createBoard() {
-    axios({
-      url: "/createBoard",
-      method: "post",
-      params: {
-        folId: boardBean.folId,
-        brdName: boardBean.brdName,
-        brdComment: boardBean.brdComment,
-        memId: boardBean.memId,
-        odr: boardBean.odr,
-        noticeYn: boardBean.noticeYn,
-        imgUploadYn: boardBean.imgUploadYn,
-        fileLimit: boardBean.fileLimit,
-        fileCntLimit: boardBean.fileCntLimit,
-        replYn: boardBean.replYn,
-      },
-    })
-      .then(function (res) {
-        if (res.data.succesResult) {
-          alert("등록 성공");
-          // 메인화면으로
-          navigate('/dashboard');
-        } else {
-          alert("등록 실패");
-        }
-      })
-      .catch(function (err) {
-        alert("등록 실패 (오류)");
-      });
-  }
 }
 
 // 스타일 정의
@@ -315,7 +356,7 @@ const styles = {
     gap: "15px",
   },
   inputGroupText: {
-    backgroundColor: "#6c757d", // 중립적인 색상
+    backgroundColor: "#6c757d",
     color: "#fff",
     border: "none",
   },
@@ -327,6 +368,15 @@ const styles = {
     backgroundColor: "#007bff",
     borderColor: "#007bff",
     color: "#fff",
+  },
+  previewContainer: {
+    marginTop: "10px",
+    display: "flex",
+    justifyContent: "center",
+  },
+  previewImage: {
+    maxHeight: "200px",
+    borderRadius: "8px",
   },
 };
 

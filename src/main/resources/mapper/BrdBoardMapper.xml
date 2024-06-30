@@ -333,6 +333,47 @@
 
 
 
+    <!-- 게시판 배너 파일빈 인서트 -->
+    <insert id="insertFileBean" parameterType="com.example.movieCore.movie.vo.MovVo" >
+        INSERT INTO
+            CMM_FILE (
+            FILE_ID,
+            MODULE,
+            FILE_NAME,
+            LOCAL_NAME,
+            FILE_EXT,
+            URL,
+            VOLUME,
+            CREATE_DT,
+            src
+        )
+        VALUES
+            (
+                #{boardBean.fileBean.fileId},
+                #{boardBean.fileBean.module},
+                #{boardBean.fileBean.fileName},
+                #{boardBean.fileBean.localName},
+                #{boardBean.fileBean.fileExt},
+                #{boardBean.fileBean.url},
+                #{boardBean.fileBean.volume},
+                #{boardBean.fileBean.createDt},
+                #{boardBean.fileBean.src}
+            )
+    </insert>
+
+
+    <!-- 게시판 배너 <-> 파일빈 매핑 인서트  -->
+    <insert id="insertFileBeanMap" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+        INSERT INTO BRD_BOARD_BANNER_MAP (
+            BRD_ID,
+            FILE_ID
+        )
+        VALUES (
+                   #{boardBean.brdId},
+                   #{boardBean.fileBean.fileId}
+               )
+
+    </insert>
 
 
 

@@ -55,4 +55,12 @@ public class BrdBoardServiceImpl {
     public int getMaxBoardOdr(BrdBoardBean boardBean) {
         return brdBoardMapper.getMaxBoardOdr(boardBean);
     }
+
+    public void insertFileBean(BrdVo brdVo) {
+        brdBoardMapper.insertFileBean(brdVo);
+    }
+
+    public void insertFileBeanMap(BrdVo brdVo) {
+        brdBoardMapper.insertFileBeanMap(brdVo);
+    }
 }
