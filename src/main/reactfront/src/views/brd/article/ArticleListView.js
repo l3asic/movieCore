@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   CTableBody,
   CTable,
@@ -9,14 +9,19 @@ import {
   CFormInput,
   CInputGroup,
   CButton,
-  CCardImage
-} from '@coreui/react'
+  CCardImage,
+  CContainer,
+  CForm,
+  CNavbar,
+  CNavbarBrand
+} from '@coreui/react';
+import CIcon from "@coreui/icons-react";
 import axios from "axios";
 import { useNavigate, useLocation } from 'react-router-dom';
 import Paging from "../../uitils/Paging";
-import CIcon from "@coreui/icons-react";
-import { cilLoopCircular, cilSwapVertical } from "@coreui/icons";
+import { cilLoopCircular, cilSwapVertical, cilMagnifyingGlass } from "@coreui/icons";
 import ReactImg from '../../../assets/images/react.jpg';
+import GrayLine from "../../uitils/GrayLine";
 
 const ArticleListView = () => {
 
@@ -31,7 +36,6 @@ const ArticleListView = () => {
       currentPage: 0, // 현재 페이지 초기값 설정
     },
   });
-
 
   useEffect(() => {
     // URL에서 brdid 값을 추출 (ex : http://localhost:3000/#/brd/ArticleListView?brdId=BB2115517422 )
@@ -121,10 +125,12 @@ const ArticleListView = () => {
         };
       });
 
-      // 게시판 이름을 한 번만 추출하여 설정
+      // 게시판 이름, 설명을 한 번만 추출하여 설정
       let brdName = '';
+      let brdComment = '';
       if (articleBeanList.length > 0) {
         brdName = articleBeanList[0].brdName;
+        brdComment = articleBeanList[0].brdComment;
       }
 
       // 데이터를 상태로 설정하여 화면에 렌더링될 수 있도록 함
@@ -132,8 +138,9 @@ const ArticleListView = () => {
         ...prevState,
         articleBeanList: articleBeanList,
         paging,
-        brdBoardBean : {
-          brdName : brdName
+        brdBoardBean: {
+          brdName: brdName,
+          brdComment: brdComment
         }
       }));
 
@@ -190,8 +197,6 @@ const ArticleListView = () => {
       }));
       setSchSelect('');
       setSchText('');
-      // ㅇ
-
 
     }).catch(function (err) {
       alert("조회 실패 (오류)");
@@ -221,47 +226,84 @@ const ArticleListView = () => {
 
   return (
     <div>
+      <h4>{brdVo.brdBoardBean.brdName}</h4>
+      <p>{brdVo.brdBoardBean.brdComment}</p>
+
       {/** 배너 영역 */}
       <div>
         <CCardImage orientation="top" src={ReactImg} style={{ height: "200px", marginBottom: "30px" }} />
       </div>
+      <GrayLine marginBottom="10px" marginTop="10px"/>
 
-      <h4>{brdVo.brdBoardBean.brdName}</h4>
-      <div>
-        <CInputGroup className="mb-3" style={{ width: "30%", display: "flex", float: "right" }}>
-          <CFormSelect size="sm" className="mb-3" style={{ flex: "2" }} onChange={searchSelect} value={schSelect} name="schSelect">
-            <option value="all">전체</option>
-            <option value="subject">제목</option>
-            <option value="content">내용</option>
-            <option value="memName">작성자</option>
-          </CFormSelect>
-          <CFormInput size="sm" className="mb-3" style={{ flex: "9" }} onChange={searchText} value={schText} name="schText" />
-          <CButton size="sm" className="mb-3" color="secondary" onClick={searchArticle} name="searchBtn">검색</CButton>
-          {/* 초기화 */}
-          <CButton
-            className="mb-3"
-            color="black"
-            variant="outline"
-            style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
-            onClick={refreshFilterSearch}>
-            <CIcon icon={cilLoopCircular} />
-          </CButton>
-        </CInputGroup>
-      </div>
+      <CNavbar colorScheme="light" className="bg-light">
+        <CContainer fluid style={{ padding: 0 }}>
+          <CNavbarBrand className="ms-3">
+          </CNavbarBrand>
+
+          <CForm className="d-flex">
+            <CFormSelect
+              style={{ marginRight: "5px" }}
+              onChange={searchSelect}
+              value={schSelect}
+            >
+              <option value="all">전체</option>
+              <option value="subject">제목</option>
+              <option value="content">내용</option>
+              <option value="memName">작성자</option>
+            </CFormSelect>
+
+            <CFormInput
+              type="search"
+              className="me-2 ms-1"
+              style={{
+                width : "200px"
+              }}
+              placeholder="검색어를 입력하세요"
+              onChange={searchText}
+              value={schText}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  searchArticle();
+                }
+              }}
+            />
+
+            <CButton
+              color="black"
+              variant="outline"
+              className="me-2"
+              style={{ whiteSpace: "nowrap", border: "1px solid gray" }}
+              onClick={searchArticle}
+            >
+              <CIcon icon={cilMagnifyingGlass} />
+            </CButton>
+
+            <CButton
+              color="black"
+              variant="outline"
+              style={{ whiteSpace: "nowrap", border: "1px solid gray" }}
+              onClick={refreshFilterSearch}
+            >
+              <CIcon icon={cilLoopCircular} />
+            </CButton>
+          </CForm>
+        </CContainer>
+      </CNavbar>
+
       <CTable className="boardTableList">
         <CTableHead color="light">
           <CTableRow>
-            <CTableHeaderCell scope="col" >번호</CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="subject">제목
+            <CTableHeaderCell scope="col">번호</CTableHeaderCell>
+            <CTableHeaderCell scope="col">제목
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('subject')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="memName">작성자
+            <CTableHeaderCell scope="col">작성자
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('memName')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="createDt">작성일
+            <CTableHeaderCell scope="col">작성일
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('createDt')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="viewCnt">조회수
+            <CTableHeaderCell scope="col">조회수
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('viewCnt')} />
             </CTableHeaderCell>
           </CTableRow>
@@ -278,10 +320,10 @@ const ArticleListView = () => {
           ))}
         </CTableBody>
       </CTable>
-      <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
 
+      <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
     </div>
   )
 }
 
-export default ArticleListView
+export default ArticleListView;

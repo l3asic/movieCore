@@ -10,6 +10,7 @@
         <id column="ATCL_ID" property="atclId" jdbcType="VARCHAR"/>
         <result column="BRD_ID" property="brdId" jdbcType="VARCHAR"/>
         <result column="BRD_NAME" property="brdName" jdbcType="VARCHAR"/>
+        <result column="BRD_COMMENT" property="brdComment" jdbcType="VARCHAR"/>
         <result column="FOL_ID" property="folId" jdbcType="VARCHAR"/>
         <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
@@ -166,7 +167,8 @@
         BA.EXPIRE_YN,
         BA.STATE,
         BA.ATCL_REPL_CNT,
-        BB.BRD_NAME
+        BB.BRD_NAME,
+        BB.BRD_COMMENT
         FROM
         BRD_ARTICLE BA
 

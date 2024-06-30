@@ -21,6 +21,8 @@ public class BrdArticleBean implements Serializable {
 
     private String brdName;
 
+    private String brdComment;
+
     private String memId;
 
     private String subject;
