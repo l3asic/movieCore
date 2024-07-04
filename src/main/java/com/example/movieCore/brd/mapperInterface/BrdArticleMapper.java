@@ -50,4 +50,6 @@ public interface BrdArticleMapper {
     ArrayList<BrdReplyBean> selectReplyList(BrdVo brdVo);
 
     void insertReplyBean(BrdVo brdVo);
+
+    int updateReplyState(BrdVo brdVo);
 }

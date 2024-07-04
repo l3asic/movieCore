@@ -636,6 +636,8 @@
             STATE
         FROM BRD_REPLY
         WHERE ATCL_ID = #{articleBean.atclId}
+        ORDER BY
+            CREATE_DT DESC
     </select>
 
 
@@ -744,6 +746,20 @@
                      #{replyBean.state}
                  )
     </insert>
+
+
+    <!-- 게시글의 댓글 상태 업데이트 -->
+    <update id="updateReplyState" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        UPDATE BRD_REPLY
+        SET STATE = #{mode}
+        WHERE
+        <foreach collection="replyBeanList" item="replyBean" open="(" separator=" OR " close=")">
+            REPL_ID = #{replyBean.replId}
+        </foreach>
+    </update>
+
+
+
 
 
 

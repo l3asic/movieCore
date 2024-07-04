@@ -102,4 +102,8 @@ public class BrdArticleServiceImpl {
     public void insertReplyBean(BrdVo brdVo) {
         brdArticleMapper.insertReplyBean(brdVo);
     }
+
+    public int updateReplyState(BrdVo brdVo) {
+        return brdArticleMapper.updateReplyState(brdVo);
+    }
 }

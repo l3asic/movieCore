@@ -176,6 +176,7 @@ function ArticleListManage() {
   };
 
   const formatDateTime = (dateString) => {
+    if (!dateString) return "";
     const date = new Date(dateString);
     return date.toLocaleString("ko-KR", {
       year: "numeric",
@@ -306,7 +307,12 @@ function ArticleListManage() {
       },
     })
       .then((res) => {
-        setComments(res.data.replyBeanList || []); // 댓글 목록 설정, 없으면 빈 배열
+        const formattedComments = res.data.brdVo.replyBeanList.map((comment) => ({
+          ...comment,
+          createDt: formatDateTime(comment.createDt),
+          stateText: comment.state === "B" ? "정상" : comment.state === "D" ? "삭제" : "기타",
+        }));
+        setComments(formattedComments || []); // 댓글 목록 설정, 없으면 빈 배열
       })
       .catch((err) => {
         alert("댓글 조회 실패 (오류)");
@@ -406,9 +412,33 @@ function ArticleListManage() {
   };
 
   const updateCommentStateAdmin = (mode) => {
-    // Update selected comments state here
-    console.log("Updating comments state", selectedComments, mode);
+    let replyBeanList = selectedComments.map(replId => ({
+      replId: replId
+    }));
+
+    axios({
+      url: "/updateReplyState",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        replyBeanList: replyBeanList,
+        mode: mode,
+      }),
+    })
+      .then((res) => {
+        alert(res.data.successMsg);
+        selectReplyListAdmin(selectedArticle.atclId); // 댓글 리스트 갱신
+        setSelectedComments([]); // 선택된 댓글 체크박스 초기화
+      })
+      .catch((err) => {
+        alert(err.response.data.errorMsg);
+      });
   };
+
+
+
 
   return (
     <>
@@ -815,7 +845,7 @@ function ArticleListManage() {
                           <CTableDataCell>{comment.memName}</CTableDataCell>
                           <CTableDataCell>{comment.content}</CTableDataCell>
                           <CTableDataCell>{comment.createDt}</CTableDataCell>
-                          <CTableDataCell>{comment.state}</CTableDataCell>
+                          <CTableDataCell>{comment.stateText}</CTableDataCell>
                         </CTableRow>
                       ))
                     ) : (
