@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CFormInput, CForm, CFormLabel, CCol, CButton, CCard, CCardBody, CCardTitle, CCardText, CCardFooter
+  CFormInput, CForm, CFormLabel, CCol, CButton, CCard, CCardBody, CCardTitle, CCardText, CCardFooter, CFormTextarea, CRow
 } from '@coreui/react';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,24 +14,32 @@ const ArticleDetail = () => {
   const navigate = useNavigate();
 
   const [brdVo, setBrdVo] = useState(null);
+  const [replyBeanList, setReplyBeanList] = useState([]);
+  const [newComment, setNewComment] = useState('');
 
   useEffect(() => {
     if (atclId) {
       // 데이터베이스에서 게시글 정보를 조회
-      axios({
+      fetchArticleDetail(atclId);
+    }
+  }, [atclId]);
+
+  const fetchArticleDetail = async (articleId) => {
+    try {
+      const response = await axios({
         url: '/selectArticleDetail',
         method: 'post',
         params: {
-          atclId: atclId,
-          memId : JSON.parse(localStorage.getItem('memberBean')).memId
+          atclId: articleId,
+          memId: JSON.parse(localStorage.getItem('memberBean')).memId
         }
-      }).then(function (res) {
-        setBrdVo(res.data.brdVo);
-      }).catch(function (err) {
-        alert("조회 실패 (오류)");
       });
+      setBrdVo(response.data.brdVo);
+      setReplyBeanList(response.data.brdVo.replyBeanList);
+    } catch (error) {
+      alert("조회 실패 (오류)");
     }
-  }, [atclId]);
+  };
 
   function updateArticle() {
     navigate('/brd/ArticleUpdate', { state: { articleData: brdVo.articleBean } });
@@ -64,6 +72,37 @@ const ArticleDetail = () => {
       }
     });
   }
+
+  const handleCommentSubmit = async () => {
+    if (!newComment) {
+      alert('댓글을 입력하세요.');
+      return;
+    }
+
+    try {
+      const response = await axios({
+        url: '/addReply',
+        method: 'post',
+        data: {
+          replyBean: {
+            atclId: atclId,
+            content: newComment,
+            memId: JSON.parse(localStorage.getItem('memberBean')).memId,
+            memName: JSON.parse(localStorage.getItem('memberBean')).memName
+          }
+        }
+      });
+
+      if (response.data.successResult) {
+        fetchArticleDetail(atclId); // 댓글 추가 후 전체 댓글 목록을 다시 가져옴
+        setNewComment('');
+      } else {
+        alert('댓글 등록 실패');
+      }
+    } catch (error) {
+      alert('댓글 등록 실패 (오류)');
+    }
+  };
 
   if (!brdVo || !brdVo.articleBean) {
     return <div>Loading...</div>;
@@ -160,10 +199,49 @@ const ArticleDetail = () => {
         </CCol>
 
         <div className="d-grid gap-2 d-md-flex justify-content-md-end pb-3">
-          <CButton className="me-md-2" onClick={updateArticle}>수정</CButton>
+          <CButton className="me-md-2" onClick={updateArticle}>게시글 수정</CButton>
           <CButton className="me-md-2" onClick={deleteArticle}>삭제</CButton>
           <CButton color="dark" onClick={() => navigate(-1)}>목록으로</CButton>
         </div>
+
+        <GrayLine marginBottom="0px" marginTop="0px"/>
+
+        {/* 댓글 작성 영역 */}
+        <CCol md={12} className="mt-4">
+          <h5>댓글</h5>
+          <CForm className="mb-2 d-flex align-items-center">
+            <CFormTextarea
+              id="newComment"
+              rows="3"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="flex-grow-1 me-2"
+            />
+            <CButton
+              color="secondary"
+              style={{ width : "80px"}}
+              onClick={handleCommentSubmit}>
+              작성
+            </CButton>
+          </CForm>
+        </CCol>
+
+        {/* 댓글 리스트 영역 */}
+        <CCol md={12}>
+          <div className="mt-4">
+            {replyBeanList.map(reply => (
+              <CCard key={reply.replId} className="mb-2">
+                <CCardBody>
+                  <CCardTitle>{reply.memName}</CCardTitle>
+                  <CCardText>{reply.content}</CCardText>
+                  <div className="text-muted" style={{ fontSize: '0.8rem' }}>
+                    {formatDateTime(reply.createDt)}
+                  </div>
+                </CCardBody>
+              </CCard>
+            ))}
+          </div>
+        </CCol>
       </CForm>
     </>
   );

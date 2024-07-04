@@ -700,6 +700,53 @@
     </select>
 
 
+    <!-- 게시글의 댓글 리스트 조회 -->
+    <select id="selectReplyList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="replyBean">
+        SELECT
+            REPL_ID,
+            ATCL_ID,
+            CONTENT,
+            MEM_ID,
+            MEM_NAME,
+            CREATE_DT,
+            UPDATE_DT,
+            STATE
+        FROM BRD_REPLY
+        WHERE
+            ATCL_ID = #{articleBean.atclId}
+          AND
+            STATE = 'B'
+        ORDER BY
+            CREATE_DT DESC
+    </select>
+
+
+
+    <!-- 게시글의 댓글 인서트 -->
+    <insert id="insertReplyBean" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        INSERT INTO BRD_REPLY (
+            REPL_ID,
+            ATCL_ID,
+            CONTENT,
+            MEM_ID,
+            MEM_NAME,
+            CREATE_DT,
+            UPDATE_DT,
+            STATE
+        ) VALUES (
+                     #{replyBean.replId},
+                     #{replyBean.atclId},
+                     #{replyBean.content},
+                     #{replyBean.memId},
+                     #{replyBean.memName},
+                     NOW(),
+                     NOW(),
+                     #{replyBean.state}
+                 )
+    </insert>
+
+
+
 
 
 

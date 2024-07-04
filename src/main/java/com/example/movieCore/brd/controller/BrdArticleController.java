@@ -197,6 +197,9 @@ public class BrdArticleController {
             // 게시글 정보 조회
             brdVo.setArticleBean(articleService.selectArticleDetail(brdVo));
 
+            // 댓글 리스트 조회
+            brdVo.setReplyBeanList(articleService.selectReplyList(brdVo));
+
             resMap.put("brdVo", brdVo);
             succesResult = true;
         } catch (Exception e) {
@@ -401,6 +404,52 @@ public class BrdArticleController {
             resMap.put("brdVo", brdVo );
 
         } catch (Exception e) {
+        }
+
+        return resMap;
+    }
+
+
+
+    /** 댓글 작성 */
+    @PostMapping(value = "/addReply")
+    @ResponseBody
+    public Map<String, Object> addReply(@RequestBody BrdVo brdVo) throws Exception {
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+
+        try {
+
+            /** 기본 값 세팅 */
+            MakeUUID makeUUID = new MakeUUID();
+            String replId = makeUUID.makeShortUUID("BR");
+
+            // 고유 댓글 id
+            brdVo.getReplyBean().setReplId(replId);
+
+            // 생성 날짜
+            Date date = new Date();
+            Timestamp nowTime = new Timestamp(date.getTime());
+            brdVo.getReplyBean().setCreateDt(nowTime);
+
+            // 업뎃 날짜
+            brdVo.getReplyBean().setUpdateDt(nowTime);
+
+            // 상태 값
+            brdVo.getReplyBean().setState("B");
+
+            // 디비 인서트
+            articleService.insertReplyBean(brdVo);
+
+            brdVo.setReplyBeanList(articleService.selectReplyListAdmin(brdVo));
+
+            successResult = true;
+
+            resMap.put("brdVo", brdVo);
+            resMap.put("successResult", successResult);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return resMap;

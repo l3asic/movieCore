@@ -94,4 +94,12 @@ public class BrdArticleServiceImpl {
     public BrdBoardBean selectBoardByBrdId(BrdVo brdVo) {
         return brdArticleMapper.selectBoardByBrdId(brdVo);
     }
+
+    public ArrayList<BrdReplyBean> selectReplyList(BrdVo brdVo) {
+        return brdArticleMapper.selectReplyList(brdVo);
+    }
+
+    public void insertReplyBean(BrdVo brdVo) {
+        brdArticleMapper.insertReplyBean(brdVo);
+    }
 }

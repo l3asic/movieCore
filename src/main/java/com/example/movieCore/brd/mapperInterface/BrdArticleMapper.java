@@ -46,4 +46,8 @@ public interface BrdArticleMapper {
     void updateArticleViewCnt(BrdVo brdVo);
 
     BrdBoardBean selectBoardByBrdId(BrdVo brdVo);
+
+    ArrayList<BrdReplyBean> selectReplyList(BrdVo brdVo);
+
+    void insertReplyBean(BrdVo brdVo);
 }

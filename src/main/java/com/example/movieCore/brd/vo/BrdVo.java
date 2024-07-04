@@ -21,6 +21,8 @@ public class BrdVo {
 
     private BrdBoardBean boardBean;
 
+    private BrdReplyBean replyBean;
+
     private ArrayList<BrdFolderBean> folderBeanList;
 
     private ArrayList<BrdBoardBean> boardBeanList;
