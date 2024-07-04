@@ -52,4 +52,8 @@ public interface BrdArticleMapper {
     void insertReplyBean(BrdVo brdVo);
 
     int updateReplyState(BrdVo brdVo);
+
+    int selectArticleReplCnt(BrdVo brdVo);
+
+    void updateArticleReplCnt(BrdVo brdVo);
 }

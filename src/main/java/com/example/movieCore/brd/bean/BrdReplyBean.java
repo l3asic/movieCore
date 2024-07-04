@@ -18,4 +18,5 @@ public class BrdReplyBean implements Serializable {
     private Timestamp createDt;
     private Timestamp updateDt;
     private String state;
+    private int atclReplCnt;
 }

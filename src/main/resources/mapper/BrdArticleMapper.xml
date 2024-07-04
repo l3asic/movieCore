@@ -181,7 +181,8 @@
         BA.STATE,
         BA.ATCL_REPL_CNT,
         BB.BRD_NAME,
-        BB.BRD_COMMENT
+        BB.BRD_COMMENT,
+        (SELECT COUNT(*) FROM BRD_REPLY BR WHERE BR.ATCL_ID = BA.ATCL_ID AND BR.STATE = 'B') AS atcl_repl_cnt
         FROM
         BRD_ARTICLE BA
 
@@ -250,6 +251,7 @@
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
 
     </select>
+
 
     <select id="searchArticle" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
 
@@ -757,6 +759,29 @@
             REPL_ID = #{replyBean.replId}
         </foreach>
     </update>
+
+
+    <!-- 게시글의 댓글 갯수 조회 -->
+    <select id="selectArticleReplCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="integer">
+        select count(*) cnt
+        from BRD_REPLY
+        where
+            atcl_id = #{replyBean.atclId}
+        and
+            state = 'B'
+    </select>
+
+
+
+    <!-- 게시글의 댓글 갯수 업데이트 -->
+    <update id="updateArticleReplCnt" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        UPDATE BRD_ARTICLE
+        SET ATCL_REPL_CNT = #{replyBean.atclReplCnt}
+        WHERE
+            atcl_id = #{replyBean.atclId}
+    </update>
+
+
 
 
 

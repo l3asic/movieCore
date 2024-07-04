@@ -326,10 +326,13 @@ const ArticleListView = () => {
             <CTableHeaderCell scope="col">작성자
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('memName')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">작성일
+            <CTableHeaderCell scope="col" style={{ paddingRight: '20px' }}>작성일
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('createDt')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">조회수
+            <CTableHeaderCell scope="col" style={{ paddingRight: '20px' }}>댓글수
+              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('atclReplCnt')} />
+            </CTableHeaderCell>
+            <CTableHeaderCell scope="col" style={{ paddingRight: '0px' }}>조회수
               <CIcon icon={cilSwapVertical} onClick={() => sortColumn('viewCnt')} />
             </CTableHeaderCell>
           </CTableRow>
@@ -340,8 +343,9 @@ const ArticleListView = () => {
               <CTableHeaderCell scope="col" className="cursorDefault">{index + 1}</CTableHeaderCell>
               <CTableHeaderCell scope="col" className="cursorPoint" value={article.atclId} onClick={() => selectArticleDetail(article.atclId)}>{article.subject}</CTableHeaderCell>
               <CTableHeaderCell scope="col" className="cursorDefault">{article.memName}</CTableHeaderCell>
-              <CTableHeaderCell scope="col" className="cursorDefault">{article.createDt}</CTableHeaderCell>
-              <CTableHeaderCell scope="col" className="cursorDefault">{article.viewCnt}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault" style={{ paddingRight: '20px' }}>{article.createDt}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault" style={{ paddingRight: '20px' }}>{article.atclReplCnt}</CTableHeaderCell>
+              <CTableHeaderCell scope="col" className="cursorDefault" style={{ paddingRight: '0px' }}>{article.viewCnt}</CTableHeaderCell>
             </CTableRow>
           ))}
         </CTableBody>

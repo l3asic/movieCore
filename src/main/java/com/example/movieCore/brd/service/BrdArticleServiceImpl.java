@@ -106,4 +106,14 @@ public class BrdArticleServiceImpl {
     public int updateReplyState(BrdVo brdVo) {
         return brdArticleMapper.updateReplyState(brdVo);
     }
+
+    public int selectArticleReplCnt(BrdVo brdVo) {
+        return brdArticleMapper.selectArticleReplCnt(brdVo);
+    }
+
+    public void updateArticleReplCnt(BrdVo brdVo) {
+        brdArticleMapper.updateArticleReplCnt(brdVo);
+    }
+
+
 }

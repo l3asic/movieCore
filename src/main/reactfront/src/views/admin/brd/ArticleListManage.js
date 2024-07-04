@@ -780,7 +780,7 @@ function ArticleListManage() {
               </div>
 
               <div className="form-row" style={{ marginTop: '20px' }}>
-                <h5 style={{ flex: 1 }}>댓글</h5>
+                <h5 style={{ flex: 1 }}>댓글 ({comments.length}) </h5>
                 <div>
                   <CButton
                     color="black"

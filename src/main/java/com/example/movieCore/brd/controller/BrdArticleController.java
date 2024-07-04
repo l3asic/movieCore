@@ -438,9 +438,16 @@ public class BrdArticleController {
             // 상태 값
             brdVo.getReplyBean().setState("B");
 
-            // 디비 인서트
+            // 댓글 인서트
             articleService.insertReplyBean(brdVo);
 
+            /** 게시글의 댓글수 갱신 */
+            // 댓글 수 조회
+            brdVo.getReplyBean().setAtclReplCnt(articleService.selectArticleReplCnt(brdVo));
+            // 댓글 수 업데이트
+            articleService.updateArticleReplCnt(brdVo);
+
+            /** 댓글 리스트 재조회 */
             brdVo.setReplyBeanList(articleService.selectReplyListAdmin(brdVo));
 
             successResult = true;
