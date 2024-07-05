@@ -64,7 +64,9 @@ public class BrdArticleController {
         // 댓글 수
         articleBean.setAtclReplCnt(0);
 
+
         /** 게시글 최종 디비 인서트 */
+        brdVo.setArticleBean(articleBean);
         boolean succesResult = articleService.atclRegistry(brdVo);
 
         Map<String, Object> resMap = new HashMap<>();
@@ -502,6 +504,33 @@ public class BrdArticleController {
         return resMap;
     }
 
+
+
+
+    /** 게시글 수정 시 */
+    @PostMapping(value = "/atclUpdate")
+    @ResponseBody
+    public Map<String, Object> atclUpdate(@RequestBody BrdVo brdVo) throws Exception {
+
+        boolean succesResult = false;
+        BrdArticleBean articleBean = brdVo.getArticleBean();
+
+        // 수정 날짜
+        Date date = new Date();
+        Timestamp nowTime = new Timestamp(date.getTime());
+        articleBean.setUpdateDt(nowTime);
+
+        /** 게시글 최종 업데이트 */
+        brdVo.setArticleBean(articleBean);
+
+        succesResult = articleService.atclUpdate(brdVo);
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("succesResult", succesResult);
+        resMap.put("brdVo", brdVo);
+
+        return resMap;
+    }
 
 
 

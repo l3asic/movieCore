@@ -116,4 +116,7 @@ public class BrdArticleServiceImpl {
     }
 
 
+    public boolean atclUpdate(BrdVo brdVo) {
+        return brdArticleMapper.atclUpdate(brdVo);
+    }
 }

@@ -788,6 +788,23 @@
 
 
 
+    <!-- 게시글 수정 -->
+    <update id="atclUpdate" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        update
+            BRD_ARTICLE
+        set
+            SUBJECT = #{articleBean.subject},
+            CONTENT = #{articleBean.content},
+            UPDATE_DT = #{articleBean.updateDt},
+            EXPIRE_DT = #{articleBean.expireDt},
+            EXPIRE_YN = #{articleBean.expireYn}
+        where
+            ATCL_ID = #{articleBean.atclId}
+    </update>
+
+
+
+
 
 
 

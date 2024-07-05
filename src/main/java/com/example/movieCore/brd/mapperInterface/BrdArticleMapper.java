@@ -56,4 +56,6 @@ public interface BrdArticleMapper {
     int selectArticleReplCnt(BrdVo brdVo);
 
     void updateArticleReplCnt(BrdVo brdVo);
+
+    boolean atclUpdate(BrdVo brdVo);
 }
