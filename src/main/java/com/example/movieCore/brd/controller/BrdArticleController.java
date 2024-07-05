@@ -504,45 +504,6 @@ public class BrdArticleController {
 
 
 
-    /** 게시판 설정 조회 */
-    @PostMapping(value = "/updateReplyState")
-    @ResponseBody
-    public Map<String, Object> selectBoard(@RequestBody BrdVo brdVo) throws Exception {
-        Map<String, Object> resMap = new HashMap<>();
-        boolean successResult = false;
-        String successMsg = "";
-
-        try {
-
-            if(brdVo.getMode().equals("restore")){
-                brdVo.setMode("B");
-            }else if(brdVo.getMode().equals("delete")){
-                brdVo.setMode("D");
-            }
-
-            int sucCnt = 0;
-            sucCnt = articleService.updateReplyState(brdVo);
-
-            if(brdVo.getReplyBeanList().size() == sucCnt){
-                successResult =true;
-                successMsg = sucCnt + " 개의 댓글 상태가 변경되었습니다.";
-            }else{
-                successResult =false;
-                int failCnt = brdVo.getArticleBeanList().size() - sucCnt;
-                successMsg = failCnt + " 개의 댓글 상태 변경이 실패 하였습니다.";
-            }
-
-            successResult = true;
-            resMap.put("successResult", successResult);
-            resMap.put("successMsg", successMsg);
-
-        } catch (Exception e) {
-        }
-
-        return resMap;
-    }
-
-
 
 
 
