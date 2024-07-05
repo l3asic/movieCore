@@ -16,6 +16,7 @@ const ArticleDetail = () => {
   const [brdVo, setBrdVo] = useState(null);
   const [replyBeanList, setReplyBeanList] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const loggedInUserId = JSON.parse(localStorage.getItem('memberBean')).memId;
 
   useEffect(() => {
     if (atclId) {
@@ -31,7 +32,7 @@ const ArticleDetail = () => {
         method: 'post',
         params: {
           atclId: articleId,
-          memId: JSON.parse(localStorage.getItem('memberBean')).memId
+          memId: loggedInUserId
         }
       });
       setBrdVo(response.data.brdVo);
@@ -41,11 +42,11 @@ const ArticleDetail = () => {
     }
   };
 
-  function updateArticle() {
+  const updateArticle = () => {
     navigate('/brd/ArticleUpdate', { state: { articleData: brdVo.articleBean } });
-  }
+  };
 
-  function deleteArticle() {
+  const deleteArticle = () => {
     Swal.fire({
       title: '정말 삭제하시겠습니까?',
       icon: 'warning',
@@ -71,7 +72,7 @@ const ArticleDetail = () => {
         });
       }
     });
-  }
+  };
 
   const handleCommentSubmit = async () => {
     if (!newComment) {
@@ -87,7 +88,7 @@ const ArticleDetail = () => {
           replyBean: {
             atclId: atclId,
             content: newComment,
-            memId: JSON.parse(localStorage.getItem('memberBean')).memId,
+            memId: loggedInUserId,
             memName: JSON.parse(localStorage.getItem('memberBean')).memName
           }
         }
@@ -103,6 +104,43 @@ const ArticleDetail = () => {
       alert('댓글 등록 실패 (오류)');
     }
   };
+
+  const handleCommentDelete = async (replId) => {
+    try {
+
+      let replyBeanList = [];
+      let replyBean = {
+        replId : replId
+      }
+      replyBeanList.push(replyBean);
+
+
+      const res = await axios({
+        url: '/updateReplyState',
+        method: 'post',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+          replyBeanList: replyBeanList,
+          mode: "delete",
+        }),
+      });
+
+      if (res.data.successResult) {
+        alert(res.data.successMsg);
+        fetchArticleDetail(atclId); // 댓글 삭제 후 전체 댓글 목록을 다시 가져옴
+      } else {
+        alert('댓글 삭제 실패');
+      }
+    } catch (error) {
+      alert('댓글 삭제 실패 (오류)');
+    }
+  };
+
+
+
+
 
   if (!brdVo || !brdVo.articleBean) {
     return <div>Loading...</div>;
@@ -199,8 +237,13 @@ const ArticleDetail = () => {
         </CCol>
 
         <div className="d-grid gap-2 d-md-flex justify-content-md-end pb-3">
-          <CButton className="me-md-2" onClick={updateArticle}>게시글 수정</CButton>
-          <CButton className="me-md-2" onClick={deleteArticle}>삭제</CButton>
+          {
+            articleBean.memId === loggedInUserId && (
+            <>
+              <CButton className="me-md-2" onClick={updateArticle}>게시글 수정</CButton>
+              <CButton className="me-md-2" onClick={deleteArticle}>삭제</CButton>
+            </>
+          )}
           <CButton color="dark" onClick={() => navigate(-1)}>목록으로</CButton>
         </div>
 
@@ -231,12 +274,27 @@ const ArticleDetail = () => {
           <div className="mt-4">
             {replyBeanList.map(reply => (
               <CCard key={reply.replId} className="mb-2">
-                <CCardBody>
-                  <CCardTitle>{reply.memName}</CCardTitle>
-                  <CCardText>{reply.content}</CCardText>
-                  <div className="text-muted" style={{ fontSize: '0.8rem' }}>
-                    {formatDateTime(reply.createDt)}
+                <CCardBody className="d-flex justify-content-between align-items-center">
+                  <div>
+                    <CCardTitle>{reply.memName}</CCardTitle>
+                    <CCardText>{reply.content}</CCardText>
+                    <div className="text-muted" style={{ fontSize: '0.8rem' }}>
+                      {formatDateTime(reply.createDt)}
+                    </div>
                   </div>
+                  {reply.memId === loggedInUserId && (
+                    <CButton
+                      color="secondary"
+                      size="sm"
+                      onClick={() => {
+                        if (window.confirm("정말로 댓글을 삭제하시겠습니까?")) {
+                          handleCommentDelete(reply.replId);
+                        }
+                      }}
+                    >
+                      삭제
+                    </CButton>
+                  )}
                 </CCardBody>
               </CCard>
             ))}
