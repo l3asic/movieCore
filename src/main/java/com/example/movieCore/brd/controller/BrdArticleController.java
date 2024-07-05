@@ -534,6 +534,36 @@ public class BrdArticleController {
 
 
 
+    /**
+     * 게시글 수정을 위한 상세정보 조회
+     */
+    @PostMapping(value = "/fetchArticleDetail")
+    @ResponseBody
+    public Map<String, Object> fetchArticleDetail(HttpServletRequest request, HttpServletResponse response, BrdArticleBean articleBean) throws Exception {
+
+        BrdVo brdVo = new BrdVo();
+        brdVo.setArticleBean(articleBean);
+
+        boolean succesResult = false;
+
+        Map resMap = new HashMap<>();
+        try {
+
+            // 게시글 정보 조회
+            brdVo.setArticleBean(articleService.selectArticleDetail(brdVo));
+
+            resMap.put("brdVo", brdVo);
+            succesResult = true;
+        } catch (Exception e) {
+
+        }
+
+        resMap.put("succesResult", succesResult);
+
+        return resMap;
+    }
+
+
 
 
 

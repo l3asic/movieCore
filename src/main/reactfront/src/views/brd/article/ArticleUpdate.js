@@ -38,12 +38,8 @@ const ArticleUpdate = () => {
 
   useEffect(() => {
     selectAllFolderBoardList();
-    if (articleData && articleData.content) {
-      const contentBlock = htmlToDraft(articleData.content);
-      if (contentBlock) {
-        const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-        setEditorState(EditorState.createWithContent(contentState));
-      }
+    if (articleData && articleData.atclId) {
+      fetchArticleDetail(articleData.atclId);
     }
   }, []);
 
@@ -62,6 +58,34 @@ const ArticleUpdate = () => {
       setBoardOptions([]);
     }
   }, [selectedFolder]);
+
+  const fetchArticleDetail = async (articleId) => {
+    try {
+      const response = await axios({
+        url: '/fetchArticleDetail',
+        method: 'post',
+        params: {
+          atclId: articleId,
+        }
+      });
+
+      setBrdVo(prevState => ({
+        ...prevState,
+        articleBean: response.data.brdVo.articleBean
+      }));
+      setArticleBean(response.data.brdVo.articleBean);
+
+      if (response.data.brdVo.articleBean.content) {
+        const contentBlock = htmlToDraft(response.data.brdVo.articleBean.content);
+        if (contentBlock) {
+          const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+          setEditorState(EditorState.createWithContent(contentState));
+        }
+      }
+    } catch (error) {
+      alert("조회 실패 (오류)");
+    }
+  };
 
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
@@ -111,7 +135,6 @@ const ArticleUpdate = () => {
         ...prevState,
         boardBean: res.data.brdVo.boardBean
       }));
-      brdVo.boardBean = res.data.brdVo.boardBean;
     }).catch(() => {
       alert("조회 실패 (오류)");
     });
@@ -226,7 +249,7 @@ const ArticleUpdate = () => {
         <CCol md={3}>
           <CFormSelect
             label="폴더 선택"
-            options={brdVo.folderBeanList.map(folderBean => ({
+            options={(brdVo.folderBeanList || []).map(folderBean => ({
               label: folderBean.folName,
               value: folderBean.folId
             }))}
