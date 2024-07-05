@@ -65,10 +65,31 @@ const ArticleReg = () => {
   }, [selectedFolder]);
 
   const handleFileChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+    const fileCntLimit = brdVo.boardBean.fileCntLimit || Infinity;
+    const fileLimit = brdVo.boardBean.fileLimit || Infinity;
+
+
+    if (newFiles.length + files.length > fileCntLimit) {
+      alert(`최대 ${fileCntLimit}개의 파일만 업로드할 수 있습니다.`);
+      return;
+    }
+
+    for (let file of newFiles) {
+      if (file.size > fileLimit * 1024 * 1024) {
+        alert(`파일 크기는 최대 ${fileLimit}MB까지 허용됩니다.`);
+        return;
+      }
+    }
+
     setFiles((prevFiles) => [
       ...prevFiles,
-      ...Array.from(event.target.files)
+      ...newFiles
     ]);
+  };
+
+  const handleRemoveFile = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
   const handleFolderChange = (event) => {
@@ -77,11 +98,42 @@ const ArticleReg = () => {
     setSelectedFolder(folderValue);
   };
 
+  /** 게시판 변경 선택 */
   const handleBoardChange = (event) => {
     const boardValue = event.target.value;
+
+    selectBoardByBrdId(boardValue)
+
     setSelectedBoard(boardValue);
     changeAtclBean(event);
+
   };
+
+  /** 게시판 선택 */
+  function selectBoardByBrdId(brdId) {
+
+    axios({
+      url: '/selectBoardByBrdId',
+      method: 'post',
+      data: {
+        boardBean: {
+          brdId : brdId
+        }
+      }
+
+    }).then(function (res) {
+      // 게시판 이름, 설명 세팅
+      setBrdVo(prevState => ({
+        ...prevState,
+        boardBean: res.data.brdVo.boardBean
+      }));
+      brdVo.boardBean = res.data.brdVo.boardBean;
+
+    }).catch(function (err) {
+      alert("조회 실패 (오류)");
+    });
+  }
+
 
   const changeAtclBean = (e) => {
     const { value, name } = e.target;
@@ -103,6 +155,11 @@ const ArticleReg = () => {
   };
 
   const submitArticle = () => {
+    if (files.length > (brdVo.boardBean.fileCntLimit || Infinity)) {
+      alert(`최대 ${brdVo.boardBean.fileCntLimit}개의 파일만 업로드할 수 있습니다.`);
+      return;
+    }
+
     brdVo.articleBean = { ...articleBean, content: draftToHtml(convertToRaw(editorState.getCurrentContent())) }; // articleBean을 직접 복사
     const memberBean = JSON.parse(localStorage.getItem('memberBean'));
     brdVo.articleBean.memId = memberBean.memId;
@@ -167,6 +224,10 @@ const ArticleReg = () => {
         }));
         setBoardOptions(newBoardOptions);
         setSelectedBoard(newBoardOptions.length > 0 ? newBoardOptions[0].value : '');
+
+        selectBoardByBrdId(newBoardOptions[0].value);
+
+
       }
     }).catch(() => {
       alert("등록 실패 (오류)");
@@ -291,10 +352,19 @@ const ArticleReg = () => {
         <CCol md={12}>
           <div className="mb-3">
             <CFormLabel>파일 첨부</CFormLabel>
-            <CFormInput type="file" id="formFileMultiple" multiple onChange={handleFileChange} />
-            <ul>
+            <CFormInput
+              type="file"
+              id="formFileMultiple"
+              multiple
+              onChange={handleFileChange}
+              disabled={brdVo.boardBean.imgUploadYn === 'N'}
+            />
+            <ul className="list-group mt-2">
               {files.map((file, index) => (
-                <li key={index}>{file.name}</li>
+                <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                  {file.name}
+                  <button className="btn btn-outline-danger btn-sm" onClick={() => handleRemoveFile(index)}>제거</button>
+                </li>
               ))}
             </ul>
           </div>
