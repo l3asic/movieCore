@@ -30,7 +30,7 @@ const ArticleUpdate = () => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [files, setFiles] = useState([]);
   const [existingFiles, setExistingFiles] = useState([]);
-  const [oldFileBeanList, setOldFileBeanList] = useState([]);
+  const [deletedFiles, setDeletedFiles] = useState([]); // 삭제된 파일 리스트
   const [selectedFolder, setSelectedFolder] = useState(articleData?.folId || '');
   const [selectedBoard, setSelectedBoard] = useState(articleData?.brdId || '');
   const [boardOptions, setBoardOptions] = useState([]);
@@ -77,7 +77,6 @@ const ArticleUpdate = () => {
       }));
       setArticleBean(response.data.brdVo.articleBean);
       setExistingFiles(response.data.brdVo.articleBean.fileBeanList || []);
-      setOldFileBeanList(response.data.brdVo.articleBean.fileBeanList || []);
 
       if (response.data.brdVo.articleBean.content) {
         const contentBlock = htmlToDraft(response.data.brdVo.articleBean.content);
@@ -119,9 +118,11 @@ const ArticleUpdate = () => {
   };
 
   const handleRemoveExistingFile = (fileId) => {
-    setExistingFiles((prevFiles) =>
-      prevFiles.filter((file) => file.fileId !== fileId)
-    );
+    setExistingFiles((prevFiles) => {
+      const fileToRemove = prevFiles.find(file => file.fileId === fileId);
+      setDeletedFiles(prevDeleted => [...prevDeleted, fileToRemove]);
+      return prevFiles.filter((file) => file.fileId !== fileId);
+    });
   };
 
   const handleFolderChange = (event) => {
@@ -186,19 +187,13 @@ const ArticleUpdate = () => {
     }
     brdVo.articleBean.expireYn = calculateExpireYn();
 
-    // 변동이 없는 파일을 제외하고, 삭제된 파일과 새로운 파일만 포함
-    const finalFileList = [
-      ...existingFiles,
-      ...files.map(file => ({ file, mode: 'new' }))
-    ];
-
-    brdVo.fileBeanList = finalFileList;
-    brdVo.oldFileBeanList = oldFileBeanList; // 기존 파일 리스트를 추가
+    brdVo.fileBeanList = files.map(file => ({ file, mode: 'new' }));
+    brdVo.oldFileBeanList = deletedFiles; // 삭제된 파일 리스트를 추가
 
     axios.post('/atclUpdate', brdVo)
       .then((res) => {
         if (res.data.succesResult) {
-          atclFileUpload(finalFileList, res.data.brdVo);
+          atclFileUpload(files, res.data.brdVo);
         } else {
           alert("등록 실패");
         }
@@ -209,8 +204,8 @@ const ArticleUpdate = () => {
 
   const atclFileUpload = (fileList, brdVo) => {
     const formData = new FormData();
-    fileList.filter(file => file.mode === 'new').forEach(file => {
-      formData.append('files', file.file);
+    fileList.forEach(file => {
+      formData.append('files', file);
     });
     formData.append('brdVo', JSON.stringify(brdVo)); // 문자열로 추가
 
@@ -219,7 +214,6 @@ const ArticleUpdate = () => {
         'Content-Type': 'multipart/form-data'
       }
     }).then(() => {
-      alert("수정 성공");
       MoveToArticleListView();
     }).catch(() => {
       alert("파일 업로드 실패");

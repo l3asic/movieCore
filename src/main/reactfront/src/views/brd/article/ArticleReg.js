@@ -199,9 +199,7 @@ const ArticleReg = () => {
         'Content-Type': 'multipart/form-data'
       }
     }).then(() => {
-      alert("성공");
     }).catch(() => {
-      alert("파일 업로드 실패");
     });
   };
 

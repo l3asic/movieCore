@@ -283,8 +283,8 @@ public class BrdArticleController {
 
 
     /**
-    * 게시글 수정시 첨부파일 업로드
-    * */
+     * 게시글 수정시 첨부파일 업로드
+     * */
     @PostMapping("/atclFileUploadUpdate")
     public Map<String, Object> atclFileUploadUpdate(
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
@@ -307,14 +307,15 @@ public class BrdArticleController {
                 }
             }
 
-
-            // 게시글에 인서트된 파일 데이터 모두 삭제
-            articleService.deleteArticleFileBeanMap(brdVo);
-            articleService.deleteFileBean(brdVo);
-
+            // 삭제된 파일 리스트 처리
+            if (brdVo.getOldFileBeanList() != null && !brdVo.getOldFileBeanList().isEmpty()) {
+                articleService.deleteArticleFileBeanMap(brdVo);
+                articleService.deleteFileBean(brdVo);
+            }
 
             // 새 파일 리스트에 추가
             brdVo.getArticleBean().setFileBeanList(fileBeans);
+            brdVo.setFileBeanList(fileBeans);
 
             // 파일빈 디비 인서트
             articleService.insertFileBeans(brdVo);

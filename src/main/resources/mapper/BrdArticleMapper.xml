@@ -817,7 +817,12 @@
     <delete id="deleteArticleFileBeanMap" parameterType="com.example.movieCore.brd.vo.BrdVo">
         DELETE FROM BRD_FILE_MAPPING
         WHERE ATCL_ID = #{articleBean.atclId}
+        AND FILE_ID IN
+        <foreach item="fileBean" collection="oldFileBeanList" open="(" separator="," close=")">
+            #{fileBean.fileId}
+        </foreach>
     </delete>
+
 
 
 
