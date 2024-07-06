@@ -119,4 +119,13 @@ public class BrdArticleServiceImpl {
     public boolean atclUpdate(BrdVo brdVo) {
         return brdArticleMapper.atclUpdate(brdVo);
     }
+
+    public void deleteFileBean(BrdVo brdVo) {
+        brdArticleMapper.deleteFileBean(brdVo);
+    }
+
+    public void deleteArticleFileBeanMap(BrdVo brdVo) {
+        brdArticleMapper.deleteArticleFileBeanMap(brdVo);
+    }
+
 }

@@ -803,6 +803,24 @@
     </update>
 
 
+    <!-- 게시글 첨부파일 삭제 -->
+    <delete id="deleteFileBean" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        DELETE FROM CMM_FILE
+        WHERE FILE_ID IN
+        <foreach item="file" collection="oldFileBeanList" open="(" separator="," close=")">
+            #{file.fileId}
+        </foreach>
+    </delete>
+
+
+    <!-- 게시글 <-> 첨부파일 매핑 삭제 -->
+    <delete id="deleteArticleFileBeanMap" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        DELETE FROM BRD_FILE_MAPPING
+        WHERE ATCL_ID = #{articleBean.atclId}
+    </delete>
+
+
+
 
 
 

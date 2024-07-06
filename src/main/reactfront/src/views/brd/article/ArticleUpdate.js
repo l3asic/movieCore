@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CFormInput, CForm, CFormLabel, CFormSelect, CCol, CButton
+  CFormInput, CForm, CFormLabel, CFormSelect, CCol, CButton, CCard, CCardBody, CCardTitle, CCardText, CCardFooter
 } from '@coreui/react';
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -29,6 +29,8 @@ const ArticleUpdate = () => {
   const [articleBean, setArticleBean] = useState(articleData);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [files, setFiles] = useState([]);
+  const [existingFiles, setExistingFiles] = useState([]);
+  const [oldFileBeanList, setOldFileBeanList] = useState([]);
   const [selectedFolder, setSelectedFolder] = useState(articleData?.folId || '');
   const [selectedBoard, setSelectedBoard] = useState(articleData?.brdId || '');
   const [boardOptions, setBoardOptions] = useState([]);
@@ -74,6 +76,8 @@ const ArticleUpdate = () => {
         articleBean: response.data.brdVo.articleBean
       }));
       setArticleBean(response.data.brdVo.articleBean);
+      setExistingFiles(response.data.brdVo.articleBean.fileBeanList || []);
+      setOldFileBeanList(response.data.brdVo.articleBean.fileBeanList || []);
 
       if (response.data.brdVo.articleBean.content) {
         const contentBlock = htmlToDraft(response.data.brdVo.articleBean.content);
@@ -112,6 +116,12 @@ const ArticleUpdate = () => {
 
   const handleRemoveFile = (index) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveExistingFile = (fileId) => {
+    setExistingFiles((prevFiles) =>
+      prevFiles.filter((file) => file.fileId !== fileId)
+    );
   };
 
   const handleFolderChange = (event) => {
@@ -176,34 +186,41 @@ const ArticleUpdate = () => {
     }
     brdVo.articleBean.expireYn = calculateExpireYn();
 
+    // 변동이 없는 파일을 제외하고, 삭제된 파일과 새로운 파일만 포함
+    const finalFileList = [
+      ...existingFiles,
+      ...files.map(file => ({ file, mode: 'new' }))
+    ];
+
+    brdVo.fileBeanList = finalFileList;
+    brdVo.oldFileBeanList = oldFileBeanList; // 기존 파일 리스트를 추가
+
     axios.post('/atclUpdate', brdVo)
       .then((res) => {
         if (res.data.succesResult) {
-          if (files.length > 0) {
-            atclFileUpload(res.data.brdVo);
-          }
+          atclFileUpload(finalFileList, res.data.brdVo);
         } else {
           alert("등록 실패");
         }
-        MoveToArticleListView();
       }).catch(() => {
       alert("등록 실패 (오류)");
     });
   };
 
-  const atclFileUpload = (brdVo) => {
+  const atclFileUpload = (fileList, brdVo) => {
     const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files', file);
+    fileList.filter(file => file.mode === 'new').forEach(file => {
+      formData.append('files', file.file);
     });
-    formData.append('brdVo', JSON.stringify(brdVo));
+    formData.append('brdVo', JSON.stringify(brdVo)); // 문자열로 추가
 
-    return axios.post('/atclFileUpload', formData, {
+    return axios.post('/atclFileUploadUpdate', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     }).then(() => {
-      alert("성공");
+      alert("수정 성공");
+      MoveToArticleListView();
     }).catch(() => {
       alert("파일 업로드 실패");
     });
@@ -249,7 +266,7 @@ const ArticleUpdate = () => {
         <CCol md={3}>
           <CFormSelect
             label="폴더 선택"
-            options={(brdVo.folderBeanList || []).map(folderBean => ({
+            options={brdVo.folderBeanList.map(folderBean => ({
               label: folderBean.folName,
               value: folderBean.folId
             }))}
@@ -353,7 +370,41 @@ const ArticleUpdate = () => {
 
         <CCol md={12}>
           <div className="mb-3">
-            <CFormLabel>파일 첨부</CFormLabel>
+            <CFormLabel>기존 파일</CFormLabel>
+            <div className="d-flex flex-wrap">
+              {existingFiles.length > 0 ? (
+                existingFiles.map((file, index) => (
+                  <CCard key={index} className="m-2" style={{ minWidth: '200px', maxWidth: '200px' }}>
+                    <CCardBody>
+                      <CCardTitle>{file.fileName}</CCardTitle>
+                      <CCardText>
+                        {file.fileExt.toUpperCase()} 파일
+                      </CCardText>
+                    </CCardBody>
+                    <CCardFooter>
+                      <CButton href={file.src} download={file.localName} color="primary">
+                        다운로드
+                      </CButton>
+                      <CButton color="danger" onClick={() => handleRemoveExistingFile(file.fileId)}>
+                        제거
+                      </CButton>
+                    </CCardFooter>
+                  </CCard>
+                ))
+              ) : (
+                <CCard className="m-2" style={{ minWidth: '200px' }}>
+                  <CCardBody>
+                    <CCardText>첨부된 파일이 없습니다.</CCardText>
+                  </CCardBody>
+                </CCard>
+              )}
+            </div>
+          </div>
+        </CCol>
+
+        <CCol md={12}>
+          <div className="mb-3">
+            <CFormLabel>새 파일 첨부</CFormLabel>
             <CFormInput
               type="file"
               id="formFileMultiple"

@@ -282,6 +282,62 @@ public class BrdArticleController {
 
 
 
+    /**
+    * 게시글 수정시 첨부파일 업로드
+    * */
+    @PostMapping("/atclFileUploadUpdate")
+    public Map<String, Object> atclFileUploadUpdate(
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            @RequestPart("brdVo") String brdVoString) {
+
+        BrdVo brdVo = new Gson().fromJson(brdVoString, BrdVo.class);
+
+        Map<String, Object> resMap = new HashMap<>();
+        boolean succesResult = false;
+
+        try {
+            MakeFileBean makeFileBean = new MakeFileBean();
+
+            // 파일 업로드 및 파일 빈 값 할당
+            ArrayList<FileBean> fileBeans = new ArrayList<>();
+            if (files != null) {
+                for (MultipartFile file : files) {
+                    FileBean fileBean = makeFileBean.makingFileBean("BRD", file);
+                    fileBeans.add(fileBean);
+                }
+            }
+
+
+            // 게시글에 인서트된 파일 데이터 모두 삭제
+            articleService.deleteArticleFileBeanMap(brdVo);
+            articleService.deleteFileBean(brdVo);
+
+
+            // 새 파일 리스트에 추가
+            brdVo.getArticleBean().setFileBeanList(fileBeans);
+
+            // 파일빈 디비 인서트
+            articleService.insertFileBeans(brdVo);
+
+            // 게시글 <-> 첨부파일 매핑 인서트
+            articleService.insertArticleFileMap(brdVo);
+
+            succesResult = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        resMap.put("succesResult", succesResult);
+
+        return resMap;
+    }
+
+
+
+
+
+
 
 
 

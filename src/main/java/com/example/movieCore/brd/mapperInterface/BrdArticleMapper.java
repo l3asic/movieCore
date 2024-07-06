@@ -58,4 +58,9 @@ public interface BrdArticleMapper {
     void updateArticleReplCnt(BrdVo brdVo);
 
     boolean atclUpdate(BrdVo brdVo);
+
+    void deleteFileBean(BrdVo brdVo);
+
+    void deleteArticleFileBeanMap(BrdVo brdVo);
+
 }
