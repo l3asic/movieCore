@@ -624,6 +624,33 @@ public class BrdArticleController {
 
 
 
+    /** 지금 핫한 게시글 조회 */
+    @PostMapping(value = "/selectHotArticle")
+    @ResponseBody
+    public Map<String, Object> selectHotArticle(@RequestBody BrdVo brdVo) throws Exception {
+
+        boolean succesResult = false;
+
+
+        try {
+            brdVo.setArticleBeanList(articleService.selectHotArticle(brdVo));
+        }catch (Exception e){
+
+        }
+
+
+        succesResult = true;
+
+
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("succesResult", succesResult);
+        resMap.put("brdVo", brdVo);
+
+        return resMap;
+    }
+
+
+
 
 
 

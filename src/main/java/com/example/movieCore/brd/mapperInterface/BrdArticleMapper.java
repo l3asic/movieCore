@@ -63,4 +63,5 @@ public interface BrdArticleMapper {
 
     void deleteArticleFileBeanMap(BrdVo brdVo);
 
+    ArrayList<BrdArticleBean> selectHotArticle(BrdVo brdVo);
 }

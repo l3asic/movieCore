@@ -5,7 +5,12 @@ import {
   CCard,
   CCardBody,
   CCardImage,
-  CCardTitle
+  CCardTitle,
+  CListGroup,
+  CListGroupItem,
+  CButton,
+  CRow,
+  CCol
 } from '@coreui/react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -16,6 +21,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../../cstmCss/Dashboard.css';
+import { cilCommentBubble, cilMovie } from "@coreui/icons";
+import CIcon from '@coreui/icons-react';
 
 const Dashboard = () => {
   const [movVo, setMovVo] = useState({
@@ -23,11 +30,16 @@ const Dashboard = () => {
     currentPage: 1
   });
 
+  const [brdVo, setBrdVo] = useState({
+    articleBeanList: []
+  });
+
   const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
   const navigate = useNavigate();
 
   useEffect(() => {
     selectDailyBoxOfficeList();
+    selectHotArticle();
   }, [startDate]);
 
   const selectDailyBoxOfficeList = async () => {
@@ -44,10 +56,29 @@ const Dashboard = () => {
         movieBoxOfficeBeanList: movies,
       }));
     } catch (err) {
-      // alert('영화 목록 조회에 실패했습니다.');
       setMovVo(prevState => ({
         ...prevState,
         movieBoxOfficeBeanList: [],
+      }));
+    }
+  };
+
+  const selectHotArticle = async () => {
+    try {
+      const response = await axios.post('/selectHotArticle', {}, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const articles = response.data.brdVo.articleBeanList || [];
+      setBrdVo(prevState => ({
+        ...prevState,
+        articleBeanList: articles,
+      }));
+    } catch (err) {
+      setBrdVo(prevState => ({
+        ...prevState,
+        articleBeanList: [],
       }));
     }
   };
@@ -66,6 +97,10 @@ const Dashboard = () => {
 
   const moveToMovieInfo = (movieCd) => {
     navigate(`/movie/MovieInfo`, { state: { movieCd } });
+  };
+
+  const moveToPost = (atclId) => {
+    navigate(`/post/${atclId}`);
   };
 
   const settings = {
@@ -105,7 +140,17 @@ const Dashboard = () => {
     <>
       {/** 박스오피스 영역 */}
       <GrayLine marginTop="20px" marginBottom="40px" />
-      <h4 className="box-office-header">일일 박스 오피스</h4>
+      <CRow className="align-items-center">
+        <CCol>
+          <h4 className="box-office-header">
+            <CIcon icon={cilMovie} size="xl" className="me-2 text-primary" />
+            일일 박스 오피스
+          </h4>
+        </CCol>
+        <CCol className="text-end">
+          <CButton color="link" className="p-0 text-muted">+ 더보기</CButton>
+        </CCol>
+      </CRow>
 
       <Slider {...settings}>
         {movVo.movieBoxOfficeBeanList.map((movie, index) => (
@@ -139,7 +184,39 @@ const Dashboard = () => {
       <GrayLine marginTop="20px" marginBottom="40px" />
 
       {/** 게시판 영역 */}
-      <h4 className="box-office-header">게시판 영역</h4>
+      <CRow className="align-items-center">
+        <CCol>
+          <h4 className="box-office-header mb-3">
+            <CIcon icon={cilCommentBubble} size="xl" className="me-2 text-info" />
+            지금 핫한 게시글
+          </h4>
+        </CCol>
+        <CCol className="text-end">
+          <CButton color="link" className="p-0 text-muted">+ 더보기</CButton>
+        </CCol>
+      </CRow>
+      <CListGroup className="hot-posts-list">
+        {brdVo.articleBeanList.map((post, index) => (
+          <CListGroupItem key={index} className="d-flex justify-content-between align-items-center">
+            <div className="d-flex align-items-center">
+              <strong className="me-2">{index + 1}</strong>
+              <div onClick={() => moveToPost(post.atclId)} className="post-title">
+                {post.subject} <span className="text-warning" style={{ color: '#ff6666' }}>({post.atclReplCnt})</span>
+              </div>
+            </div>
+            <div className="d-flex align-items-center">
+              <CBadge color="info" className="me-2">
+                {post.brdName}
+              </CBadge>
+              <CBadge color="primary" shape="rounded-pill">
+                {post.viewCnt} views
+              </CBadge>
+            </div>
+          </CListGroupItem>
+        ))}
+      </CListGroup>
+
+      <GrayLine marginTop="20px" marginBottom="40px" />
     </>
   );
 };

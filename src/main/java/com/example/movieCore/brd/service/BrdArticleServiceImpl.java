@@ -128,4 +128,7 @@ public class BrdArticleServiceImpl {
         brdArticleMapper.deleteArticleFileBeanMap(brdVo);
     }
 
+    public ArrayList<BrdArticleBean> selectHotArticle(BrdVo brdVo) {
+        return brdArticleMapper.selectHotArticle(brdVo);
+    }
 }

@@ -827,6 +827,59 @@
 
 
 
+    <!-- 지금 핫한 게시글 10개 -->
+    <select id="selectHotArticle" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean">
+        SELECT
+            A.ATCL_ID,
+            A.BRD_ID,
+            A.MEM_ID,
+            A.SUBJECT,
+            A.CONTENT,
+            A.VIEW_CNT,
+            A.CREATE_DT,
+            A.UPDATE_DT,
+            A.EXPIRE_DT,
+            A.EXPIRE_YN,
+            A.STATE,
+            A.ATCL_REPL_CNT,
+            B.BRD_NAME,
+            COALESCE(CURRENT_VIEW.VIEW_CNT, 0) - COALESCE(PREVIOUS_VIEW.VIEW_CNT, 0) AS VIEW_DIFF
+        FROM
+            BRD_ARTICLE A
+                LEFT JOIN
+            (SELECT
+                 ATCL_ID,
+                 COUNT(*) AS VIEW_CNT
+             FROM
+                 BRD_VIEW_LOG
+             WHERE
+            <![CDATA[VIEW_DT >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)]]>
+             GROUP BY
+                 ATCL_ID) AS CURRENT_VIEW ON A.ATCL_ID = CURRENT_VIEW.ATCL_ID
+                LEFT JOIN
+            (SELECT
+                 ATCL_ID,
+                 COUNT(*) AS VIEW_CNT
+             FROM
+                 BRD_VIEW_LOG
+             WHERE
+            <![CDATA[VIEW_DT < DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+               AND VIEW_DT >= DATE_SUB(CURDATE(), INTERVAL 2 DAY)]]>
+             GROUP BY
+                 ATCL_ID) AS PREVIOUS_VIEW ON A.ATCL_ID = PREVIOUS_VIEW.ATCL_ID
+                LEFT JOIN
+            BRD_BOARD B ON A.BRD_ID = B.BRD_ID
+        WHERE
+            A.STATE = 'B' -- 필요한 경우 상태 조건 추가
+          AND A.EXPIRE_YN = 'N'
+        ORDER BY
+            VIEW_DIFF DESC
+            LIMIT 10
+    </select>
+
+
+
+
 
 
 
