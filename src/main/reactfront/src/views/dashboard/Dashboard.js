@@ -100,7 +100,15 @@ const Dashboard = () => {
   };
 
   const moveToPost = (atclId) => {
-    navigate(`/post/${atclId}`);
+    navigate(`/brd/ArticleDetail`, { state: { atclId } });
+  };
+
+  const moveToBoard = (brdId) => {
+    navigate(`/brd/ArticleListView?brdId=${brdId}`);
+  };
+
+  const moveToBoxOffice = () => {
+    navigate(`/movie/BoxOffice`);
   };
 
   const settings = {
@@ -148,7 +156,7 @@ const Dashboard = () => {
           </h4>
         </CCol>
         <CCol className="text-end">
-          <CButton color="link" className="p-0 text-muted">+ 더보기</CButton>
+          <CButton color="link" className="p-0 text-muted" onClick={moveToBoxOffice}>+ 더보기</CButton>
         </CCol>
       </CRow>
 
@@ -187,12 +195,9 @@ const Dashboard = () => {
       <CRow className="align-items-center">
         <CCol>
           <h4 className="box-office-header mb-3">
-            <CIcon icon={cilCommentBubble} size="xl" className="me-2 text-info" />
+            <CIcon icon={cilCommentBubble} size="xl" className="me-2 text-dark" />
             지금 핫한 게시글
           </h4>
-        </CCol>
-        <CCol className="text-end">
-          <CButton color="link" className="p-0 text-muted">+ 더보기</CButton>
         </CCol>
       </CRow>
       <CListGroup className="hot-posts-list">
@@ -200,15 +205,20 @@ const Dashboard = () => {
           <CListGroupItem key={index} className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center">
               <strong className="me-2">{index + 1}</strong>
-              <div onClick={() => moveToPost(post.atclId)} className="post-title">
-                {post.subject} <span className="text-warning" style={{ color: '#ff6666' }}>({post.atclReplCnt})</span>
+              {post.noticeYn === 'Y' && (
+                <CBadge color="danger" className="me-2">
+                  공지
+                </CBadge>
+              )}
+              <div onClick={() => moveToPost(post.atclId)} className="post-title" style={{ marginLeft: post.noticeYn === 'Y' ? '5px' : '0' }}>
+                {post.subject} <span className="text-danger" style={{ color: '#ff6666' }}>({post.atclReplCnt})</span>
               </div>
             </div>
             <div className="d-flex align-items-center">
-              <CBadge color="info" className="me-2">
+              <CBadge color="info" className="me-2 cursor-pointer" onClick={() => moveToBoard(post.brdId)}>
                 {post.brdName}
               </CBadge>
-              <CBadge color="primary" shape="rounded-pill">
+              <CBadge color="dark" shape="rounded-pill">
                 {post.viewCnt} views
               </CBadge>
             </div>

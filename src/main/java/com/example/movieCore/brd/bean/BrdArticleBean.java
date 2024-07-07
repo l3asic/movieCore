@@ -43,6 +43,9 @@ public class BrdArticleBean implements Serializable {
 
     private int atclReplCnt;
 
+    /** 공지 여부 */
+    private String noticeYn;
+
 
     /** 작성자명 */
     private String memName;

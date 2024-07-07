@@ -26,6 +26,7 @@
         <result column="STATE" property="state" jdbcType="VARCHAR"/>
         <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
         <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
+        <result column="notice_yn" property="noticeYn" jdbcType="VARCHAR"/>
 
         <!-- 파일 리스트 -->
         <collection property="fileBeanList" ofType="com.example.movieCore.cmm.FileBean">
@@ -843,6 +844,7 @@
             A.STATE,
             A.ATCL_REPL_CNT,
             B.BRD_NAME,
+            B.notice_yn,
             COALESCE(CURRENT_VIEW.VIEW_CNT, 0) - COALESCE(PREVIOUS_VIEW.VIEW_CNT, 0) AS VIEW_DIFF
         FROM
             BRD_ARTICLE A
