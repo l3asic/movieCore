@@ -9,7 +9,7 @@ const MemberManage = React.lazy(() => import('./views/admin/mem/MemberManage'))
 // - 영화 이관 관리
 const MovieMigManage = React.lazy(() => import('./views/admin/movie/MovieMigManage'))
 // - 박스오피스 배치 관리
-const BoxOfficeBatchManage = React.lazy(() => import('./views/admin/movie/BoxOfficeBatchManage'))
+const BatchManage = React.lazy(() => import('./views/admin/movie/BatchManage'))
 // - 영화 리스트 관리
 const MovieListManage = React.lazy(() => import('./views/admin/movie/MovieListManage'))
 //    - 영화 상세정보 관리
@@ -164,7 +164,7 @@ const routes = [
   // - 영화 이관 관리
   { path: '/admin/MovieMigManage', name: 'MovieMigManage', element: MovieMigManage },
   // - 박스오피스 배치 관리
-  { path: '/admin/BoxOfficeBatchManage', name: 'BoxOfficeBatchManage', element: BoxOfficeBatchManage },
+  { path: '/admin/BatchManage', name: 'BatchManage', element: BatchManage },
   // - 영화 리스트 관리
   { path: '/admin/MovieListManage', name: 'MovieListManage', element: MovieListManage },
   //    - 영화 상세정보 관리

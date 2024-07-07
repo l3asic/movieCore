@@ -22,7 +22,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
 
-function BoxOfficeBatchManage() {
+function BatchManage() {
   const [batchDailyBoxOfficeRun, setBatchDailyBoxOfficeRun] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [batchLogs, setBatchLogs] = useState([]);
@@ -86,7 +86,7 @@ function BoxOfficeBatchManage() {
 
   return (
     <CContainer>
-      <h4 className="mb-lg-5">일일 박스 오피스 배치 관리</h4>
+      <h4 className="mb-lg-5">배치 관리</h4>
 
       <CCard className="mb-4">
         <CCardHeader style={{ backgroundColor: '#343a40', color: 'white' }}>
@@ -265,4 +265,4 @@ function specificDateBatch(targetDt) {
 
 
 
-export default BoxOfficeBatchManage;
+export default BatchManage;

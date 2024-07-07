@@ -9,7 +9,7 @@ import {
   cilDrop, cilFaceDead, cilLightbulb, cilMovie,
   cilNotes,
   cilPencil,
-  cilPuzzle,
+  cilPuzzle, cilRunning,
   cilSpeedometer,
   cilStar, cilUser,
 } from '@coreui/icons'
@@ -64,11 +64,6 @@ const _nav = [
           },
           {
             component: CNavItem,
-            name: ' - 박스오피스 배치 관리',
-            to: '/admin/BoxOfficeBatchManage',
-          },
-          {
-            component: CNavItem,
             name: ' - 영화 목록 관리',
             to: '/admin/MovieListManage',
           },
@@ -98,6 +93,14 @@ const _nav = [
             to: '/admin/ArticleListManage',
           },
         ],
+      },
+
+
+      {
+        component: CNavItem,
+        name: '배치 관리',
+        to: '/admin/BatchManage',
+        icon: <CIcon icon={cilRunning} customClassName="nav-icon" />,
       },
 
 
