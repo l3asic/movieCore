@@ -4,6 +4,7 @@ import com.example.movieCore.migMovie.api.DataConverter;
 import com.example.movieCore.migMovie.api.MigMovieApiClientImpl;
 import com.example.movieCore.migMovie.bean.*;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
+import com.example.movieCore.migMovie.vo.BatchVo;
 import com.example.movieCore.migMovie.vo.MigMovVo;
 import com.example.movieCore.movie.bean.MovieBoxOfficeBean;
 import com.example.movieCore.movie.vo.MovVo;
@@ -717,20 +718,21 @@ public class MigMovManageController {
 
 
     /** 일일 박스오피스 동작 상태 체크 */
-    @PostMapping(value = "/dailyBoxOfficeBatchActiveCheck")
+    @PostMapping(value = "/fetchBatchStatus")
     @ResponseBody
-    public Map<String, Object> dailyBoxOfficeBatchActiveCheck(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Map<String, Object> fetchBatchStatus() throws Exception {
 
         boolean batchDailyBoxOfficeRun = false;
         Map<String, Object> resMap = new HashMap<>();
 
         try {
-            // 일일 박스오피스 배치 동작 상태 확인
-            batchDailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
+            // 배치 리스트 조회 동작
+            BatchVo batchVo = new BatchVo();
+            batchVo.setBatches(movManageService.fetchBatchStatus());
 
-            resMap.put("batchDailyBoxOfficeRun", batchDailyBoxOfficeRun);
 
-            resMap.put("success", "success");
+            resMap.put("batchVo", batchVo);
+
         }catch (Exception e){
 
         }
@@ -742,18 +744,17 @@ public class MigMovManageController {
 
 
     /** 일일 박스오피스 동작/정지 업데이트 */
-    @PostMapping(value = "/dailyBoxOfficeBatchActiveUpdate")
+    @PostMapping(value = "/updateBatchStatus")
     @ResponseBody
-    public Map<String, Object> dailyBoxOfficeBatchActiveUpdate(@RequestBody MigMovVo movVo) throws Exception{
+    public Map<String, Object> updateBatchStatus(@RequestBody MigMovVo movVo) throws Exception{
 
 
-        boolean batchDailyBoxOfficeRun = false;
+        boolean batchRun = false;
         Map<String, Object> resMap = new HashMap<>();
 
         try {
             // 업데이트 로직
-            batchDailyBoxOfficeRun = movManageService.BoxOfficeBatchActiveUpdate(movVo);
-            resMap.put("batchDailyBoxOfficeRun", batchDailyBoxOfficeRun);
+            batchRun = movManageService.updateBatchStatus(movVo);
             resMap.put("success", "success");
         } catch (Exception e) {
             // 오류 처리

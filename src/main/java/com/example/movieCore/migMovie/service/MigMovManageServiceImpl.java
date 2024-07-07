@@ -137,8 +137,8 @@ public class MigMovManageServiceImpl {
     }
 
 
-    public boolean dailyBoxOfficeRunCheck(String batchName) {
-        return migMovManageMapper.dailyBoxOfficeRunCheck(batchName);
+    public boolean batchRunCheckByName(String batchName) {
+        return migMovManageMapper.batchRunCheckByName(batchName);
     }
 
 
@@ -650,11 +650,15 @@ public class MigMovManageServiceImpl {
     }
 
 
-    public boolean BoxOfficeBatchActiveUpdate(MigMovVo movVo) {
-        return migMovManageMapper.BoxOfficeBatchActiveUpdate(movVo);
+    public boolean updateBatchStatus(MigMovVo movVo) {
+        return migMovManageMapper.updateBatchStatus(movVo);
     }
 
     public ArrayList<BatchLog> selectBatchLog() {
         return migMovManageMapper.selectBatchLog();
+    }
+
+    public ArrayList<BatchConfig> fetchBatchStatus() {
+        return migMovManageMapper.fetchBatchStatus();
     }
 }

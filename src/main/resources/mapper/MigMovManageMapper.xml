@@ -42,6 +42,13 @@
     </resultMap>
 
 
+    <!-- 배치 설정 -->
+    <resultMap id="BatchConfig" type="com.example.movieCore.migMovie.bean.BatchConfig">
+        <result property="batchName" column="BATCH_NAME" />
+        <result property="batchRun" column="batch_run" />
+    </resultMap>
+
+
 
 
     <!-- 영화 정보 인서트 -->
@@ -486,8 +493,8 @@
 
 
 
-    <!-- 일일 박스오피스 배치 동작 확인 -->
-    <select id="dailyBoxOfficeRunCheck" parameterType="String" resultType="boolean">
+    <!-- 배치 명으로 배치 동작 확인 -->
+    <select id="batchRunCheckByName" parameterType="String" resultType="boolean">
         select
             BATCH_RUN as batchRun
         from
@@ -497,8 +504,8 @@
     </select>
 
 
-    <!-- 박스오피스 배치 동작 상태 업데이트 -->
-    <update id="BoxOfficeBatchActiveUpdate" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
+    <!-- 배치 동작 상태 업데이트 -->
+    <update id="updateBatchStatus" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
         UPDATE BATCH_CONFIG
         SET BATCH_RUN = #{batchConfig.batchRun}
         WHERE BATCH_NAME = #{batchConfig.batchName}
@@ -546,6 +553,17 @@
         ORDER BY
             BATCH_RUN_TIME desc
     </select>
+
+
+    <!-- 배치 동작 컨피그 조회 -->
+    <select id="fetchBatchStatus" resultMap="BatchConfig">
+        SELECT
+            BATCH_NAME,
+            BATCH_RUN
+        FROM
+            BATCH_CONFIG
+    </select>
+
 
 
 

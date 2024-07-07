@@ -23,23 +23,65 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
 
 function BatchManage() {
-  const [batchDailyBoxOfficeRun, setBatchDailyBoxOfficeRun] = useState(false);
+  const [batches, setBatches] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [batchLogs, setBatchLogs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentErrorText, setCurrentErrorText] = useState('');
 
   useEffect(() => {
-    dailyBoxOfficeBatchActiveCheck(setBatchDailyBoxOfficeRun);
+    fetchBatchStatus();
     selectBatchLog();
   }, []);
 
-  const toggleBatch = () => {
-    setBatchDailyBoxOfficeRun(!batchDailyBoxOfficeRun);
-    dailyBoxOfficeBatchActiveUpdate(!batchDailyBoxOfficeRun);
+  const fetchBatchStatus = () => {
+    axios({
+      url: '/fetchBatchStatus',
+      method: 'post',
+      data: {}
+    })
+      .then(function (res) {
+        setBatches(res.data.batchVo.batches); // 서버에서 받아온 배치 상태 데이터를 상태에 저장
+      })
+      .catch(function (err) {
+        alert("배치 상태 조회 실패 (오류)");
+      });
   };
 
-  /** 특정 날짜 수동 배치 */
+  const toggleBatch = (batchName) => {
+    const updatedBatches = batches.map(batch => {
+      if (batch.batchName === batchName) {
+        batch.batchRun = !batch.batchRun;
+        updateBatchStatus(batch.batchName, batch.batchRun);
+      }
+      return batch;
+    });
+    setBatches(updatedBatches);
+  };
+
+  const updateBatchStatus = (batchName, batchRun) => {
+    axios({
+      url: '/updateBatchStatus',
+      method: 'post',
+      data: {
+        batchConfig: {
+          batchName: batchName,
+          batchRun: batchRun
+        }
+      }
+    })
+      .then(function (res) {
+        if (res.data.success === 'success') {
+          alert('배치 상태 업데이트 완료');
+        } else {
+          alert('배치 상태 업데이트 실패');
+        }
+      })
+      .catch(function (err) {
+        alert("배치 상태 업데이트 실패 (오류)");
+      });
+  };
+
   const runBatchForDate = () => {
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
@@ -53,7 +95,6 @@ function BatchManage() {
     selectBatchLog();
   };
 
-  /** 배치 로그 리스트 조회 */
   const selectBatchLog = () => {
     axios({
       url: '/selectBatchLog',
@@ -64,7 +105,7 @@ function BatchManage() {
         setBatchLogs(res.data.movVo.batchLogList); // 서버에서 받아온 배치 로그 데이터를 상태에 저장
       })
       .catch(function (err) {
-        alert("실패 (오류)");
+        alert("배치 로그 조회 실패 (오류)");
       });
   };
 
@@ -93,19 +134,31 @@ function BatchManage() {
           <strong>배치 컨트롤</strong>
         </CCardHeader>
         <CCardBody>
-          <CRow className="mb-3 align-items-center">
-            <CCol sm="8">
-              <h5>현재 상태 : {batchDailyBoxOfficeRun ? '활성화' : '비활성화'}</h5>
-            </CCol>
-            <CCol sm="4">
-              <CButton
-                color={batchDailyBoxOfficeRun ? 'danger' : 'dark'}
-                onClick={toggleBatch}
-              >
-                {batchDailyBoxOfficeRun ? '배치 중지' : '배치 시작'}
-              </CButton>
-            </CCol>
-          </CRow>
+          <CTable>
+            <CTableHead>
+              <CTableRow>
+                <CTableHeaderCell>배치명</CTableHeaderCell>
+                <CTableHeaderCell>현재 상태</CTableHeaderCell>
+                <CTableHeaderCell>제어</CTableHeaderCell>
+              </CTableRow>
+            </CTableHead>
+            <CTableBody>
+              {batches.map((batch, index) => (
+                <CTableRow key={index}>
+                  <CTableDataCell>{batch.batchName}</CTableDataCell>
+                  <CTableDataCell>{batch.batchRun ? '활성화' : '비활성화'}</CTableDataCell>
+                  <CTableDataCell>
+                    <CButton
+                      color={batch.batchRun ? 'danger' : 'dark'}
+                      onClick={() => toggleBatch(batch.batchName)}
+                    >
+                      {batch.batchRun ? '배치 중지' : '배치 시작'}
+                    </CButton>
+                  </CTableDataCell>
+                </CTableRow>
+              ))}
+            </CTableBody>
+          </CTable>
         </CCardBody>
       </CCard>
 
@@ -175,8 +228,6 @@ function BatchManage() {
                 </CTableRow>
               ))}
             </CTableBody>
-
-
           </CTable>
         </CCardBody>
       </CCard>
@@ -189,7 +240,7 @@ function BatchManage() {
         <CModalHeader onClose={() => setModalVisible(false)}>
           <CModalTitle>배치 오류 내용</CModalTitle>
         </CModalHeader>
-        <CModalBody >
+        <CModalBody>
           {currentErrorText}
         </CModalBody>
       </CModal>
@@ -197,46 +248,6 @@ function BatchManage() {
   );
 }
 
-/** 일일 박스 오피스 배치 상태 확인 */
-function dailyBoxOfficeBatchActiveCheck(setBatchRun) {
-  axios({
-    url: '/dailyBoxOfficeBatchActiveCheck',
-    method: 'post',
-    data: {}
-  })
-    .then(function (res) {
-      setBatchRun(res.data.batchDailyBoxOfficeRun);
-    })
-    .catch(function (err) {
-      alert("실패 (오류)");
-    });
-}
-
-/** 일일 박스 오피스 배치 동작/정지 업데이트 */
-function dailyBoxOfficeBatchActiveUpdate(batchDailyBoxOfficeRun) {
-  axios({
-    url: '/dailyBoxOfficeBatchActiveUpdate',
-    method: 'post',
-    data: {
-      batchConfig: {
-        batchName: "batchDailyBoxOffice",
-        batchRun: batchDailyBoxOfficeRun
-      }
-    }
-  })
-    .then(function (res) {
-      if (res.data.success === 'success') {
-        alert('배치 상태 업데이트 완료');
-      } else {
-        alert('배치 상태 업데이트 실패');
-      }
-    })
-    .catch(function (err) {
-      alert("실패 (오류)");
-    });
-}
-
-/** 특정 일자 일일 박스 오피스 수동 배치 */
 function specificDateBatch(targetDt) {
   axios({
     url: '/specificDateBatch',
@@ -259,10 +270,6 @@ function specificDateBatch(targetDt) {
     .catch(function (err) {
       alert("실패 (오류)");
     });
-
-
 }
-
-
 
 export default BatchManage;

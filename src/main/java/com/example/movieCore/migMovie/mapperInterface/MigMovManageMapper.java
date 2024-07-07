@@ -62,11 +62,13 @@ public interface MigMovManageMapper {
 
     void updateOpenDt(MigMovVo movVo);
 
-    boolean dailyBoxOfficeRunCheck(String batchName);
+    boolean batchRunCheckByName(String batchName);
 
-    boolean BoxOfficeBatchActiveUpdate(MigMovVo movVo);
+    boolean updateBatchStatus(MigMovVo movVo);
 
     void insertBatchLog(BatchLog batchLog);
 
     ArrayList<BatchLog> selectBatchLog();
+
+    ArrayList<BatchConfig> fetchBatchStatus();
 }

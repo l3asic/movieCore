@@ -31,7 +31,7 @@ public class SchMovBoxOffice {
 
 
         // 배치 동작 상태 확인
-        batchDailyBoxOfficeRun = movManageService.dailyBoxOfficeRunCheck("batchDailyBoxOffice");
+        batchDailyBoxOfficeRun = movManageService.batchRunCheckByName("batchDailyBoxOffice");
 
         if(batchDailyBoxOfficeRun){ // 배치 정상 동작 상태
 
