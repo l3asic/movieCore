@@ -46,6 +46,7 @@
     <resultMap id="BatchConfig" type="com.example.movieCore.migMovie.bean.BatchConfig">
         <result property="batchName" column="BATCH_NAME" />
         <result property="batchRun" column="batch_run" />
+        <result property="dateBatchYn" column="DATE_BATCH_YN" />
     </resultMap>
 
 
@@ -559,10 +560,23 @@
     <select id="fetchBatchStatus" resultMap="BatchConfig">
         SELECT
             BATCH_NAME,
-            BATCH_RUN
+            BATCH_RUN,
+            DATE_BATCH_YN
         FROM
             BATCH_CONFIG
     </select>
+
+
+
+
+    <!-- 게시글 만료 여부 업데이트 -->
+    <update id="syncExpireArticle">
+        UPDATE BRD_ARTICLE
+        SET EXPIRE_YN = 'Y'
+        WHERE EXPIRE_DT <![CDATA[<]]> CURRENT_TIMESTAMP
+    </update>
+
+
 
 
 

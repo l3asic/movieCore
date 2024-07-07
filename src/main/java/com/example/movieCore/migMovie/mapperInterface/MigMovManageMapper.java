@@ -71,4 +71,6 @@ public interface MigMovManageMapper {
     ArrayList<BatchLog> selectBatchLog();
 
     ArrayList<BatchConfig> fetchBatchStatus();
+
+    int syncExpireArticle();
 }

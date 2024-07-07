@@ -3,6 +3,7 @@ package com.example.movieCore.migMovie.scheldule;
 import com.example.movieCore.migMovie.bean.BatchConfig;
 import com.example.movieCore.migMovie.bean.BatchLog;
 import com.example.movieCore.migMovie.service.MigMovManageServiceImpl;
+import com.example.movieCore.migMovie.vo.BatchVo;
 import com.example.movieCore.migMovie.vo.MigMovVo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -10,14 +11,16 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 
 @Component
-public class SchMovBoxOffice {
+public class BatchSchelduler {
 
     private final MigMovManageServiceImpl movManageService;
 
 
     private boolean batchDailyBoxOfficeRun = false;
 
-    public SchMovBoxOffice(MigMovManageServiceImpl movManageService) {
+    private boolean batchExpireArticleRun = false;
+
+    public BatchSchelduler(MigMovManageServiceImpl movManageService) {
         this.movManageService = movManageService;
     }
 
@@ -65,6 +68,60 @@ public class SchMovBoxOffice {
             movManageService.insertStopBatchLog(batchLog);
             
         }
+
+    }
+
+
+
+
+
+
+
+    /**
+     * 게시글 만료 배치 스케줄러
+     * */
+    @Scheduled(cron = "0 1 0 * * *")
+    public void batchExpireArticle() {
+        BatchVo batchVo = new BatchVo();
+        batchVo.setBatchConfig(new BatchConfig());
+
+        batchVo.getBatchConfig().setBatchName("batchExpireArticle");
+        batchVo.getBatchConfig().setBatchType("자동");
+
+
+        // 배치 동작 상태 확인
+        batchExpireArticleRun = movManageService.batchRunCheckByName("batchExpireArticle");
+
+        if(batchExpireArticleRun){
+            movManageService.syncExpireArticle(batchVo);
+
+        }else{
+            // 배치 정지된 상태
+
+            batchVo.setBatchLog(new BatchLog());
+            // 배치명
+            batchVo.getBatchLog().setBatchName("batchExpireArticle");
+            // 동작시간
+            batchVo.getBatchLog().setBatchRunTime(new Timestamp(System.currentTimeMillis()));
+            // 배치 자동/수동
+            batchVo.getBatchLog().setBatchType("자동");
+            // 실패 갯수
+            batchVo.getBatchLog().setBatchFailCount(0);
+            // 오류 내용
+            batchVo.getBatchLog().setBatchErrorText("");
+            // 배치 동작 상태
+            batchVo.getBatchLog().setBatchStatus("정지 상태");
+            // 배치 종료 시간 기록
+            batchVo.getBatchLog().setBatchEndTime(new Timestamp(System.currentTimeMillis()));
+            // 소요시간 계산
+            batchVo.getBatchLog().calculateBatchDuration();
+
+            // 배치로그 최종 디비 인서트
+            movManageService.insertStopBatchLog(batchVo.getBatchLog());
+
+        }
+
+
 
     }
     

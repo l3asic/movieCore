@@ -688,17 +688,39 @@ public class MigMovManageController {
 
 
 
-    /**  일일 박스오피스 수동 배치 api 호출 및 이관 */
-    @PostMapping(value = "/specificDateBatch")
+    /**  수동 배치 (api 호출 및 이관 등) */
+    @PostMapping(value = "/manualBatch")
     @ResponseBody
-    public Map<String, Object> specificDateBatch(@RequestBody MigMovVo movVo) throws Exception {
+    public Map<String, Object> manualBatch(@RequestBody BatchVo batchVo) throws Exception {
 
         Map<String, Object> resMap = new HashMap<>();
-        BatchLog batchLog ;
+        BatchLog batchLog = new BatchLog() ;
+
+        MigMovVo movVo = new MigMovVo();
+        movVo.setBatchConfig(batchVo.getBatchConfig());
 
         try {
-            // 일일 박스오피스 이관 동작
-            batchLog = movManageService.syncDailyBoxOffice(movVo);
+
+            if("batchDailyBoxOffice".equals(batchVo.getBatchConfig().getBatchName())){
+                // 일일 박스오피스 이관 동작
+                batchLog = movManageService.syncDailyBoxOffice(movVo);
+
+            }else if("batchWeeklyBoxOffice".equals(batchVo.getBatchConfig().getBatchName())){
+                // 주간 박스오피스 이관 동작
+                batchLog = movManageService.syncWeeklyBoxOffice(movVo);
+
+            }else if ("batchExpireArticle".equals(batchVo.getBatchConfig().getBatchName())){
+                // 게시글 만료 배치 동작
+                batchLog = movManageService.syncExpireArticle(batchVo);
+
+            }
+
+
+
+
+
+
+
             if(batchLog.getBatchStatus().equals("정상 동작")){
                 resMap.put("success", "success");
             }else{

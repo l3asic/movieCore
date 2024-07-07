@@ -17,6 +17,9 @@ public class BatchVo {
     /** 배치 설정 */
     private BatchConfig batchConfig;
 
+    /** 배치 로그 */
+    private BatchLog batchLog;
+
 
     /** 배치 설정 리스트 */
     private ArrayList<BatchConfig> batches;

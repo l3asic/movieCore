@@ -16,7 +16,9 @@ import {
   CModal,
   CModalBody,
   CModalHeader,
-  CModalTitle
+  CModalTitle,
+  CFormSelect,
+  CBadge
 } from "@coreui/react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -28,6 +30,7 @@ function BatchManage() {
   const [batchLogs, setBatchLogs] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [currentErrorText, setCurrentErrorText] = useState('');
+  const [selectedBatch, setSelectedBatch] = useState('');
 
   useEffect(() => {
     fetchBatchStatus();
@@ -83,6 +86,11 @@ function BatchManage() {
   };
 
   const runBatchForDate = () => {
+    if (!selectedBatch) {
+      alert('배치를 선택하세요');
+      return;
+    }
+
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth() + 1;
     const day = selectedDate.getDate();
@@ -91,7 +99,7 @@ function BatchManage() {
     const formattedDay = day < 10 ? '0' + day : day;
 
     const targetDt = `${year}${formattedMonth}${formattedDay}`;
-    specificDateBatch(targetDt);
+    manualBatch(selectedBatch, targetDt);
     selectBatchLog();
   };
 
@@ -145,7 +153,7 @@ function BatchManage() {
             <CTableBody>
               {batches.map((batch, index) => (
                 <CTableRow key={index}>
-                  <CTableDataCell>{batch.batchName}</CTableDataCell>
+                  <CTableDataCell><strong>{batch.batchName}</strong></CTableDataCell>
                   <CTableDataCell>{batch.batchRun ? '활성화' : '비활성화'}</CTableDataCell>
                   <CTableDataCell>
                     <CButton
@@ -164,24 +172,36 @@ function BatchManage() {
 
       <CCard className="mb-4">
         <CCardHeader style={{ backgroundColor: '#343a40', color: 'white' }}>
-          <strong>특정 날짜 수동 배치</strong>
+          <strong>수동 배치</strong>
         </CCardHeader>
         <CCardBody>
           <CRow className="mb-3 align-items-center">
-            <CCol sm="1">
+            <CCol sm="2" className="d-flex align-items-center">
+              <strong>배치 선택</strong>
+            </CCol>
+            <CCol sm="3" className="me-lg-5">
+              <CFormSelect value={selectedBatch} onChange={(e) => setSelectedBatch(e.target.value)}>
+                <option value="">배치를 선택하세요</option>
+                {batches.map((batch, index) => (
+                  <option key={index} value={batch.batchName}>{batch.batchName}</option>
+                ))}
+              </CFormSelect>
+            </CCol>
+            <CCol sm="1" className="d-flex align-items-center" style={{ marginLeft: '20px' }}>
               <strong>날짜 선택</strong>
             </CCol>
-            <CCol sm="7">
+            <CCol sm="3">
               <DatePicker
                 selected={selectedDate}
                 onChange={setSelectedDate}
                 dateFormat="yyyy-MM-dd"
                 className="form-control"
-                style={{ width: '50%' }}
+                style={{ marginLeft: '20px' }}
+                disabled={batches.find(batch => batch.batchName === selectedBatch)?.dateBatchYn !== 'Y'}
               />
             </CCol>
-            <CCol sm="4">
-              <CButton color="dark" onClick={runBatchForDate}>
+            <CCol sm="2">
+              <CButton color="dark" onClick={runBatchForDate} style={{ marginLeft: '20px' }}>
                 배치 실행
               </CButton>
             </CCol>
@@ -197,7 +217,7 @@ function BatchManage() {
           <CTable>
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell>배치 명</CTableHeaderCell>
+                <CTableHeaderCell><strong>배치 명</strong></CTableHeaderCell>
                 <CTableHeaderCell>배치 시작 시간</CTableHeaderCell>
                 <CTableHeaderCell>배치 타입</CTableHeaderCell>
                 <CTableHeaderCell>배치 오류 내용</CTableHeaderCell>
@@ -211,7 +231,7 @@ function BatchManage() {
             <CTableBody>
               {batchLogs.map((log, index) => (
                 <CTableRow key={index}>
-                  <CTableDataCell>{log.batchName}</CTableDataCell>
+                  <CTableDataCell><strong>{log.batchName}</strong></CTableDataCell>
                   <CTableDataCell>{formatDate(log.batchRunTime)}</CTableDataCell>
                   <CTableDataCell>{log.batchType}</CTableDataCell>
                   <CTableDataCell>
@@ -224,7 +244,11 @@ function BatchManage() {
                   <CTableDataCell>{formatDate(log.batchEndTime)}</CTableDataCell>
                   <CTableDataCell>{log.batchDuration}</CTableDataCell>
                   <CTableDataCell>{log.batchFailCount}</CTableDataCell>
-                  <CTableDataCell>{log.batchStatus}</CTableDataCell>
+                  <CTableDataCell>
+                    <CBadge color={log.batchStatus === '실패' ? 'danger' : 'primary'}>
+                      {log.batchStatus}
+                    </CBadge>
+                  </CTableDataCell>
                 </CTableRow>
               ))}
             </CTableBody>
@@ -248,13 +272,13 @@ function BatchManage() {
   );
 }
 
-function specificDateBatch(targetDt) {
+function manualBatch(batchName, targetDt) {
   axios({
-    url: '/specificDateBatch',
+    url: '/manualBatch',
     method: 'post',
     data: {
       batchConfig: {
-        batchName: "batchDailyBoxOffice",
+        batchName: batchName,
         targetDt: targetDt,
         batchType: "수동"
       }
