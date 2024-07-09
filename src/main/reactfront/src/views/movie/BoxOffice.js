@@ -24,6 +24,28 @@ const formatDate = (date) => {
   return [year, month, day].join('');
 };
 
+const getLastSunday = (date) => {
+  const dayOfWeek = date.getDay();
+  const lastSunday = new Date(date);
+  lastSunday.setDate(date.getDate() - dayOfWeek);
+  return lastSunday;
+};
+
+const getWeekOptions = () => {
+  const today = new Date();
+  const thisWeekSunday = getLastSunday(today);
+  const lastWeekSunday = new Date(thisWeekSunday);
+  lastWeekSunday.setDate(thisWeekSunday.getDate() - 7);
+  const twoWeeksAgoSunday = new Date(lastWeekSunday);
+  twoWeeksAgoSunday.setDate(lastWeekSunday.getDate() - 7);
+
+  return [
+    { label: "지지난 주", value: formatDate(twoWeeksAgoSunday) },
+    { label: "지난 주", value: formatDate(lastWeekSunday) },
+    { label: "이번 주", value: formatDate(thisWeekSunday) }
+  ];
+};
+
 const BoxOffice = () => {
   const [movVo, setMovVo] = useState({
     movieBoxOfficeBeanList: [],
@@ -31,17 +53,21 @@ const BoxOffice = () => {
   });
   const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
   const [activeTab, setActiveTab] = useState('DAILY');
+  const [selectedWeek, setSelectedWeek] = useState(getWeekOptions()[2].value);
   const navigate = useNavigate();
 
   useEffect(() => {
-    selectBoxOfficeList(activeTab);
-  }, [startDate, activeTab]);
+    if (activeTab === 'DAILY') {
+      selectBoxOfficeList(activeTab, formatDate(startDate));
+    } else {
+      selectBoxOfficeList(activeTab, selectedWeek);
+    }
+  }, [startDate, activeTab, selectedWeek]);
 
-  const selectBoxOfficeList = async (boxOfficeType) => {
-    const formattedDate = formatDate(startDate);
+  const selectBoxOfficeList = async (boxOfficeType, dateOrWeek) => {
     try {
       const response = await axios.post('/selectBoxOfficeList', {
-        showRange: formattedDate,
+        showRange: dateOrWeek,
         boxOfficeType: boxOfficeType
       }, {
         headers: {
@@ -79,6 +105,8 @@ const BoxOffice = () => {
     navigate(`/movie/MovieInfo`, { state: { movieCd } });
   };
 
+  const weekOptions = getWeekOptions();
+
   const settings = {
     dots: false,
     infinite: false,
@@ -112,6 +140,16 @@ const BoxOffice = () => {
     ]
   };
 
+  const weekSliderSettings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 2, // 기본값을 이번 주로 설정
+    afterChange: (current) => setSelectedWeek(weekOptions[current].value),
+  };
+
   return (
     <>
       <CNav variant="tabs" role="tablist" className="mb-lg-5">
@@ -133,20 +171,40 @@ const BoxOffice = () => {
         </CNavItem>
       </CNav>
 
-      <div className="date-selector" style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
-        <button onClick={handlePrevDay} className="arrow-button">
-          <CIcon icon={cilChevronLeft} />
-        </button>
-        <DatePicker
-          selected={startDate}
-          onChange={setStartDate}
-          dateFormat="yyyy-MM-dd"
-          className="form-control"
-          style={{ width: '50%' }}
-        />
-        <button onClick={handleNextDay} className="arrow-button">
-          <CIcon icon={cilChevronRight} />
-        </button>
+      <div className="date-selector">
+        {activeTab === 'DAILY' ? (
+          <>
+            <button onClick={handlePrevDay} className="arrow-button">
+              <CIcon icon={cilChevronLeft} />
+            </button>
+            <DatePicker
+              selected={startDate}
+              onChange={setStartDate}
+              dateFormat="yyyy-MM-dd"
+              className="date-picker"
+            />
+            <button onClick={handleNextDay} className="arrow-button">
+              <CIcon icon={cilChevronRight} />
+            </button>
+          </>
+        ) : (
+          <div className="week-slider-container">
+            <Slider {...weekSliderSettings} className="week-slider">
+              {weekOptions.map((option, index) => (
+                <div key={index} className="week-option">
+                  <h5
+                    style={{
+                      textAlign: 'center',
+                      marginTop : '30px'
+                    }}
+                  >
+                    {option.label}
+                  </h5>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        )}
       </div>
 
       <Slider {...settings}>
