@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -385,9 +386,9 @@ public class MigMovieApiClientImpl {
 
 
     /**
-     *  박스 오피스 api 호출
+     *  일일 박스 오피스 api 호출
      */
-    public MigMovVo callMovieBoxOfficeApi(MigMovVo movVo){
+    public MigMovVo callDailyBoxOfficeApi(MigMovVo movVo){
 
         // API 엔드포인트 URL
         String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
@@ -432,7 +433,7 @@ public class MigMovieApiClientImpl {
 
 
         ArrayList<MovieBoxOfficeBean> boxOfficeBeanList = new ArrayList<>();
-        boxOfficeBeanList = dataConverter.convertToMovieBoxOfficeBeanList(jsonMap, targetDt);
+        boxOfficeBeanList = dataConverter.convertToMovieBoxOfficeBeanList(jsonMap, targetDt, "dailyBoxOfficeList");
         movVo.setBoxOfficeBeanList(boxOfficeBeanList);
 
 
@@ -443,6 +444,67 @@ public class MigMovieApiClientImpl {
 
 
 
+    }
+
+
+
+
+    /**
+     *  주간 박스 오피스 api 호출
+     */
+    public MigMovVo callWeeklyBoxOfficeApi(MigMovVo movVo){
+
+        // API 엔드포인트 URL
+        String apiUrl = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchWeeklyBoxOfficeList.json";
+
+        // WebClient 인스턴스 생성
+        WebClient webClient = WebClient.create();
+
+        String targetDt;
+
+        if(movVo.getBatchConfig() == null){ // 기본 값 : 가장 최근 일요일 (지난주)
+            // 현재 날짜를 기준으로 가장 최근의 일요일 날짜를 yyyyMMdd 형식으로 구하기
+            LocalDate currentDate = LocalDate.now();
+            LocalDate lastSunday = currentDate.with(DayOfWeek.SUNDAY).minusDays(1);
+            if (currentDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                lastSunday = currentDate; // 오늘이 일요일인 경우 오늘을 가장 최근 일요일로 설정
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            targetDt = lastSunday.format(formatter);
+        } else { // 특정 날짜 이관
+            // BatchConfig에서 날짜 값을 가져옴
+            String batchDate = movVo.getBatchConfig().getTargetDt();
+            // yyyyMMdd 형식의 문자열을 LocalDate로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate date = LocalDate.parse(batchDate, formatter);
+            // 해당 날짜가 속한 주의 일요일 날짜를 구함
+            LocalDate sundayOfWeek = date.with(DayOfWeek.SUNDAY);
+            targetDt = sundayOfWeek.format(formatter);
+        }
+
+        // API 호출 URL 및 파라미터 조합
+        String fullUrl = String.format("%s?key=%s&targetDt=%s&weekGb=0", apiUrl, key2, targetDt);
+
+        // API 호출 및 응답 받기
+        String responseBody = webClient.get()
+                .uri(fullUrl)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        // JSON 데이터를 객체로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
+        try {
+            jsonMap = objectMapper.readValue(responseBody, new TypeReference<>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<MovieBoxOfficeBean> boxOfficeBeanList = dataConverter.convertToMovieBoxOfficeBeanList(jsonMap, targetDt, "weeklyBoxOfficeList" );
+        movVo.setBoxOfficeBeanList(boxOfficeBeanList);
+
+        return movVo;
     }
 
 

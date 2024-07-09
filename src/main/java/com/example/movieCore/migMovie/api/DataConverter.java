@@ -368,7 +368,7 @@ public class DataConverter {
 
 
 
-    public ArrayList<MovieBoxOfficeBean> convertToMovieBoxOfficeBeanList(Object jsonMap, String targetDt) {
+    public ArrayList<MovieBoxOfficeBean> convertToMovieBoxOfficeBeanList(Object jsonMap, String targetDt, String apiName) {
         ArrayList<MovieBoxOfficeBean> movieBoxOfficeBeanList = new ArrayList<>();
 
         if (jsonMap instanceof LinkedHashMap) {
@@ -377,11 +377,11 @@ public class DataConverter {
             if (topLevelMap.containsKey("boxOfficeResult")) {
                 LinkedHashMap<String, Object> boxOfficeResult = (LinkedHashMap<String, Object>) topLevelMap.get("boxOfficeResult");
 
-                if (boxOfficeResult.containsKey("dailyBoxOfficeList")) {
-                    ArrayList<LinkedHashMap<String, Object>> dailyBoxOfficeList = (ArrayList<LinkedHashMap<String, Object>>) boxOfficeResult.get("dailyBoxOfficeList");
+                if (boxOfficeResult.containsKey(apiName)) {
+                    ArrayList<LinkedHashMap<String, Object>> boxOfficeList = (ArrayList<LinkedHashMap<String, Object>>) boxOfficeResult.get(apiName);
 
-                    for (LinkedHashMap<String, Object> dailyBoxOffice : dailyBoxOfficeList) {
-                        movieBoxOfficeBeanList.add(convertToMovieBoxOfficeBean(dailyBoxOffice, targetDt));
+                    for (LinkedHashMap<String, Object> boxOffice : boxOfficeList) {
+                        movieBoxOfficeBeanList.add(convertToMovieBoxOfficeBean(boxOffice, targetDt));
                     }
                 }
             }

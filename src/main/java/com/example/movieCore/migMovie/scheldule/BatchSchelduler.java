@@ -18,6 +18,8 @@ public class BatchSchelduler {
 
     private boolean batchDailyBoxOfficeRun = false;
 
+    private boolean batchWeeklyBoxOfficeRun = false;
+
     private boolean batchExpireArticleRun = false;
 
     public BatchSchelduler(MigMovManageServiceImpl movManageService) {
@@ -26,6 +28,7 @@ public class BatchSchelduler {
 
     /**
      * 일일 박스 오피스 이관 배치 스케쥴러
+     * 매일 23:00 작동
      * */
     @Scheduled(cron = "0 0 23 * * *")
     public void batchDailyBoxOffice() {
@@ -73,12 +76,63 @@ public class BatchSchelduler {
 
 
 
+    /**
+     * 주간 박스 오피스 이관 배치 스케쥴러
+     * 매주 월요일 01:05 작동
+     * */
+    @Scheduled(cron = "0 5 1 * * MON")
+    public void batchWeeklyBoxOffice() {
+
+        MigMovVo movVo = new MigMovVo();
+
+
+        // 배치 동작 상태 확인
+        batchWeeklyBoxOfficeRun = movManageService.batchRunCheckByName("batchWeeklyBoxOffice");
+
+        if(batchWeeklyBoxOfficeRun){ // 배치 정상 동작 상태
+
+            movVo.setBatchConfig(new BatchConfig());
+            movVo.getBatchConfig().setBatchType("자동");
+
+            // 일일 박스오피스 이관 동작
+            movManageService.syncWeeklyBoxOffice(movVo);
+        }else{
+            // 배치 정지된 상태
+
+            BatchLog batchLog = new BatchLog();
+            // 배치명
+            batchLog.setBatchName("batchWeeklyBoxOffice");
+            // 동작시간
+            batchLog.setBatchRunTime(new Timestamp(System.currentTimeMillis()));
+            // 배치 자동/수동
+            batchLog.setBatchType("자동");
+            // 실패 갯수
+            batchLog.setBatchFailCount(0);
+            // 오류 내용
+            batchLog.setBatchErrorText("");
+            // 배치 동작 상태
+            batchLog.setBatchStatus("정지 상태");
+            // 배치 종료 시간 기록
+            batchLog.setBatchEndTime(new Timestamp(System.currentTimeMillis()));
+            // 소요시간 계산
+            batchLog.calculateBatchDuration();
+
+            // 배치로그 최종 디비 인서트
+            movManageService.insertStopBatchLog(batchLog);
+
+        }
+
+    }
+
+
+
 
 
 
 
     /**
      * 게시글 만료 배치 스케줄러
+     * 매일  01:00 작동
      * */
     @Scheduled(cron = "0 1 0 * * *")
     public void batchExpireArticle() {

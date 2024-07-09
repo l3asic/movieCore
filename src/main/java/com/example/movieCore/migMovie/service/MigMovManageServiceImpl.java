@@ -174,7 +174,7 @@ public class MigMovManageServiceImpl {
 
         try {
             // 박스오피스 api 호출
-            movVo = movieApiClient.callMovieBoxOfficeApi(movVo);
+            movVo = movieApiClient.callDailyBoxOfficeApi(movVo);
 
             boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
 
@@ -242,6 +242,9 @@ public class MigMovManageServiceImpl {
 
                     // 개봉일 openDt 정보 업데이트
                     updateOpenDt(movVo);
+
+                    // 타입 설정
+                movVo.getBoxOfficeBean().setBoxOfficeType("DAILY");
 
                 // 박스오피스 테이블 인서트
                 insertBoxOffice(movVo);
@@ -291,7 +294,7 @@ public class MigMovManageServiceImpl {
 
 
     /**
-     * 주간 박스오피스 이관 - 추후 진행 예정 @@@
+     * 주간 박스오피스 이관 -
      * */
     public BatchLog syncWeeklyBoxOffice(MigMovVo movVo){
 
@@ -300,7 +303,7 @@ public class MigMovManageServiceImpl {
         /** 배치 로그 */
         BatchLog batchLog = new BatchLog();
         // 배치명
-        batchLog.setBatchName("batchDailyBoxOffice");
+        batchLog.setBatchName("batchWeeklyBoxOffice");
         // 동작시간
         batchLog.setBatchRunTime(new Timestamp(System.currentTimeMillis()));
         // 배치 자동/수동
@@ -319,7 +322,7 @@ public class MigMovManageServiceImpl {
 
         try {
             // 박스오피스 api 호출
-            movVo = movieApiClient.callMovieBoxOfficeApi(movVo);
+            movVo = movieApiClient.callWeeklyBoxOfficeApi(movVo);
 
             boxOfficeBeanList =  movVo.getBoxOfficeBeanList();
 
@@ -387,6 +390,9 @@ public class MigMovManageServiceImpl {
 
                     // 개봉일 openDt 정보 업데이트
                     updateOpenDt(movVo);
+
+                    // 박스 오피스 타입설정
+                movVo.getBoxOfficeBean().setBoxOfficeType("WEEKLY");
 
                 // 박스오피스 테이블 인서트
                 insertBoxOffice(movVo);

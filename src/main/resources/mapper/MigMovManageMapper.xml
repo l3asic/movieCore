@@ -468,7 +468,7 @@
 
     <!-- 박스오피스 테이블 인서트 -->
     <insert id="insertBoxOffice" parameterType="com.example.movieCore.migMovie.vo.MigMovVo">
-        INSERT INTO MOV_BOX_OFFICE (show_range, movie_cd, box_rank, box_rank_old_and_new, audi_cnt, audi_inten, audi_change, audi_acc,movie_nm)
+        INSERT INTO MOV_BOX_OFFICE (show_range, movie_cd, box_rank, box_rank_old_and_new, audi_cnt, audi_inten, audi_change, audi_acc,movie_nm,BOX_OFFICE_TYPE)
         VALUES
             (
             #{boxOfficeBean.showRange},
@@ -479,7 +479,8 @@
             #{boxOfficeBean.audiInten},
             #{boxOfficeBean.audiChange},
             #{boxOfficeBean.audiAcc},
-            #{boxOfficeBean.movieNm}
+            #{boxOfficeBean.movieNm},
+            #{boxOfficeBean.boxOfficeType}
             )
     </insert>
 

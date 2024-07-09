@@ -42,6 +42,9 @@ public class MovieBoxOfficeBean {
     /** 개봉일 */
     private java.sql.Timestamp openDt;
 
+    /** 박스오피스 타입 (주간/일일) */
+    private String boxOfficeType;
+
 
     /** 영화 정보 */
     private MovieBean movieBean;
