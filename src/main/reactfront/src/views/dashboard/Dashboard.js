@@ -45,7 +45,10 @@ const Dashboard = () => {
   const selectDailyBoxOfficeList = async () => {
     const formattedDate = formatDate(startDate);
     try {
-      const response = await axios.post('/selectDailyBoxOfficeList', { showRange: formattedDate }, {
+      const response = await axios.post('/selectBoxOfficeList', {
+        showRange: formattedDate,
+        boxOfficeType : "DAILY"
+      }, {
         headers: {
           'Content-Type': 'application/json',
         }

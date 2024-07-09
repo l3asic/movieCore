@@ -467,11 +467,12 @@ public class MovMovieController {
 
 
     /** 영화 모듈 - 일일 박스 오피스 영화 조회 */
-    @PostMapping(value = "/selectDailyBoxOfficeList")
+    @PostMapping(value = "/selectBoxOfficeList")
     @ResponseBody
-    public Map<String, Object> selectDailyBoxOfficeList(@RequestBody Map<String, String> requestBody) throws Exception {
+    public Map<String, Object> selectBoxOfficeList(@RequestBody Map<String, String> requestBody) throws Exception {
 
         String showRange = requestBody.get("showRange");
+        String boxOfficeType = requestBody.get("boxOfficeType");
 
         boolean successResult = false;
         Map<String, Object> resMap = new HashMap<>();
@@ -483,11 +484,10 @@ public class MovMovieController {
 
             movVo.setMovieBoxOfficeBean(new MovieBoxOfficeBean());
             movVo.getMovieBoxOfficeBean().setShowRange(showRange);
+            movVo.getMovieBoxOfficeBean().setBoxOfficeType(boxOfficeType);
 
-
-            
             // 날짜 기준 일일 박스 오피스 조회
-            movVo.setMovieBoxOfficeBeanList(movieService.selectDailyBoxOfficeList(movVo));
+            movVo.setMovieBoxOfficeBeanList(movieService.selectBoxOfficeList(movVo));
 
             resMap.put("movVo", movVo);
             successResult = true;
@@ -501,7 +501,6 @@ public class MovMovieController {
         return resMap;
 
     }
-
 
 
     /** 사용자 추천 영화 조회 */

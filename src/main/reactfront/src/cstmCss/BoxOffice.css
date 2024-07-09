@@ -124,3 +124,13 @@
 .movie-image {
   border-radius: 10px; /* 모서리를 둥글게 만듦 */
 }
+
+.nav-tabs .nav-link {
+  color: #6c757d; /* 평소 회색 */
+  font-weight: normal;
+}
+
+.nav-tabs .nav-link.active {
+  color: #000; /* 선택된 경우 검정색 */
+  font-weight: bold; /* 선택된 경우 진하게 */
+}

@@ -69,7 +69,7 @@ public interface MovMovieMapper {
     MoviePersonalMoviePoint selectMoviePersonalMoviePoint(MovVo movVo);
 
 
-    ArrayList<MovieBoxOfficeBean> selectDailyBoxOfficeList(MovVo movVo);
+    ArrayList<MovieBoxOfficeBean> selectBoxOfficeList(MovVo movVo);
 
     int checkGenreTaste(MovVo movVo);
 

@@ -867,8 +867,8 @@
 
 
 
-    <!-- 영화 모듈 - 일일 박스오피스 리스트 조회 -->
-    <select id="selectDailyBoxOfficeList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="BoxOfficeResultMap">
+    <!-- 영화 모듈 - 박스오피스 리스트 조회 -->
+    <select id="selectBoxOfficeList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="BoxOfficeResultMap">
         SELECT
             mbo.SHOW_RANGE,
             mbo.MOVIE_CD,
@@ -912,6 +912,8 @@
             CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE
             mbo.SHOW_RANGE = #{movieBoxOfficeBean.showRange}
+        and
+            mbo.box_office_type= #{movieBoxOfficeBean.boxOfficeType}
         ORDER BY
             CAST(mbo.BOX_RANK AS UNSIGNED) ASC
     </select>

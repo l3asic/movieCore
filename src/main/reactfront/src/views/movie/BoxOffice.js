@@ -10,7 +10,7 @@ import '../../cstmCss/BoxOffice.css';
 import { cilChevronLeft, cilChevronRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import GrayLine from "../uitils/GrayLine";
-import { CCard, CCardBody, CCardImage, CCardText, CCardTitle, CBadge } from '@coreui/react';
+import { CCard, CCardBody, CCardImage, CCardText, CCardTitle, CBadge, CNav, CNavItem, CNavLink } from '@coreui/react';
 
 const formatDate = (date) => {
   let d = new Date(date),
@@ -29,18 +29,21 @@ const BoxOffice = () => {
     movieBoxOfficeBeanList: [],
     currentPage: 1
   });
-
   const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
+  const [activeTab, setActiveTab] = useState('DAILY');
   const navigate = useNavigate();
 
   useEffect(() => {
-    selectDailyBoxOfficeList();
-  }, [startDate]);
+    selectBoxOfficeList(activeTab);
+  }, [startDate, activeTab]);
 
-  const selectDailyBoxOfficeList = async () => {
+  const selectBoxOfficeList = async (boxOfficeType) => {
     const formattedDate = formatDate(startDate);
     try {
-      const response = await axios.post('/selectDailyBoxOfficeList', { showRange: formattedDate }, {
+      const response = await axios.post('/selectBoxOfficeList', {
+        showRange: formattedDate,
+        boxOfficeType: boxOfficeType
+      }, {
         headers: {
           'Content-Type': 'application/json',
         }
@@ -111,9 +114,24 @@ const BoxOffice = () => {
 
   return (
     <>
-      <h4 className="box-office-header">일일 박스 오피스</h4>
-
-      <GrayLine marginTop="20px" marginBottom="40px" />
+      <CNav variant="tabs" role="tablist" className="mb-lg-5">
+        <CNavItem>
+          <CNavLink
+            active={activeTab === 'DAILY'}
+            onClick={() => setActiveTab('DAILY')}
+          >
+            일일 박스오피스
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink
+            active={activeTab === 'WEEKLY'}
+            onClick={() => setActiveTab('WEEKLY')}
+          >
+            주간 박스오피스
+          </CNavLink>
+        </CNavItem>
+      </CNav>
 
       <div className="date-selector" style={{ justifyContent: 'center', display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
         <button onClick={handlePrevDay} className="arrow-button">

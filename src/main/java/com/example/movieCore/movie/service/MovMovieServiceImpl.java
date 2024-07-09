@@ -135,8 +135,8 @@ public class MovMovieServiceImpl {
 
 
 
-    public ArrayList<MovieBoxOfficeBean> selectDailyBoxOfficeList(MovVo movVo) {
-        return movMovieMapper.selectDailyBoxOfficeList(movVo);
+    public ArrayList<MovieBoxOfficeBean> selectBoxOfficeList(MovVo movVo) {
+        return movMovieMapper.selectBoxOfficeList(movVo);
     }
 
 
