@@ -23,4 +23,6 @@ public interface BrdFolderMapper {
     void updateFolderOrderAdmin(BrdFolderBean folderBean);
 
     int getMaxOdr();
+
+    void updateFolderName(BrdVo brdVo);
 }

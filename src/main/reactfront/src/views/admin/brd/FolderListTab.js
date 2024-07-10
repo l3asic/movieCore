@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   CTable,
@@ -16,6 +15,11 @@ import {
   CButton,
   CFormInput,
   CFormSelect,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -47,6 +51,9 @@ function FolderListTab() {
   const [selectAll, setSelectAll] = useState(false);
   const [isEditingOrder, setIsEditingOrder] = useState(false);
   const [showDragInfo, setShowDragInfo] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFolder, setSelectedFolder] = useState(null);
+  const [newFolderName, setNewFolderName] = useState("");
 
   useEffect(() => {
     selectFolderListAdmin();
@@ -241,6 +248,50 @@ function FolderListTab() {
     selectFolderListAdmin(); // 변경 사항 취소
   };
 
+  const handleFolderClick = (folder) => {
+    setSelectedFolder(folder);
+    setNewFolderName(folder.folName);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedFolder(null);
+    setNewFolderName("");
+  };
+
+  const handleFolderNameChange = (event) => {
+    setNewFolderName(event.target.value);
+  };
+
+  const handleSaveFolderName = () => {
+    axios({
+      url: "/updateFolderName",
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        folderBean : {
+          folId: selectedFolder.folId,
+          folName: newFolderName,
+        }
+      }),
+    })
+      .then((res) => {
+        if (res.data.successResult) {
+          alert("폴더명 변경 완료");
+          selectFolderListAdmin();
+          handleModalClose();
+        } else {
+          alert("폴더명 변경 실패");
+        }
+      })
+      .catch((err) => {
+        alert("실패 (오류)");
+      });
+  };
+
   return (
     <>
       <GrayLine marginTop="30px" marginBottom="30px" />
@@ -395,6 +446,7 @@ function FolderListTab() {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        onClick={() => handleFolderClick(folder)}
                       >
                         <CTableDataCell style={{ width: "10px" }}>
                           <CFormCheck
@@ -421,6 +473,28 @@ function FolderListTab() {
       </DragDropContext>
 
       <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
+
+      <CModal visible={isModalOpen} onClose={handleModalClose}>
+        <CModalHeader onClose={handleModalClose}>
+          <CModalTitle>폴더명 변경</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CFormInput
+            type="text"
+            value={newFolderName}
+            onChange={handleFolderNameChange}
+            placeholder="폴더명을 입력하세요"
+          />
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={handleModalClose}>
+            취소
+          </CButton>
+          <CButton color="primary" onClick={handleSaveFolderName}>
+            저장
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </>
   );
 }

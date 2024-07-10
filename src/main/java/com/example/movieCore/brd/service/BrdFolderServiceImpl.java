@@ -44,4 +44,8 @@ public class BrdFolderServiceImpl {
     public int getMaxOdr() {
         return brdFolderMapper.getMaxOdr();
     }
+
+    public void updateFolderName(BrdVo brdVo) {
+        brdFolderMapper.updateFolderName(brdVo);
+    }
 }

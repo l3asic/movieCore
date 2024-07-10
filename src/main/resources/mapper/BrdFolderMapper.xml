@@ -123,11 +123,21 @@
     </update>
 
 
+
     <!-- 폴더 순서 odr 맥스값 조회 -->
     <select id="getMaxOdr" resultType="int">
         SELECT IFNULL(MAX(ODR), 0) AS maxOdr
         FROM BRD_FOLDER
     </select>
+
+
+    <!-- 폴더명 변경 -->
+    <update id="updateFolderName" parameterType="com.example.movieCore.brd.vo.BrdVo">
+        UPDATE BRD_FOLDER
+        SET FOL_NAME = #{boardBean.folName}
+        WHERE FOL_ID = #{boardBean.folId}
+    </update>
+
 
 
 

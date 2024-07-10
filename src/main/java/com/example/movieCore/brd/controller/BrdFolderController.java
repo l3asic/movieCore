@@ -185,6 +185,29 @@ public class BrdFolderController {
 
 
 
+    /** 관리자 모듈 - 폴더 명 변경  */
+    @PostMapping(value = "/updateFolderName")
+    @ResponseBody
+    public Map<String, Object> updateFolderName(@RequestBody BrdVo brdVo) throws Exception {
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
+
+        try {
+
+            folderService.updateFolderName(brdVo);
+
+            successResult = true;
+
+
+        } catch (Exception e) {
+        }
+
+        resMap.put("successResult", successResult);
+        return resMap;
+    }
+
+
+
 
 
 
