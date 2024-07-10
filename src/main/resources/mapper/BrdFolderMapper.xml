@@ -134,8 +134,8 @@
     <!-- 폴더명 변경 -->
     <update id="updateFolderName" parameterType="com.example.movieCore.brd.vo.BrdVo">
         UPDATE BRD_FOLDER
-        SET FOL_NAME = #{boardBean.folName}
-        WHERE FOL_ID = #{boardBean.folId}
+        SET FOL_NAME = #{folderBean.folName}
+        WHERE FOL_ID = #{folderBean.folId}
     </update>
 
 
