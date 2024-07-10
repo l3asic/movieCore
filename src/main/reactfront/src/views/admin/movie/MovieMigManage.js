@@ -27,7 +27,6 @@ function MovieMigManage() {
   return (
     <CContainer>
       <h4 className="mb-4">영화 이관 및 API 관리</h4>
-      <h5 className="text-danger mb-4">클릭 주의 !!!</h5>
 
       <CCard className="mb-4">
         <CCardHeader>
@@ -69,14 +68,14 @@ function MovieMigManage() {
           <CRow className="mb-3">
             <CCol>
               <CButton color="secondary" size="lg" onClick={() => handleApiCall('/callKMDBApi', "KMDB 데이터 이관 성공", "이관 실패")}>
-                6. KMDB API 호출 (영화 포스터, 줄거리, 예고편 이관)
+                5. KMDB API 호출 (영화 포스터, 줄거리, 예고편 이관)
               </CButton>
             </CCol>
           </CRow>
           <CRow className="mb-3">
             <CCol>
               <CButton block color="secondary" size="lg" onClick={() => handleApiCall('/callDBTest', "DB 연결 성공", "DB 연결 실패")}>
-                99. DB 테스트
+                0. DB 연결 테스트
               </CButton>
             </CCol>
           </CRow>

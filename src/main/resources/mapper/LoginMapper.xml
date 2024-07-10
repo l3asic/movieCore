@@ -152,7 +152,7 @@
                  LEFT JOIN MEM_FILE_MAPPING mfm ON mmi.MEM_ID = mfm.MEM_ID
                  LEFT JOIN CMM_FILE cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE mmi.MEM_ID = #{memberBean.memId}
-        ORDER BY cf.CREATE_DT DESC, mfm.PROFILE_IDX DESC
+        ORDER BY cf.CREATE_DT DESC, mfm.CREATE_DT DESC
             LIMIT 1
     </select>
 
@@ -188,16 +188,16 @@
 
 
     <!-- 프사 <-> 파일빈 매핑 인서트  -->
-    <insert id="insertFileBeanMap" parameterType="com.example.movieCore.brd.vo.BrdVo"  >
+    <insert id="insertFileBeanMap" parameterType="com.example.movieCore.login.vo.LoginMemberVo"  >
         INSERT INTO MEM_FILE_MAPPING (
             mem_id,
             FILE_ID,
-            PROFILE_IDX
+            create_dt
         )
         VALUES (
                    #{memberBean.memId},
                    #{memberBean.fileBean.fileId},
-                   #{memberBean.fileBean.profileIdx}
+                   #{memberBean.fileBean.createDt}
                )
 
     </insert>
@@ -274,14 +274,6 @@
 
 
 
-
-    <!-- 사용자 프로필 사진 갯수 계산용 조회 -->
-    <select id="selectProfileImgCnt" parameterType="com.example.movieCore.login.vo.LoginMemberVo" resultType="string">
-        SELECT
-            CAST(COUNT(*) AS CHAR) AS cnt
-        FROM MEM_FILE_MAPPING
-        WHERE MEM_ID = #{memberBean.memId}
-    </select>
 
 
     <!-- 사용자 이메일 인증후 이메일 정보 업데이트 -->

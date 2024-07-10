@@ -198,7 +198,7 @@ const Dashboard = () => {
       <CRow className="align-items-center">
         <CCol>
           <h4 className="box-office-header mb-3">
-            <CIcon icon={cilCommentBubble} size="xl" className="me-2 text-dark" />
+            <CIcon icon={cilCommentBubble} size="xl" className="me-2 text-danger"  />
             지금 핫한 게시글
           </h4>
         </CCol>

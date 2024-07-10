@@ -139,11 +139,11 @@ export default function MovieInfo() {
             {/* 포스터 우측 출연진 정보 */}
             <div className="grid items-start gap-2">
               <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "20px"}}>{movVo.movieBean.prdtYear}</p>
-              <div style={{marginBottom: "10px", display:"flex"}}>
-                <h1 className="text-3xl font-bold tracking-tighter md:text-4xl" >{movVo.movieBean.movieNm}</h1>
+              <div style={{marginBottom: "10px", display:"flex", flexDirection: "column"}}>
+                <h1 className="text-3xl font-bold tracking-tighter md:text-4xl">{movVo.movieBean.movieNm}</h1>
                 {movVo.movieBean.movieNmEn && (
-                  <h5 className="text-3xl font-bold tracking-tighter md:text-4xl" style={{marginLeft:"10px", marginTop : "20px"}}>
-                    ({movVo.movieBean.movieNmEn})
+                  <h5 className="text-3xl font-bold tracking-tighter md:text-4xl" style={{marginTop: "10px"}}>
+                    {movVo.movieBean.movieNmEn}
                   </h5>
                 )}
               </div>
@@ -254,7 +254,7 @@ export default function MovieInfo() {
         <div className="container">
           <div className="row justify-content-center" style={{ display: "flex" }}>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>상세정보</h2>
+              <h5 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>상세정보</h5>
             </div>
             <div className="col-md-8">
               <div className="card shadow-sm text-white" style={{ backgroundColor: "#2f363f" }}>
@@ -395,7 +395,7 @@ export default function MovieInfo() {
         <div className="container">
           <div className="row justify-content-center" style={{ display: "flex" }}>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>상세정보</h2>
+              <h5 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{ marginRight: "50px" }}>미디어</h5>
             </div>
             <div className="col-md-8">
               <div>
@@ -439,7 +439,7 @@ export default function MovieInfo() {
 
             {/* 한줄 평 태그 */}
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{marginRight: "50px"}}>Reviews</h2>
+              <h5 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{marginRight: "50px"}}>Reviews</h5>
             </div>
 
             <div className="grid items-start gap-4 md:grid-cols-[2fr_1fr] xl:gap-8" style={{width: "100%", display: "block"}}>
@@ -467,7 +467,7 @@ export default function MovieInfo() {
                       {/* 아이디 + 별점 + 한줄평 내용 */}
                       <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
                         {/* 아이디 칸 */}
-                        <h3 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>{pointBean.memName}</h3>
+                        <h5 className="text-lg font-semibold tracking-tighter" style={{marginBottom: "10px"}}>{pointBean.memName}</h5>
                         {/* 별점 칸 */}
                         <div className="flex items-center gap-1" style={{marginBottom: "10px"}}>
                           <span className="text-sm font-medium tracking-tighter">★({pointBean.point}) </span>

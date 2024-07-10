@@ -26,9 +26,6 @@ public class FileBean {
     private java.sql.Timestamp mapDt;
 
 
-    /** 멤버 모듈용 컬럼 */
-    private String profileIdx;
-
 
 
 }

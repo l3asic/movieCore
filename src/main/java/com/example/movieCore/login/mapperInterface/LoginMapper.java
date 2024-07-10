@@ -31,8 +31,6 @@ public interface LoginMapper {
 
     int updateMemberState(LoginMemberVo memVo);
 
-    String selectProfileImgCnt(LoginMemberVo memVo);
-
     void updateMemberEmail(LoginMemberVo memVo);
 
     ArrayList<LoginMemberBean> selectMemberListByEmail(LoginMemberVo memVo);

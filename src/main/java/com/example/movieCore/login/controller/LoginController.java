@@ -143,11 +143,13 @@ public class LoginController {
             FileBean fileBean = makeFileBean.makingFileBean("MEM",file);
             memVo.getMemberBean().setFileBean(fileBean);
 
+            // 생성 날짜
+            Date date = new Date();
+            Timestamp nowTime = new Timestamp(date.getTime());
+            memVo.getMemberBean().getFileBean().setCreateDt(nowTime);
+
             // 프로필 사진 파일빈 디비 인서트
             loginService.insertFileBean(memVo);
-
-            // 프로필 이미지 갯수 계산
-            memVo.getMemberBean().getFileBean().setProfileIdx(loginService.selectProfileImgCnt(memVo));
 
             // 멤버  <-> 프로필 사진 파일 매핑 인서트
             loginService.insertFileBeanMap(memVo);
@@ -276,9 +278,14 @@ public class LoginController {
                 FileBean fileBean = makeFileBean.makingFileBean("MEM", profileImage);
                 memVo.getMemberBean().setFileBean(fileBean);
 
+
+                // 생성 날짜
+                Date date = new Date();
+                Timestamp nowTime = new Timestamp(date.getTime());
+                memVo.getMemberBean().getFileBean().setCreateDt(nowTime);
+
                 loginService.insertFileBean(memVo);
-                // 프로필 이미지 갯수 계산
-                memVo.getMemberBean().getFileBean().setProfileIdx(loginService.selectProfileImgCnt(memVo));
+
                 loginService.insertFileBeanMap(memVo);
             }
 

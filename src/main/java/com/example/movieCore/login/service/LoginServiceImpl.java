@@ -79,10 +79,6 @@ public class LoginServiceImpl {
         return loginMapper.updateMemberState(memVo);
     }
 
-    public String selectProfileImgCnt(LoginMemberVo memVo) {
-        return loginMapper.selectProfileImgCnt(memVo);
-    }
-
 
     // 이메일 인증 코드 전송
     public void sendEmail(String to, String subject, String codeText) {
