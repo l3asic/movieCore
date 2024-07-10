@@ -22,7 +22,8 @@ import GrayLine from "../uitils/GrayLine";
 
 const MovieList = () => {
   const cardStyle = {
-    marginRight: '20px'
+    marginRight: '40px',
+    marginLeft: '40px'
   };
 
   const [movVo, setMovVo] = useState({

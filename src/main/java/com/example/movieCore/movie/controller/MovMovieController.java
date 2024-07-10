@@ -430,17 +430,15 @@ public class MovMovieController {
     /** 영화 포스터 등록/변경 */
     @PostMapping("/moviePosterUpload")
     public Map<String, Object> moviePosterUpload(@RequestParam("file") MultipartFile file, @RequestParam("movVo") String movVoString) {
-        MovVo movVo = new Gson().fromJson(movVoString, MovVo.class);
-
-        Map resMap = new HashMap<>();
-        boolean succesResult = false;
+        Map<String, Object> resMap = new HashMap<>();
+        boolean successResult = false;
 
         try {
-
+            MovVo movVo = new Gson().fromJson(movVoString, MovVo.class);
             MakeFileBean makeFileBean = new MakeFileBean();
 
             // 파일 업로드 및 파일 빈 값 할당
-            FileBean fileBean = makeFileBean.makingFileBean("MOV",file);
+            FileBean fileBean = makeFileBean.makingFileBean("MOV", file);
             movVo.getMovieBean().setFileBean(fileBean);
 
             // 포스터 파일빈 디비 인서트
@@ -452,16 +450,16 @@ public class MovMovieController {
             // 영화 <-> 포스터 파일 매핑 인서트
             movieService.insertMovieFileMap(movVo);
 
-            succesResult =true;
-
+            successResult = true;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        resMap.put("succesResult", succesResult);
-
+        resMap.put("successResult", successResult);
         return resMap;
     }
+
+
 
 
 

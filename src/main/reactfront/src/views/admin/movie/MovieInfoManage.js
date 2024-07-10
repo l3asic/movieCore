@@ -1,5 +1,3 @@
-
-
 import React, {useEffect, useState} from 'react';
 
 import ReactImg from '../../../assets/images/react.jpg';
@@ -75,6 +73,33 @@ export default function MovieInfoManage() {
 
   };
 
+  /** 영화 포스터 등록/변경 */
+  const moviePosterUpload = () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('movVo', JSON.stringify(movVo));
+
+      axios.post('/moviePosterUpload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(res => {
+          if (res.data.successResult) {
+            alert("성공");
+          } else {
+            alert("실패 (서버 오류)");
+          }
+        })
+        .catch(error => {
+          console.error("포스터 업로드 오류:", error);
+          alert("실패 (오류)");
+        });
+    } else {
+      alert("파일을 선택해주세요.");
+    }
+  };
 
 
   useEffect(() => {
@@ -85,20 +110,16 @@ export default function MovieInfoManage() {
     addMovieViewCnt();
   }, []);
 
-
   const [isHeartFilled, setIsHeartFilled] = useState(movVo.movieBean.fav); // 하트 아이콘의 상태
 
   const [isEvaluated, setIsEvaluated] = useState(movVo.movieBean.evaluated); // 영화 평가 여부
 
-
   /** 하트 아이콘 클릭 시 */
   const handleHeartClick = () => {
-
     // 하트 아이콘 변경
     setIsHeartFilled(prevState => !prevState);
     // 영화 찜 추가
     updateMovieFavorite();
-
   };
 
   /** 별점 선택 시 값 세팅 */
@@ -146,11 +167,8 @@ export default function MovieInfoManage() {
     setExpanded(!expanded); // 펼쳐진 상태를 토글
   };
 
-
-
   return (
     <>
-
       {/** 영화 상세정보 섹션 */}
       <section className="py-6 lg:py-12 xl:py-16">
         <div className="container">
@@ -162,14 +180,14 @@ export default function MovieInfoManage() {
             {/* 영화 포스터 */}
             <div className="flex items-start gap-4 md:items-center" style={{marginRight: "150px"}}>
 
-                <img
-                  alt="Movie poster"
-                  className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                  height="450"
-                  src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : ReactImg}
-                  width="320"
-                  style={{ borderRadius: '10px' }}
-                />
+              <img
+                alt="Movie poster"
+                className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
+                height="450"
+                src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : ReactImg}
+                width="320"
+                style={{ borderRadius: '10px' }}
+              />
 
               {/**/}
               {/* 포스터 파일 수정 */}
@@ -219,18 +237,6 @@ export default function MovieInfoManage() {
 
               {/* 감독 칸 (추후 예정) */}
               <div className="flex items-center gap-2" style={{display: "flex", marginBottom: "20px"}}>
-                {/*<img
-                    alt="Director avatar"
-                    className="rounded-full object-cover"
-                    height="40"
-                    src={ReactImg}
-                    style={{
-                      aspectRatio: "40/40",
-                      objectFit: "cover",
-                    }}
-                    width="40"
-                  />*/}
-                {/*<CAvatar src={avatar2}/>*/}
                 <div style={{
                   border: "2px solid gray", /* 테두리 색상을 회색으로 설정 */
                   borderRadius: "10px", /* 모서리를 조금만 깎기 위한 설정 */
@@ -243,9 +249,7 @@ export default function MovieInfoManage() {
                   <CIcon icon={cilUser} className="" size="xl" />
                 </div>
 
-
                 {/** 감독 */}
-
                 <div className="flex flex-col">
                   {movVo.movieBean.movieDirectorBeanList && movVo.movieBean.movieDirectorBeanList.map((director, index) => (
                     <div key={index}>
@@ -277,19 +281,6 @@ export default function MovieInfoManage() {
                       <CIcon icon={cilUser} className="text-secondary" size="xl" />
                     </div>
 
-                    {/* 배우 사진 */}
-                    {/*<img
-                      alt="Actor avatar"
-                      className="rounded-full object-cover"
-                      height="40"
-                      src={ReactImg}
-                      style={{
-                        aspectRatio: "40/40",
-                        objectFit: "cover",
-                      }}
-                      width="40"
-                    />*/}
-                    {/* 배우명, 역할명 */}
                     <div className="flex flex-col">
                       <span className="font-semibold">{actor.peopleNm}</span>
                       <span className="font-semibold"> / </span>
@@ -307,16 +298,10 @@ export default function MovieInfoManage() {
         </div>
       </section>
 
-
       {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="20px" marginBottom="50px" />
 
-
       {/** 영화 추가 정보 섹션 */}
-      {/* typeNm 장/단편,  movieNmEn 영문명, showTm 상영시간,    watchGradeNm 관람등급,  totalViewCnt  전체조회수
-        companyNm 회사명,  genreNm 영화 장르들,  nationNm 제작국가,  prdtStatNm  개봉/개봉예정,
-        showTm 상영시간,  openDt 개봉일,
-        */}
       <section className="border-t py-6 lg:py-12 xl:py-16" style={{marginBottom: "50px"}}>
         <div className="container">
           <div className="row justify-content-center" style={{ display: "flex" }}>
@@ -326,7 +311,6 @@ export default function MovieInfoManage() {
             <div className="col-md-8">
               <div className="card shadow-sm text-white" style={{ backgroundColor: "#2f363f" }}>
                 <div className="card-body">
-
 
                   {/* 영화 제목  영화 영문 제목 */}
                   <div className="row mb-4 mt-4">
@@ -375,18 +359,18 @@ export default function MovieInfoManage() {
                       {movVo.movieBean.movieDirectorBeanList && movVo.movieBean.movieDirectorBeanList.map((director, index) => (
                         <span key={index} className="font-semibold">
                           {index > 0 && ", "}
-                            {director.peopleNm}
+                          {director.peopleNm}
                         </span>
                       ))}
                     </div>
                     <div className="col-sm-6">
                       <strong style={{fontWeight: "normal"}}> 출연진 : </strong>
-                        {movVo.movieBean.movieActorBeanList && movVo.movieBean.movieActorBeanList.map((actor, index) => (
-                          <span key={index} className="font-semibold">
+                      {movVo.movieBean.movieActorBeanList && movVo.movieBean.movieActorBeanList.map((actor, index) => (
+                        <span key={index} className="font-semibold">
                             {index > 0 && ", "}
-                            {actor.peopleNm}
+                          {actor.peopleNm}
                           </span>
-                        ))}
+                      ))}
                     </div>
                   </div>
 
@@ -399,8 +383,8 @@ export default function MovieInfoManage() {
 
                     {movVo.movieBean.showTypeNm && (
                       <div className="col-sm-6">
-                      <strong style={{ fontWeight: "normal" }}> 상영 형태 : </strong> {movVo.movieBean.showTypeNm}
-                    </div>
+                        <strong style={{ fontWeight: "normal" }}> 상영 형태 : </strong> {movVo.movieBean.showTypeNm}
+                      </div>
                     )}
                   </div>
 
@@ -439,7 +423,6 @@ export default function MovieInfoManage() {
                     </div>
                   )}
 
-
                 </div>
               </div>
             </div>
@@ -447,10 +430,8 @@ export default function MovieInfoManage() {
         </div>
       </section>
 
-
       {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="20px" marginBottom="50px" />
-
 
       {/** 예고편 영역 */}
       <section className="border-t py-6 lg:py-12 xl:py-16" style={{marginBottom: "50px"}}>
@@ -486,10 +467,8 @@ export default function MovieInfoManage() {
         </div>
       </section>
 
-
       {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="20px" marginBottom="50px" />
-
 
       {/** 한줄 평 섹션 */}
       <section className="border-t border-gray-200 py-6 lg:py-12 xl:py-16" style={{marginBottom: "20px"}}>
@@ -514,7 +493,7 @@ export default function MovieInfoManage() {
                       {pointBean.profileSrc ? (
                         <CAvatar src={pointBean.profileSrc}/>
                       ) : (
-                          <CIcon icon={cilUser} className="text-secondary" size="xl" />
+                        <CIcon icon={cilUser} className="text-secondary" size="xl" />
                       )}
 
                       {/* 아이디 + 별점 + 한줄평 내용 */}
@@ -526,11 +505,11 @@ export default function MovieInfoManage() {
                           <span className="text-sm font-medium tracking-tighter">★({pointBean.point}) </span>
                         </div>
                         <div style={{display:"flex" }}>
-                            {/* 한줄평 내용 칸 */}
-                            <p
-                              className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
-                              {pointBean.repl}
-                            </p>
+                          {/* 한줄평 내용 칸 */}
+                          <p
+                            className="text-sm tracking-wide leading-paragraph md:text-base lg:text-lg xl:text-base dark:text-gray-400">
+                            {pointBean.repl}
+                          </p>
 
                           <div style={{marginLeft:"500px", display:"flex"}}>
 
@@ -569,7 +548,6 @@ export default function MovieInfoManage() {
                   </div>
                 ))
               }
-
 
               {/** 더보기 / 접기 영역 */}
               {movVo.movieBean.moviePersonalMoviePointBeanList && movVo.movieBean.moviePersonalMoviePointBeanList.length > visibleItems && (
@@ -683,114 +661,8 @@ export default function MovieInfoManage() {
       {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="20px" marginBottom="50px" />
 
-      {/** 추후 예매 기능 추가 */}
-
-      {/** 연관 영화 섹션 */}
-      {/*<section className="border-t border-gray-200 py-6 lg:py-12 xl:py-16">
-          <div className="container">
-            <div className="grid items-start gap-4 md:grid-cols-[1fr_2fr] xl:gap-8">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold tracking-tighter md:text-4xl">Related Movies</h2>
-              </div>
-              <div className="grid w-full grid-cols-2 items-start gap-4 md:grid-cols-3 lg:gap-6">
-                <div className="flex flex-col items-center gap-2">
-                  <img
-                    alt="Movie cover"
-                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                    height="270"
-                    src={ReactImg}
-                    width="180"
-                  />
-                  <h3 className="text-sm font-bold tracking-tighter">The Batman</h3>
-                  <p className="text-xs tracking-tight uppercase">2022</p>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <img
-                    alt="Movie cover"
-                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                    height="270"
-                    src={ReactImg}
-                    width="180"
-                  />
-                  <h3 className="text-sm font-bold tracking-tighter">The Batman</h3>
-                  <p className="text-xs tracking-tight uppercase">2022</p>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <img
-                    alt="Movie cover"
-                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                    height="270"
-                    src={ReactImg}
-                    width="180"
-                  />
-                  <h3 className="text-sm font-bold tracking-tighter">The Batman</h3>
-                  <p className="text-xs tracking-tight uppercase">2022</p>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <img
-                    alt="Movie cover"
-                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                    height="270"
-                    src={ReactImg}
-                    width="180"
-                  />
-                  <h3 className="text-sm font-bold tracking-tighter">The Batman</h3>
-                  <p className="text-xs tracking-tight uppercase">2022</p>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <img
-                    alt="Movie cover"
-                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                    height="270"
-                    src={ReactImg}
-                    width="180"
-                  />
-                  <h3 className="text-sm font-bold tracking-tighter">The Batman</h3>
-                  <p className="text-xs tracking-tight uppercase">2022</p>
-                </div>
-                <div className="flex flex-col items-center gap-2">
-                  <img
-                    alt="Movie cover"
-                    className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
-                    height="270"
-                    src={ReactImg}
-                    width="180"
-                  />
-                  <h3 className="text-sm font-bold tracking-tighter">The Batman</h3>
-                  <p className="text-xs tracking-tight uppercase">2022</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>*/}
-
-      {/** 기타 내용 칸 섹션  */}
-      {/*<div className="border-t">
-          <div className="container py-6 lg:py-12 xl:py-16">
-            <div className="grid items-center justify-center gap-4 text-center md:gap-10">
-              <div className="space-y-3">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Ready to watch?</h2>
-                <p className="text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Experience the movie magic on the big screen or from the comfort of your home.
-                </p>
-              </div>
-              <div className="flex flex-col gap-2 min-[400px]:flex-row justify-center">
-                <h5>
-                  링크
-                </h5>
-                <h5>
-                  링크
-                </h5>
-              </div>
-            </div>
-          </div>
-        </div>*/}
-
     </>
   )
-
-
-
 
   /** 영화 조회수 증가 */
   function addMovieViewCnt() {
@@ -810,10 +682,7 @@ export default function MovieInfoManage() {
         alert("실패 (오류)");
       });
 
-
   }
-
-
 
   /** 선택 영화 상세 조회 */
   function selectMovieInfo() {
@@ -837,7 +706,6 @@ export default function MovieInfoManage() {
           res.data.movieBean.openDtFullStr = openDtFullStr;
         }
 
-
         if(res.data.movieBean.moviePersonalMoviePointBeanList != null && res.data.movieBean.moviePersonalMoviePointBeanList.length > 0){
           var pointBeanList = res.data.movieBean.moviePersonalMoviePointBeanList;
           for (var i = 0; i < pointBeanList.length; i++) {
@@ -852,9 +720,6 @@ export default function MovieInfoManage() {
 
         }
 
-
-
-
         setMovVo(prevMovVo => ({
           ...prevMovVo,
           movieBean: res.data.movieBean,
@@ -862,22 +727,17 @@ export default function MovieInfoManage() {
         }));
 
         setIsHeartFilled(res.data.movieBean.fav);
-
         setIsEvaluated(res.data.movieBean.evaluated);
-
 
       })
       .catch(function (err) {
         alert("실패 (오류)");
       });
 
-
   }
-
 
   /** 영화 찜 수정 */
   function updateMovieFavorite(){
-
     var mode = "";
     if(isHeartFilled){  // 하트가 채워져 있는 경우 (찜해제하기)
       mode = "delete";
@@ -902,7 +762,6 @@ export default function MovieInfoManage() {
       });
 
   }
-
 
   /** 평가(별점, 한줄평) 등록 및 수정시 */
   function updateMovPersonalMoviePoint(mode){
@@ -940,26 +799,17 @@ export default function MovieInfoManage() {
       });
   }
 
-
-
   /** 내 한줄 평 수정 버튼 클릭 시 */
   function updatePointInputBox(){
-
     // 한줄 평 인풋박스 입력으로 전환
     setIsEvaluated(false);
 
     // 별 5개 기본값 강제 세팅
     movVo.moviePersonalMoviePointBean.point = "5";
-
   }
-
 
   /** 리뷰 상태 정상/삭제 로 변경 */
   function updateReviewState(mode, pointBean){
-
-    // 체크된 영화 목록 필터링
-    // const selectedMovies = movVo.movieBeanList.filter(movie => movie.selected);
-
     axios({
       url: '/updateMovieState',
       method: 'post',
@@ -970,48 +820,11 @@ export default function MovieInfoManage() {
     })
       .then(function (res) {
         // 상태 변경 후 영화 목록 다시 불러오기
-        selectMovieInfo()();
+        selectMovieInfo();
       })
       .catch(function (err) {
       });
 
   }
 
-
-  /** 영화 포스터 등록/변경 */
-  function moviePosterUpload() {
-    if(file){
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('movVo', JSON.stringify(movVo)); // movVo 객체를 직접 FormData에 추가
-
-      return axios.post('/moviePosterUpload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-        .then(res => {
-          alert("성공");
-
-        })
-        .catch(error => {
-        });
-    }else{
-      return ;
-    }
-
-  }
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
