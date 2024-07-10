@@ -114,8 +114,6 @@ export default function MovieInfo() {
   return (
     <>
 
-      <h5> 영화 상세정보 페이지</h5>
-
       {/** 영화 상세정보 섹션 */}
       <section className="py-6 lg:py-12 xl:py-16">
         <div className="container">
@@ -450,19 +448,12 @@ export default function MovieInfo() {
                   <div key={index} className="flex items-start gap-4" style={{marginBottom: "30px"}}>
                     {/* 프사 + 이름 */}
                     <div className="flex items-center gap-4" style={{display: "flex"}}>
-                      {/*<img
-                      alt="User avatar"
-                      className="rounded-full object-cover"
-                      height="80"
-                      src={ReactImg}
-                      style={{
-                        aspectRatio: "80/80",
-                        objectFit: "cover",
-                      }}
-                      width="80"
-                    />*/}
                       {/* 프사 칸 */}
-                      <CAvatar src={avatar2}/>
+                      {pointBean.profileSrc ? (
+                        <CAvatar src={pointBean.profileSrc} />
+                      ) : (
+                        <CIcon icon={cilUser} className="text-secondary" size="xl" />
+                      )}
 
                       {/* 아이디 + 별점 + 한줄평 내용 */}
                       <div className="grid items-start gap-1" style={{marginBottom: "30px"}}>
@@ -500,8 +491,9 @@ export default function MovieInfo() {
           {isEvaluated ? (
             <div>
               {/* 한줄 평 태그 */}
+              <GrayLine marginBottom="20px" marginTop="10px"/>
               <div className="space-y-2">
-                <h4 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{marginBottom:"20px"}}>내 평가</h4>
+                <h5 className="text-2xl font-bold tracking-tighter md:text-4xl" style={{marginBottom:"20px"}}>내 평가</h5>
               </div>
 
               {/* 내 평가(별점 + 한줄평) 출력 영역 */}

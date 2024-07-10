@@ -16,6 +16,9 @@ public class MoviePersonalMoviePoint {
     private String repl;
     private String state;
 
+    // 영화 평가인의 프사
+    private String profileSrc;
+
 
 
 }

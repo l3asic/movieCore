@@ -101,7 +101,9 @@
         <result column="point" property="point" jdbcType="VARCHAR"/>
         <result column="repl" property="repl" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="VARCHAR"/>
+        <result column="profile_src" property="profileSrc" jdbcType="VARCHAR"/>
     </resultMap>
+
 
     <!-- 영화 파일 빈 -->
     <resultMap type="com.example.movieCore.cmm.FileBean" id="movieFileMap">
@@ -681,18 +683,29 @@
 
 
     <!-- 영화 평가 정보 리스트 조회 -->
-    <select id="selectMoviePersonalMoviePointBeanList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="moviePersonalMoviePointBean" >
+    <select id="selectMoviePersonalMoviePointBeanList" parameterType="com.example.movieCore.movie.vo.MovVo" resultMap="moviePersonalMoviePointBean">
         SELECT
             MPMP.movie_cd,
             MPMP.mem_id,
             mmi.MEM_NAME,
             MPMP.point,
             MPMP.repl,
-            MPMP.state
+            MPMP.state,
+            cmmf.SRC AS profile_src
         FROM MOV_PERSONAL_MOVIE_POINT MPMP
                  JOIN MEM_MEMBER_INFO mmi ON MPMP.MEM_ID = mmi.MEM_ID
-        WHERE MPMP.MOVIE_CD = #{movieBean.movieCd} AND MPMP.MEM_ID != #{memberBean.memId}
+                 LEFT JOIN MEM_FILE_MAPPING mfm ON mmi.MEM_ID = mfm.MEM_ID
+            AND mfm.CREATE_DT = (
+                SELECT MAX(CREATE_DT)
+                FROM MEM_FILE_MAPPING
+                WHERE MEM_ID = mmi.MEM_ID
+            )
+                 LEFT JOIN CMM_FILE cmmf ON mfm.FILE_ID = cmmf.FILE_ID
+        WHERE MPMP.MOVIE_CD = #{movieBean.movieCd}
+          AND MPMP.MEM_ID != #{memberBean.memId}
     </select>
+
+
 
 
     <!-- 영화 한줄평 상태 변경 -->
