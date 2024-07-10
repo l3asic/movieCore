@@ -18,6 +18,7 @@ import Paging from '../uitils/Paging';
 import {cilLoopCircular, cilMagnifyingGlass} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { useNavigate } from 'react-router-dom';
+import GrayLine from "../uitils/GrayLine";
 
 const MovieList = () => {
   const cardStyle = {
@@ -61,7 +62,6 @@ const MovieList = () => {
 
   return (
     <>
-      <h4 className="mb-3">영화 리스트 페이지 입니다</h4>
 
       {/** 상단 네비 */}
       <CNavbar colorScheme="light" className="bg-light">
@@ -129,6 +129,7 @@ const MovieList = () => {
       </CNavbar>
 
 
+      <GrayLine marginBottom="30px" marginTop="10px"/>
 
 
       {movVo.movieBeanList.length > 0 && (
