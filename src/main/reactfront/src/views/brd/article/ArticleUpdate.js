@@ -195,10 +195,10 @@ const ArticleUpdate = () => {
         if (res.data.succesResult) {
           atclFileUpload(files, res.data.brdVo);
         } else {
-          alert("등록 실패");
+          alert("수정 실패");
         }
       }).catch(() => {
-      alert("등록 실패 (오류)");
+      alert("수정 실패 (오류)");
     });
   };
 

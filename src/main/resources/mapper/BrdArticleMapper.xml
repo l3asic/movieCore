@@ -113,6 +113,19 @@
         <result column="STATE" property="state" jdbcType="VARCHAR"/>
         <result column="ATCL_REPL_CNT" property="atclReplCnt" jdbcType="VARCHAR"/>
         <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
+
+        <!-- 파일 리스트 -->
+        <collection property="fileBeanList" ofType="com.example.movieCore.cmm.FileBean">
+            <id column="FILE_ID" property="fileId" jdbcType="VARCHAR"/>
+            <result column="MODULE" property="module" jdbcType="VARCHAR"/>
+            <result column="FILE_NAME" property="fileName" jdbcType="VARCHAR"/>
+            <result column="LOCAL_NAME" property="localName" jdbcType="VARCHAR"/>
+            <result column="FILE_EXT" property="fileExt" jdbcType="VARCHAR"/>
+            <result column="URL" property="url" jdbcType="VARCHAR"/>
+            <result column="VOLUME" property="volume" jdbcType="VARCHAR"/>
+            <result column="FILE_CREATE_DT" property="createDt" jdbcType="TIMESTAMP"/>
+            <result column="SRC" property="src" jdbcType="VARCHAR"/>
+        </collection>
     </resultMap>
 
 
@@ -520,11 +533,22 @@
         BA.UPDATE_DT,
         BA.EXPIRE_DT,
         BA.EXPIRE_YN,
-        BA.STATE
+        BA.STATE,
+        CF.FILE_ID,
+        CF.MODULE,
+        CF.FILE_NAME,
+        CF.LOCAL_NAME,
+        CF.FILE_EXT,
+        CF.URL,
+        CF.VOLUME,
+        CF.CREATE_DT as FILE_CREATE_DT,
+        CF.SRC
         FROM
         BRD_ARTICLE BA
         LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
         LEFT JOIN BRD_BOARD BB ON BA.BRD_ID = BB.BRD_ID
+        LEFT JOIN BRD_FILE_MAPPING BFM ON BA.ATCL_ID = BFM.ATCL_ID
+        LEFT JOIN CMM_FILE CF ON BFM.FILE_ID = CF.FILE_ID
         WHERE
         1=1
         <choose>
@@ -556,16 +580,16 @@
                 ORDER BY
                 <choose>
                     <when test="searchBean.sortKey == 'atcl_id'">
-                        BA.atcl_id
+                        BA.ATCL_ID
                     </when>
                     <when test="searchBean.sortKey == 'brd_name'">
-                        BB.brd_name
+                        BB.BRD_NAME
                     </when>
                     <when test="searchBean.sortKey == 'subject'">
                         BA.SUBJECT
                     </when>
                     <when test="searchBean.sortKey == 'content'">
-                        BA.content
+                        BA.CONTENT
                     </when>
                     <when test="searchBean.sortKey == 'mem_name'">
                         MMI.MEM_NAME
@@ -574,10 +598,10 @@
                         BA.CREATE_DT
                     </when>
                     <when test="searchBean.sortKey == 'expire_yn'">
-                        BA.expire_yn
+                        BA.EXPIRE_YN
                     </when>
                     <when test="searchBean.sortKey == 'state'">
-                        BA.state
+                        BA.STATE
                     </when>
                     <otherwise>
                         BA.CREATE_DT
@@ -596,6 +620,7 @@
         </choose>
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
+
 
 
 

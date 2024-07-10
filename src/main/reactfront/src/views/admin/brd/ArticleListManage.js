@@ -22,6 +22,11 @@ import {
   CModalBody,
   CModalFooter,
   CCollapse,
+  CCard,
+  CCardBody,
+  CCardTitle,
+  CCardText,
+  CCardFooter
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -57,7 +62,7 @@ function ArticleListManage() {
   const [selectAll, setSelectAll] = useState(false);
   const [modal, setModal] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState({
-    files: [], // Add files array to hold the attached files
+    fileBeanList: [], // Add files array to hold the attached files
   });
   const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 상태
   const [commentsCollapsed, setCommentsCollapsed] = useState(true); // 댓글 접기/펼치기 상태
@@ -210,6 +215,7 @@ function ArticleListManage() {
             expireDt: isNaN(Date.parse(article.expireDt)) ? null : formattedExpireDt,
             selected: false,
             stateText: article.state === "B" ? "정상" : article.state === "D" ? "삭제" : "기타",
+            fileBeanList: article.fileBeanList || [], // 파일 정보 추가
           };
         });
 
@@ -229,13 +235,13 @@ function ArticleListManage() {
   };
 
   const handleRowClick = (index, article) => {
-    // 기존동작
     if (!brdVo.articleBeanList[index].selected) {
       const formattedArticle = {
         ...article,
         createDt: article.createDt ? formatDateTime(article.createDt) : null,
         updateDt: article.updateDt ? formatDateTime(article.updateDt) : null,
         expireDt: article.expireDt ? formatDateTime(article.expireDt) : null,
+        fileBeanList: article.fileBeanList || [], // 파일 정보 추가
       };
       setSelectedArticle(formattedArticle);
       setModal(true); // 팝업을 여는 부분
@@ -246,23 +252,6 @@ function ArticleListManage() {
       // 게시글의 댓글 리스트 조회
       selectReplyListAdmin(article.atclId);
     }
-
-    /** 추후 게시글에 속한 파일 조회 예정 */
-    /*if (!brdVo.articleBeanList[index].selected) {
-      axios({
-        url: "/getArticleFiles", // Assuming you have an endpoint to get article files
-        method: "post",
-        data: { atclId: article.atclId },
-      })
-        .then((res) => {
-          setSelectedArticle({ ...article, files: res.data.files });
-          setModal(true); // 팝업을 여는 부분
-          selectBoardListAdmin(article.brdId);
-        })
-        .catch((err) => {
-          alert("파일 조회 실패 (오류)");
-        });
-    }*/
   };
 
   const handleArticleChange = (event) => {
@@ -293,7 +282,6 @@ function ArticleListManage() {
 
     return `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
   };
-
 
   // 댓글 목록 조회
   const selectReplyListAdmin = (atclId) => {
@@ -379,7 +367,11 @@ function ArticleListManage() {
       }),
     })
       .then((res) => {
-        alert(res.data.successMsg);
+        if (res.data.successResult) {
+          alert(res.data.successMsg);
+        } else {
+          alert("등록 실패");
+        }
         setModal(false); // 팝업창을 닫음
         selectArticleListAdmin();
       })
@@ -436,9 +428,6 @@ function ArticleListManage() {
         alert(err.response.data.errorMsg);
       });
   };
-
-
-
 
   return (
     <>
@@ -607,9 +596,9 @@ function ArticleListManage() {
           {selectedArticle && (
             <div className="form-container">
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+                <label><strong>폴더</strong></label>
                 <CFormSelect
                   name="folderId"
-                  label="폴더"
                   value={selectedArticle.folderId || ''}
                   onChange={handleFolderChange}
                   style={{ flex: 1 }}
@@ -618,9 +607,9 @@ function ArticleListManage() {
                     <option key={folder.folId} value={folder.folId}>{folder.folName}</option>
                   ))}
                 </CFormSelect>
+                <label><strong>게시판 명</strong></label>
                 <CFormSelect
                   name="brdId"
-                  label="게시판 명"
                   value={selectedArticle.brdId || ''}
                   onChange={handleArticleChange}
                   style={{ flex: 1 }}
@@ -631,58 +620,58 @@ function ArticleListManage() {
                 </CFormSelect>
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+                <label><strong>고유번호</strong></label>
                 <CFormInput
                   type="text"
                   name="atclId"
-                  label="고유번호"
                   value={selectedArticle.atclId || ''}
                   onChange={handleArticleChange}
                   readOnly
                   style={{ flex: 1 }}
                 />
+                <label><strong>작성자</strong></label>
                 <CFormInput
                   type="text"
                   name="memName"
-                  label="작성자"
                   value={selectedArticle.memName || ''}
                   onChange={handleArticleChange}
                   style={{ flex: 1 }}
                 />
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+                <label><strong>제목</strong></label>
                 <CFormInput
                   type="text"
                   name="subject"
-                  label="제목"
                   value={selectedArticle.subject || ''}
                   onChange={handleArticleChange}
                   style={{ flex: 1 }}
                 />
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+                <label><strong>내용</strong></label>
                 <CFormInput
                   type="textarea"
                   name="content"
-                  label="내용"
                   value={selectedArticle.content || ''}
                   onChange={handleArticleChange}
                   style={{ flex: 1, height: '150px' }}
                 />
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+                <label><strong>작성일</strong></label>
                 <CFormInput
                   type="text"
                   name="createDt"
-                  label="작성일"
                   value={selectedArticle.createDt || ''}
                   onChange={handleArticleChange}
                   readOnly
                   style={{ flex: 1 }}
                 />
+                <label><strong>수정일</strong></label>
                 <CFormInput
                   type="text"
                   name="updateDt"
-                  label="수정일"
                   value={selectedArticle.updateDt || ''}
                   onChange={handleArticleChange}
                   readOnly
@@ -690,9 +679,9 @@ function ArticleListManage() {
                 />
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+                <label><strong>게시 종료 여부</strong></label>
                 <CFormSelect
                   name="expireYn"
-                  label="게시 종료 여부"
                   value={selectedArticle.expireYn}
                   onChange={handleArticleChange}
                   style={{ flex: 0.4 }}
@@ -702,12 +691,12 @@ function ArticleListManage() {
                 </CFormSelect>
 
                 <div style={{ display: 'flex', flex: 1, gap: '10px', alignItems: 'center' }}>
+                  <label><strong>게시 종료일</strong></label>
                   {!showDatePicker ? (
                     <>
                       <CFormInput
                         type="text"
                         name="expireDt"
-                        label="게시 종료일"
                         value={selectedArticle.expireDt || ''}
                         onChange={handleArticleChange}
                         readOnly
@@ -730,57 +719,34 @@ function ArticleListManage() {
                   )}
                 </div>
               </div>
-              <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
-                <CFormSelect
-                  name="state"
-                  label="상태"
-                  value={selectedArticle.state || 'other'}
-                  onChange={handleArticleChange}
-                  style={{ flex: 1 }}
-                >
-                  <option value="B">정상</option>
-                  <option value="D">삭제</option>
-                  <option value="other">기타</option>
-                </CFormSelect>
-                <CFormInput
-                  type="text"
-                  name="viewCnt"
-                  label="조회수"
-                  value={selectedArticle.viewCnt !== undefined ? selectedArticle.viewCnt : '0'}
-                  onChange={handleArticleChange}
-                  readOnly
-                  style={{ flex: 1 }}
-                />
-                <CFormInput
-                  type="text"
-                  name="atclReplCnt"
-                  label="댓글 수"
-                  value={selectedArticle.atclReplCnt !== undefined ? selectedArticle.atclReplCnt : '0'}
-                  onChange={handleArticleChange}
-                  readOnly
-                  style={{ flex: 1 }}
-                />
-              </div>
-              <div className="form-row" style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
-                <label>첨부 파일:</label>
-                {/** 추후 첨부파일 처리 */}
-                {/*<ul>
-                  {selectedArticle.files.length > 0 ? (
-                    selectedArticle.files.map((file, index) => (
-                      <li key={index}>
-                        <a href={file.url} target="_blank" rel="noopener noreferrer">
-                          {file.fileName}
-                        </a>
-                      </li>
-                    ))
-                  ) : (
-                    <li>첨부 파일이 없습니다.</li>
-                  )}
-                </ul>*/}
-              </div>
-
               <div className="form-row" style={{ marginTop: '20px' }}>
-                <h5 style={{ flex: 1 }}>댓글 ({comments.length}) </h5>
+                <h5 style={{ flex: 1 }}><strong>첨부 파일:</strong></h5>
+                <div style={{ flex: 1 }}>
+                  {selectedArticle.fileBeanList && selectedArticle.fileBeanList.length > 0 ? (
+                    <div className="d-flex flex-wrap">
+                      {selectedArticle.fileBeanList.map((file, index) => (
+                        <CCard key={index} className="m-2" style={{ minWidth: '200px', maxWidth: '200px' }}>
+                          <CCardBody>
+                            <CCardTitle>{file.fileName}</CCardTitle>
+                            <CCardText>
+                              {file.fileExt.toUpperCase()} 파일
+                            </CCardText>
+                          </CCardBody>
+                          <CCardFooter>
+                            <CButton href={file.src} download={file.localName} color="primary">
+                              다운로드
+                            </CButton>
+                          </CCardFooter>
+                        </CCard>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>첨부 파일이 없습니다.</p>
+                  )}
+                </div>
+              </div>
+              <div className="form-row" style={{ marginTop: '20px' }}>
+                <h5 style={{ flex: 1 }}><strong>댓글 ({comments.length})</strong></h5>
                 <div>
                   <CButton
                     color="black"
@@ -830,7 +796,6 @@ function ArticleListManage() {
                       <CTableHeaderCell scope="col">상태</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
-                  {/*팝업 내 댓글 테이블*/}
                   <CTableBody>
                     {comments.length > 0 ? (
                       comments.map((comment) => (
@@ -860,6 +825,7 @@ function ArticleListManage() {
               </CCollapse>
             </div>
           )}
+
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={handleModalClose}>

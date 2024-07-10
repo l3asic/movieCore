@@ -442,6 +442,7 @@ public class BrdArticleController {
 
             successResult = true;
             resMap.put("successMsg", "게시글이 성공적으로 업데이트되었습니다.");
+            resMap.put("successResult", successResult);
         } catch (Exception e) {
             e.printStackTrace();
             resMap.put("errorMsg", "게시글 업데이트 중 오류가 발생했습니다.");
