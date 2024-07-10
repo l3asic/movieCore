@@ -69,6 +69,12 @@ function ArticleListManage() {
   const [comments, setComments] = useState([]); // 댓글 목록 상태
   const [selectedComments, setSelectedComments] = useState([]); // 선택된 댓글 목록
 
+
+  const stripHtmlTags = (str) => {
+    return str.replace(/<[^>]*>?/gm, '');
+  };
+
+
   useEffect(() => {
     selectArticleListAdmin();
   }, []);
@@ -564,7 +570,7 @@ function ArticleListManage() {
                   {article.subject.length > 10 ? `${article.subject.substring(0, 10)}...` : article.subject}
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "200px" }}>
-                  {article.content.length > 10 ? `${article.content.substring(0, 10)}...` : article.content}
+                  {stripHtmlTags(article.content).length > 10 ? `${stripHtmlTags(article.content).substring(0, 10)}...` : stripHtmlTags(article.content)}
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "100px" }}>{article.memName}</CTableDataCell>
                 <CTableDataCell style={{ width: "120px" }}>{article.createDt}</CTableDataCell>
@@ -650,12 +656,9 @@ function ArticleListManage() {
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
                 <label><strong>내용</strong></label>
-                <CFormInput
-                  type="textarea"
-                  name="content"
-                  value={selectedArticle.content || ''}
-                  onChange={handleArticleChange}
-                  style={{ flex: 1, height: '150px' }}
+                <div
+                  style={{ flex: 1, height: '150px', backgroundColor: '#f5f5f5', padding: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
+                  dangerouslySetInnerHTML={{ __html: selectedArticle.content }}
                 />
               </div>
               <div className="form-row" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
@@ -825,7 +828,6 @@ function ArticleListManage() {
               </CCollapse>
             </div>
           )}
-
         </CModalBody>
         <CModalFooter>
           <CButton color="secondary" onClick={handleModalClose}>
