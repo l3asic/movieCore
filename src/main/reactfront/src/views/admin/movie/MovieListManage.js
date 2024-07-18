@@ -10,7 +10,11 @@ import {
   CNavbar,
   CContainer,
   CNavbarBrand,
-  CForm, CButton,  CFormInput, CFormSelect
+  CForm,
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CBadge
 } from "@coreui/react";
 import axios from "axios";
 import Paging from "../../uitils/Paging";
@@ -19,15 +23,15 @@ import {
   cilTrash,
   cilSwapVertical,
   cilMagnifyingGlass,
-  cilRecycle
+  cilRecycle,
+  cilMovie
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GrayLine from "../../uitils/GrayLine";
 
 function MovieListManage() {
   const navigate = useNavigate();
-
 
   // 영화 객체 관리
   const [movVo, setMovVo] = useState({
@@ -37,11 +41,10 @@ function MovieListManage() {
       currentPage: 0, // 현재 페이지 초기값 설정
     },
     searchBean: {
-      schFilter : "",
-      schText : "",
+      schFilter: "",
+      schText: "",
     },
   });
-
 
   // 체크박스 관리
   const [selectAll, setSelectAll] = useState(false);
@@ -56,7 +59,6 @@ function MovieListManage() {
   let [sortKey, setSortKey] = useState(); // 정렬 기준 컬럼
   let [sortOdr, setSortOdr] = useState(); // 정렬
 
-
   const searchFilter = event => {
     setSchFilter(event.target.value);
   };
@@ -64,7 +66,6 @@ function MovieListManage() {
   const searchText = event => {
     setSchText(event.target.value);
   };
-
 
   // 정렬 함수
   const sortColumn = (key) => {
@@ -81,45 +82,50 @@ function MovieListManage() {
 
   return (
     <>
-      <h4>영화 리스트 관리 </h4>
+      <h4 className="mb-4 d-flex align-items-center">
+        <CIcon icon={cilMovie} size="xl" className="me-2" style={{ fontSize: '2rem' }} />
+        영화 목록 관리
+      </h4>
 
       {/* 회색 가로줄 하나 */}
       <GrayLine marginTop="30px" marginBottom="30px" />
 
-      {/** 상단 네비 */}
-      <CNavbar colorScheme="light" className="bg-light">
+      {/* 상단 네비 */}
+      <CNavbar colorScheme="light" className="bg-light mb-4">
         <CContainer fluid style={{ padding: 0 }}>
           <div className="d-flex align-items-center">
-
-            {/** 복원 버튼 */}
+            {/* 복원 버튼 */}
             <CButton
-              color="black" variant="outline"
-              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px' }}
+              color="dark"
+              variant="outline"
+              className="me-2"
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
               title="영화 상태 정상으로 변경"
               onClick={() => updateMovieStateAdmin('restore')}
             >
               <CIcon icon={cilRecycle} />
             </CButton>
 
-            {/** 삭제 버튼 */}
+            {/* 삭제 버튼 */}
             <CButton
-              color="black" variant="outline"
-              style={{ whiteSpace: 'nowrap', border: '1px solid gray', marginRight: '10px'}}
+              color="dark"
+              variant="outline"
+              className="me-2"
+              style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
               title="영화 상태 삭제로 변경"
               onClick={() => updateMovieStateAdmin('delete')}
             >
               <CIcon icon={cilTrash} />
             </CButton>
 
-            {/** 토탈 갯수 */}
-            <CNavbarBrand className="ms-3">Total : {movVo.paging.totalItems}</CNavbarBrand>
+            {/* 토탈 갯수 */}
+            <CNavbarBrand className="ms-3">Total: {movVo.paging.totalItems}</CNavbarBrand>
           </div>
-
 
           <CForm className="d-flex">
             {/* 검색조건 */}
             <CFormSelect
-              style={{ marginRight: '5px' }}
+              className="me-2"
               options={[
                 { label: '전체', value: 'all' },
                 { label: '영화 고유번호', value: 'movieCd' },
@@ -137,7 +143,6 @@ function MovieListManage() {
               placeholder="Search"
               onChange={searchText}
               value={schText}
-              name={schText}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') {
                   searchMovieList();
@@ -146,20 +151,18 @@ function MovieListManage() {
             />
 
             <CButton
-              color="black"
+              color="dark"
               variant="outline"
               className="me-2"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
               onClick={searchMovieList}
-              id="searchBtn"
             >
               <CIcon icon={cilMagnifyingGlass} />
             </CButton>
 
-
             {/* 초기화 */}
             <CButton
-              color="black"
+              color="dark"
               variant="outline"
               style={{ whiteSpace: 'nowrap', border: '1px solid gray' }}
               onClick={refreshFilterSearch}>
@@ -171,11 +174,9 @@ function MovieListManage() {
         </CContainer>
       </CNavbar>
 
-
-
-      {/** 영화 목록 테이블 */}
-      <CTable color="dark" striped className="mt-3 mb-lg-5">
-        <CTableHead>
+      {/* 영화 목록 테이블 */}
+      <CTable hover responsive className="shadow-sm">
+        <CTableHead color="dark">
           <CTableRow>
             {/* 체크박스 */}
             <CTableHeaderCell scope="col" style={{ width: '50px' }}>
@@ -185,32 +186,26 @@ function MovieListManage() {
                 onChange={() => handleSelectAll()}
               />
             </CTableHeaderCell>
-
-
-            <CTableHeaderCell scope="col" name="movieCd">
+            <CTableHeaderCell scope="col">
               영화 고유번호
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('movieCd')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('movieCd')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="movieNm">
+            <CTableHeaderCell scope="col">
               영화 제목
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('movieNm')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('movieNm')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="prdtYear">
+            <CTableHeaderCell scope="col">
               개봉년도
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('prdtYear')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('prdtYear')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="repGenreNm">
+            <CTableHeaderCell scope="col">
               대표 장르
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('repGenreNm')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('repGenreNm')} />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col" name="state">
+            <CTableHeaderCell scope="col">
               상태
-              {/* 정렬을 위한 화살표 아이콘 */}
-              <CIcon icon={cilSwapVertical} onClick={() => sortColumn('state')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('state')} />
             </CTableHeaderCell>
-
-
-
           </CTableRow>
         </CTableHead>
 
@@ -224,10 +219,14 @@ function MovieListManage() {
                 />
               </CTableDataCell>
               <CTableDataCell>{movie.movieCd}</CTableDataCell>
-              <CTableDataCell onClick={() => movieInfoManage(movie.movieCd)}>{movie.movieNm}</CTableDataCell>
+              <CTableDataCell className="fw-bold text-dark">{movie.movieNm}</CTableDataCell>
               <CTableDataCell>{movie.prdtYear}</CTableDataCell>
               <CTableDataCell>{movie.repGenreNm}</CTableDataCell>
-              <CTableDataCell state={movie.state}>{movie.stateText}</CTableDataCell>
+              <CTableDataCell>
+                <CBadge color={movie.state === "B" ? "primary" : "danger"}>
+                  {movie.stateText}
+                </CBadge>
+              </CTableDataCell>
             </CTableRow>
           ))}
         </CTableBody>
@@ -242,12 +241,10 @@ function MovieListManage() {
     </>
   );
 
-
   /** 영화 리스트 조회 */
   function selectMovieListAdmin(newPage) {
     if (newPage != null) {  // 페이지 이동시
       movVo.paging.currentPage = newPage;
-
     } else {  // 최초 조회, 검색 시
       movVo.paging = { totalItems: 0, currentPage: 0 }; // 기본 paging 객체를 생성하여 할당
       newPage = 0;
@@ -257,7 +254,7 @@ function MovieListManage() {
       url: '/selectMovieListAdmin',
       method: 'post',
       params: {
-        newPage : newPage,
+        newPage: newPage,
         searchFilter: schFilter,
         searchText: schText,
         sortKey: sortKey, // 정렬 기준 컬럼
@@ -281,21 +278,18 @@ function MovieListManage() {
         setMovVo((prevMovVo) => ({ ...prevMovVo, movieBeanList, paging }));
         setSortKey(res.data.movVo.sortKey);
         setSortOdr(res.data.movVo.sortOdr);
-
       })
       .catch(function (err) {
         alert('(오류)');
       });
   }
 
-
   /** 페이지 이동 */
   function handlePageChange(newPage) {
     selectMovieListAdmin(newPage);
   }
 
-
-  /** 체크박스 전체 선택*/
+  /** 체크박스 전체 선택 */
   function handleSelectAll() {
     setSelectAll((prev) => !prev);
     const updatedList = [...movVo.movieBeanList];
@@ -310,16 +304,13 @@ function MovieListManage() {
     setSelectAll(updatedList.every((movie) => movie.selected));
   }
 
-
   /** 검색 버튼 클릭 시 */
-  function searchMovieList(){
+  function searchMovieList() {
     selectMovieListAdmin();
   }
 
-
-  /** 검색, 필터 초기화  */
-  function refreshFilterSearch(){
-
+  /** 검색, 필터 초기화 */
+  function refreshFilterSearch() {
     // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
     schFilter = '';
     schText = '';
@@ -334,13 +325,10 @@ function MovieListManage() {
 
     // 초기화된 조건으로 리스트 조회
     selectMovieListAdmin();
-
   }
 
-
-  /** 영화 상태 정상/삭제 로 변경 */
-  function updateMovieStateAdmin(mode){
-
+  /** 영화 상태 정상/삭제로 변경 */
+  function updateMovieStateAdmin(mode) {
     // 체크된 영화 목록 필터링
     const selectedMovies = movVo.movieBeanList.filter(movie => movie.selected);
 
@@ -349,7 +337,7 @@ function MovieListManage() {
       method: 'post',
       data: {
         movieBeanList: selectedMovies,
-        mode : mode
+        mode: mode
       }
     })
       .then(function (res) {
@@ -362,16 +350,12 @@ function MovieListManage() {
         // 상태 변경 실패 시 메세지
         alert(err.data.successMsg);
       });
-
   }
-
 
   /** 영화 상세 관리 페이지 이동 */
-  function movieInfoManage(movieCd){
+  function movieInfoManage(movieCd) {
     navigate('/admin/MovieInfoManage', { state: { movieCd: movieCd } });
   }
-
-
 }
 
 export default MovieListManage;
