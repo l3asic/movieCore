@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react'
 import CIcon from '@coreui/icons-react'
 import {
-  cilBell,
-  cilCalculator,
-  cilChartPie,
+  cilAvTimer,
+  cilBell, cilBraille, cilBug,
+  cilCalculator, cilCalendarCheck,
+  cilChartPie, cilClipboard,
   cilCursor,
   cilDescription,
-  cilDrop, cilFaceDead, cilLightbulb, cilMovie,
+  cilDrop, cilLightbulb, cilMovie,
   cilNotes,
-  cilPencil,
+  cilPencil, cilPlus,
   cilPuzzle, cilRunning,
   cilSpeedometer,
   cilStar, cilUser,
@@ -41,7 +42,7 @@ const _nav = [
     component: CNavGroup,
     name: '관리자',
     to: '/base',
-    icon: <CIcon icon={cilFaceDead} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilBug} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -59,12 +60,14 @@ const _nav = [
         items: [
           {
             component: CNavItem,
-            name: ' - 이관 및 API 관리',
+            name: '이관 및 API 관리',
+            icon: <CIcon icon={cilAvTimer} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
             to: '/admin/MovieMigManage',
           },
           {
             component: CNavItem,
-            name: ' - 영화 목록 관리',
+            name: '영화 목록 관리',
+            icon: <CIcon icon={cilBraille} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
             to: '/admin/MovieListManage',
           },
         ],
@@ -75,23 +78,28 @@ const _nav = [
         component: CNavGroup,
         name: '게시판 관리',
         to: '/admin/boardManage',
-        icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
         items: [
           {
             component: CNavItem,
-            name: ' - 폴더/게시판 생성',
+            name: '폴더/게시판 생성',
+            icon: <CIcon icon={cilPlus} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
             to: '/admin/CreateFolderBoard',
           },
           {
             component: CNavItem,
-            name: ' - 폴더/게시판 관리',
+            name: '폴더/게시판 관리',
+            icon: <CIcon icon={cilCalendarCheck} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
             to: '/admin/FolderBoardList',
           },
           {
             component: CNavItem,
-            name: ' - 게시글 관리',
-            to: '/admin/ArticleListManage',
-          },
+            name: '게시글 관리',
+            icon: <CIcon icon={cilNotes} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
+            to: '/admin/ArticleListManage'
+
+          }
+
         ],
       },
 
@@ -137,29 +145,6 @@ const _nav = [
         component: CNavItem,
         name: 'Movie Core 추천 영화',
         to: '/movie/MovieRecommend',
-      },
-
-      {
-        component: CNavGroup,
-        name: '더미 폴더1',
-        to: '/admin/boardManage',
-        items: [
-          {
-            component: CNavItem,
-            name: ' - 더미 기능1',
-            to: '/admin/CreateFolderBoard',
-          },
-          {
-            component: CNavItem,
-            name: ' - 더미 기능2',
-            to: '/admin/FolderBoardList',
-          },
-          {
-            component: CNavItem,
-            name: ' - 더미 기능3',
-            to: '/admin/ArticleListManage',
-          },
-        ],
       },
 
 

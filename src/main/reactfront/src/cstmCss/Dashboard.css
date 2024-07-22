@@ -124,3 +124,7 @@
 .movie-image {
   border-radius: 10px; /* 모서리를 둥글게 만듦 */
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

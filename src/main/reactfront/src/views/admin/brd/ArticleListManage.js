@@ -33,7 +33,7 @@ import {
   cilTrash,
   cilSwapVertical,
   cilMagnifyingGlass,
-  cilRecycle,
+  cilRecycle, cilAlignLeft,
 } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import DatePicker from "react-datepicker";
@@ -437,7 +437,10 @@ function ArticleListManage() {
 
   return (
     <>
-      <h4> 게시글 관리 </h4>
+      <h4 className="mb-4 d-flex align-items-center">
+        <CIcon icon={cilAlignLeft} size="xl" className="me-3" style={{ fontSize: '2rem' }} />
+        게시글 관리
+      </h4>
 
       <GrayLine marginTop="30px" marginBottom="30px" />
 

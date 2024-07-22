@@ -159,14 +159,14 @@ const Dashboard = () => {
           </h4>
         </CCol>
         <CCol className="text-end">
-          <CButton color="link" className="p-0 text-muted" onClick={moveToBoxOffice}>+ 더보기</CButton>
+          <CButton color="link" className="p-0 text-muted cursor-pointer" onClick={moveToBoxOffice}>+ 더보기</CButton>
         </CCol>
       </CRow>
 
       <Slider {...settings}>
         {movVo.movieBoxOfficeBeanList.map((movie, index) => (
-          <div key={index} className="movie-card" onClick={() => moveToMovieInfo(movie.movieCd)}>
-            <CCard className="movie-card-content">
+          <div key={index} className="movie-card cursor-pointer" onClick={() => moveToMovieInfo(movie.movieCd)}>
+            <CCard className="movie-card-content cursorPoint" >
               {movie.rankOldAndNew !== "OLD" && (
                 <div className="position-relative">
                   <CBadge color="danger" className="movie-badge position-absolute top-0 start-0" shape="rounded-pill">
@@ -213,7 +213,7 @@ const Dashboard = () => {
                   공지
                 </CBadge>
               )}
-              <div onClick={() => moveToPost(post.atclId)} className="post-title" style={{ marginLeft: post.noticeYn === 'Y' ? '5px' : '0' }}>
+              <div onClick={() => moveToPost(post.atclId)} className="post-title cursor-pointer" style={{ marginLeft: post.noticeYn === 'Y' ? '5px' : '0' }}>
                 {post.subject} <span className="text-danger" style={{ color: '#ff6666' }}>({post.atclReplCnt})</span>
               </div>
             </div>
