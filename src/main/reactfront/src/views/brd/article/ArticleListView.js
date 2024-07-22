@@ -35,6 +35,11 @@ const ArticleListView = () => {
     },
   });
 
+  const [schSelect, setSchSelect] = useState('');
+  const [schText, setSchText] = useState('');
+  const [sortKey, setSortKey] = useState('createDt'); // 정렬 기준 컬럼의 초기값을 'createDt'로 설정
+  const [sortOdr, setSortOdr] = useState('desc'); // 정렬 순서의 초기값을 'desc'로 설정
+
   useEffect(() => {
     // URL에서 brdid 값을 추출 (ex : http://localhost:3000/#/brd/ArticleListView?brdId=BB2115517422 )
     const searchParams = new URLSearchParams(location.search);
@@ -58,10 +63,9 @@ const ArticleListView = () => {
 
   }, [location]);
 
-  let [schSelect, setSchSelect] = useState('');
-  let [schText, setSchText] = useState('');
-  let [sortKey, setSortKey] = useState(''); // 정렬 기준 컬럼
-  let [sortOdr, setSortOdr] = useState(''); // 정렬
+  useEffect(() => {
+    selectArticleList();
+  }, [sortKey, sortOdr]);
 
   const searchSelect = event => {
     setSchSelect(event.target.value);
@@ -71,9 +75,8 @@ const ArticleListView = () => {
     setSchText(event.target.value);
   };
 
-  //정렬 함수
+  // 정렬 함수
   const sortColumn = (key) => {
-    debugger;
     if (sortKey === key) {
       // 동일한 컬럼을 클릭한 경우 정렬 순서를 변경
       setSortOdr(sortOdr === 'asc' ? 'desc' : 'asc');
@@ -82,7 +85,6 @@ const ArticleListView = () => {
       setSortKey(key);
       setSortOdr('asc');
     }
-    selectArticleList();
   };
 
   /** 게시판 조회 */
@@ -151,9 +153,6 @@ const ArticleListView = () => {
         paging
       }));
 
-      setSortKey(res.data.brdVo.boardBean.sortKey);
-      setSortOdr(res.data.brdVo.boardBean.sortOdr);
-
     }).catch(function (err) {
       alert("조회 실패 (오류)");
     });
@@ -161,7 +160,6 @@ const ArticleListView = () => {
 
   // 페이지 이동
   function handlePageChange(newPage) {
-    debugger;
     selectArticleList(newPage);
   }
 
@@ -171,14 +169,13 @@ const ArticleListView = () => {
 
   /** 검색, 필터 초기화  */
   function refreshFilterSearch() {
-    debugger
     // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
     setSchSelect('');
     setSchText('');
 
     // 정렬 초기화
-    setSortKey('');
-    setSortOdr('');
+    setSortKey('createDt'); // 기본값으로 재설정
+    setSortOdr('desc'); // 기본값으로 재설정
 
     // 초기화된 조건으로 리스트 조회
     selectArticleList();
@@ -230,7 +227,6 @@ const ArticleListView = () => {
               value={schText}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
-                  debugger
                   selectArticleList(0);
                 }
               }}
