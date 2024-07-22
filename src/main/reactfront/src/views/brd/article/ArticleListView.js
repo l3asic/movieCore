@@ -7,7 +7,6 @@ import {
   CTableRow,
   CFormSelect,
   CFormInput,
-  CInputGroup,
   CButton,
   CCardImage,
   CContainer,
@@ -59,12 +58,10 @@ const ArticleListView = () => {
 
   }, [location]);
 
-
-
   let [schSelect, setSchSelect] = useState('');
   let [schText, setSchText] = useState('');
-  let [sortKey, setSortKey] = useState(); // 정렬 기준 컬럼
-  let [sortOdr, setSortOdr] = useState(); // 정렬
+  let [sortKey, setSortKey] = useState(''); // 정렬 기준 컬럼
+  let [sortOdr, setSortOdr] = useState(''); // 정렬
 
   const searchSelect = event => {
     setSchSelect(event.target.value);
@@ -76,18 +73,17 @@ const ArticleListView = () => {
 
   //정렬 함수
   const sortColumn = (key) => {
+    debugger;
     if (sortKey === key) {
       // 동일한 컬럼을 클릭한 경우 정렬 순서를 변경
-      sortOdr = (sortOdr === 'asc' ? 'desc' : 'asc');
+      setSortOdr(sortOdr === 'asc' ? 'desc' : 'asc');
     } else {
       // 다른 컬럼을 클릭한 경우 정렬 기준을 변경하고 기본 순서는 오름차순으로 설정
-      sortKey = key;
-      sortOdr = 'asc';
+      setSortKey(key);
+      setSortOdr('asc');
     }
     selectArticleList();
   };
-
-
 
   /** 게시판 조회 */
   function selectBoardByBrdId() {
@@ -105,29 +101,20 @@ const ArticleListView = () => {
         boardBean: res.data.brdVo.boardBean
       }));
 
-
     }).catch(function (err) {
       alert("조회 실패 (오류)");
     });
   }
 
-
-
-
   /** 게시글 리스트 조회 */
-  function selectArticleList(newPage) {
-    if (newPage != null) { // 페이지 이동시
-      brdVo.paging.currentPage = newPage;
-    } else {
-      brdVo.paging = { totalItems: 0, currentPage: 0 }; // 기본 paging 객체를 생성하여 할당
-      newPage = 0;
-    }
+  function selectArticleList(newPage = 0) {
+    const currentPage = newPage !== null ? newPage : brdVo.paging.currentPage;
 
     axios({
       url: '/selectArticleList',
       method: 'post',
       data: {
-        newPage: newPage,
+        newPage: currentPage,
         boardBean: {
           brdId: brdVo.boardBean.brdId,
           schSelect: schSelect,
@@ -135,7 +122,6 @@ const ArticleListView = () => {
           sortKey: sortKey, // 정렬 기준 컬럼
           sortOdr: sortOdr // 정렬 순서
         },
-
       }
 
     }).then(function (res) {
@@ -175,6 +161,7 @@ const ArticleListView = () => {
 
   // 페이지 이동
   function handlePageChange(newPage) {
+    debugger;
     selectArticleList(newPage);
   }
 
@@ -182,67 +169,19 @@ const ArticleListView = () => {
     navigate('/brd/ArticleDetail', { state: { atclId } });
   }
 
-  function searchArticle() {
-    axios({
-      url: '/searchArticle',
-      method: 'get',
-      params: {
-        brdId: brdVo.boardBean.brdId,
-        schSelect: schSelect,
-        schText: schText
-      }
-
-    }).then(function (res) {
-      let searchResult = res.data.brdVo.articleBeanList.map(article => {
-        // 'YYYY-MM-DD' 형식의 문자열을 Date 객체로 변환
-        const date = new Date(article.createDt);
-
-        // Date 객체를 '0000.00.00' 형식의 문자열로 변환
-        const formattedDate = date.toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }).replace(/\.$/, '');
-
-        // article 객체에 새로운 속성으로 변환된 날짜를 할당
-        return {
-          ...article,
-          createDt: formattedDate
-        };
-      });
-
-      // 검색된 결과를 상태로 설정하여 화면에 렌더링될 수 있도록 함
-      setBrdVo(prevState => ({
-        ...prevState,
-        articleBeanList: searchResult
-      }));
-      setSchSelect('');
-      setSchText('');
-
-    }).catch(function (err) {
-      alert("조회 실패 (오류)");
-    });
-
-  }
-
   /** 검색, 필터 초기화  */
   function refreshFilterSearch() {
-
+    debugger
     // 검색조건 및 검색어 초기화 (강제로 즉시 초기화)
-    schSelect = '';
-    schText = '';
-
-    // 남겨진 검색조건 값도 초기화
     setSchSelect('');
     setSchText('');
 
     // 정렬 초기화
-    sortKey = '';
-    sortOdr = '';
+    setSortKey('');
+    setSortOdr('');
 
     // 초기화된 조건으로 리스트 조회
     selectArticleList();
-
   }
 
   return (
@@ -260,7 +199,6 @@ const ArticleListView = () => {
           />
         </div>
       )}
-
 
       <GrayLine marginBottom="10px" marginTop="10px"/>
 
@@ -292,7 +230,8 @@ const ArticleListView = () => {
               value={schText}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
-                  searchArticle();
+                  debugger
+                  selectArticleList(0);
                 }
               }}
             />
@@ -302,7 +241,7 @@ const ArticleListView = () => {
               variant="outline"
               className="me-2"
               style={{ whiteSpace: "nowrap", border: "1px solid gray" }}
-              onClick={searchArticle}
+              onClick={() => selectArticleList(0)}
             >
               <CIcon icon={cilMagnifyingGlass} />
             </CButton>
@@ -356,7 +295,7 @@ const ArticleListView = () => {
 
       <Paging paging={brdVo.paging} onPageChange={handlePageChange} itemsPerPage={10} />
     </div>
-  )
+  );
 }
 
 export default ArticleListView;
