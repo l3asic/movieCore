@@ -427,14 +427,13 @@ function FolderListTab() {
                     게시판 갯수
                     <CIcon icon={cilSwapVertical} onClick={() => sortColumn("board_cnt")} />
                   </CTableHeaderCell>
-                  <CTableHeaderCell scope="col" style={{ width: "80px" }}>
-                    상태
-                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("state")} />
-                  </CTableHeaderCell>
-
                   <CTableHeaderCell scope="col" style={{ width: "120px" }}>
                     폴더 생성일
                     <CIcon icon={cilSwapVertical} onClick={() => sortColumn("create_dt")} />
+                  </CTableHeaderCell>
+                  <CTableHeaderCell scope="col" style={{ width: "80px" }}>
+                    상태
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("state")} />
                   </CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -459,8 +458,8 @@ function FolderListTab() {
                         <CTableDataCell style={{ width: "120px" }}>{folder.folName}</CTableDataCell>
                         <CTableDataCell style={{ width: "100px" }}>{folder.memId}</CTableDataCell>
                         <CTableDataCell style={{ width: "100px" }}>{folder.boardCnt}</CTableDataCell>
-                        <CTableDataCell style={{ width: "80px" }}>{folder.stateText}</CTableDataCell>
                         <CTableDataCell style={{ width: "120px" }}>{folder.createDt}</CTableDataCell>
+                        <CTableDataCell style={{ width: "80px" }}>{folder.stateText}</CTableDataCell>
                       </CTableRow>
                     )}
                   </Draggable>
