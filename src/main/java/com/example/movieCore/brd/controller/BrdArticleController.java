@@ -110,12 +110,10 @@ public class BrdArticleController {
     /** 게시판의 게시글 리스트 조회 */
     @PostMapping(value = "/selectArticleList")
     @ResponseBody
-    public Map<String, Object> selectArticleList(HttpServletRequest request, HttpServletResponse response, BrdBoardBean boardBean) throws Exception{
+    public Map<String, Object> selectArticleList(@RequestBody BrdVo brdVo) throws Exception {
 
 
         /** 게시글 리스트 조회디비서 셀렉트  */
-        BrdVo brdVo = new BrdVo();
-        brdVo.setBoardBean(boardBean);
 
         boolean succesResult = false;
 

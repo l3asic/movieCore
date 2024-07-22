@@ -181,7 +181,7 @@
 
 
     <!-- 게시글 리스트 조회 -->
-    <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
+    <select id="selectArticleList" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean">
 
         SELECT
         BA.ATCL_ID,
@@ -201,37 +201,34 @@
         (SELECT COUNT(*) FROM BRD_REPLY BR WHERE BR.ATCL_ID = BA.ATCL_ID AND BR.STATE = 'B') AS atcl_repl_cnt
         FROM
         BRD_ARTICLE BA
-
-        LEFT JOIN MEM_MEMBER_INFO MMI
-        ON BA.MEM_ID = MMI.MEM_ID
-
-        LEFT JOIN BRD_BOARD BB
-        ON BA.BRD_ID = BB.BRD_ID
-
+        LEFT JOIN MEM_MEMBER_INFO MMI ON BA.MEM_ID = MMI.MEM_ID
+        LEFT JOIN BRD_BOARD BB ON BA.BRD_ID = BB.BRD_ID
         WHERE
         BA.STATE = 'B'
         AND
         BA.BRD_ID = #{boardBean.brdId}
         AND
         BA.EXPIRE_YN = 'N'
-        <choose>
-            <when test="boardBean.schSelect == 'subject'">
-                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'content'">
-                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'memName'">
-                AND MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <otherwise>
-                AND (
-                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
-                )
-            </otherwise>
-        </choose>
+        <if test="boardBean.schText != null and boardBean.schText != ''">
+            <choose>
+                <when test="boardBean.schSelect == 'subject'">
+                    AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                </when>
+                <when test="boardBean.schSelect == 'content'">
+                    AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                </when>
+                <when test="boardBean.schSelect == 'memName'">
+                    AND MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
+                </when>
+                <otherwise>
+                    AND (
+                    BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                    OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                    OR MMI.MEM_NAME LIKE CONCAT('%', #{boardBean.schText}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
         <choose>
             <when test="boardBean.sortKey != null and boardBean.sortOdr != null">
                 ORDER BY
@@ -263,10 +260,10 @@
                 ORDER BY BA.CREATE_DT DESC
             </otherwise>
         </choose>
-
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
 
     </select>
+
 
 
     <select id="searchArticle" parameterType="com.example.movieCore.brd.vo.BrdVo" resultMap="articleBean" >
@@ -400,38 +397,40 @@
 
     </select>
 
+    <!-- 게시글 토탈 갯수 조회 -->
     <select id="selectArticleListTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
         SELECT
         COUNT(BA.ATCL_ID) totalCnt
         FROM
         BRD_ARTICLE BA
-
         WHERE
-            BA.STATE = 'B'
+        BA.STATE = 'B'
         AND
-            BA.BRD_ID = #{boardBean.brdId}
+        BA.BRD_ID = #{boardBean.brdId}
         AND
-            BA.EXPIRE_YN = 'N'
-        <choose>
-            <when test="boardBean.schSelect == 'subject'">
-                AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'content'">
-                AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <when test="boardBean.schSelect == 'memName'">
-                AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
-            </when>
-            <otherwise>
-                AND (
-                BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
-                OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
-                )
-            </otherwise>
-        </choose>
-
+        BA.EXPIRE_YN = 'N'
+        <if test="boardBean.schText != null and boardBean.schText != ''">
+            <choose>
+                <when test="boardBean.schSelect == 'subject'">
+                    AND BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                </when>
+                <when test="boardBean.schSelect == 'content'">
+                    AND BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                </when>
+                <when test="boardBean.schSelect == 'memName'">
+                    AND BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                </when>
+                <otherwise>
+                    AND (
+                    BA.SUBJECT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                    OR BA.CONTENT LIKE CONCAT('%', #{boardBean.schText}, '%')
+                    OR BA.MEM_ID LIKE CONCAT('%', #{boardBean.schText}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
     </select>
+
 
 
     <update id="deleteArticle" parameterType="com.example.movieCore.brd.vo.BrdVo"  >

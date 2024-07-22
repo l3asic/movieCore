@@ -126,13 +126,16 @@ const ArticleListView = () => {
     axios({
       url: '/selectArticleList',
       method: 'post',
-      params: {
-        brdId: brdVo.boardBean.brdId,
+      data: {
         newPage: newPage,
-        schSelect: schSelect,
-        schText: schText,
-        sortKey: sortKey, // 정렬 기준 컬럼
-        sortOdr: sortOdr // 정렬 순서
+        boardBean: {
+          brdId: brdVo.boardBean.brdId,
+          schSelect: schSelect,
+          schText: schText,
+          sortKey: sortKey, // 정렬 기준 컬럼
+          sortOdr: sortOdr // 정렬 순서
+        },
+
       }
 
     }).then(function (res) {
