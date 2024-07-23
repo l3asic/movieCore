@@ -4,14 +4,14 @@ import {
   cilAvTimer,
   cilBell, cilBraille, cilBug,
   cilCalculator, cilCalendarCheck,
-  cilChartPie, cilClipboard, cilCoffee,
+  cilChartPie, cilClipboard, cilCloudDownload, cilCoffee,
   cilCursor,
   cilDescription,
   cilDrop, cilLightbulb, cilMovie,
   cilNotes,
   cilPencil, cilPlus,
   cilPuzzle, cilRunning,
-  cilStar,  cilUser, cilVideo,
+  cilStar, cilUser, cilVideo,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import axios from "axios";
@@ -60,7 +60,7 @@ const _nav = [
           {
             component: CNavItem,
             name: '이관 및 API 관리',
-            icon: <CIcon icon={cilAvTimer} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
+            icon: <CIcon icon={cilCloudDownload} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
             to: '/admin/MovieMigManage',
           },
           {
@@ -77,7 +77,7 @@ const _nav = [
         component: CNavGroup,
         name: '게시판 관리',
         to: '/admin/boardManage',
-        icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilClipboard} customClassName="nav-icon" style={{ paddingLeft : "15px", marginRight : "10px" }} />,
         items: [
           {
             component: CNavItem,
@@ -107,7 +107,7 @@ const _nav = [
         component: CNavItem,
         name: '배치 관리',
         to: '/admin/BatchManage',
-        icon: <CIcon icon={cilRunning} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilAvTimer} customClassName="nav-icon" style={{ paddingLeft : "15px", marginRight : "10px" }} />,
       },
 
 

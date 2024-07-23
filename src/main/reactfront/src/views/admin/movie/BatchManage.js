@@ -23,6 +23,8 @@ import {
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "axios";
+import CIcon from "@coreui/icons-react";
+import {cilAlignLeft, cilAvTimer} from "@coreui/icons";
 
 function BatchManage() {
   const [batches, setBatches] = useState([]);
@@ -135,7 +137,14 @@ function BatchManage() {
 
   return (
     <CContainer>
-      <h4 className="mb-lg-5">배치 관리</h4>
+      <CRow className="mb-4">
+        <CCol>
+          <h4 className="d-flex align-items-center" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
+            <CIcon icon={cilAvTimer} size="xl" className="me-3" style={{ fontSize: '2rem' }} />
+            배치 관리
+          </h4>
+        </CCol>
+      </CRow>
 
       <CCard className="mb-4">
         <CCardHeader style={{ backgroundColor: '#343a40', color: 'white' }}>

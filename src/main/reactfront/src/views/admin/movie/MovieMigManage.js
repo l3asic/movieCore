@@ -10,7 +10,7 @@ import {
   CForm
 } from "@coreui/react";
 import CIcon from '@coreui/icons-react';
-import {cilSync, cilLink, cilCheckCircle, cilMovie} from '@coreui/icons';
+import {cilSync, cilLink, cilCheckCircle, cilMovie, cilCloudDownload} from '@coreui/icons';
 import axios from 'axios';
 import GrayLine from "../../uitils/GrayLine";
 
@@ -31,7 +31,7 @@ function MovieMigManage() {
   return (
     <CContainer>
       <h4 className="mb-4 d-flex align-items-center">
-        <CIcon icon={cilMovie} size="xl" className="me-2" style={{ fontSize: '2rem' }} />
+        <CIcon icon={cilCloudDownload} size="xl" className="me-2" style={{ fontSize: '2rem' }} />
         영화 이관 및 API 관리
       </h4>
 
