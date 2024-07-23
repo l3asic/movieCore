@@ -224,7 +224,7 @@ const _nav = [
 
 
   /** 사이드바 템플릿 컴포넌트 */
-  {
+  /*{
     component: CNavTitle,
     name: 'Theme',
   },
@@ -499,7 +499,11 @@ const _nav = [
     name: 'Docs',
     href: 'https://coreui.io/react/docs/templates/installation/',
     icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-  },
+  },*/
+
+
+
+
 ]
 
 
