@@ -51,14 +51,14 @@ const Register = () => {
   }, []);
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row /*align-items-center*/">
+    <div className="bg-light min-vh-100 d-flex flex-row /*align-items-center*/ mt-3">
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={6}>
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <CForm>
-                  <h1>회원 가입</h1>
+                  <h4 className="mb-3">회원 가입</h4>
                   <p className="text-medium-emphasis">계정을 생성하세요</p>
                   <p className="text-medium-emphasis">* 항목은 필수 입니다</p>
                   {/* 아이디 칸*/}

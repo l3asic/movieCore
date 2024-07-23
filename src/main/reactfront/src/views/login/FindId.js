@@ -86,6 +86,7 @@ const FindId = () => {
             memberBeanList: response.data.memVo.memberBeanList,
             foundIdList: maskedIds
           }));
+          memVo.foundIdList = maskedIds;
           setMessage('이메일에 등록된 ' + memVo.foundIdList.length + '개의 계정을 찾았습니다.' ) ;
         } else {
           setMessage('인증 코드가 유효하지 않습니다. 다시 시도해주세요.');

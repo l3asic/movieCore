@@ -96,7 +96,7 @@ const FindPassword = () => {
           setNewPassword(response.data.memVo.memberBean.loginPassword);
           setMessage('비밀번호가 초기화되었습니다. 새로운 비밀번호를 확인하세요.');
         } else {
-          setMessage('인증 코드가 유효하지 않습니다. 다시 시도해주세요.');
+          setMessage('인증 코드 혹은 아이디와 이메일이 유효하지 않습니다. 다시 시도해주세요.');
         }
       })
       .catch(error => {
