@@ -150,11 +150,10 @@ const Dashboard = () => {
   return (
     <>
       {/** 박스오피스 영역 */}
-      <GrayLine marginTop="20px" marginBottom="40px" />
-      <CRow className="align-items-center">
+      <CRow className="align-items-center mt-3">
         <CCol>
           <h4 className="box-office-header">
-            <CIcon icon={cilMovie} size="xl" className="me-2 text-primary" />
+            <CIcon icon={cilMovie} size="xl" className="me-2 text-black" />
             일일 박스 오피스
           </h4>
         </CCol>
@@ -218,7 +217,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="d-flex align-items-center">
-              <CBadge color="info" className="me-2 cursor-pointer" onClick={() => moveToBoard(post.brdId)}>
+              <CBadge color="primary" className="me-2 cursor-pointer" onClick={() => moveToBoard(post.brdId)}>
                 {post.brdName}
               </CBadge>
               <CBadge color="dark" shape="rounded-pill">

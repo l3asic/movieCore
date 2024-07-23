@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   CFormInput, CForm, CFormLabel,
-  CCol, CButton, CFormSelect
+  CCol, CButton, CFormSelect, CRow
 } from '@coreui/react';
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -12,6 +12,8 @@ import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import draftToHtml from 'draftjs-to-html';
+import CIcon from "@coreui/icons-react";
+import {cilAlignLeft, cilPencil} from "@coreui/icons";
 
 const ArticleReg = () => {
   const location = useLocation();
@@ -238,7 +240,15 @@ const ArticleReg = () => {
 
   return (
     <>
-      <h4 className="pb-lg-2">게시글 작성</h4>
+      <CRow className="mb-4">
+        <CCol>
+          <h4 className="d-flex align-items-center" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
+            <CIcon icon={cilPencil} size="xl" className="me-3" style={{ fontSize: '2rem' }} />
+            게시글 작성
+          </h4>
+        </CCol>
+      </CRow>
+
       <GrayLine marginBottom="20px" marginTop="0px" />
 
       <CForm className="row g-3">

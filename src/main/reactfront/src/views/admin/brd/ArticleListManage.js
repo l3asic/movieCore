@@ -440,7 +440,7 @@ function ArticleListManage() {
       <CRow className="mb-4">
         <CCol>
           <h4 className="d-flex align-items-center" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
-            <CIcon icon={cilAlignLeft} size="xl" className="me-3" style={{ fontSize: '2rem', color: '#007bff' }} />
+            <CIcon icon={cilAlignLeft} size="xl" className="me-3" style={{ fontSize: '2rem'}} />
             게시글 관리
           </h4>
         </CCol>

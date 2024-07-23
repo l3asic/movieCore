@@ -79,7 +79,7 @@ const CheckPassword = () => {
                           {/*<p>
                             비밀번호
                           </p>*/}
-                          <Link to="/register">
+                          <Link to="/SelectFindIdPw">
                             <CButton  className="mt-3 btn-dark" active tabIndex={-1}>
                               비밀번호 찾기
                             </CButton>

@@ -48,7 +48,7 @@ const AppHeaderDropdown = ({ onLogout }) => {
         >
           <CIcon
             icon={cilUser}
-            className="me-2"
+            className="me-2 text-dark"
           />
           내 정보 관리
         </CDropdownItem>
@@ -56,7 +56,7 @@ const AppHeaderDropdown = ({ onLogout }) => {
         <CDropdownItem
           onClick={MoveToMyFavMovie}
         >
-          <CIcon icon={cilHeart} className="me-2" />
+          <CIcon icon={cilHeart} className="me-2 text-danger" />
           내가 찜한 영화
         </CDropdownItem>
 
@@ -77,7 +77,7 @@ const AppHeaderDropdown = ({ onLogout }) => {
         <CDropdownItem
           onClick={onLogout}
         >
-          <CIcon icon={cilAccountLogout} className="me-2"
+          <CIcon icon={cilAccountLogout} className="me-2 text-black"
                  />
           로그아웃
         </CDropdownItem>
