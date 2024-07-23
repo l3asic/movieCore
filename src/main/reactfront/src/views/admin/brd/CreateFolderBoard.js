@@ -19,16 +19,16 @@ const CreateFolderBoard = () => {
       {/** 상단 탭 네비 */}
       <CNav variant="pills" className="mb-5">
         <CNavItem>
-          <CNavLink onClick={() => toggleTab(0)} active={activeTab === 0}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CIcon icon={cilFolder} style={{ marginRight: '10px' }} />
+          <CNavLink  onClick={() => toggleTab(0)} active={activeTab === 0}>
+            <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}>
+              <CIcon icon={cilFolder} className="text-warning" style={{ marginRight: '10px' }} />
               폴더 생성
             </div>
           </CNavLink>
         </CNavItem>
         <CNavItem>
           <CNavLink onClick={() => toggleTab(1)} active={activeTab === 1}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', cursor: "pointer" }}>
               <CIcon icon={cilClipboard} style={{ marginRight: '10px' }} />
               게시판 생성
             </div>

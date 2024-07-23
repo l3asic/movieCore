@@ -20,7 +20,7 @@ import {
   CModalHeader,
   CModalTitle,
   CInputGroup,
-  CInputGroupText
+  CInputGroupText, CBadge
 } from "@coreui/react";
 import axios from "axios";
 import dayjs from 'dayjs'; // 날짜 형식을 위한 라이브러리 추가
@@ -439,35 +439,36 @@ const MemberManage = () => {
             <CTableHeaderCell scope="col">
               <CFormCheck
                 id="selectAllCheckBox"
+                style={{cursor: "pointer"}}
                 checked={selectAll}
                 onChange={() => handleSelectAll()}
               />
             </CTableHeaderCell>
-            <CTableHeaderCell scope="col">고유번호<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_id')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">사용자 ID<CIcon icon={cilSwapVertical} onClick={() => sortColumn('login_id')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">사용자 명<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_name')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">성별<CIcon icon={cilGroup} onClick={() => sortColumn('gender')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">고유번호<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('mem_id')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">사용자 ID<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('login_id')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">사용자 명<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('mem_name')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">성별<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('gender')} /></CTableHeaderCell>
             <CTableHeaderCell scope="col">주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">상세주소</CTableHeaderCell>
             <CTableHeaderCell scope="col">이메일</CTableHeaderCell>
-            <CTableHeaderCell scope="col">회원 등급<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_role')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">가입일<CIcon icon={cilSwapVertical} onClick={() => sortColumn('mem_create_date')} /></CTableHeaderCell>
-            <CTableHeaderCell scope="col">상태<CIcon icon={cilSwapVertical} onClick={() => sortColumn('state')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">회원 등급<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('mem_role')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">가입일<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('mem_create_date')} /></CTableHeaderCell>
+            <CTableHeaderCell scope="col">상태<CIcon icon={cilSwapVertical} style={{cursor: "pointer"}} onClick={() => sortColumn('state')} /></CTableHeaderCell>
           </CTableRow>
         </CTableHead>
 
         <CTableBody>
           {memVo.memberBeanList.map((memberBean) => (
-            <CTableRow key={memberBean.memId} onClick={() => handleEdit(memberBean)}>
+            <CTableRow key={memberBean.memId} >
               <CTableDataCell>
-                <CFormCheck
+                <CFormCheck style={{cursor: "pointer"}}
                   checked={memberBean.selected || selectAll}
                   onChange={() => handleSelect(memberBean.memId)}
                 />
               </CTableDataCell>
-              <CTableDataCell>{memberBean.memId}</CTableDataCell>
+              <CTableDataCell onClick={() => handleEdit(memberBean)} style={{cursor: "pointer"}}>{memberBean.memId}</CTableDataCell>
               <CTableDataCell>{memberBean.loginId}</CTableDataCell>
-              <CTableDataCell>{memberBean.memName}</CTableDataCell>
+              <CTableDataCell onClick={() => handleEdit(memberBean)} style={{cursor: "pointer"}}>{memberBean.memName}</CTableDataCell>
               <CTableDataCell>
                 {memberBean.gender === 'M' ? '남성' : memberBean.gender === 'F' ? '여성' : '미상'}
               </CTableDataCell>
@@ -476,7 +477,11 @@ const MemberManage = () => {
               <CTableDataCell>{memberBean.email}</CTableDataCell>
               <CTableDataCell>{memberBean.memRole === 'ADMIN' ? '관리자' : '사용자'}</CTableDataCell>
               <CTableDataCell>{dayjs(memberBean.memCreateDate).format('YYYY.MM.DD')}</CTableDataCell>
-              <CTableDataCell>{memberBean.state === 'B' ? '정상' : '삭제'}</CTableDataCell>
+              <CTableDataCell>
+                <CBadge color={memberBean.state === "B" ? "primary" : "danger"}>
+                  {memberBean.state === 'B' ? '정상' : '삭제'}
+                </CBadge>
+              </CTableDataCell>
             </CTableRow>
           ))}
         </CTableBody>

@@ -16,6 +16,7 @@ const Paging = ({ paging, onPageChange, itemsPerPage  }) => {
           key={i}
           active={i === currentPage}
           onClick={() => onPageChange(i)}
+          style={{cursor: "pointer"}}
         >
           {i}
         </CPaginationItem>
@@ -32,9 +33,10 @@ const Paging = ({ paging, onPageChange, itemsPerPage  }) => {
         disabled={!hasPreviousPage}
         onClick={() => onPageChange(1)}
       >
-        <span aria-hidden="true">««</span>
+        <span aria-hidden="true" style={{cursor: "pointer"}}>««</span>
       </CPaginationItem>
       <CPaginationItem
+        style={{cursor: "pointer"}}
         aria-label="Previous"
         disabled={!hasPreviousPage}
         onClick={() => onPageChange(currentPage - 1)}
@@ -47,9 +49,10 @@ const Paging = ({ paging, onPageChange, itemsPerPage  }) => {
         disabled={!hasNextPage}
         onClick={() => onPageChange(currentPage + 1)}
       >
-        <span aria-hidden="true">»</span>
+        <span aria-hidden="true" style={{cursor: "pointer"}}>»</span>
       </CPaginationItem>
       <CPaginationItem
+        style={{cursor: "pointer"}}
         aria-label="Last"
         disabled={!hasNextPage}
         onClick={() => onPageChange(totalPages)}

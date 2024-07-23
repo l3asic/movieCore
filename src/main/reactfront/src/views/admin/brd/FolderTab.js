@@ -17,10 +17,10 @@ function FolderTab() {
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>
-        <CIcon icon={cilFolder} style={{ marginRight: '10px',  width : '25px', height : '25px' }} />
+        <CIcon icon={cilFolder} className="text-warning" style={{ marginRight: '10px',  width : '25px', height : '25px' }} />
         폴더 생성
       </h1>
-      <div style={styles.spacing}></div> {/* 폴더 생성 탭과 폴더 생성 UI 간의 간격을 위해 추가 */}
+      <div style={styles.spacing}></div>
       <CForm className="row g-3" style={styles.form}>
         <CCol md={5}>
           <CInputGroup className="mb-3">
@@ -37,7 +37,7 @@ function FolderTab() {
         </CCol>
         <CCol md={2}>
           <CButton
-            color="warning"
+            color="dark"
             onClick={createFolder}
             style={styles.button}
           >
@@ -103,8 +103,8 @@ const styles = {
     justifyContent: 'space-between'
   },
   inputGroupText: {
-    backgroundColor: '#DAA520', // 사이드 네비게이션 톤에 맞춘 색상
-    color: '#333',
+    backgroundColor: '#6c757d', // 회색 계열 색상으로 변경
+    color: '#fff',
     border: 'none'
   },
   input: {
@@ -112,11 +112,13 @@ const styles = {
     borderRadius: '4px'
   },
   button: {
-    backgroundColor: '#DAA520', // 사이드 네비게이션 톤에 맞춘 색상
-    borderColor: '#DAA520',
-    color: '#333',
+    backgroundColor: '#6c757d', // 회색 계열 색상으로 변경
+    borderColor: '#6c757d',
+    color: '#fff',
     height: '38px'
   }
+
+
 };
 
 export default FolderTab;

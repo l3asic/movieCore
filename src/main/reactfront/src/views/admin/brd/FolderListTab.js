@@ -19,7 +19,7 @@ import {
   CModalHeader,
   CModalTitle,
   CModalBody,
-  CModalFooter,
+  CModalFooter, CBadge,
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -323,7 +323,7 @@ function FolderListTab() {
               Total : {brdVo.paging.totalItems}
               {showDragInfo && (
                 <span style={{ fontSize: "0.8rem", color: "gray", marginLeft: "10px" }}>
-                  폴더를 끌어다 놓으면 순서를 변경할 수 있습니다.
+                  폴더(폴더 명)를 끌어다 놓으면 순서를 변경할 수 있습니다.
                 </span>
               )}
             </CNavbarBrand>
@@ -445,7 +445,6 @@ function FolderListTab() {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        onClick={() => handleFolderClick(folder)}
                       >
                         <CTableDataCell style={{ width: "10px" }}>
                           <CFormCheck
@@ -455,11 +454,19 @@ function FolderListTab() {
                         </CTableDataCell>
                         <CTableDataCell style={{ width: "40px" }}>{folder.odr}</CTableDataCell>
                         <CTableDataCell style={{ width: "60px" }}>{folder.folId}</CTableDataCell>
-                        <CTableDataCell style={{ width: "120px" }}>{folder.folName}</CTableDataCell>
+                        <CTableDataCell style={{ width: "120px" }}  onClick={() => handleFolderClick(folder)}>
+                          {folder.folName}
+                        </CTableDataCell>
                         <CTableDataCell style={{ width: "100px" }}>{folder.memId}</CTableDataCell>
                         <CTableDataCell style={{ width: "100px" }}>{folder.boardCnt}</CTableDataCell>
                         <CTableDataCell style={{ width: "120px" }}>{folder.createDt}</CTableDataCell>
-                        <CTableDataCell style={{ width: "80px" }}>{folder.stateText}</CTableDataCell>
+                        <CTableDataCell style={{ width: "80px" }}>
+                          <CBadge color={folder.stateText === "정상" ? "primary" : "danger"}>
+                            {folder.stateText}
+                          </CBadge>
+                        </CTableDataCell>
+
+
                       </CTableRow>
                     )}
                   </Draggable>

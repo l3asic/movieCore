@@ -563,13 +563,13 @@ function ArticleListManage() {
         <CTableBody>
           {brdVo.articleBeanList.length > 0 ? (
             brdVo.articleBeanList.map((article, index) => (
-              <CTableRow key={article.atclId} onClick={() => handleRowClick(index, article)}>
+              <CTableRow key={article.atclId} >
                 <CTableDataCell style={{ width: "50px" }} onClick={(e) => e.stopPropagation()}>
                   <CFormCheck checked={article.selected || selectAll} onChange={() => handleSelect(index)} />
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "100px" }}>{article.atclId}</CTableDataCell>
                 <CTableDataCell style={{ width: "120px" }}>{article.brdName}</CTableDataCell>
-                <CTableDataCell style={{ width: "150px" }}>
+                <CTableDataCell style={{ width: "150px" , cursor: "pointer"}} onClick={() => handleRowClick(index, article)}>
                   {article.subject.length > 10 ? `${article.subject.substring(0, 10)}...` : article.subject}
                 </CTableDataCell>
                 <CTableDataCell style={{ width: "200px" }}>

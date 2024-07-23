@@ -496,7 +496,7 @@ function BoardListTab() {
                     color: "#495057",
                   }}
                 >
-                  <CIcon icon={cilFolder} style={{ marginRight: "10px" }} />
+                  <CIcon icon={cilFolder} className="text-warning" style={{ marginRight: "10px" }} />
                   <h5 style={{ margin: 0 }}>{folder.folName}</h5>
                 </div>
                 <CTable color="dark" striped className="mt-3 mb-lg-5">

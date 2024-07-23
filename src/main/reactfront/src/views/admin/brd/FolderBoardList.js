@@ -21,16 +21,16 @@ const FolderBoardList = () => {
     <>
       {/** 상단 탭 네비 */}
       <CNav variant="pills">
-        <CNavItem>
-          <CNavLink onClick={() => toggleTab(0)} active={activeTab === 0}>
+        <CNavItem >
+          <CNavLink style={{cursor: "pointer"}} onClick={() => toggleTab(0)} active={activeTab === 0}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CIcon icon={cilFolder} style={{ marginRight: '10px' }} />
+              <CIcon icon={cilFolder} className="text-warning" style={{ marginRight: '10px' }} />
               폴더 리스트
             </div>
           </CNavLink>
         </CNavItem>
         <CNavItem>
-          <CNavLink onClick={() => toggleTab(1)} active={activeTab === 1}>
+          <CNavLink style={{cursor: "pointer"}} onClick={() => toggleTab(1)} active={activeTab === 1}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <CIcon icon={cilClipboard} style={{ marginRight: '10px' }} />
               게시판 리스트

@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { CBadge, CNavGroup, CNavItem } from '@coreui/react';
 import axios from 'axios';
 import CIcon from '@coreui/icons-react';
-import { cilClipboard, cilFolder, cilNotes } from '@coreui/icons';
+import {cilClipboard, cilFolder} from '@coreui/icons';
 
 export const AppSidebarNav = ({ items }) => {
   const location = useLocation();
@@ -59,7 +59,7 @@ export const AppSidebarNav = ({ items }) => {
                 component: CNavItem,
                 name: boardBean.brdName,
                 to: '/brd/ArticleListView?brdId=' + boardBean.brdId,
-                icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
+                icon: <CIcon icon={cilClipboard} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
               };
 
               boardItemList.push(boardItem);

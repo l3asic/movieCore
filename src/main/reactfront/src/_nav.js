@@ -4,15 +4,14 @@ import {
   cilAvTimer,
   cilBell, cilBraille, cilBug,
   cilCalculator, cilCalendarCheck,
-  cilChartPie, cilClipboard,
+  cilChartPie, cilClipboard, cilCoffee,
   cilCursor,
   cilDescription,
   cilDrop, cilLightbulb, cilMovie,
   cilNotes,
   cilPencil, cilPlus,
   cilPuzzle, cilRunning,
-  cilSpeedometer,
-  cilStar, cilUser,
+  cilStar,  cilUser, cilVideo,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import axios from "axios";
@@ -48,7 +47,7 @@ const _nav = [
         component: CNavItem,
         name: '회원 관리',
         to: '/admin/memberManage',
-        icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilUser} customClassName="nav-icon" style={{ paddingLeft : "15px", marginRight : "10px" }} />,
       },
 
 
@@ -56,18 +55,18 @@ const _nav = [
         component: CNavGroup,
         name: '영화 관리',
         to: '/admin/MovieMigManage',
-        icon: <CIcon icon={cilMovie} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilMovie} customClassName="nav-icon" style={{ paddingLeft : "15px", marginRight : "10px" }} />,
         items: [
           {
             component: CNavItem,
             name: '이관 및 API 관리',
-            icon: <CIcon icon={cilAvTimer} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
+            icon: <CIcon icon={cilAvTimer} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
             to: '/admin/MovieMigManage',
           },
           {
             component: CNavItem,
             name: '영화 목록 관리',
-            icon: <CIcon icon={cilBraille} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
+            icon: <CIcon icon={cilBraille} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
             to: '/admin/MovieListManage',
           },
         ],
@@ -83,19 +82,19 @@ const _nav = [
           {
             component: CNavItem,
             name: '폴더/게시판 생성',
-            icon: <CIcon icon={cilPlus} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
+            icon: <CIcon icon={cilPlus} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
             to: '/admin/CreateFolderBoard',
           },
           {
             component: CNavItem,
             name: '폴더/게시판 관리',
-            icon: <CIcon icon={cilCalendarCheck} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
+            icon: <CIcon icon={cilCalendarCheck} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
             to: '/admin/FolderBoardList',
           },
           {
             component: CNavItem,
             name: '게시글 관리',
-            icon: <CIcon icon={cilNotes} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "15px" }} />,
+            icon: <CIcon icon={cilNotes} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
             to: '/admin/ArticleListManage'
 
           }
@@ -131,19 +130,22 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: '영화 전체 목록',
+        name: '영화 목록',
+        icon: <CIcon icon={cilVideo} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
         to: '/movie/MovieList',
       },
 
       {
         component: CNavItem,
         name: '박스 오피스',
+        icon: <CIcon icon={cilCoffee} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
         to: '/movie/BoxOffice',
       },
 
       {
         component: CNavItem,
-        name: 'Movie Core 추천 영화',
+        name: 'MovieCore 추천 영화',
+        icon: <CIcon icon={cilStar} customClassName="nav-icon" style={{ paddingLeft : "30px", marginRight : "10px" }} />,
         to: '/movie/MovieRecommend',
       },
 

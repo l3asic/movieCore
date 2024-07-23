@@ -182,44 +182,48 @@ function MovieListManage() {
             <CTableHeaderCell scope="col" style={{ width: '50px' }}>
               <CFormCheck
                 id="selectAllCheckBox"
+                style={{cursor: "pointer"}}
                 checked={selectAll}
                 onChange={() => handleSelectAll()}
               />
             </CTableHeaderCell>
             <CTableHeaderCell scope="col">
               영화 고유번호
-              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('movieCd')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" style={{cursor: "pointer"}} onClick={() => sortColumn('movieCd')} />
             </CTableHeaderCell>
             <CTableHeaderCell scope="col">
               영화 제목
-              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('movieNm')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" style={{cursor: "pointer"}} onClick={() => sortColumn('movieNm')} />
             </CTableHeaderCell>
             <CTableHeaderCell scope="col">
               개봉년도
-              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('prdtYear')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" style={{cursor: "pointer"}} onClick={() => sortColumn('prdtYear')} />
             </CTableHeaderCell>
             <CTableHeaderCell scope="col">
               대표 장르
-              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('repGenreNm')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" style={{cursor: "pointer"}} onClick={() => sortColumn('repGenreNm')} />
             </CTableHeaderCell>
             <CTableHeaderCell scope="col">
               상태
-              <CIcon icon={cilSwapVertical} className="ms-2" onClick={() => sortColumn('state')} />
+              <CIcon icon={cilSwapVertical} className="ms-2" style={{cursor: "pointer"}} onClick={() => sortColumn('state')} />
             </CTableHeaderCell>
           </CTableRow>
         </CTableHead>
 
         <CTableBody>
           {movVo.movieBeanList.map((movie, index) => (
-            <CTableRow key={index}>
+            <CTableRow key={index}  >
               <CTableDataCell style={{ width: '50px' }}>
                 <CFormCheck
+                  style={{cursor: "pointer"}}
                   checked={movie.selected || selectAll}
                   onChange={() => handleSelect(index)}
                 />
               </CTableDataCell>
               <CTableDataCell>{movie.movieCd}</CTableDataCell>
-              <CTableDataCell className="fw-bold text-dark">{movie.movieNm}</CTableDataCell>
+              <CTableDataCell className="fw-bold text-dark" style={{cursor: "pointer"}} onClick={() => movieInfoManage(movie.movieCd)} >
+                {movie.movieNm}
+              </CTableDataCell>
               <CTableDataCell>{movie.prdtYear}</CTableDataCell>
               <CTableDataCell>{movie.repGenreNm}</CTableDataCell>
               <CTableDataCell>
