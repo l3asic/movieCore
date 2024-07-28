@@ -94,7 +94,7 @@ export default function MovieInfoManage() {
         })
         .catch(error => {
           console.error("포스터 업로드 오류:", error);
-          alert("실패 (오류)");
+          alert("실패. (오류)");
         });
     } else {
       alert("파일을 선택해주세요.");

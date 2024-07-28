@@ -346,7 +346,7 @@ function FolderListTab() {
               options={[
                 { label: "폴더 명", value: "fol_name" },
                 { label: "폴더 고유번호", value: "fol_id" },
-                { label: "생성자 명", value: "mem_id" },
+                { label: "생성자 명", value: "mem_name" },
                 { label: "상태", value: "state" },
               ]}
               onChange={searchFilter}
@@ -421,7 +421,7 @@ function FolderListTab() {
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ width: "100px" }}>
                     생성자 명
-                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("mem_id")} />
+                    <CIcon icon={cilSwapVertical} onClick={() => sortColumn("mem_name")} />
                   </CTableHeaderCell>
                   <CTableHeaderCell scope="col" style={{ width: "100px" }}>
                     게시판 갯수
@@ -457,7 +457,7 @@ function FolderListTab() {
                         <CTableDataCell style={{ width: "120px" }}  onClick={() => handleFolderClick(folder)}>
                           {folder.folName}
                         </CTableDataCell>
-                        <CTableDataCell style={{ width: "100px" }}>{folder.memId}</CTableDataCell>
+                        <CTableDataCell style={{ width: "100px" }}>{folder.memName}</CTableDataCell>
                         <CTableDataCell style={{ width: "100px" }}>{folder.boardCnt}</CTableDataCell>
                         <CTableDataCell style={{ width: "120px" }}>{folder.createDt}</CTableDataCell>
                         <CTableDataCell style={{ width: "80px" }}>

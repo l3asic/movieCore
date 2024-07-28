@@ -183,7 +183,7 @@ const _nav = [
 
 
   /** 커스텀 QnA 모듈  */
-  {
+  /*{
     component: CNavTitle,
     name: 'QnA',
   },
@@ -215,7 +215,7 @@ const _nav = [
       },
 
     ],
-  },
+  },*/
 
 
 

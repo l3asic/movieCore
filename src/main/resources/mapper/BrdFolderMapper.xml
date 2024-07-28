@@ -8,6 +8,7 @@
     <resultMap type="com.example.movieCore.brd.bean.BrdFolderBean" id="folderBean">
         <id column="FOL_ID" property="folId" jdbcType="VARCHAR" />
         <result column="MEM_ID" property="memId" jdbcType="VARCHAR"/>
+        <result column="MEM_NAME" property="memName" jdbcType="VARCHAR"/>
         <result column="FOL_NAME" property="folName" jdbcType="VARCHAR"/>
         <result column="STATE" property="state" jdbcType="VARCHAR" />
         <result column="ODR" property="odr" jdbcType="INTEGER"/>
@@ -62,11 +63,13 @@
     <!-- 관리자모듈- 폴더 갯수 조회 -->
     <select id="selectFolderListAdminTotalCnt" parameterType="com.example.movieCore.brd.vo.BrdVo" resultType="java.lang.Integer">
         SELECT
-        COUNT(BF.FOL_ID) totalCnt
+            COUNT(BF.FOL_ID) AS totalCnt
         FROM
-        BRD_FOLDER BF
-
+            BRD_FOLDER BF
+                LEFT JOIN
+            MEM_MEMBER_INFO MMI ON BF.MEM_ID = MMI.MEM_ID
     </select>
+
 
 
     <!-- 관리자모듈- 폴더 리스트 조회 -->
@@ -78,9 +81,12 @@
         BF.STATE,
         BF.ODR,
         BF.CREATE_DT,
+        MMI.MEM_NAME,
         (SELECT COUNT(*) FROM BRD_BOARD BB WHERE BB.FOL_ID = BF.FOL_ID) AS BOARD_CNT
         FROM
         BRD_FOLDER BF
+        LEFT JOIN
+        MEM_MEMBER_INFO MMI ON BF.MEM_ID = MMI.MEM_ID
         WHERE
         1=1
         <if test="searchBean.searchFilter != null and searchBean.searchFilter != '' and searchBean.searchText != null and searchBean.searchText != ''">
@@ -101,6 +107,7 @@
         </choose>
         LIMIT #{paging.startIndex}, #{paging.itemsPerPage}
     </select>
+
 
 
 
