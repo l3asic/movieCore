@@ -65,7 +65,7 @@ const ArticleDetail = () => {
         }).then(function (res) {
           if (res.data.successResult) {
             alert("삭제 되었습니다.");
-            navigate('/brd/ArticleListView');
+            navigate('/dashboard');
           }
         }).catch(function (err) {
           alert("삭제 실패 (오류)");
@@ -241,7 +241,7 @@ const ArticleDetail = () => {
             articleBean.memId === loggedInUserId && (
             <>
               <CButton className="me-md-2" onClick={updateArticle}>게시글 수정</CButton>
-              <CButton className="me-md-2" onClick={deleteArticle}>삭제</CButton>
+              <CButton className="me-md-2" color="danger" onClick={deleteArticle}>삭제</CButton>
             </>
           )}
           <CButton color="dark" onClick={() => navigate(-1)}>목록으로</CButton>
@@ -284,7 +284,7 @@ const ArticleDetail = () => {
                   </div>
                   {reply.memId === loggedInUserId && (
                     <CButton
-                      color="secondary"
+                      color="danger"
                       size="sm"
                       onClick={() => {
                         if (window.confirm("정말로 댓글을 삭제하시겠습니까?")) {

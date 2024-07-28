@@ -21,7 +21,7 @@ import {
   CModalTitle,
   CModalBody,
   CModalFooter,
-  CCardImage,
+  CCardImage, CBadge,
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -559,7 +559,11 @@ function BoardListTab() {
                             <CTableDataCell style={{ width: "60px" }}>{board.brdId}</CTableDataCell>
                             <CTableDataCell style={{ width: "140px" }}>{board.brdName}</CTableDataCell>
                             <CTableDataCell style={{ width: "200px" }}>{board.brdComment}</CTableDataCell>
-                            <CTableDataCell style={{ width: "100px" }}>{board.stateText}</CTableDataCell>
+                            <CTableDataCell style={{ width: "80px" }}>
+                              <CBadge color={board.stateText === "정상" ? "primary" : "danger"}>
+                                {board.stateText}
+                              </CBadge>
+                            </CTableDataCell>
                             <CTableDataCell style={{ width: "80px" }}>{board.noticeYn}</CTableDataCell>
                             <CTableDataCell style={{ width: "100px" }}>{board.atclCnt}</CTableDataCell>
                           </CTableRow>

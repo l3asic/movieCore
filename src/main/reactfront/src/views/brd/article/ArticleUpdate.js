@@ -192,10 +192,8 @@ const ArticleUpdate = () => {
 
     axios.post('/atclUpdate', brdVo)
       .then((res) => {
-        if (res.data.succesResult) {
+        if (res.data.succesResult && files != null && files.length>0) {
           atclFileUpload(files, res.data.brdVo);
-        } else {
-          alert("수정 실패");
         }
       }).catch(() => {
       alert("수정 실패 (오류)");

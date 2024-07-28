@@ -26,7 +26,7 @@ import {
   CCardBody,
   CCardTitle,
   CCardText,
-  CCardFooter, CRow, CCol
+  CCardFooter, CRow, CCol, CBadge
 } from "@coreui/react";
 import {
   cilLoopCircular,
@@ -584,7 +584,11 @@ function ArticleListManage() {
                 <CTableDataCell style={{ width: "100px" }}>
                   {article.expireYn === "N" ? "게시 중" : "게시 종료"}
                 </CTableDataCell>
-                <CTableDataCell style={{ width: "80px" }}>{article.stateText}</CTableDataCell>
+                <CTableDataCell style={{ width: "80px" }}>
+                  <CBadge color={article.stateText === "정상" ? "primary" : "danger"}>
+                    {article.stateText}
+                  </CBadge>
+                </CTableDataCell>
               </CTableRow>
             ))
           ) : (
