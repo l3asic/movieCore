@@ -149,7 +149,7 @@ export default function MovieInfo() {
               {/* 대표 장르 칸 */}
               <p className="text-sm tracking-wide md:text-base" style={{marginBottom: "20px"}}>{movVo.movieBean.repGenreNm}</p>
 
-              {/* 평균 별점 칸 (추후 예정) , 찜 칸 */}
+              {/* 평균 별점 칸, 찜 칸 */}
               <div style={{ marginBottom: "60px", display: "flex" }}>
                 <h5 className="text-2xl tracking-wide md:text-base" style={{ marginRight: "350px" }}>★ {movVo.movieBean.pointAvg} ({movVo.movieBean.pointTotalCnt})</h5>
 
@@ -162,7 +162,7 @@ export default function MovieInfo() {
 
               </div>
 
-              {/* 감독 칸 (추후 예정) */}
+              {/* 감독 칸 */}
               <div className="flex items-center gap-2" style={{display: "flex", marginBottom: "20px"}}>
                 {/*<img
                     alt="Director avatar"
@@ -202,7 +202,7 @@ export default function MovieInfo() {
 
               </div>
 
-              {/* 배우들 한줄 (3명씩) (추후 예정) */}
+              {/* 배우들 한줄 */}
               <div className="grid w-full grid-cols-2 items-start gap-4 md:grid-cols-3 lg:gap-6 "
                    style={{display: "flex", marginBottom: "20px"}}>
 

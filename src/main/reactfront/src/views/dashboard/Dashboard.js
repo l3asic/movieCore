@@ -37,6 +37,13 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    selectDailyBoxOfficeList();
+    selectHotArticle();
+  }, [startDate]);
+
+
   // 랜덤 색상을 생성하는 함수 추가
   const generateRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -63,10 +70,7 @@ const Dashboard = () => {
     return colorMap.current[boardName];
   };
 
-  useEffect(() => {
-    selectDailyBoxOfficeList();
-    selectHotArticle();
-  }, [startDate]);
+
 
   const selectDailyBoxOfficeList = async () => {
     const formattedDate = formatDate(startDate);

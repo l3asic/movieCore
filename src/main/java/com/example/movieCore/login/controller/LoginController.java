@@ -43,7 +43,7 @@ public class LoginController {
 
         memberBean.setMemId(memId);
         memberBean.setMemCreateDate(memCreateDate);
-        /* 임시 권한 배정 (추후 수정함)*/
+        // 권한 기본값 (사용자)
         memberBean.setMemRole("ROLE_USER");
 
 

@@ -144,6 +144,9 @@
             <result column="GENRE_ALT" property="genreAlt" jdbcType="VARCHAR"/>
             <result column="REP_GENRE_NM" property="repGenreNm" jdbcType="VARCHAR"/>
             <result column="STATE" property="state" jdbcType="VARCHAR"/>
+            <result column="point_avg" property="pointAvg" jdbcType="VARCHAR"/>
+            <result column="point_total_cnt" property="pointTotalCnt" jdbcType="VARCHAR"/>
+            <result column="total_view_cnt" property="totalViewCnt" jdbcType="VARCHAR"/>
 
         </association>
         <!-- 파일빈  -->
@@ -292,6 +295,8 @@
             mm.MOVIE_CD = mmi.MOVIE_CD
 
             AND mm.STATE = 'B'
+            and mm.GENRE_ALT not like '%(에로)%'
+            and mm.TYPE_NM != '단편'
 
           /* 검색) 제목, 대표장르, 개봉년도, 배우명, 관람등급, 전체 */
         <choose>
@@ -372,6 +377,9 @@
         CMM_FILE AS cf ON mfm.FILE_ID = cf.FILE_ID
         WHERE
         mm.STATE = 'B'
+          /* 임시 무비 제외*/
+        and mm.GENRE_ALT not like '%(에로)%'
+        and mm.TYPE_NM != '단편'
 
         /* 검색) 제목, 대표장르, 개봉년도, 배우명, 관람등급, 제작국가, 전체 */
         <choose>
