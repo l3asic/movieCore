@@ -12,7 +12,7 @@ import {
   CForm,
   CButton, CNavbar, CContainer, CNavbarBrand
 } from '@coreui/react';
-import ReactImg from '../../assets/images/react.jpg';
+import movieImg01 from '../../assets/images/uiImg/movieImg01.jpg';
 import axios from 'axios';
 import Paging from '../uitils/Paging';
 import {cilLoopCircular, cilMagnifyingGlass} from "@coreui/icons";
@@ -151,7 +151,7 @@ const MovieList = () => {
               >
 
                 <CCardImage orientation="top"
-                            src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : ReactImg}
+                            src={movie.fileBean && movie.fileBean.src ? movie.fileBean.src : movieImg01}
                             style={{ height: '400px' }} />
 
                 <CCardBody>

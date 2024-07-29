@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react';
 
-import ReactImg from '../../assets/images/react.jpg';
+import movieImg01 from '../../assets/images/uiImg/movieImg01.jpg';
 import {
   CAvatar,
   CButton,
@@ -128,7 +128,7 @@ export default function MovieInfo() {
                 alt="Movie poster"
                 className="rounded-lg object-cover aspect-[2/3] overflow-hidden"
                 height="450"
-                src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : ReactImg}
+                src={movVo.movieBean.fileBean && movVo.movieBean.fileBean.src ? movVo.movieBean.fileBean.src : movieImg01}
                 width="320"
                 style={{ borderRadius: '10px' }}
               />
