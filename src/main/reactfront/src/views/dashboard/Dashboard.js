@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   CBadge,
   CCardText,
@@ -36,6 +36,32 @@ const Dashboard = () => {
 
   const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 1)));
   const navigate = useNavigate();
+
+  // 랜덤 색상을 생성하는 함수 추가
+  const generateRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  // 게시판 이름과 색상 매핑을 저장할 빈 객체 초기화
+  const colorMap = useRef({});
+
+  const getBadgeColor = (boardName, noticeYn) => {
+    if (noticeYn === 'Y') {
+      return '#e55556';
+    }
+
+    // 아직 색상이 할당되지 않은 경우 새로운 색상을 생성하고 저장
+    if (!colorMap.current[boardName]) {
+      colorMap.current[boardName] = generateRandomColor();
+    }
+    // 게시판 이름에 대한 기존 색상 반환
+    return colorMap.current[boardName];
+  };
 
   useEffect(() => {
     selectDailyBoxOfficeList();
@@ -217,7 +243,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="d-flex align-items-center">
-              <CBadge color="primary" className="me-2 cursor-pointer" onClick={() => moveToBoard(post.brdId)}>
+              <CBadge style={{ backgroundColor: getBadgeColor(post.brdName, post.noticeYn), color: 'white' }} className="me-2 cursor-pointer" onClick={() => moveToBoard(post.brdId)}>
                 {post.brdName}
               </CBadge>
               <CBadge color="dark" shape="rounded-pill">
