@@ -21,13 +21,17 @@ const Register = () => {
   const [memberInfo, setMemberInfo] = useState({
     loginId: '',
     loginPassword: '',
+    loginPasswordConfirm: '',
     memName: '',
     gender: 'N', // 기본값 (성별을 밝히지 않음)
     address: '',
     addressInfo: '',
+    emailId: '',
+    emailDomain: 'naver.com',
+    email: '',
   });
 
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Daum 우편번호 서비스 스크립트 로드
@@ -77,9 +81,9 @@ const Register = () => {
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
                     <CFormInput name="loginPassword"
-                      type="password"
-                      placeholder="비밀번호"
-                      onChange={changeMemberInfo}
+                                type="password"
+                                placeholder="비밀번호"
+                                onChange={changeMemberInfo}
                     />
                   </CInputGroup>
 
@@ -90,9 +94,9 @@ const Register = () => {
                       <CIcon icon={cilLockLocked} />
                     </CInputGroupText>
                     <CFormInput name="loginPasswordConfirm"
-                      type="password"
-                      placeholder="비밀번호 확인"
-                      onChange={changeMemberInfo}
+                                type="password"
+                                placeholder="비밀번호 확인"
+                                onChange={changeMemberInfo}
                     />
                   </CInputGroup>
 
@@ -126,12 +130,12 @@ const Register = () => {
                         <CInputGroupText>
                           <CIcon icon={cilRoom} />
                         </CInputGroupText>
-                        <CFormInput name="address" placeholder="주소"  value={memberInfo.address}
+                        <CFormInput name="address" placeholder="주소" value={memberInfo.address}
                                     onChange={changeMemberInfo} />
                       </CInputGroup>
                     </CCol>
                     <CCol md={3}>
-                      <CButton color="secondary" onClick={openDaumPostcode} style={{ width: '100%', height: '100%'}}>
+                      <CButton color="secondary" onClick={openDaumPostcode} style={{ width: '100%', height: '100%' }}>
                         주소 검색
                       </CButton>
                     </CCol>
@@ -142,10 +146,18 @@ const Register = () => {
                     </CInputGroupText>
                     <CFormInput name="addressInfo" placeholder="상세주소" onChange={changeMemberInfo} />
                   </CInputGroup>
-                  {/*<CInputGroup className="mb-3">
+                  *
+                  <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput name="email" placeholder="이메일" onChange={changeMemberInfo} />
-                  </CInputGroup>*/}
+                    <CFormInput name="emailId" placeholder="이메일 아이디" onChange={changeMemberInfo} />
+                    <CFormSelect name="emailDomain" value={memberInfo.emailDomain} onChange={changeMemberInfo}>
+                      <option value="naver.com">naver.com</option>
+                      <option value="daum.com">daum.com</option>
+                      <option value="gmail.com">gmail.com</option>
+                      <option value="self">직접 입력</option>
+                    </CFormSelect>
+                  </CInputGroup>
+
                   <div className="d-grid">
                     <CButton color="dark" onClick={signUp}>
                       Create Account
@@ -158,17 +170,15 @@ const Register = () => {
         </CRow>
       </CContainer>
     </div>
-  )
+  );
 
   /** 회원정보 객체 값 할당 */
-  function changeMemberInfo(e){
-
+  function changeMemberInfo(e) {
     const { value, name } = e.target; // 우선 e.target 에서 name 과 value 를 추출
     setMemberInfo({
       ...memberInfo, // 기존의 input 객체를 복사한 뒤
       [name]: value // name 키를 가진 값을 value 로 설정
     });
-
   }
 
   /** 주소 검색 및 값 할당 */
@@ -190,8 +200,9 @@ const Register = () => {
   }
 
   /** 회원가입 버튼 클릭 */
-  function signUp(){
+  function signUp() {
 
+    memberInfo.email = `${memberInfo.emailId}@${memberInfo.emailDomain}`;
     // 유효성 검사
     if (!validateSignUpInfo()) {
       return;
@@ -201,40 +212,33 @@ const Register = () => {
     axios({
       url: '/signUp', // 통신할 웹문서
       method: 'post', // 통신할 방식
-      params:{
+      params: {
         loginId: memberInfo.loginId,
-        loginPassword:  memberInfo.loginPassword,
+        loginPassword: memberInfo.loginPassword,
         memName: memberInfo.memName,
         gender: memberInfo.gender,
         address: memberInfo.address,
         addressInfo: memberInfo.addressInfo,
-        /*email: memberInfo.email*/
+        email: memberInfo.email
       }
-
-    }).then(function (res){
-      if(res.data.succesResult){
-
+    }).then(function (res) {
+      if (res.data.succesResult) {
         // 이메일 인증 페이지로 이동
         navigate('/login/EmailCert', { state: { loginId: memberInfo.loginId } });
-
-
-      }else{
+      } else {
         alert("가입 그냥 실패?");
       }
-
-    }).catch(function (err){
+    }).catch(function (err) {
       alert("가입 실패 (오류)");
     });
-
-
   }
 
   /** 회원가입 유효성 검사 */
   function validateSignUpInfo() {
-    const { loginId, loginPassword, loginPasswordConfirm, memName, gender, address/*, email*/ } = memberInfo;
+    const { loginId, loginPassword, loginPasswordConfirm, memName, gender, address, email } = memberInfo;
 
     // 필수 항목 체크
-    if (!loginId || !loginPassword || !loginPasswordConfirm || !memName || !gender){    // 필수에 주소, 이메일 제외|| !address || !email
+    if (!loginId || !loginPassword || !loginPasswordConfirm || !memName || !gender || !address || !email) {
       alert(' * 필수 항목을 입력하세요.');
       return false;
     }
@@ -252,16 +256,15 @@ const Register = () => {
     }
 
     // 이메일 유효성 체크 (예시: 정규식 사용)
-    /*const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
       alert('유효한 이메일 주소를 입력하세요.');
       return false;
-    }*/
+    }
 
     // 유효성 검사 통과
     return true;
   }
-
 }
 
-export default Register
+export default Register;

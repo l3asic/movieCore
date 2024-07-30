@@ -197,8 +197,6 @@ const ArticleListView = () => {
         </div>
       )}
 
-      <GrayLine marginBottom="10px" marginTop="10px"/>
-
       <CNavbar colorScheme="light" className="bg-light">
         <CContainer fluid style={{ padding: 0 }}>
           <CNavbarBrand className="ms-3">
@@ -253,6 +251,8 @@ const ArticleListView = () => {
           </CForm>
         </CContainer>
       </CNavbar>
+
+      <GrayLine marginBottom="10px" marginTop="10px"/>
 
       <CTable className="boardTableList">
         <CTableHead color="light">
