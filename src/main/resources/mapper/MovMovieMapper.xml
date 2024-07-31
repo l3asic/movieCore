@@ -295,9 +295,10 @@
             mm.MOVIE_CD = mmi.MOVIE_CD
 
             AND mm.STATE = 'B'
+
+            /* 임시 무비 제외*/
             and mm.GENRE_ALT not like '%(에로)%'
             and mm.TYPE_NM != '단편'
-            and mm.PRDT_STAT_NM = '개봉'
 
           /* 검색) 제목, 대표장르, 개봉년도, 배우명, 관람등급, 전체 */
         <choose>
@@ -381,7 +382,6 @@
           /* 임시 무비 제외*/
         and mm.GENRE_ALT not like '%(에로)%'
         and mm.TYPE_NM != '단편'
-        and mm.PRDT_STAT_NM = '개봉'
 
         /* 검색) 제목, 대표장르, 개봉년도, 배우명, 관람등급, 제작국가, 전체 */
         <choose>

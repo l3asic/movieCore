@@ -526,7 +526,7 @@ public class MovMovieController {
 
             ArrayList<MovieGenreBean> movieGenreBeanList = new ArrayList<>();
 
-            // 최다 별점 장르
+            // 최고 별점 장르
             movieGenreBeanList.addAll(movieService.pointAvgTopMovGr(memVo));
 
             // 최다 좋아요 장르

@@ -30,12 +30,12 @@ function MovieMigManage() {
 
   return (
     <CContainer>
-      <h4 className="mb-4 d-flex align-items-center">
+      <h4 className="mb-2 d-flex align-items-center">
         <CIcon icon={cilCloudDownload} size="xl" className="me-2" style={{ fontSize: '2rem' }} />
         영화 이관 및 API 관리
       </h4>
 
-      <p className="text-muted mb-4">※ 동작에 주의 요함</p>
+      <p className="text-muted mb-4 ms-3">※ 동작에 주의 요함</p>
 
       <GrayLine marginBottom="50px" marginTop="10px"/>
 
